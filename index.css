@@ -8,7 +8,7 @@ body {
     }
     .img-container {
       width: 90vw;
-      max-width: 400px; 
+      max-width: 300px; 
       padding: 1rem;
       box-sizing: border-box;
       display: flex;
