@@ -6,18 +6,10 @@ body {
       align-items: center;
       background: #000;
     }
-    .img-container {
+    .img{
       width: 100vw;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .img-container img {
-      max-width: 50vw;  
-      max-height: 50vh; 
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      display: block;
     }
