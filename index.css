@@ -1,5 +1,24 @@
- body {
-            background-color: black;
-            color: white; /* Para o texto ficar visível no fundo preto */
-            font-family: Arial, sans-serif;
-        }
+body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+    }
+    .img-container {
+      width: 90vw;
+      max-width: 700px; /* ajuste conforme precisar */
+      padding: 1rem;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .img-container img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px; /* opcional, para bordas arredondadas */
+      box-shadow: 0 2px 10px rgba(0,0,0,0.7); /* opcional */
+    }
