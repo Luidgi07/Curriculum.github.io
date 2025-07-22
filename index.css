@@ -1,0 +1,5 @@
+ body {
+            background-color: black;
+            color: white; /* Para o texto ficar visível no fundo preto */
+            font-family: Arial, sans-serif;
+        }
