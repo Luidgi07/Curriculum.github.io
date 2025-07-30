@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – START colado à base EXATO</title>
+  <title>PS4 Menu – START alinhado à base</title>
   <style>
     body {
       background: #121a24;
@@ -62,20 +62,19 @@
       border-radius: 0;
       display: block;
     }
+    /* HUD em baixo do quadrado */
     .hud-row {
       display: none;
       position: absolute;
       left: 0;
-      /* O top é igual a 100% da altura original do quadrado, 
-         mas usamos um translateY extra para coincidir com o scale */
       top: 100%;
-      margin-top: 0;
       flex-direction: row;
-      align-items: flex-start;
+      align-items: stretch;
       z-index: 40;
       pointer-events: none;
       width: 100%;
       transition: transform 0.22s;
+      /* a animação será aplicada via JS! */
     }
     .hud-start {
       height: 48px;
@@ -131,8 +130,7 @@
     }
     @media (max-width: 950px) {
       .ps4-dashboard { padding-left: 15px;}
-      .hud-row { min-width: 90px; font-size:0.86em; }
-      .hud-title { font-size:1em;}
+      .hud-row, .hud-title { font-size:0.86em; }
       .menu-item-wrapper, .menu-item, .hud-start { width:120px;}
     }
   </style>
@@ -189,21 +187,20 @@
     const allHudRows = document.querySelectorAll('.hud-row');
     let selected = 0;
 
-    // Calcula o deslocamento para baixo
     function setHudOffset() {
-      allHudRows.forEach((row, idx) => {
-        row.style.transform = "";
+      allHudRows.forEach((row) => {
+        row.style.transform = '';
       });
-      // Altura original do cartão
+      // calcula o deslocamento para colar na base expandida
       const card = allItems[selected];
       let scale = 1;
       if (card.classList.contains('selected')) {
-        scale = 1.22; // igual ao CSS .menu-item.selected
+        scale = 1.22;
       }
-      // Valor exato extra de deslocamento por causa do scale (vai colar mesmo à base expandida)
-      const offset = ((scale - 1) * 160); // 160 é a altura do cartão original
+      const offset = ((scale - 1) * 160); // 160 é a altura original
       allHudRows[selected].style.transform = `translateY(${offset}px)`;
     }
+
     function updateHUD(idx) {
       allItems[selected].classList.remove('selected');
       selected = idx;
@@ -211,16 +208,18 @@
       allItems[selected].focus();
       setHudOffset();
     }
+
     allItems.forEach((item, idx) => {
       item.addEventListener('mouseover', () => updateHUD(idx));
       item.addEventListener('focus', () => updateHUD(idx));
     });
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') updateHUD((selected + 1) % allItems.length);
       if (e.key === 'ArrowLeft') updateHUD((selected - 1 + allItems.length) % allItems.length);
     });
 
-    // Aplica o offset inicial ao carregar a página
+    // Aplica offset inicial ao carregar
     setHudOffset();
   </script>
 </body>
