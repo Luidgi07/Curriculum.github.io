@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>PS4 Menu – Carrossel, fundo fade e expansão suave</title>
+  <title>PS4 Menu – Carrossel, fundo fade e transição suave</title>
   <style>
     html, body {
       min-height: 100vh;
@@ -19,7 +19,7 @@
       align-items: flex-start;
       position: relative;
     }
-    /* Pseudo-elemento cobre totalmente o topo, fade lento */
+    /* Pseudo-elemento cobre totalmente o topo, faz fade lento, inclui gradiente */
     body::before {
       content: "";
       position: fixed; top: 0; left: 0;
@@ -31,7 +31,9 @@
       transition: opacity 2s cubic-bezier(.36,1,.72,1);
     }
     body.bg-dynamic::before {
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+      background:
+        linear-gradient(to bottom, #121a24 0%, rgba(18,26,36,0) 14%),
+        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
       opacity: 1;
     }
     .dashboard-container {
@@ -41,9 +43,7 @@
       z-index: 10;
       transition: transform 0.65s cubic-bezier(.42,1,.72,1);
     }
-    .dashboard-container.expanded {
-      transform: translateY(-340px);
-    }
+    .dashboard-container.expanded { transform: translateY(-340px);}
     .ps4-dashboard {
       width: 100vw;
       padding: 80px 0 120px 90px;
@@ -58,7 +58,6 @@
       will-change: transform;
       position: relative;
     }
-    /* espaço de respiro para evitar corte nas extremidades */
     .carousel-inner .empty {
       min-width: calc(50vw - 90px - 80px);
       pointer-events: none;
@@ -235,7 +234,6 @@ const gameDetails = document.getElementById('gameDetails');
 let selected = 0, expanded = false;
 const quadW = 160, gap = 38;
 function moveCarousel(idx) {
-  // min-width da .empty calculada para centrares mesmo o quadrado
   const leftPad = carousel.querySelector('.empty').offsetWidth;
   const translate = leftPad + idx * (quadW + gap);
   carousel.style.transform = `translateX(calc(50vw - ${translate + quadW / 2}px))`;
