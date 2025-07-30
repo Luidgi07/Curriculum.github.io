@@ -160,7 +160,7 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
   transition: transform 0.22s cubic-bezier(.32,1.35,.62,1), box-shadow 0.18s, z-index 0.16s, border 0.18s;
 }
 .menu-item.selected {
-  transform: scale(1.22);
+  transform: scale(180px * 1.22);
   box-shadow: 0 0 40px 5px #42aaffcc, 0 5px 35px #000c;
   border: 2.5px solid #42aaff;
   border-bottom: none;
@@ -180,18 +180,18 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
 }
 @keyframes boxin { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
 .hud-start {
-  height: 48px; background: rgba(26,30,43,0.98);
+  width: 180px; height: 60px; background: rgba(26,30,43,0.98);
   border-radius: 0; border: 2.5px solid #42aaff;
   box-shadow: 0 3px 18px #06448460; pointer-events: auto;
   margin-right: 12px; display: flex; align-items: center; justify-content: center; opacity: 1; width: 160px; transition: width 0.22s;
 }
-.menu-item.selected ~ .hud-row .hud-start { width: calc(160px * 1.22); }
+.menu-item.selected ~ .hud-row .hud-start { width: calc(180px * 1.22); }
 .hud-btn {
   background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-  color: #fff; border: none; border-radius: 0; font-size: 1em; font-weight: 600; letter-spacing: 2px; padding: 8px 32px; cursor: pointer; outline: none; pointer-events: auto; box-shadow: 0 1px 8px #149ccc90; transition: background 0.14s; height: 32px;
+  color: #fff; border: none; border-radius: 0; font-size: 1em; font-weight: 600; letter-spacing: 2px; padding: 12px 32px; cursor: pointer; outline: none; pointer-events: auto; box-shadow: 0 1px 8px #149ccc90; transition: background 0.14s; height: 40px;
 }
 .hud-title {
-  min-width: 180px; height: 48px; display: flex; align-items: center;
+  min-width: 180px; height: 60px; display: flex; align-items: center;
   background: rgba(26,30,43,0.98); border-radius: 0; border: 2.5px solid #42aaff;
   box-shadow: 0 3px 18px #06448460; pointer-events: auto; padding: 0 10px 0 20px;
   font-size: 1.13em; font-weight: 700; letter-spacing: 1.0px; color: #f5f7fa;
@@ -335,7 +335,7 @@ const hudTitles = carousel.querySelectorAll('.hud-title');
 const dashboardsContainer = document.getElementById('dashCont');
 const gameDetails = document.getElementById('gameDetails');
 let selected = 0, expanded = false;
-const quadW = 160, gap = 38;
+const quadW = 180, gap = 38;
 function moveCarousel(idx) {
   carousel.style.transform = `translateX(calc(50vw - 90px - ${(quadW + gap) * idx + quadW / 2}px))`;
 }
