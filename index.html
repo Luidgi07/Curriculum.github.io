@@ -2,20 +2,21 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – HUD alinhado + fundo dinâmico</title>
+  <title>PS4 Menu – HUD alinhado + fundo dinâmico + mensagem</title>
   <style>
-    html, body {
-      height: 100%;
+    body {
+      background: #121a24;
       min-height: 100vh;
       margin: 0;
       padding: 0;
-    }
-    /* Remove flex do body para não haver limite ao tamanho */
-    body {
-      background: #121a24;
       font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
     }
-    html.bg-dynamic {
+    body.bg-dynamic {
       background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
     }
     .ps4-dashboard {
@@ -149,6 +150,27 @@
       transition: box-shadow 0.14s;
       line-height: 46px;
     }
+    .bottom-message {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      background: rgba(26,30,45,0.99);
+      color: #fff;
+      font-size: 1.07em;
+      font-weight: 500;
+      letter-spacing: 1px;
+      box-shadow: 0 -2px 18px #22365977;
+      padding: 22px 0 17px 24px;
+      z-index: 1000;
+      display: none;
+      border-top: 2.5px solid #42aaff;
+      transition: opacity 0.25s;
+    }
+    .bottom-message.active {
+      display: block;
+      opacity: 1;
+    }
     @media (max-width: 950px) {
       .ps4-dashboard { padding-left: 15px;}
       .hud-row { min-width: 90px; font-size:0.86em;}
@@ -196,21 +218,32 @@
     </div>
   </div>
 
+  <div id="bottomMessage" class="bottom-message">
+    Estás a ver conteúdo especial do Fortnite! 👾
+  </div>
+
   <script>
     const allItems = document.querySelectorAll('.menu-item');
+    const body = document.body;
+    const bottomMsg = document.getElementById('bottomMessage');
     let selected = 0;
+
     function updateHUD(idx) {
       allItems[selected].classList.remove('selected');
       selected = idx;
       allItems[selected].classList.add('selected');
       allItems[selected].focus();
-      // Aplica ao html (document.documentElement) a classe bg-dynamic apenas ao selecionar o Fortnite (índice 1)
+
+      // Mostra fundo dinâmico e mensagem só com Fortnite (índice 1)
       if (selected === 1) {
-        document.documentElement.classList.add('bg-dynamic');
+        body.classList.add('bg-dynamic');
+        bottomMsg.classList.add('active');
       } else {
-        document.documentElement.classList.remove('bg-dynamic');
+        body.classList.remove('bg-dynamic');
+        bottomMsg.classList.remove('active');
       }
     }
+
     allItems.forEach((item, idx) => {
       item.addEventListener('mouseover', () => updateHUD(idx));
       item.addEventListener('focus', () => updateHUD(idx));
