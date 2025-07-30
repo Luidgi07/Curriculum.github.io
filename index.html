@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>PS4 Menu – HUD alinhado + fundo dinâmico + conteúdo extra</title>
+<title>PS4 Menu – UI premium</title>
 <style>
 body {
   background: #121a24;
@@ -15,22 +15,30 @@ body {
   justify-content: flex-end;
   align-items: flex-start;
   transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
+  position: relative;
 }
-body.bg-dynamic::before {
+/* Fade-in/out real do fundo */
+body::before, body.bg-dynamic::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   z-index: -1;
   pointer-events: none;
+  background: transparent; /* default, invisível */
+  transition: opacity 0.65s cubic-bezier(.42,1,.72,1);
+  opacity: 0;
+}
+body.bg-dynamic::before {
   background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+  opacity: 1;
 }
 .ps4-dashboard {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   gap: 38px;
-  padding: 80px 0 120px 90px; 
+  padding: 80px 0 120px 90px;
   width: 100vw;
 }
 .menu-item-wrapper {
@@ -62,8 +70,7 @@ body.bg-dynamic::before {
     z-index 0.16s,
     border 0.18s;
 }
-.menu-item.selected,
-.menu-item:hover {
+.menu-item.selected {
   transform: scale(1.22);
   box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
   border: 2.5px solid #42aaff;
@@ -89,8 +96,7 @@ body.bg-dynamic::before {
   pointer-events: none;
   transition: transform 0.22s, left 0.22s;
 }
-.menu-item.selected ~ .hud-row,
-.menu-item:hover ~ .hud-row {
+.menu-item.selected ~ .hud-row {
   display: flex;
   animation: boxin 0.21s;
   transform: translateY(17.6px);
@@ -115,8 +121,7 @@ body.bg-dynamic::before {
   width: 160px;
   transition: width 0.22s;
 }
-.menu-item.selected ~ .hud-row .hud-start,
-.menu-item:hover ~ .hud-row .hud-start {
+.menu-item.selected ~ .hud-row .hud-start {
   width: calc(160px * 1.22);
 }
 .hud-btn {
@@ -156,6 +161,7 @@ body.bg-dynamic::before {
   transition: box-shadow 0.14s;
   line-height: 46px;
 }
+/* Extra-content: transição fade e deslizamento suave */
 .extra-content {
   max-width: 900px;
   margin: 40px 90px 80px;
@@ -163,17 +169,27 @@ body.bg-dynamic::before {
   font-size: 1.08em;
   line-height: 1.6em;
   letter-spacing: 0.9px;
-  display: none;
   background: rgba(26,30,45,0.97);
   border: 2.5px solid #42aaff;
   border-radius: 9px;
   padding: 28px 35px 22px 35px;
   box-shadow: 0 8px 32px #0008;
   z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 0;
+  transform: translateY(20px);
+  transition: 
+    opacity 0.65s cubic-bezier(.42,1,.72,1),
+    max-height 0.65s cubic-bezier(.42,1,.72,1),
+    transform 0.65s cubic-bezier(.42,1,.72,1);
+  display: block; /* Mantém o espaço, só esconde visualmente */
 }
 .extra-content.active {
-  display: block;
-  animation: boxin 0.35s;
+  opacity: 1;
+  pointer-events: auto;
+  max-height: 800px;
+  transform: translateY(0);
 }
 @media (max-width: 950px) {
   .ps4-dashboard { padding-left: 15px;}
@@ -223,7 +239,6 @@ body.bg-dynamic::before {
   </div>
 </div>
 
-<!-- Conteúdo extra (só mostra se for o 2º quadrado selecionado) -->
 <div class="extra-content" id="extraContent">
   <h2>Conteúdo especial adicional do Fortnite</h2>
   <p>
@@ -239,8 +254,13 @@ const allItems = document.querySelectorAll('.menu-item');
 const body = document.body;
 const extraContent = document.getElementById('extraContent');
 let selected = 0;
+let canChange = true;
 
 function updateHUD(idx) {
+  if (!canChange || selected === idx) return;
+  canChange = false;
+  setTimeout(() => { canChange = true; }, 420); // Limita a rapidez da navegação
+
   allItems[selected].classList.remove('selected');
   selected = idx;
   allItems[selected].classList.add('selected');
@@ -250,21 +270,22 @@ function updateHUD(idx) {
   if (selected === 1) {
     body.classList.add('bg-dynamic');
     extraContent.classList.add('active');
-
-    // Scroll com efeito suave para mostrar o conteúdo extra se for necessário
     setTimeout(() => {
       extraContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 80);
+    }, 210);
   } else {
     body.classList.remove('bg-dynamic');
     extraContent.classList.remove('active');
   }
 }
 
+// Só navegação controlada (sem saltar rápido)
 allItems.forEach((item, idx) => {
-  item.addEventListener('mouseover', () => updateHUD(idx));
   item.addEventListener('focus', () => updateHUD(idx));
+  item.addEventListener('click', () => updateHUD(idx));
+  item.addEventListener('mouseover', () => updateHUD(idx));
 });
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight' && selected < allItems.length - 1) {
     updateHUD(selected + 1);
