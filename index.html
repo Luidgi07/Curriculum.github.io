@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>PS4 Menu – Gradiente com Fade na Expansão</title>
+  <title>PS4 Menu – Gradiente com Fade Suave</title>
   <style>
     html, body {
       min-height: 100vh;
@@ -20,25 +20,23 @@
       align-items: flex-start;
       position: relative;
     }
-    /* Pseudo-elemento: imagem de fundo pura */
     body::before {
       content: "";
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
       z-index: -2;
-      pointer-events: none;
       opacity: 0;
+      pointer-events: none;
       background: transparent;
       transition: opacity 2s cubic-bezier(.36,1,.72,1);
     }
     body.bg-dynamic::before {
       background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
       opacity: 1;
-      z-index: -2;
     }
-    /* Gradiente extra "por cima" (via ::after) só quando expandido, com fade */
-    body.bg-dynamic.gradient-fade::after {
+    /* Gradiente sempre presente em ::after, só a opacidade faz fade */
+    body.bg-dynamic::after {
       content: "";
       position: fixed;
       top: 0; left: 0;
@@ -56,19 +54,11 @@
           rgba(18,26,36,0.15) 76%,
           rgba(18,26,36,0) 100%
         );
-      opacity: 1;
-      transition: opacity 1.1s cubic-bezier(.36,1,.72,1);
-    }
-    body.bg-dynamic::after {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-      pointer-events: none;
       opacity: 0;
       transition: opacity 1.1s cubic-bezier(.36,1,.72,1);
-      background: none;
+    }
+    body.bg-dynamic.gradient-fade::after {
+      opacity: 1;
     }
 
     .dashboard-container {
@@ -117,7 +107,7 @@
     }
     .menu-item.selected {
       transform: scale(1.22);
-      box-shadow: 0 0 50px 5px #42aaffcc, 0 10px 45px #000c;
+      box-shadow: 0 0 90px 15px #42aaffcc, 0 10px 45px #000c;
       border: 2.5px solid #42aaff;
       border-bottom: none;
       z-index: 20; opacity: 1;
@@ -265,7 +255,6 @@ const dashboardsContainer = document.getElementById('dashCont');
 const gameDetails = document.getElementById('gameDetails');
 let selected = 0, expanded = false;
 const quadW = 160, gap = 38;
-
 function moveCarousel(idx) {
   carousel.style.transform = `translateX(calc(50vw - 90px - ${(quadW + gap) * idx + quadW / 2}px))`;
 }
@@ -279,7 +268,6 @@ function updateHUD(idx) {
   document.body.classList.toggle('bg-dynamic', selected === 1);
   if (selected !== 1) document.body.classList.remove('gradient-fade');
 }
-
 function expandDetails() {
   if (selected !== 1 || expanded) return;
   expanded = true;
@@ -287,7 +275,6 @@ function expandDetails() {
   gameDetails.classList.add('visible');
   hudTitles.forEach(t => t.classList.remove('exp-arrow'));
   hudTitles[1].classList.add('exp-arrow');
-  // Gradiente aparece (com fade)
   document.body.classList.add('gradient-fade');
 }
 function collapseDetails() {
@@ -295,10 +282,8 @@ function collapseDetails() {
   dashboardsContainer.classList.remove('expanded');
   gameDetails.classList.remove('visible');
   hudTitles[1].classList.remove('exp-arrow');
-  // Gradiente faz fade out
   document.body.classList.remove('gradient-fade');
 }
-
 hudTitles[1].addEventListener('click', expandDetails);
 document.addEventListener('keydown', e => {
   if (!expanded && selected === 1 && (e.key === 'ArrowDown' || e.key === 'PageDown')) expandDetails();
