@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<title>PS4 Menu – HUD alinhado + fundo dinâmico suave</title>
+<meta charset="UTF-8" />
+<title>PS4 Menu – Detalhes expansíveis suave</title>
 <style>
+/* --- Código original mantido (resumido para foco) --- */
 body {
   background: #121a24;
   min-height: 100vh;
@@ -17,24 +18,32 @@ body {
   transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
   position: relative;
 }
-
-/* Pseudo-elemento para fade do fundo */
-body::before {
+body.bg-dynamic::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   z-index: -1;
   pointer-events: none;
-  background: transparent;
-  opacity: 0;
-  transition: opacity 0.65s cubic-bezier(.42,1,.72,1);
-}
-body.bg-dynamic::before {
   background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
   opacity: 1;
+  transition: opacity 0.6s cubic-bezier(.42,1,.72,1);
 }
 
+/* --- Container para o dashboard, permitirá animação vertical --- */
+.dashboard-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  transition: transform 0.5s cubic-bezier(.42,1,.72,1);
+  z-index: 10;
+}
+.dashboard-container.expanded {
+  transform: translateY(-320px); /* Ajusta altura conforme a game-details */
+}
+
+/* --- Dashboard original mantido --- */
 .ps4-dashboard {
   display: flex;
   flex-direction: row;
@@ -42,6 +51,7 @@ body.bg-dynamic::before {
   gap: 38px;
   padding: 80px 0 120px 90px; 
   width: 100vw;
+  background: transparent; /* Só para garantir */
 }
 .menu-item-wrapper {
   position: relative;
@@ -155,7 +165,7 @@ body.bg-dynamic::before {
   border: 2.5px solid #42aaff;
   box-shadow: 0 3px 18px #06448460;
   pointer-events: auto;
-  padding: 0 35px 0 20px;
+  padding: 0 10px 0 20px;
   font-size: 1.13em;
   font-weight: 700;
   letter-spacing: 1.0px;
@@ -165,106 +175,247 @@ body.bg-dynamic::before {
   opacity: 1;
   transition: box-shadow 0.14s;
   line-height: 46px;
+  user-select: none;
+  cursor: pointer; /* indica que pode ser clicado */
+  position: relative;
 }
-.bottom-message {
+/* Pequena seta ao lado do nome, só visível quando expandido */
+.hud-title.expanded::after {
+  content: "▼";
+  margin-left: 8px;
+  font-size: 0.9em;
+  display: inline-block;
+  animation: bounce 1.5s infinite;
+  color: #42aaff;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0px);}
+  50% { transform: translateY(5px);}
+}
+
+/* Painel de detalhes do jogo */
+.game-details {
   position: fixed;
-  left: 0;
   bottom: 0;
+  left: 0;
   width: 100vw;
-  background: rgba(26,30,45,0.99);
-  color: #fff;
-  font-size: 1.07em;
-  font-weight: 500;
-  letter-spacing: 1px;
-  box-shadow: 0 -2px 18px #22365977;
-  padding: 22px 0 17px 24px;
-  z-index: 1000;
-  display: none;
-  border-top: 2.5px solid #42aaff;
-  transition: opacity 0.25s;
+  max-height: 320px; /* altura fixa para o painel */
+  background: rgba(26,30,43,0.98);
+  border-top: 3px solid #42aaff;
+  box-shadow: 0 -5px 30px #000a;
+  padding: 22px 40px;
+  display: flex;
+  gap: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(100%);
+  transition: opacity 0.5s cubic-bezier(.42,1,.72,1), transform 0.5s cubic-bezier(.42,1,.72,1);
+  z-index: 9;
 }
-.bottom-message.active {
-  display: block;
+.game-details.visible {
   opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0%);
 }
+
+/* Conteúdo dentro do painel detalhes */
+.game-details img {
+  width: 220px;
+  height: 160px;
+  object-fit: cover;
+  border: 2.5px solid #42aaff;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.game-details .info {
+  flex-grow: 1;
+  color: #f5f7fa;
+}
+.game-details .info p {
+  margin: 0 0 12px 0;
+  font-size: 1em;
+  line-height: 1.3em;
+}
+.game-details .buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+}
+.game-details .buttons button {
+  background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
+  border: none;
+  border-radius: 0;
+  color: #fff;
+  padding: 8px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 8px #149ccc90;
+  transition: background 0.25s;
+}
+.game-details .buttons button:hover {
+  background: linear-gradient(135deg,#1178cc 60%,#4ebafd 120%);
+  outline: none;
+}
+
+/* Media query para mobile */
 @media (max-width: 950px) {
-  .ps4-dashboard { padding-left: 15px;}
-  .hud-row { min-width: 90px; font-size:0.86em;}
-  .hud-title { font-size:1em;}
+  .game-details {
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+    padding: 20px 20px;
+  }
+  .game-details img {
+    width: 100%;
+    height: auto;
+  }
+  .game-details .buttons {
+    justify-content: flex-start;
+  }
 }
+
 </style>
 </head>
 <body>
-<div class="ps4-dashboard">
-  <div class="menu-item-wrapper">
-    <div class="menu-item selected" tabindex="0" data-title="Red Dead Redemption 2">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/4/44/Red_Dead_Redemption_II_capa.png" alt="Red Dead Redemption 2">
+<!-- Container para controle do movimento vertical do menu -->
+<div class="dashboard-container">
+  <div class="ps4-dashboard">
+    <div class="menu-item-wrapper">
+      <div class="menu-item selected" tabindex="0" data-title="Red Dead Redemption 2">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/4/44/Red_Dead_Redemption_II_capa.png" alt="Red Dead Redemption 2" />
+      </div>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title" data-index="0">Red Dead Redemption 2</div>
+      </div>
     </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Red Dead Redemption 2</div>
+    <div class="menu-item-wrapper">
+      <div class="menu-item" tabindex="0" data-title="Fortnite">
+        <img src="https://static-cdn.jtvnw.net/ttv-boxart/33214-285x380.jpg" alt="Fortnite" />
+      </div>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title expanded" data-index="1">Fortnite</div> 
+        <!-- seta só visível com JS quando expandido -->
+      </div>
     </div>
-  </div>
-  <div class="menu-item-wrapper">
-    <div class="menu-item" tabindex="0" data-title="Fortnite">
-      <img src="https://static-cdn.jtvnw.net/ttv-boxart/33214-285x380.jpg" alt="Fortnite">
+    <div class="menu-item-wrapper">
+      <div class="menu-item" tabindex="0" data-title="Days Gone">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/1/16/Days_Gone_capa.png" alt="Days Gone" />
+      </div>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title" data-index="2">Days Gone</div>
+      </div>
     </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Fortnite</div>
-    </div>
-  </div>
-  <div class="menu-item-wrapper">
-    <div class="menu-item" tabindex="0" data-title="Days Gone">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/1/16/Days_Gone_capa.png" alt="Days Gone">
-    </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Days Gone</div>
-    </div>
-  </div>
-  <div class="menu-item-wrapper">
-    <div class="menu-item" tabindex="0" data-title="Ghost of Tsushima">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
-    </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Ghost of Tsushima</div>
+    <div class="menu-item-wrapper">
+      <div class="menu-item" tabindex="0" data-title="Ghost of Tsushima">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima" />
+      </div>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title" data-index="3">Ghost of Tsushima</div>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="bottomMessage" class="bottom-message">
-  Estás a ver conteúdo especial do Fortnite! 👾
+<!-- Painel detalhe do Fortnite, inicialmente invisível -->
+<div class="game-details" id="gameDetails">
+  <img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
+  <div class="info">
+    <p><strong>Fortnite</strong> é um jogo de battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivo.</p>
+    <div class="buttons">
+      <button class="btn-trophies">Ver Troféus</button>
+      <button class="hud-btn" style="height:auto; padding: 10px 36px;">START</button>
+    </div>
+  </div>
 </div>
 
 <script>
 const allItems = document.querySelectorAll('.menu-item');
+const dashboardsContainer = document.querySelector('.dashboard-container');
 const body = document.body;
-const bottomMsg = document.getElementById('bottomMessage');
+const bottomMsg = document.getElementById('bottomMessage'); // mantido mas não usado aqui
+const gameDetails = document.getElementById('gameDetails');
 let selected = 0;
+let expanded = false;
 
 function updateHUD(idx) {
+  if (expanded) return; // bloqueia alterações enquanto expandido
   allItems[selected].classList.remove('selected');
   selected = idx;
   allItems[selected].classList.add('selected');
   allItems[selected].focus();
 
-  // Mostra fundo dinâmico e mensagem só com Fortnite (índice 1)
+  // Controla fundo dinâmico e mensagem
   if (selected === 1) {
     body.classList.add('bg-dynamic');
-    bottomMsg.classList.add('active');
+    bottomMsg?.classList.add('active');
   } else {
     body.classList.remove('bg-dynamic');
-    bottomMsg.classList.remove('active');
+    bottomMsg?.classList.remove('active');
   }
 }
 
-allItems.forEach((item, idx) => {
-  item.addEventListener('mouseover', () => updateHUD(idx));
-  item.addEventListener('focus', () => updateHUD(idx));
+function expandDetails() {
+  if (selected !== 1) return; // só para o segundo quadrado
+  expanded = true;
+  dashboardsContainer.classList.add('expanded');
+  gameDetails.classList.add('visible');
+  // Adiciona seta animada ao nome
+  const hudTitles = document.querySelectorAll('.hud-title');
+  hudTitles.forEach(t => t.classList.remove('expanded'));
+  // Coloca só no nome do Fortnite
+  const hudTitleFortnite = document.querySelector('.menu-item-wrapper:nth-child(2) .hud-title');
+  hudTitleFortnite.classList.add('expanded');
+}
+
+function collapseDetails() {
+  expanded = false;
+  dashboardsContainer.classList.remove('expanded');
+  gameDetails.classList.remove('visible');
+  // Remove seta animada
+  document.querySelectorAll('.hud-title.expanded').forEach(t => t.classList.remove('expanded'));
+}
+
+// Eventos para clique no nome do Fortnite
+const hudTitleFortnite = document.querySelector('.menu-item-wrapper:nth-child(2) .hud-title');
+hudTitleFortnite.style.cursor = 'pointer';
+hudTitleFortnite.addEventListener('click', () => {
+  if (!expanded) {
+    expandDetails();
+  }
 });
-document.addEventListener('keydown', (e) => {
+
+// Eventos teclado para expandir/fechar
+document.addEventListener('keydown', e => {
+  if (selected === 1 && (e.key === 'ArrowDown' || e.key === 'PageDown')) {
+    expandDetails();
+  } else if (expanded && (e.key === 'Escape' || e.key === 'ArrowUp')) {
+    collapseDetails();
+  }
+});
+
+// Mantém navegação teclado/raton normal
+allItems.forEach((item, idx) => {
+  item.addEventListener('mouseover', () => {
+    if (!expanded) updateHUD(idx);
+  });
+  item.addEventListener('focus', () => {
+    if (!expanded) updateHUD(idx);
+  });
+});
+document.addEventListener('keydown', e => {
+  if (expanded) return;
   if (e.key === 'ArrowRight' && selected < allItems.length - 1) {
     updateHUD(selected + 1);
   }
@@ -275,4 +426,3 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
-
