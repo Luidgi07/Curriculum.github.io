@@ -218,9 +218,14 @@
       item.addEventListener('focus', () => updateHUD(idx));
     });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') updateHUD((selected + 1) % allItems.length);
-      if (e.key === 'ArrowLeft') updateHUD((selected - 1 + allItems.length) % allItems.length);
-    });
+  if (e.key === 'ArrowRight' && selected < allItems.length - 1) {
+    updateHUD(selected + 1);
+  }
+  if (e.key === 'ArrowLeft' && selected > 0) {
+    updateHUD(selected - 1);
+  }
+});
+
   </script>
 </body>
 </html>
