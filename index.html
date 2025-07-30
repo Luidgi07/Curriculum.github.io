@@ -1,299 +1,185 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<title>PS4 Menu – UI premium</title>
-<style>
-body {
-  background: #121a24;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
-  position: relative;
-}
-/* Fade-in/out real do fundo */
-body::before, body.bg-dynamic::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  background: transparent; /* default, invisível */
-  transition: opacity 0.65s cubic-bezier(.42,1,.72,1);
-  opacity: 0;
-}
-body.bg-dynamic::before {
-  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
-  opacity: 1;
-}
-.ps4-dashboard {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 38px;
-  padding: 80px 0 120px 90px;
-  width: 100vw;
-}
-.menu-item-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.menu-item, .hud-start {
-  width: 160px;
-  height: 160px;
-  border-radius: 0;
-}
-.menu-item {
-  background: #23283a;
-  box-shadow: 0 8px 32px #000c;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 2.5px solid transparent;
-  position: relative;
-  z-index: 1;
-  opacity: 0.92;
-  transition:
-    transform 0.22s cubic-bezier(.32,1.35,.62,1),
-    box-shadow 0.18s,
-    z-index 0.16s,
-    border 0.18s;
-}
-.menu-item.selected {
-  transform: scale(1.22);
-  box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
-  border: 2.5px solid #42aaff;
-  border-bottom: none;
-  z-index: 20;
-  opacity: 1;
-}
-.menu-item img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  border-radius: 0;
-  display: block;
-}
-.hud-row {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 100%;
-  margin-top: 0;
-  flex-direction: row;
-  align-items: stretch;
-  z-index: 40;
-  pointer-events: none;
-  transition: transform 0.22s, left 0.22s;
-}
-.menu-item.selected ~ .hud-row {
-  display: flex;
-  animation: boxin 0.21s;
-  transform: translateY(17.6px);
-  left: -17.6px;
-}
-@keyframes boxin {
-  from { opacity: 0; transform: translateY(20px);}
-  to { opacity: 1; transform: translateY(0);}
-}
-.hud-start {
-  height: 48px;
-  background: rgba(26,30,43,0.98);
-  border-radius: 0;
-  border: 2.5px solid #42aaff;
-  box-shadow: 0 3px 18px #06448460;
-  pointer-events: auto;
-  margin-right: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-  width: 160px;
-  transition: width 0.22s;
-}
-.menu-item.selected ~ .hud-row .hud-start {
-  width: calc(160px * 1.22);
-}
-.hud-btn {
-  background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-  color: #fff;
-  border: none;
-  border-radius: 0;
-  font-size: 1em;
-  font-weight: 600;
-  letter-spacing: 2px;
-  padding: 8px 32px;
-  cursor: pointer;
-  outline: none;
-  pointer-events: auto;
-  box-shadow: 0 1px 8px #149ccc90;
-  transition: background 0.14s;
-  height: 32px;
-}
-.hud-title {
-  min-width: 180px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  background: rgba(26, 30, 43, 0.98);
-  border-radius: 0;
-  border: 2.5px solid #42aaff;
-  box-shadow: 0 3px 18px #06448460;
-  pointer-events: auto;
-  padding: 0 35px 0 20px;
-  font-size: 1.13em;
-  font-weight: 700;
-  letter-spacing: 1.0px;
-  color: #f5f7fa;
-  text-shadow: 0 2px 10px #193c8040;
-  white-space: nowrap;
-  opacity: 1;
-  transition: box-shadow 0.14s;
-  line-height: 46px;
-}
-/* Extra-content: transição fade e deslizamento suave */
-.extra-content {
-  max-width: 900px;
-  margin: 40px 90px 80px;
-  color: #eee;
-  font-size: 1.08em;
-  line-height: 1.6em;
-  letter-spacing: 0.9px;
-  background: rgba(26,30,45,0.97);
-  border: 2.5px solid #42aaff;
-  border-radius: 9px;
-  padding: 28px 35px 22px 35px;
-  box-shadow: 0 8px 32px #0008;
-  z-index: 5;
-  opacity: 0;
-  pointer-events: none;
-  max-height: 0;
-  transform: translateY(20px);
-  transition: 
-    opacity 0.65s cubic-bezier(.42,1,.72,1),
-    max-height 0.65s cubic-bezier(.42,1,.72,1),
-    transform 0.65s cubic-bezier(.42,1,.72,1);
-  display: block; /* Mantém o espaço, só esconde visualmente */
-}
-.extra-content.active {
-  opacity: 1;
-  pointer-events: auto;
-  max-height: 800px;
-  transform: translateY(0);
-}
-@media (max-width: 950px) {
-  .ps4-dashboard { padding-left: 15px;}
-  .hud-row { min-width: 90px; font-size:0.86em;}
-  .hud-title { font-size:1em;}
-  .extra-content { margin: 32px 10px 50px; padding: 18px 12px 16px 12px;}
-}
-</style>
+  <meta charset="UTF-8">
+  <title>PS4 Menu – Menu fixo, conteúdo extra scrollável</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #121a24;
+      position: relative;
+      transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
+    }
+    body.bg-dynamic::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+      opacity: 1;
+      transition: opacity 0.6s cubic-bezier(.42,1,.72,1);
+    }
+    .extra-content {
+      max-width: 900px;
+      margin: 40px auto 180px auto;
+      color: #eee;
+      font-size: 1.08em;
+      background: rgba(26,30,45,0.97);
+      border: 2.5px solid #42aaff;
+      border-radius: 9px;
+      padding: 28px 35px 22px 35px;
+      box-shadow: 0 8px 32px #0008;
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      max-height: 0;
+      transform: translateY(20px);
+      transition:
+        opacity 0.65s cubic-bezier(.42,1,.72,1),
+        max-height 0.65s cubic-bezier(.42,1,.72,1),
+        transform 0.65s cubic-bezier(.42,1,.72,1);
+      position: relative;
+      display: block;
+    }
+    .extra-content.active {
+      opacity: 1;
+      pointer-events: auto;
+      max-height: 800px;
+      transform: translateY(0);
+    }
+    .ps4-dashboard {
+      position: fixed;
+      left: 0; bottom: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 38px;
+      padding: 80px 0 120px 90px;
+      width: 100vw;
+      z-index: 10;
+    }
+    /* ...resto do CSS como já tens... */
+    .menu-item, .hud-start { width: 160px; height: 160px; border-radius: 0; }
+    .menu-item {
+      background: #23283a;
+      box-shadow: 0 8px 32px #000c;
+      outline: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      border: 2.5px solid transparent;
+      position: relative; z-index: 1; opacity: 0.92;
+      transition: transform 0.22s cubic-bezier(.32,1.35,.62,1),
+                  box-shadow 0.18s, z-index 0.16s, border 0.18s;
+    }
+    .menu-item.selected {
+      transform: scale(1.22);
+      box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
+      border: 2.5px solid #42aaff; border-bottom: none;
+      z-index: 20; opacity: 1;
+    }
+    .menu-item img { width: 100%; height: 100%; object-fit: cover; }
+    .hud-row {
+      display: none; position: absolute; left: 0; top: 100%; margin-top: 0;
+      flex-direction: row; align-items: stretch; z-index: 40; pointer-events: none;
+      transition: transform 0.22s, left 0.22s;
+    }
+    .menu-item.selected ~ .hud-row {
+      display: flex; animation: boxin 0.21s;
+      transform: translateY(17.6px); left: -17.6px;
+    }
+    @media (max-width: 950px) {
+      .ps4-dashboard { padding-left: 15px;}
+      .hud-row { min-width: 90px; font-size:0.86em; }
+      .extra-content { margin: 32px 10px 180px 10px; padding: 18px 12px 16px 12px;}
+    }
+  </style>
 </head>
 <body>
-<div class="ps4-dashboard">
-  <div class="menu-item-wrapper">
-    <div class="menu-item selected" tabindex="0" data-title="Red Dead Redemption 2">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/4/44/Red_Dead_Redemption_II_capa.png" alt="Red Dead Redemption 2">
+  <div class="extra-content" id="extraContent">
+    <h2>Conteúdo especial adicional do Fortnite</h2>
+    <p>Só aparece quando o Fortnite está selecionado. Podes colocar aqui dicas, imagens, vídeos ou qualquer texto extra.</p>
+  </div>
+
+  <div class="ps4-dashboard">
+    <div class="menu-item-wrapper">
+      <div class="menu-item selected" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/4/44/Red_Dead_Redemption_II_capa.png" alt="Red Dead Redemption 2">
+      </div>
+      <div class="hud-row">
+        <div class="hud-start"><button class="hud-btn">START</button></div>
+        <div class="hud-title">Red Dead Redemption 2</div>
+      </div>
     </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Red Dead Redemption 2</div>
+    <div class="menu-item-wrapper">
+      <div class="menu-item" tabindex="0">
+        <img src="https://static-cdn.jtvnw.net/ttv-boxart/33214-285x380.jpg" alt="Fortnite">
+      </div>
+      <div class="hud-row">
+        <div class="hud-start"><button class="hud-btn">START</button></div>
+        <div class="hud-title">Fortnite</div>
+      </div>
+    </div>
+    <div class="menu-item-wrapper">
+      <div class="menu-item" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/1/16/Days_Gone_capa.png" alt="Days Gone">
+      </div>
+      <div class="hud-row">
+        <div class="hud-start"><button class="hud-btn">START</button></div>
+        <div class="hud-title">Days Gone</div>
+      </div>
+    </div>
+    <div class="menu-item-wrapper">
+      <div class="menu-item" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
+      </div>
+      <div class="hud-row">
+        <div class="hud-start"><button class="hud-btn">START</button></div>
+        <div class="hud-title">Ghost of Tsushima</div>
+      </div>
     </div>
   </div>
-  <div class="menu-item-wrapper">
-    <div class="menu-item" tabindex="0" data-title="Fortnite">
-      <img src="https://static-cdn.jtvnw.net/ttv-boxart/33214-285x380.jpg" alt="Fortnite">
-    </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Fortnite</div>
-    </div>
-  </div>
-  <div class="menu-item-wrapper">
-    <div class="menu-item" tabindex="0" data-title="Days Gone">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/1/16/Days_Gone_capa.png" alt="Days Gone">
-    </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Days Gone</div>
-    </div>
-  </div>
-  <div class="menu-item-wrapper">
-    <div class="menu-item" tabindex="0" data-title="Ghost of Tsushima">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
-    </div>
-    <div class="hud-row">
-      <div class="hud-start"><button class="hud-btn">START</button></div>
-      <div class="hud-title">Ghost of Tsushima</div>
-    </div>
-  </div>
-</div>
 
-<div class="extra-content" id="extraContent">
-  <h2>Conteúdo especial adicional do Fortnite</h2>
-  <p>
-    Aqui podes adicionar texto, imagens, vídeos ou o que quiseres — só aparece quando o Fortnite está selecionado.
-  </p>
-  <p>
-    Usa esta área para mostrar dicas, notícias, estatísticas ou o conteúdo que quiseres partilhar relacionado com o jogo.
-  </p>
-</div>
+  <script>
+    const allItems = document.querySelectorAll('.menu-item');
+    const body = document.body;
+    const extraContent = document.getElementById('extraContent');
+    let selected = 0;
+    let canChange = true;
 
-<script>
-const allItems = document.querySelectorAll('.menu-item');
-const body = document.body;
-const extraContent = document.getElementById('extraContent');
-let selected = 0;
-let canChange = true;
+    function updateHUD(idx) {
+      if (!canChange || selected === idx) return;
+      canChange = false;
+      setTimeout(() => { canChange = true; }, 420);
 
-function updateHUD(idx) {
-  if (!canChange || selected === idx) return;
-  canChange = false;
-  setTimeout(() => { canChange = true; }, 420); // Limita a rapidez da navegação
+      allItems[selected].classList.remove('selected');
+      selected = idx;
+      allItems[selected].classList.add('selected');
+      allItems[selected].focus();
 
-  allItems[selected].classList.remove('selected');
-  selected = idx;
-  allItems[selected].classList.add('selected');
-  allItems[selected].focus();
+      // Ativa o fundo e o texto só em Fortnite (índice 1)
+      if (selected === 1) {
+        body.classList.add('bg-dynamic');
+        extraContent.classList.add('active');
+      } else {
+        body.classList.remove('bg-dynamic');
+        extraContent.classList.remove('active');
+      }
+    }
 
-  // Mostrar fundo dinâmico e conteúdo extra só se for Fortnite (índice 1)
-  if (selected === 1) {
-    body.classList.add('bg-dynamic');
-    extraContent.classList.add('active');
-    setTimeout(() => {
-      extraContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 210);
-  } else {
-    body.classList.remove('bg-dynamic');
-    extraContent.classList.remove('active');
-  }
-}
+    allItems.forEach((item, idx) => {
+      item.addEventListener('focus', () => updateHUD(idx));
+      item.addEventListener('click', () => updateHUD(idx));
+      item.addEventListener('mouseover', () => updateHUD(idx));
+    });
 
-// Só navegação controlada (sem saltar rápido)
-allItems.forEach((item, idx) => {
-  item.addEventListener('focus', () => updateHUD(idx));
-  item.addEventListener('click', () => updateHUD(idx));
-  item.addEventListener('mouseover', () => updateHUD(idx));
-});
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight' && selected < allItems.length - 1) {
-    updateHUD(selected + 1);
-  }
-  if (e.key === 'ArrowLeft' && selected > 0) {
-    updateHUD(selected - 1);
-  }
-});
-</script>
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
+      if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
+    });
+  </script>
 </body>
 </html>
