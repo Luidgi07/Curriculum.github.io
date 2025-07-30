@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu HUD Lateral Top Alinhado</title>
+  <title>PS4 Menu – Retângulo colado à base</title>
   <style>
     body {
       background: #121a24;
@@ -26,16 +26,21 @@
     .menu-item-wrapper {
       position: relative;
       display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      /* permite espaço para o HUD ao lado */
+      flex-direction: column;
+      align-items: center;
     }
     .menu-item {
       width: 160px; height: 160px;
       background: #23283a;
       box-shadow: 0 8px 32px #000c;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.22s cubic-bezier(.32,1.35,.62,1), box-shadow 0.18s, z-index 0.15s, height 0.22s, width 0.22s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.22s cubic-bezier(.32,1.35,.62,1), 
+                  box-shadow 0.18s, 
+                  z-index 0.15s, 
+                  height 0.22s, 
+                  width 0.22s;
       cursor: pointer;
       border-radius: 0;
       border: 2.5px solid transparent;
@@ -43,8 +48,9 @@
       z-index: 1;
       opacity: 0.92;
     }
-    .menu-item.selected, .menu-item:hover {
-      /* Aumenta tanto para cima como para baixo e direita/esquerda */
+    .menu-item.selected,
+    .menu-item:hover {
+      /* Expande para cima e para baixo */
       transform: scale(1.22);
       box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
       border: 2.5px solid #42aaff;
@@ -60,9 +66,9 @@
     .start-info-box {
       display: none;
       position: absolute;
-      top: 0;
-      left: 105%;
-      /* começa onde começa o cartão (mesmo topo), alinhado horizontalmente */
+      left: 0;
+      top: 100%;
+      margin-top: 13px;
       min-width: 320px;
       min-height: 66px;
       background: rgba(26,30,43,0.98);
@@ -179,3 +185,5 @@
   </script>
 </body>
 </html>
+
+
