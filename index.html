@@ -2,44 +2,37 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – Fundo total e mensagem afastada</title>
+  <title>PS4 Menu – Quadrados no fim da página</title>
   <style>
     body {
-      /* Fundo ocupa toda a viewport, visível sempre (por cima, auto-ajusta) */
       min-height: 100vh;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
-      /* o body mantém o fundo base */
       background: #121a24;
       position: relative;
     }
     .background-img {
-      /* Imagem de fundo cobre toda a página, incluindo scroll */
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       object-fit: cover;
       z-index: 0;
       pointer-events: none;
       user-select: none;
       transition: opacity 0.5s;
-      opacity: 0;
-    }
-    .background-img.active {
       opacity: 1;
     }
-
     .ps4-dashboard {
       display: flex;
       flex-direction: row;
       align-items: flex-end;
       gap: 38px;
-      padding: 80px 0 120px 90px;
+      padding: 0 0 120px 90px; /* igual ao início, mas sem margin-top */
       width: 100vw;
-      position: relative;
+      position: fixed;
+      left: 0;
+      bottom: 0;
       z-index: 1;
     }
     .menu-item-wrapper {
@@ -165,11 +158,11 @@
       transition: box-shadow 0.14s;
       line-height: 46px;
     }
-    /* Nova mensagem bem espaçada depois do painel */
+    /* Mensagem sempre visível, afastada do dashboard */
     .custom-message {
       width: 94vw;
-      margin: 160px auto 0 auto;
       max-width: 980px;
+      margin: 90px auto 0 auto;
       background: rgba(26,30,45,0.97);
       color: #fff;
       font-size: 1.17em;
@@ -180,10 +173,9 @@
       box-shadow: 0 8px 32px #0008;
       letter-spacing: 1.2px;
       text-align: left;
-      display: none;
-    }
-    .custom-message.active {
       display: block;
+      z-index: 10;
+      position: relative;
     }
     @media (max-width: 1050px) {
       .custom-message { max-width: 99vw; font-size: 0.98em;}
@@ -192,13 +184,14 @@
       .ps4-dashboard { padding-left: 15px;}
       .hud-row { min-width: 90px; font-size:0.86em;}
       .hud-title { font-size:1em;}
+      .custom-message { margin-top: 40px; }
     }
   </style>
 </head>
 <body>
-  <!-- Imagem de fundo que cobre a página toda (só aparece quando "Fortnite" está selecionado) -->
+  <!-- Imagem de fundo a ocupar sempre toda a página -->
   <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
-       class="background-img" id="backgroundFortnite"
+       class="background-img"
        alt="Fundo especial Fortnite">
 
   <div class="ps4-dashboard">
@@ -240,31 +233,19 @@
     </div>
   </div>
 
-  <!-- Nova mensagem, afastada para baixo do dashboard -->
-  <div id="specialMessage" class="custom-message">
+  <div class="custom-message">
     Estás a ver conteúdo especial do Fortnite! 👾
   </div>
 
   <script>
     const allItems = document.querySelectorAll('.menu-item');
     let selected = 0;
-    const bgImg = document.getElementById('backgroundFortnite');
-    const msgDiv = document.getElementById('specialMessage');
 
     function updateHUD(idx) {
       allItems[selected].classList.remove('selected');
       selected = idx;
       allItems[selected].classList.add('selected');
       allItems[selected].focus();
-
-      // Só mostra fundo e div de mensagem com Fortnite (índice 1)
-      if (selected === 1) {
-        bgImg.classList.add('active');
-        msgDiv.classList.add('active');
-      } else {
-        bgImg.classList.remove('active');
-        msgDiv.classList.remove('active');
-      }
     }
 
     allItems.forEach((item, idx) => {
@@ -283,3 +264,4 @@
   </script>
 </body>
 </html>
+
