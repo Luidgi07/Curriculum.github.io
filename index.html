@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>PS4 Menu – HUD alinhado + fundo dinâmico + mensagem</title>
+<title>PS4 Menu – HUD alinhado + fundo dinâmico + mensagem + scroll baixo</title>
 <style>
 body {
   background: #121a24;
@@ -30,7 +30,7 @@ body.bg-dynamic::before {
   flex-direction: row;
   align-items: flex-end;
   gap: 38px;
-  padding: 80px 0 120px 90px; 
+  padding: 80px 0 120px 90px;
   width: 100vw;
 }
 .menu-item-wrapper {
@@ -177,10 +177,19 @@ body.bg-dynamic::before {
   display: block;
   opacity: 1;
 }
+.extra-content {
+  max-width: 900px;
+  margin: 40px 90px 80px; /* alinhado com padding dashboard */
+  color: #eee;
+  font-size: 1.05em;
+  line-height: 1.5em;
+  letter-spacing: 0.9px;
+}
 @media (max-width: 950px) {
   .ps4-dashboard { padding-left: 15px;}
   .hud-row { min-width: 90px; font-size:0.86em;}
   .hud-title { font-size:1em;}
+  .extra-content { margin: 40px 20px 80px; }
 }
 </style>
 </head>
@@ -224,11 +233,22 @@ body.bg-dynamic::before {
   </div>
 </div>
 
+<div id="bottomMessage" class="bottom-message">
+  Estás a ver conteúdo especial do Fortnite! 👾
+</div>
+
+<!-- Conteúdo extra para scroll -->
+<div class="extra-content" id="extraContent">
+  <h2>Conteúdo especial adicional</h2>
+  <p>Aqui podes adicionar texto, imagens, vídeos ou o que quiseres para tornar a página mais interessante quando selecionas o segundo quadrado.</p>
+  <p>Esta área será visível quando a página fizer scroll para baixo conforme selecionas o Fortnite.</p>
+</div>
 
 <script>
 const allItems = document.querySelectorAll('.menu-item');
 const body = document.body;
 const bottomMsg = document.getElementById('bottomMessage');
+const extraContent = document.getElementById('extraContent');
 let selected = 0;
 
 function updateHUD(idx) {
@@ -237,10 +257,13 @@ function updateHUD(idx) {
   allItems[selected].classList.add('selected');
   allItems[selected].focus();
 
-  // Mostra fundo dinâmico e mensagem só com Fortnite (índice 1)
+  // Mostrar fundo dinâmico e mensagem só se for Fortnite (índice 1)
   if (selected === 1) {
     body.classList.add('bg-dynamic');
     bottomMsg.classList.add('active');
+
+    // Smooth scroll para a área extra (podes ajustar o offset se quiseres)
+    extraContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else {
     body.classList.remove('bg-dynamic');
     bottomMsg.classList.remove('active');
