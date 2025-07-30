@@ -2,29 +2,26 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu - Info por baixo</title>
+  <title>PS4 Menu - Info HUD em baixo</title>
   <style>
     body {
       background: #131a24;
       min-height: 100vh;
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
-      display: flex; align-items: flex-end; justify-content: flex-start;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
     }
     .ps4-dashboard {
       display: flex;
       flex-direction: row;
       align-items: flex-end;
       gap: 38px;
-      padding: 80px 0 120px 90px;
+      padding: 80px 0 80px 90px;
       position: relative;
-    }
-    .menu-item-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      min-width: 160px;
+      width: 100vw;
     }
     .menu-item {
       width: 160px; height: 160px;
@@ -37,7 +34,7 @@
       border: 2.5px solid transparent;
       position: relative;
       z-index: 1;
-      opacity: 0.90;
+      opacity: 0.92;
       overflow: visible;
     }
     .menu-item.selected, .menu-item:hover {
@@ -53,38 +50,38 @@
       border-radius: 0;
       display: block;
     }
-    /* Retângulo de info EM BAIXO */
-    .side-info {
-      display: none;
-      flex-direction: row;
+
+    /* HUD retângulo fixo */
+    .ps4-hud-info {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 54px;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 30;
+      width: 100vw;
+    }
+    .info-box {
+      display: flex;
       align-items: center;
-      justify-content: flex-start;
       background: rgba(26,30,43,0.98);
       border-radius: 7px;
       box-shadow: 0 3px 18px #06448460;
-      padding: 16px 37px 16px 18px;
-      min-width: 262px;
-      min-height: 62px;
-      margin-top: 24px;
+      padding: 16px 37px 16px 20px;
+      min-width: 270px;
+      min-height: 61px;
       border: 2px solid #222;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      transition: opacity 0.22s, transform 0.17s;
       opacity: 0;
-      z-index: 5;
+      transform: translateY(20px) scale(0.98);
       pointer-events: none;
+      transition: opacity 0.22s, transform 0.18s;
     }
-    .menu-item.selected + .side-info,
-    .menu-item:hover + .side-info {
-      display: flex;
+    .info-box.active {
       opacity: 1;
       pointer-events: auto;
-      animation: info-fadein 0.18s cubic-bezier(.44,1.8,.46,1) both;
-    }
-    @keyframes info-fadein {
-      from { opacity: 0; transform: translateX(-50%) translateY(15px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+      transform: translateY(0) scale(1.04);
     }
     .cd-icon {
       width: 39px; height: 39px;
@@ -99,55 +96,51 @@
       flex-shrink: 0;
     }
     .side-label {
-      font-size: 1.27em;
+      font-size: 1.31em;
       font-weight: 700;
       letter-spacing: 1.1px;
       color: #f5f7fa;
       text-shadow: 0 2px 5px #193c8025;
       white-space: nowrap;
     }
+    @media (max-width: 900px) {
+      .ps4-dashboard { padding-left: 20px; }
+      .info-box { min-width: 160px; font-size: 0.91em; }
+    }
   </style>
 </head>
 <body>
   <div class="ps4-dashboard">
-    <div class="menu-item-container">
-      <div class="menu-item selected" tabindex="0">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
-      </div>
-      <div class="side-info">
-        <div class="cd-icon">💿</div>
-        <span class="side-label">Ghost of Tsushima</span>
-      </div>
+    <div class="menu-item selected" tabindex="0" data-title="Ghost of Tsushima">
+      <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
     </div>
-    <div class="menu-item-container">
-      <div class="menu-item" tabindex="0">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/0/03/Uncharted_4_capa.png" alt="Uncharted 4">
-      </div>
-      <div class="side-info">
-        <div class="cd-icon">💿</div>
-        <span class="side-label">Uncharted 4</span>
-      </div>
+    <div class="menu-item" tabindex="0" data-title="Uncharted 4">
+      <img src="https://upload.wikimedia.org/wikipedia/pt/0/03/Uncharted_4_capa.png" alt="Uncharted 4">
     </div>
-    <div class="menu-item-container">
-      <div class="menu-item" tabindex="0">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/5/5c/Dark_Souls_Remastered_capa.png" alt="Dark Souls Remastered">
-      </div>
-      <div class="side-info">
-        <div class="cd-icon">💿</div>
-        <span class="side-label">Dark Souls Remastered</span>
-      </div>
+    <div class="menu-item" tabindex="0" data-title="Dark Souls Remastered">
+      <img src="https://upload.wikimedia.org/wikipedia/pt/5/5c/Dark_Souls_Remastered_capa.png" alt="Dark Souls Remastered">
     </div>
-    <!-- Adiciona mais cartões conforme necessário -->
+    <!-- Adiciona mais itens conforme quiseres -->
+  </div>
+  <div class="ps4-hud-info">
+    <div class="info-box active" id="hudInfoBox">
+      <div class="cd-icon">💿</div>
+      <span class="side-label" id="hudLabel">Ghost of Tsushima</span>
+    </div>
   </div>
   <script>
-    // Torna possível usar as setas para navegar!
     const allItems = document.querySelectorAll('.menu-item');
+    const hudBox = document.getElementById('hudInfoBox');
+    const hudLabel = document.getElementById('hudLabel');
     let selected = 0;
     function selectItem(idx) {
       allItems[selected].classList.remove('selected');
       selected = idx;
       allItems[selected].classList.add('selected');
       allItems[selected].focus();
+      // Atualiza o HUD fixo
+      hudLabel.textContent = allItems[selected].getAttribute('data-title');
+      hudBox.classList.add('active');
     }
     allItems.forEach((item, idx) => {
       item.addEventListener('mouseover', () => selectItem(idx));
@@ -161,6 +154,8 @@
         selectItem((selected - 1 + allItems.length) % allItems.length);
       }
     });
+    // Garante seleção inicial no load
+    hudBox.classList.add('active');
   </script>
 </body>
 </html>
