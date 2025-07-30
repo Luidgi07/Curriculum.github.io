@@ -10,7 +10,6 @@
       padding: 0;
     }
     body {
-      background: #121a24;
       min-height: 100vh;
       font-family: 'Segoe UI', Arial, sans-serif;
       display: flex;
@@ -18,8 +17,9 @@
       justify-content: flex-end;
       align-items: flex-start;
       transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
+      background: #121a24;
     }
-    body.bg-dynamic {
+    html.bg-dynamic {
       background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
     }
     .ps4-dashboard {
@@ -202,23 +202,19 @@
 
   <script>
     const allItems = document.querySelectorAll('.menu-item');
-    const body = document.body;
     let selected = 0;
-
     function updateHUD(idx) {
       allItems[selected].classList.remove('selected');
       selected = idx;
       allItems[selected].classList.add('selected');
       allItems[selected].focus();
-
-      // Mostra fundo dinâmico só com Fortnite (índice 1)
+      // Aplica ao html (document.documentElement) a classe bg-dynamic apenas ao selecionar o Fortnite (índice 1)
       if (selected === 1) {
-        body.classList.add('bg-dynamic');
+        document.documentElement.classList.add('bg-dynamic');
       } else {
-        body.classList.remove('bg-dynamic');
+        document.documentElement.classList.remove('bg-dynamic');
       }
     }
-
     allItems.forEach((item, idx) => {
       item.addEventListener('mouseover', () => updateHUD(idx));
       item.addEventListener('focus', () => updateHUD(idx));
