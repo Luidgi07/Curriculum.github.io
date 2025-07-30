@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu Retângulo</title>
+  <title>PS4 Menu - Info por baixo</title>
   <style>
     body {
       background: #131a24;
@@ -19,6 +19,13 @@
       padding: 80px 0 120px 90px;
       position: relative;
     }
+    .menu-item-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      min-width: 160px;
+    }
     .menu-item {
       width: 160px; height: 160px;
       background: #23283a;
@@ -34,7 +41,7 @@
       overflow: visible;
     }
     .menu-item.selected, .menu-item:hover {
-      transform: scale(1.12) translateY(-26px);
+      transform: scale(1.14) translateY(-26px);
       box-shadow: 0 0 70px 12px #33b1f099,0 10px 45px #000c;
       border: 2.5px solid #42aaff;
       z-index: 20;
@@ -46,45 +53,53 @@
       border-radius: 0;
       display: block;
     }
-
-    /* Retângulo lateral */
+    /* Retângulo de info EM BAIXO */
     .side-info {
-      display: flex;
+      display: none;
+      flex-direction: row;
       align-items: center;
+      justify-content: flex-start;
       background: rgba(26,30,43,0.98);
       border-radius: 7px;
       box-shadow: 0 3px 18px #06448460;
-      padding: 17px 36px 17px 21px;
+      padding: 16px 37px 16px 18px;
+      min-width: 262px;
+      min-height: 62px;
+      margin-top: 24px;
+      border: 2px solid #222;
       position: absolute;
-      left: 108%;
-      top: 45%;
-      min-width: 278px;
-      height: 62px;
-      opacity: 0;
-      transform: translateY(-50%) scale(0.99);
-      pointer-events: none;
+      left: 50%;
+      transform: translateX(-50%);
       transition: opacity 0.22s, transform 0.17s;
-      border: 2.5px solid #222;
+      opacity: 0;
+      z-index: 5;
+      pointer-events: none;
     }
-    .menu-item.selected .side-info,
-    .menu-item:hover .side-info {
+    .menu-item.selected + .side-info,
+    .menu-item:hover + .side-info {
+      display: flex;
       opacity: 1;
       pointer-events: auto;
-      transform: translateY(-50%) scale(1.04);
+      animation: info-fadein 0.18s cubic-bezier(.44,1.8,.46,1) both;
+    }
+    @keyframes info-fadein {
+      from { opacity: 0; transform: translateX(-50%) translateY(15px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
     .cd-icon {
       width: 39px; height: 39px;
       background: #139aff;
       border-radius: 50%;
-      margin-right: 27px;
+      margin-right: 24px;
       display: flex; align-items: center; justify-content: center;
       font-size: 25px;
       color: #ecf9ff;
       box-shadow: 0 2px 10px #185d8f80;
-      border: 2.4px solid #b2e0ff;
+      border: 2px solid #b2e0ff;
+      flex-shrink: 0;
     }
     .side-label {
-      font-size: 1.28em;
+      font-size: 1.27em;
       font-weight: 700;
       letter-spacing: 1.1px;
       color: #f5f7fa;
@@ -95,51 +110,57 @@
 </head>
 <body>
   <div class="ps4-dashboard">
-    <div class="menu-item selected" tabindex="0">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
+    <div class="menu-item-container">
+      <div class="menu-item selected" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
+      </div>
       <div class="side-info">
         <div class="cd-icon">💿</div>
         <span class="side-label">Ghost of Tsushima</span>
       </div>
     </div>
-    <div class="menu-item" tabindex="0">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/0/03/Uncharted_4_capa.png" alt="Uncharted 4">
+    <div class="menu-item-container">
+      <div class="menu-item" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/0/03/Uncharted_4_capa.png" alt="Uncharted 4">
+      </div>
       <div class="side-info">
         <div class="cd-icon">💿</div>
         <span class="side-label">Uncharted 4</span>
       </div>
     </div>
-    <div class="menu-item" tabindex="0">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/5/5c/Dark_Souls_Remastered_capa.png" alt="Dark Souls Remastered">
+    <div class="menu-item-container">
+      <div class="menu-item" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/5/5c/Dark_Souls_Remastered_capa.png" alt="Dark Souls Remastered">
+      </div>
       <div class="side-info">
         <div class="cd-icon">💿</div>
         <span class="side-label">Dark Souls Remastered</span>
       </div>
     </div>
-    <!-- Adiciona mais seções/cartões -->
+    <!-- Adiciona mais cartões conforme necessário -->
   </div>
   <script>
-    const items = document.querySelectorAll('.menu-item');
+    // Torna possível usar as setas para navegar!
+    const allItems = document.querySelectorAll('.menu-item');
     let selected = 0;
     function selectItem(idx) {
-      items[selected].classList.remove('selected');
+      allItems[selected].classList.remove('selected');
       selected = idx;
-      items[selected].classList.add('selected');
-      items[selected].focus();
+      allItems[selected].classList.add('selected');
+      allItems[selected].focus();
     }
-    items.forEach((item, idx) => {
+    allItems.forEach((item, idx) => {
       item.addEventListener('mouseover', () => selectItem(idx));
       item.addEventListener('focus', () => selectItem(idx));
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') {
-        selectItem((selected + 1) % items.length);
+        selectItem((selected + 1) % allItems.length);
       }
       if (e.key === 'ArrowLeft') {
-        selectItem((selected - 1 + items.length) % items.length);
+        selectItem((selected - 1 + allItems.length) % allItems.length);
       }
     });
   </script>
 </body>
 </html>
-
