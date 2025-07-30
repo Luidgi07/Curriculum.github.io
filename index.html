@@ -2,38 +2,30 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – Quadrados no fundo</title>
+  <title>PS4 Menu – HUD alinhado + fundo dinâmico + mensagem</title>
   <style>
     body {
+      background: #121a24;
       min-height: 100vh;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #121a24;
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
     }
-    .background-img {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      object-fit: cover;
-      z-index: 0;
-      pointer-events: none;
-      user-select: none;
-      opacity: 1;
-      transition: opacity 0.5s;
+    body.bg-dynamic {
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
     }
     .ps4-dashboard {
       display: flex;
       flex-direction: row;
       align-items: flex-end;
       gap: 38px;
-      padding: 0 0 120px 90px;
+      padding: 80px 0 120px 90px;
       width: 100vw;
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      z-index: 1;
     }
     .menu-item-wrapper {
       position: relative;
@@ -64,7 +56,8 @@
         z-index 0.16s,
         border 0.18s;
     }
-    .menu-item.selected {
+    .menu-item.selected,
+    .menu-item:hover {
       transform: scale(1.22);
       box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
       border: 2.5px solid #42aaff;
@@ -90,7 +83,8 @@
       pointer-events: none;
       transition: transform 0.22s, left 0.22s;
     }
-    .menu-item.selected ~ .hud-row {
+    .menu-item.selected ~ .hud-row,
+    .menu-item:hover ~ .hud-row {
       display: flex;
       animation: boxin 0.21s;
       transform: translateY(17.6px);
@@ -115,7 +109,8 @@
       width: 160px;
       transition: width 0.22s;
     }
-    .menu-item.selected ~ .hud-row .hud-start {
+    .menu-item.selected ~ .hud-row .hud-start,
+    .menu-item:hover ~ .hud-row .hud-start {
       width: calc(160px * 1.22);
     }
     .hud-btn {
@@ -155,6 +150,27 @@
       transition: box-shadow 0.14s;
       line-height: 46px;
     }
+    .bottom-message {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      background: rgba(26,30,45,0.99);
+      color: #fff;
+      font-size: 1.07em;
+      font-weight: 500;
+      letter-spacing: 1px;
+      box-shadow: 0 -2px 18px #22365977;
+      padding: 22px 0 17px 24px;
+      z-index: 1000;
+      display: none;
+      border-top: 2.5px solid #42aaff;
+      transition: opacity 0.25s;
+    }
+    .bottom-message.active {
+      display: block;
+      opacity: 1;
+    }
     @media (max-width: 950px) {
       .ps4-dashboard { padding-left: 15px;}
       .hud-row { min-width: 90px; font-size:0.86em;}
@@ -163,11 +179,6 @@
   </style>
 </head>
 <body>
-  <!-- Imagem de fundo fixo a ocupar toda a viewport -->
-  <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
-       class="background-img"
-       alt="Fundo especial">
-
   <div class="ps4-dashboard">
     <div class="menu-item-wrapper">
       <div class="menu-item selected" tabindex="0" data-title="Red Dead Redemption 2">
@@ -207,8 +218,14 @@
     </div>
   </div>
 
+  <div id="bottomMessage" class="bottom-message">
+    Estás a ver conteúdo especial do Fortnite! 👾
+  </div>
+
   <script>
     const allItems = document.querySelectorAll('.menu-item');
+    const body = document.body;
+    const bottomMsg = document.getElementById('bottomMessage');
     let selected = 0;
 
     function updateHUD(idx) {
@@ -216,13 +233,21 @@
       selected = idx;
       allItems[selected].classList.add('selected');
       allItems[selected].focus();
+
+      // Mostra fundo dinâmico e mensagem só com Fortnite (índice 1)
+      if (selected === 1) {
+        body.classList.add('bg-dynamic');
+        bottomMsg.classList.add('active');
+      } else {
+        body.classList.remove('bg-dynamic');
+        bottomMsg.classList.remove('active');
+      }
     }
 
     allItems.forEach((item, idx) => {
       item.addEventListener('mouseover', () => updateHUD(idx));
       item.addEventListener('focus', () => updateHUD(idx));
     });
-
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight' && selected < allItems.length - 1) {
         updateHUD(selected + 1);
