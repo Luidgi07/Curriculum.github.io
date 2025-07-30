@@ -2,44 +2,37 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – Fundo total e mensagem afastada</title>
+  <title>PS4 Menu – Apenas um selecionado</title>
   <style>
     body {
-      /* Fundo ocupa toda a viewport, visível sempre (por cima, auto-ajusta) */
       min-height: 100vh;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
-      /* o body mantém o fundo base */
       background: #121a24;
       position: relative;
     }
     .background-img {
-      /* Imagem de fundo cobre toda a página, incluindo scroll */
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       object-fit: cover;
       z-index: 0;
       pointer-events: none;
       user-select: none;
-      transition: opacity 0.5s;
-      opacity: 0;
-    }
-    .background-img.active {
       opacity: 1;
+      transition: opacity 0.5s;
     }
-
     .ps4-dashboard {
       display: flex;
       flex-direction: row;
       align-items: flex-end;
       gap: 38px;
-      padding: 80px 0 120px 90px;
+      padding: 0 0 120px 90px;
       width: 100vw;
-      position: relative;
+      position: fixed;
+      left: 0;
+      bottom: 0;
       z-index: 1;
     }
     .menu-item-wrapper {
@@ -71,8 +64,8 @@
         z-index 0.16s,
         border 0.18s;
     }
-    .menu-item.selected,
-    .menu-item:hover {
+    /* Só o .selected fica realçado! */
+    .menu-item.selected {
       transform: scale(1.22);
       box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
       border: 2.5px solid #42aaff;
@@ -98,8 +91,8 @@
       pointer-events: none;
       transition: transform 0.22s, left 0.22s;
     }
-    .menu-item.selected ~ .hud-row,
-    .menu-item:hover ~ .hud-row {
+    /* Só o selecionado mostra HUD */
+    .menu-item.selected ~ .hud-row {
       display: flex;
       animation: boxin 0.21s;
       transform: translateY(17.6px);
@@ -124,8 +117,7 @@
       width: 160px;
       transition: width 0.22s;
     }
-    .menu-item.selected ~ .hud-row .hud-start,
-    .menu-item:hover ~ .hud-row .hud-start {
+    .menu-item.selected ~ .hud-row .hud-start {
       width: calc(160px * 1.22);
     }
     .hud-btn {
@@ -165,29 +157,6 @@
       transition: box-shadow 0.14s;
       line-height: 46px;
     }
-    /* Nova mensagem bem espaçada depois do painel */
-    .custom-message {
-      width: 94vw;
-      margin: 160px auto 0 auto;
-      max-width: 980px;
-      background: rgba(26,30,45,0.97);
-      color: #fff;
-      font-size: 1.17em;
-      font-weight: 500;
-      border: 2.5px solid #42aaff;
-      border-radius: 9px;
-      padding: 28px 35px 22px 35px;
-      box-shadow: 0 8px 32px #0008;
-      letter-spacing: 1.2px;
-      text-align: left;
-      display: none;
-    }
-    .custom-message.active {
-      display: block;
-    }
-    @media (max-width: 1050px) {
-      .custom-message { max-width: 99vw; font-size: 0.98em;}
-    }
     @media (max-width: 950px) {
       .ps4-dashboard { padding-left: 15px;}
       .hud-row { min-width: 90px; font-size:0.86em;}
@@ -196,10 +165,9 @@
   </style>
 </head>
 <body>
-  <!-- Imagem de fundo que cobre a página toda (só aparece quando "Fortnite" está selecionado) -->
   <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
-       class="background-img" id="backgroundFortnite"
-       alt="Fundo especial Fortnite">
+       class="background-img"
+       alt="Fundo especial">
 
   <div class="ps4-dashboard">
     <div class="menu-item-wrapper">
@@ -240,36 +208,22 @@
     </div>
   </div>
 
-  <!-- Nova mensagem, afastada para baixo do dashboard -->
-  <div id="specialMessage" class="custom-message">
-    Estás a ver conteúdo especial do Fortnite! 👾
-  </div>
-
   <script>
     const allItems = document.querySelectorAll('.menu-item');
     let selected = 0;
-    const bgImg = document.getElementById('backgroundFortnite');
-    const msgDiv = document.getElementById('specialMessage');
 
     function updateHUD(idx) {
       allItems[selected].classList.remove('selected');
       selected = idx;
       allItems[selected].classList.add('selected');
       allItems[selected].focus();
-
-      // Só mostra fundo e div de mensagem com Fortnite (índice 1)
-      if (selected === 1) {
-        bgImg.classList.add('active');
-        msgDiv.classList.add('active');
-      } else {
-        bgImg.classList.remove('active');
-        msgDiv.classList.remove('active');
-      }
     }
 
+    // Só “selected”, nunca hover!
     allItems.forEach((item, idx) => {
-      item.addEventListener('mouseover', () => updateHUD(idx));
       item.addEventListener('focus', () => updateHUD(idx));
+      item.addEventListener('click', () => updateHUD(idx));
+      // Se quiseres que o hover faça só highlight de cursor, podes pôr efeito noutro estilo/light.
     });
 
     document.addEventListener('keydown', (e) => {
