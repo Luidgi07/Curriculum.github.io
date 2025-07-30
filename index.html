@@ -33,11 +33,27 @@
       transition: opacity 2s cubic-bezier(.36,1,.72,1);
     }
     body.bg-dynamic::before {
-      background:
-        linear-gradient(to bottom, #121a24 0%, rgba(18,26,36,0) 80%),
-        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
-      opacity: 1;
-    }
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 2s cubic-bezier(.36,1,.72,1);
+  background:
+    linear-gradient(
+      to bottom,
+      #121a24 0%,
+      #121a24 25%,
+      rgba(18,26,36,0.92) 40%,
+      rgba(18,26,36,0.85) 55%,
+      rgba(18,26,36,0.6) 66%,
+      rgba(18,26,36,0.15) 82%,
+      rgba(18,26,36,0) 100%
+    ),
+    url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+}
     .dashboard-container {
       position: fixed;
       left: 0; bottom: 0;
@@ -216,7 +232,7 @@
 <div class="game-details" id="gameDetails">
   <img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
   <div class="info">
-    <p><strong>Fortnite</strong> é um jogo de battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivoss.</p>
+    <p><strong>Fortnite</strong> é um jogo de battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivosss.</p>
     <div class="buttons">
       <button class="btn-trophies">Ver Troféus</button>
       <button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
