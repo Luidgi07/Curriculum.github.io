@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>PS4 Menu – Carrossel, fundo fade com gradiente no topo</title>
+  <title>PS4 Menu – Carrossel + gradiente ao expandir detalhes</title>
   <style>
     html, body {
       min-height: 100vh;
@@ -20,7 +20,6 @@
       align-items: flex-start;
       position: relative;
     }
-    /* Gradiente largo no topo elimina qualquer corte com a imagem */
     body::before {
       content: "";
       position: fixed;
@@ -30,30 +29,30 @@
       z-index: -1;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 2s cubic-bezier(.36,1,.72,1);
+      transition: opacity 2s cubic-bezier(.36,1,.72,1), background 0.45s;
     }
+    /* Imagem pura, sem gradiente, quando apenas selecionas Fortnite */
     body.bg-dynamic::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 2s cubic-bezier(.36,1,.72,1);
-  background:
-    linear-gradient(
-      to bottom,
-      #121a24 0%,
-      #121a24 10%,
-      rgba(18,26,36,0.92) 36%,
-      rgba(18,26,36,0.85) 46%,
-      rgba(18,26,36,0.6) 56%,
-      rgba(18,26,36,0.15) 76%,
-      rgba(18,26,36,0) 100%
-    ),
-    url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
-}
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+      opacity: 1;
+    }
+    /* Aparece gradiente quando painel expandido */
+    body.bg-dynamic.gradient-fade::before {
+      background:
+        linear-gradient(
+          to bottom,
+          #121a24 0%,
+          #121a24 10%,
+          rgba(18,26,36,0.92) 36%,
+          rgba(18,26,36,0.85) 46%,
+          rgba(18,26,36,0.6) 56%,
+          rgba(18,26,36,0.15) 76%,
+          rgba(18,26,36,0) 100%
+        ),
+        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+      opacity: 1;
+    }
+
     .dashboard-container {
       position: fixed;
       left: 0; bottom: 0;
@@ -242,7 +241,6 @@
 
 <script>
 const carousel = document.getElementById('carousel');
-const wrappers = carousel.querySelectorAll('.menu-item-wrapper');
 const allItems = carousel.querySelectorAll('.menu-item');
 const hudTitles = carousel.querySelectorAll('.hud-title');
 const dashboardsContainer = document.getElementById('dashCont');
@@ -253,7 +251,6 @@ const quadW = 160, gap = 38;
 function moveCarousel(idx) {
   carousel.style.transform = `translateX(calc(50vw - 90px - ${(quadW + gap) * idx + quadW / 2}px))`;
 }
-
 function updateHUD(idx) {
   if (expanded || idx === selected) return;
   allItems[selected].classList.remove('selected');
@@ -262,6 +259,7 @@ function updateHUD(idx) {
   allItems[selected].focus();
   moveCarousel(idx);
   document.body.classList.toggle('bg-dynamic', selected === 1);
+  if (selected !== 1) document.body.classList.remove('gradient-fade');
 }
 
 function expandDetails() {
@@ -271,21 +269,23 @@ function expandDetails() {
   gameDetails.classList.add('visible');
   hudTitles.forEach(t => t.classList.remove('exp-arrow'));
   hudTitles[1].classList.add('exp-arrow');
+  // Adiciona o gradiente quando expandes o painel
+  document.body.classList.add('gradient-fade');
 }
 function collapseDetails() {
   expanded = false;
   dashboardsContainer.classList.remove('expanded');
   gameDetails.classList.remove('visible');
   hudTitles[1].classList.remove('exp-arrow');
+  // Remove o gradiente ao fechar
+  document.body.classList.remove('gradient-fade');
 }
 
 hudTitles[1].addEventListener('click', expandDetails);
-
 document.addEventListener('keydown', e => {
   if (!expanded && selected === 1 && (e.key === 'ArrowDown' || e.key === 'PageDown')) expandDetails();
   if (expanded && (e.key === 'Escape' || e.key === 'ArrowUp')) collapseDetails();
 });
-
 allItems.forEach((item, idx) => {
   item.addEventListener('focus', () => { if (!expanded) updateHUD(idx); });
   item.addEventListener('click',   () => { if (!expanded) updateHUD(idx); });
@@ -296,8 +296,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
   if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
 });
-
-// Inicializar posição do carrossel
 moveCarousel(selected);
 </script>
 </body>
