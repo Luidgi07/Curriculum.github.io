@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>PS4 Menu – HUD alinhado + fundo dinâmico + mensagem</title>
+<title>PS4 Menu – HUD alinhado + fundo dinâmico suave</title>
 <style>
 body {
   background: #121a24;
@@ -15,16 +15,26 @@ body {
   justify-content: flex-end;
   align-items: flex-start;
   transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
+  position: relative;
 }
-body.bg-dynamic::before {
+
+/* Pseudo-elemento para fade do fundo */
+body::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   z-index: -1;
   pointer-events: none;
-  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+  background: transparent;
+  opacity: 0;
+  transition: opacity 0.65s cubic-bezier(.42,1,.72,1);
 }
+body.bg-dynamic::before {
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+  opacity: 1;
+}
+
 .ps4-dashboard {
   display: flex;
   flex-direction: row;
@@ -224,6 +234,9 @@ body.bg-dynamic::before {
   </div>
 </div>
 
+<div id="bottomMessage" class="bottom-message">
+  Estás a ver conteúdo especial do Fortnite! 👾
+</div>
 
 <script>
 const allItems = document.querySelectorAll('.menu-item');
@@ -262,3 +275,4 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
+
