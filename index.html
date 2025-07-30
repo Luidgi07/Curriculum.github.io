@@ -2,22 +2,38 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – HUD alinhado + fundo dinâmico + mensagem</title>
+  <title>PS4 Menu – Fundo sempre total</title>
   <style>
-    body {
-      background: #121a24;
-      min-height: 100vh;
+    html, body {
+      height: 100%;
+      width: 100%;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: flex-start;
-      transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
     }
-    body.bg-dynamic {
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+    body {
+      position: relative;
+      min-height: 100vh;
+      min-width: 100vw;
+      width: 100vw;
+      height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #121a24;
+      /* remove o flex antigo para garantir totalidade do fundo */
+    }
+    /* Imagem de fundo dinâmica e SEMPRE total */
+    .background-img {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .background-img.active {
+      opacity: 1;
     }
     .ps4-dashboard {
       display: flex;
@@ -26,129 +42,77 @@
       gap: 38px;
       padding: 80px 0 120px 90px;
       width: 100vw;
-    }
-    .menu-item-wrapper {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      z-index: 1;
     }
-    .menu-item, .hud-start {
-      width: 160px;
-      height: 160px;
-      border-radius: 0;
-    }
+    .menu-item-wrapper { /* ... igual ... */ }
+    .menu-item, .hud-start { width: 160px; height: 160px; border-radius: 0; }
     .menu-item {
       background: #23283a;
       box-shadow: 0 8px 32px #000c;
       outline: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       border: 2.5px solid transparent;
-      position: relative;
-      z-index: 1;
-      opacity: 0.92;
-      transition:
-        transform 0.22s cubic-bezier(.32,1.35,.62,1),
-        box-shadow 0.18s,
-        z-index 0.16s,
-        border 0.18s;
+      position: relative; z-index: 1; opacity: 0.92;
+      transition: transform 0.22s cubic-bezier(.32,1.35,.62,1),
+                  box-shadow 0.18s, z-index 0.16s, border 0.18s;
     }
-    .menu-item.selected,
-    .menu-item:hover {
+    .menu-item.selected {
       transform: scale(1.22);
       box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
-      border: 2.5px solid #42aaff;
-      border-bottom: none;
-      z-index: 20;
-      opacity: 1;
+      border: 2.5px solid #42aaff; border-bottom: none;
+      z-index: 20; opacity: 1;
     }
     .menu-item img {
       width: 100%; height: 100%;
       object-fit: cover;
-      border-radius: 0;
-      display: block;
+      border-radius: 0; display: block;
     }
     .hud-row {
       display: none;
       position: absolute;
-      left: 0;
-      top: 100%;
+      left: 0; top: 100%;
       margin-top: 0;
       flex-direction: row;
-      align-items: stretch;
-      z-index: 40;
+      align-items: stretch; z-index: 40;
       pointer-events: none;
       transition: transform 0.22s, left 0.22s;
     }
-    .menu-item.selected ~ .hud-row,
-    .menu-item:hover ~ .hud-row {
+    .menu-item.selected ~ .hud-row {
       display: flex;
       animation: boxin 0.21s;
       transform: translateY(17.6px);
       left: -17.6px;
     }
-    @keyframes boxin {
-      from { opacity: 0; transform: translateY(20px);}
-      to   { opacity: 1; transform: translateY(0);}
-    }
+    @keyframes boxin { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);} }
     .hud-start {
       height: 48px;
       background: rgba(26,30,43,0.98);
       border-radius: 0;
       border: 2.5px solid #42aaff;
       box-shadow: 0 3px 18px #06448460;
-      pointer-events: auto;
-      margin-right: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 1;
-      width: 160px;
+      pointer-events: auto; margin-right: 12px;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 1; width: 160px;
       transition: width 0.22s;
     }
-    .menu-item.selected ~ .hud-row .hud-start,
-    .menu-item:hover ~ .hud-row .hud-start {
+    .menu-item.selected ~ .hud-row .hud-start {
       width: calc(160px * 1.22);
     }
     .hud-btn {
       background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-      color: #fff;
-      border: none;
-      border-radius: 0;
-      font-size: 1em;
-      font-weight: 600;
-      letter-spacing: 2px;
-      padding: 8px 32px;
-      cursor: pointer;
-      outline: none;
-      pointer-events: auto;
-      box-shadow: 0 1px 8px #149ccc90;
-      transition: background 0.14s;
-      height: 32px;
+      color: #fff; border: none; border-radius: 0; font-size: 1em; font-weight: 600;
+      letter-spacing: 2px; padding: 8px 32px; cursor: pointer; outline: none;
+      pointer-events: auto; box-shadow: 0 1px 8px #149ccc90; transition: background 0.14s; height: 32px;
     }
     .hud-title {
-      min-width: 180px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      background: rgba(26, 30, 43, 0.98);
-      border-radius: 0;
-      border: 2.5px solid #42aaff;
-      box-shadow: 0 3px 18px #06448460;
-      pointer-events: auto;
-      padding: 0 35px 0 20px;
-      font-size: 1.13em;
-      font-weight: 700;
-      letter-spacing: 1.0px;
-      color: #f5f7fa;
-      text-shadow: 0 2px 10px #193c8040;
-      white-space: nowrap;
-      opacity: 1;
-      transition: box-shadow 0.14s;
-      line-height: 46px;
+      min-width: 180px; height: 48px; display: flex; align-items: center;
+      background: rgba(26, 30, 43, 0.98); border-radius: 0;
+      border: 2.5px solid #42aaff; box-shadow: 0 3px 18px #06448460;
+      pointer-events: auto; padding: 0 35px 0 20px; font-size: 1.13em; font-weight: 700;
+      letter-spacing: 1.0px; color: #f5f7fa; text-shadow: 0 2px 10px #193c8040;
+      white-space: nowrap; opacity: 1; transition: box-shadow 0.14s; line-height: 46px;
     }
     .bottom-message {
       position: fixed;
@@ -179,6 +143,14 @@
   </style>
 </head>
 <body>
+  <!-- Fundo de imagem (ativo apenas se “Fortnite” estiver selecionado) -->
+  <img
+    src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
+    class="background-img"
+    id="backgroundFortnite"
+    alt="Fundo especial Fortnite"
+  >
+
   <div class="ps4-dashboard">
     <div class="menu-item-wrapper">
       <div class="menu-item selected" tabindex="0" data-title="Red Dead Redemption 2">
@@ -224,7 +196,7 @@
 
   <script>
     const allItems = document.querySelectorAll('.menu-item');
-    const body = document.body;
+    const bgImg = document.getElementById('backgroundFortnite');
     const bottomMsg = document.getElementById('bottomMessage');
     let selected = 0;
 
@@ -234,27 +206,23 @@
       allItems[selected].classList.add('selected');
       allItems[selected].focus();
 
-      // Mostra fundo dinâmico e mensagem só com Fortnite (índice 1)
+      // Fundo dinâmico/mensagem só em "Fortnite" (índice 1)
       if (selected === 1) {
-        body.classList.add('bg-dynamic');
+        bgImg.classList.add('active');
         bottomMsg.classList.add('active');
       } else {
-        body.classList.remove('bg-dynamic');
+        bgImg.classList.remove('active');
         bottomMsg.classList.remove('active');
       }
     }
 
     allItems.forEach((item, idx) => {
-      item.addEventListener('mouseover', () => updateHUD(idx));
       item.addEventListener('focus', () => updateHUD(idx));
+      item.addEventListener('click', () => updateHUD(idx));
     });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' && selected < allItems.length - 1) {
-        updateHUD(selected + 1);
-      }
-      if (e.key === 'ArrowLeft' && selected > 0) {
-        updateHUD(selected - 1);
-      }
+      if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
+      if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
     });
   </script>
 </body>
