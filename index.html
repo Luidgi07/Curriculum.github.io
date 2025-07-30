@@ -1,199 +1,182 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>PS4 Menu – Slider suave + detalhes expansíveis</title>
-  <style>
-    body {
-      background: #121a24;
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: flex-start;
-      transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
-      position: relative;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-      pointer-events: none;
-      background: transparent;
-      opacity: 0;
-      transition: opacity 0.65s cubic-bezier(.42,1,.72,1);
-    }
-    body.bg-dynamic::before {
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
-      opacity: 1;
-    }
+<meta charset="UTF-8" />
+<title>PS4 Menu – Carrossel suave + detalhes expansíveis</title>
+<style>
+body {
+  background: #121a24;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  position: relative;
+  transition: background-image 0.4s cubic-bezier(.42,1,.72,1);
+}
+/* Fade real */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background: transparent;
+  opacity: 0;
+  transition: opacity 1.6s cubic-bezier(.36,1,.72,1); /* fade bem mais lento */
+}
+body.bg-dynamic::before {
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+  opacity: 1;
+}
 
-    .dashboard-container {
-      position: fixed;
-      bottom: 0; left: 0;
-      width: 100vw;
-      transition: transform 0.52s cubic-bezier(.42,1,.72,1);
-      z-index: 10;
-    }
-    .dashboard-container.expanded {
-      transform: translateY(-320px);
-    }
+.dashboard-container {
+  position: fixed;
+  left: 0; bottom: 0;
+  width: 100vw;
+  z-index: 10;
+  transition: transform 0.7s cubic-bezier(.42,1,.72,1);
+}
+.dashboard-container.expanded {
+  transform: translateY(-340px);
+}
 
-    .ps4-dashboard {
-      width: 100vw;
-      padding: 80px 0 120px 90px; 
-    }
-    .slider-wrapper {
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      gap: 38px;
-    }
-    /* Indicador/cursor "PS4-style" */
-    .selection-indicator {
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 160px;
-      height: 160px;
-      border: 2.5px solid #42aaff;
-      box-shadow: 0 0 90px 15px #33b1f0b9;
-      border-radius: 0;
-      z-index: 3;
-      pointer-events: none;
-      box-sizing: border-box;
-      background: transparent;
-      transition: transform 0.26s cubic-bezier(.32,1.35,.62,1);
-      opacity: 0.98;
-    }
-    .menu-item-wrapper {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .menu-item {
-      width: 160px; height: 160px; border-radius: 0;
-      background: #23283a;
-      box-shadow: 0 8px 32px #000c;
-      outline: none;
-      display: flex;
-      align-items: center; justify-content: center;
-      cursor: pointer;
-      border: 2.5px solid transparent;
-      position: relative; z-index: 1; opacity: 0.92;
-      transition:
-        transform 0.22s cubic-bezier(.32,1.35,.62,1),
-        box-shadow 0.18s,
-        z-index 0.16s,
-        border 0.18s;
-    }
-    .menu-item.selected {
-      transform: scale(1.22);
-      z-index: 20; opacity: 1;
-    }
-    .menu-item img {
-      width: 100%; height: 100%; object-fit: cover; border-radius: 0; display: block;
-    }
-    .hud-row {
-      display: none; position: absolute; left: 0; top: 100%; margin-top: 0;
-      flex-direction: row; align-items: stretch; z-index: 40; pointer-events: none;
-      transition: transform 0.22s, left 0.22s;
-    }
-    .menu-item.selected ~ .hud-row {
-      display: flex;
-      animation: boxin 0.21s;
-      transform: translateY(17.6px);
-      left: -17.6px;
-    }
-    @keyframes boxin { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
-    .hud-start {
-      height: 48px;
-      background: rgba(26,30,43,0.98);
-      border-radius: 0;
-      border: 2.5px solid #42aaff;
-      box-shadow: 0 3px 18px #06448460;
-      pointer-events: auto;
-      margin-right: 12px;
-      display: flex;
-      align-items: center; justify-content: center; opacity: 1;
-      width: 160px;
-      transition: width 0.22s;
-    }
-    .menu-item.selected ~ .hud-row .hud-start { width: calc(160px * 1.22); }
-    .hud-btn {
-      background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-      color: #fff; border: none; border-radius: 0; font-size: 1em; font-weight: 600;
-      letter-spacing: 2px; padding: 8px 32px; cursor: pointer; outline: none;
-      pointer-events: auto; box-shadow: 0 1px 8px #149ccc90; transition: background 0.14s; height: 32px;
-    }
-    .hud-title {
-      min-width: 180px; height: 48px; display: flex; align-items: center;
-      background: rgba(26, 30, 43, 0.98); border-radius: 0; border: 2.5px solid #42aaff;
-      box-shadow: 0 3px 18px #06448460; pointer-events: auto; padding: 0 10px 0 20px;
-      font-size: 1.13em; font-weight: 700; letter-spacing: 1.0px; color: #f5f7fa;
-      text-shadow: 0 2px 10px #193c8040; white-space: nowrap; opacity: 1;
-      transition: box-shadow 0.14s; line-height: 46px; user-select: none; cursor: pointer; position: relative;
-    }
-    /* seta ao lado do nome */
-    .hud-title .down-arrow {
-      display: none;
-      margin-left: 10px;
-      font-size: 1.1em;
-      color: #42aaff;
-      animation: bounce 1.4s infinite;
-      user-select: none;
-    }
-    .hud-title.exp-arrow .down-arrow {
-      display: inline-block;
-    }
-    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(5px);} }
-    /* Painel game-details */
-    .game-details {
-      position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px;
-      background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a;
-      padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none;
-      transform: translateY(100%); transition: opacity 0.5s cubic-bezier(.42,1,.72,1), transform 0.5s cubic-bezier(.42,1,.72,1);
-      z-index: 9;
-    }
-    .game-details.visible { opacity: 1; pointer-events: auto; transform: translateY(0%);}
-    .game-details img { width: 220px; height: 160px; object-fit: cover; border: 2.5px solid #42aaff; border-radius: 6px; flex-shrink: 0;}
-    .game-details .info { flex-grow: 1; color: #f5f7fa;}
-    .game-details .info p { margin: 0 0 12px 0; font-size: 1em; line-height: 1.3em;}
-    .game-details .buttons { display: flex; gap: 14px; margin-top: 10px;}
-    .game-details .buttons button {
-      background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-      border: none; border-radius: 0; color: #fff; padding: 8px 24px; font-weight: 600;
-      cursor: pointer; box-shadow: 0 1px 8px #149ccc90; transition: background 0.2s;
-    }
-    .game-details .buttons button:hover {
-      background: linear-gradient(135deg,#1178cc 60%,#4ebafd 120%);
-      outline: none;
-    }
-    @media (max-width: 950px) {
-      .ps4-dashboard { padding-left: 15px;}
-      .hud-row { min-width: 90px; font-size:0.86em;}
-      .hud-title { font-size:1em;}
-      .game-details { flex-direction: column; height: auto; max-height: none; padding: 20px 20px;}
-      .game-details img { width: 100%; height: auto;}
-      .game-details .buttons { justify-content: flex-start;}
-    }
-  </style>
+.ps4-dashboard {
+  width: 100vw;
+  padding: 80px 0 120px 90px;
+  overflow: hidden;
+}
+.carousel-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 38px;
+  transition: transform 0.36s cubic-bezier(.42,1,.72,1);
+  will-change: transform;
+  position: relative;
+  /* deixa espaço para o indicador slider se quiseres estilizar */
+}
+
+.menu-item-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-item {
+  width: 160px; height: 160px; border-radius: 0;
+  background: #23283a;
+  box-shadow: 0 8px 32px #000c;
+  outline: none;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  border: 2.5px solid transparent;
+  position: relative; z-index: 1; opacity: 0.92;
+  transition:
+    transform 0.22s cubic-bezier(.32,1.35,.62,1),
+    box-shadow 0.18s,
+    z-index 0.16s,
+    border 0.18s;
+}
+.menu-item.selected {
+  transform: scale(1.22);
+  box-shadow: 0 0 90px 15px #33b1f0b9, 0 10px 45px #000c;
+  border: 2.5px solid #42aaff;
+  border-bottom: none;
+  z-index: 20; opacity: 1;
+}
+.menu-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; display: block; }
+.hud-row {
+  display: none; position: absolute; left: 0; top: 100%; margin-top: 0;
+  flex-direction: row; align-items: stretch; z-index: 40; pointer-events: none;
+  transition: transform 0.22s, left 0.22s;
+}
+.menu-item.selected ~ .hud-row {
+  display: flex;
+  animation: boxin 0.21s;
+  transform: translateY(17.6px);
+  left: -17.6px;
+}
+@keyframes boxin { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
+
+.hud-start {
+  height: 48px;
+  background: rgba(26,30,43,0.98);
+  border-radius: 0;
+  border: 2.5px solid #42aaff;
+  box-shadow: 0 3px 18px #06448460;
+  pointer-events: auto;
+  margin-right: 12px;
+  display: flex;
+  align-items: center; justify-content: center; opacity: 1;
+  width: 160px;
+  transition: width 0.22s;
+}
+.menu-item.selected ~ .hud-row .hud-start { width: calc(160px * 1.22); }
+.hud-btn {
+  background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
+  color: #fff; border: none; border-radius: 0; font-size: 1em; font-weight: 600;
+  letter-spacing: 2px; padding: 8px 32px; cursor: pointer; outline: none;
+  pointer-events: auto; box-shadow: 0 1px 8px #149ccc90; transition: background 0.14s; height: 32px;
+}
+.hud-title {
+  min-width: 180px; height: 48px; display: flex; align-items: center;
+  background: rgba(26, 30, 43, 0.98); border-radius: 0; border: 2.5px solid #42aaff;
+  box-shadow: 0 3px 18px #06448460; pointer-events: auto; padding: 0 10px 0 20px;
+  font-size: 1.13em; font-weight: 700; letter-spacing: 1.0px; color: #f5f7fa;
+  text-shadow: 0 2px 10px #193c8040; white-space: nowrap; opacity: 1;
+  transition: box-shadow 0.14s; line-height: 46px; user-select: none; cursor: pointer; position: relative;
+}
+.hud-title .down-arrow {
+  display: none; margin-left: 10px; font-size: 1.1em; color: #42aaff; animation: bounce 1.4s infinite; user-select: none;
+}
+.hud-title.exp-arrow .down-arrow { display: inline-block; }
+@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(5px);} }
+
+/* Painel game-details */
+.game-details {
+  position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px;
+  background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a;
+  padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none;
+  transform: translateY(100%); transition: opacity 0.7s cubic-bezier(.42,1,.72,1), transform 0.7s cubic-bezier(.42,1,.72,1);
+  z-index: 12;
+}
+.game-details.visible { opacity: 1; pointer-events: auto; transform: translateY(0%);}
+.game-details img { width: 220px; height: 160px; object-fit: cover; border: 2.5px solid #42aaff; border-radius: 6px; flex-shrink: 0;}
+.game-details .info { flex-grow: 1; color: #f5f7fa;}
+.game-details .info p { margin: 0 0 12px 0; font-size: 1em; line-height: 1.3em;}
+.game-details .buttons { display: flex; gap: 14px; margin-top: 10px;}
+.game-details .buttons button {
+  background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
+  border: none; border-radius: 0; color: #fff; padding: 8px 24px; font-weight: 600;
+  cursor: pointer; box-shadow: 0 1px 8px #149ccc90; transition: background 0.2s;
+}
+.game-details .buttons button:hover {
+  background: linear-gradient(135deg,#1178cc 60%,#4ebafd 120%);
+  outline: none;
+}
+@media (max-width: 950px) {
+  .ps4-dashboard { padding-left: 15px;}
+  .carousel-inner { gap: 18px;}
+  .hud-title { font-size:1em;}
+  .game-details { flex-direction: column; height: auto; max-height: none; padding: 20px 20px;}
+  .game-details img { width: 100%; height: auto;}
+  .game-details .buttons { justify-content: flex-start;}
+}
+</style>
 </head>
 <body>
 <div class="dashboard-container" id="dashCont">
   <div class="ps4-dashboard">
-    <div class="slider-wrapper">
-      <!-- Slider highlight -->
-      <div class="selection-indicator"></div>
-      <!-- Quadrados do menu -->
+    <div class="carousel-inner" id="carousel">
       <div class="menu-item-wrapper">
-        <div class="menu-item selected" tabindex="0" data-title="Red Dead Redemption 2">
+        <div class="menu-item selected" tabindex="0">
           <img src="https://upload.wikimedia.org/wikipedia/pt/4/44/Red_Dead_Redemption_II_capa.png" alt="Red Dead Redemption 2" />
         </div>
         <div class="hud-row">
@@ -202,7 +185,7 @@
         </div>
       </div>
       <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0" data-title="Fortnite">
+        <div class="menu-item" tabindex="0">
           <img src="https://static-cdn.jtvnw.net/ttv-boxart/33214-285x380.jpg" alt="Fortnite" />
         </div>
         <div class="hud-row">
@@ -213,7 +196,7 @@
         </div>
       </div>
       <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0" data-title="Days Gone">
+        <div class="menu-item" tabindex="0">
           <img src="https://upload.wikimedia.org/wikipedia/pt/1/16/Days_Gone_capa.png" alt="Days Gone" />
         </div>
         <div class="hud-row">
@@ -222,7 +205,7 @@
         </div>
       </div>
       <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0" data-title="Ghost of Tsushima">
+        <div class="menu-item" tabindex="0">
           <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima" />
         </div>
         <div class="hud-row">
@@ -234,7 +217,6 @@
   </div>
 </div>
 
-<!-- Painel detalhe do Fortnite, inicialmente invisível -->
 <div class="game-details" id="gameDetails">
   <img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
   <div class="info">
@@ -247,30 +229,26 @@
 </div>
 
 <script>
-const allItems = document.querySelectorAll('.menu-item');
+const carousel = document.getElementById('carousel');
+const wrappers = carousel.querySelectorAll('.menu-item-wrapper');
+const allItems = carousel.querySelectorAll('.menu-item');
+const hudTitles = carousel.querySelectorAll('.hud-title');
 const dashboardsContainer = document.getElementById('dashCont');
-const slider = document.querySelector('.selection-indicator');
-const wrapper = document.querySelector('.slider-wrapper');
-const hudTitles = document.querySelectorAll('.hud-title');
 const gameDetails = document.getElementById('gameDetails');
-let selected = 0;
-let expanded = false;
+let selected = 0, expanded = false;
+const quadW = 160, gap = 38;
 
-// Atualiza a posição do highlight slider
-function moveSlider(idx) {
-  // gap = 38px, quad = 160px
-  slider.style.transform = `translateX(${idx * (160 + 38)}px)`;
+function moveCarousel(idx) {
+  carousel.style.transform = `translateX(calc(50vw - 90px - ${(quadW + gap) * idx + quadW / 2}px))`;
 }
-moveSlider(selected);
 
 function updateHUD(idx) {
-  if (expanded || selected === idx) return;
+  if (expanded || idx === selected) return;
   allItems[selected].classList.remove('selected');
   selected = idx;
   allItems[selected].classList.add('selected');
   allItems[selected].focus();
-  moveSlider(idx);
-
+  moveCarousel(idx);
   document.body.classList.toggle('bg-dynamic', selected === 1);
 }
 
@@ -279,7 +257,6 @@ function expandDetails() {
   expanded = true;
   dashboardsContainer.classList.add('expanded');
   gameDetails.classList.add('visible');
-  // seta ativa só no nome "Fortnite"
   hudTitles.forEach(t => t.classList.remove('exp-arrow'));
   hudTitles[1].classList.add('exp-arrow');
 }
@@ -290,26 +267,26 @@ function collapseDetails() {
   hudTitles[1].classList.remove('exp-arrow');
 }
 
-// Clique no nome Fortnite ativa expansão
-hudTitles[1].addEventListener('click', () => expandDetails());
+hudTitles[1].addEventListener('click', expandDetails);
 
-// Teclas para expandir/recolher detalhes
 document.addEventListener('keydown', e => {
   if (!expanded && selected === 1 && (e.key === 'ArrowDown' || e.key === 'PageDown')) expandDetails();
   if (expanded && (e.key === 'Escape' || e.key === 'ArrowUp')) collapseDetails();
 });
 
-// Navegação lateral com slider
 allItems.forEach((item, idx) => {
   item.addEventListener('focus', () => { if (!expanded) updateHUD(idx); });
-  item.addEventListener('click', () => { if (!expanded) updateHUD(idx); });
+  item.addEventListener('click',   () => { if (!expanded) updateHUD(idx); });
   item.addEventListener('mouseover', () => { if (!expanded) updateHUD(idx); });
 });
-document.addEventListener('keydown', (e) => {
-  if(expanded) return;
+document.addEventListener('keydown', e => {
+  if (expanded) return;
   if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
   if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
 });
+
+// Inicializar posição do carrossel
+moveCarousel(selected);
 </script>
 </body>
 </html>
