@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – Retângulo colado à base</title>
+  <title>PS4 Menu – Dois Retângulos Alinhados</title>
   <style>
     body {
       background: #121a24;
@@ -36,11 +36,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.22s cubic-bezier(.32,1.35,.62,1), 
-                  box-shadow 0.18s, 
-                  z-index 0.15s, 
-                  height 0.22s, 
-                  width 0.22s;
+      transition: transform 0.23s cubic-bezier(.32,1.35,.62,1),
+                  box-shadow 0.18s,
+                  z-index 0.16s;
       cursor: pointer;
       border-radius: 0;
       border: 2.5px solid transparent;
@@ -50,7 +48,6 @@
     }
     .menu-item.selected,
     .menu-item:hover {
-      /* Expande para cima e para baixo */
       transform: scale(1.22);
       box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
       border: 2.5px solid #42aaff;
@@ -63,37 +60,40 @@
       border-radius: 0;
       display: block;
     }
-    .start-info-box {
+    /* HUD dos dois retângulos */
+    .hud-row {
       display: none;
       position: absolute;
       left: 0;
       top: 100%;
       margin-top: 13px;
-      min-width: 320px;
-      min-height: 66px;
-      background: rgba(26,30,43,0.98);
-      box-shadow: 0 3px 18px #06448460;
-      border-radius: 7px;
-      border: 2px solid #223659;
-      display: flex;
       flex-direction: row;
-      align-items: center;
-      padding: 18px 45px 18px 26px;
-      opacity: 0;
+      align-items: stretch;
+      z-index: 40;
       pointer-events: none;
-      z-index: 33;
-      animation: none;
-      transition: opacity 0.18s, transform 0.15s;
     }
-    .menu-item.selected ~ .start-info-box,
-    .menu-item:hover ~ .start-info-box {
+    .menu-item.selected ~ .hud-row,
+    .menu-item:hover ~ .hud-row {
       display: flex;
-      opacity: 1;
-      pointer-events: auto;
-      animation: boxin 0.22s;
+      animation: boxin 0.21s;
     }
     @keyframes boxin { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
-    .start-btn {
+    .hud-start {
+      width: 160px;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26, 30, 43, 0.98);
+      border-radius: 7px;
+      border: 2px solid #223659;
+      box-shadow: 0 3px 18px #06448460;
+      pointer-events: auto;
+      margin-right: 12px; /* Aproximadamente 3mm */
+      opacity: 1;
+      transition: box-shadow 0.14s;
+    }
+    .hud-btn {
       background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
       color: #fff;
       border: none;
@@ -102,68 +102,84 @@
       font-weight: 600;
       letter-spacing: 2px;
       padding: 13px 36px;
-      margin-right: 25px;
-      box-shadow: 0 1px 8px #149ccc90;
       cursor: pointer;
       outline: none;
       pointer-events: auto;
+      box-shadow: 0 1px 8px #149ccc90;
       transition: background 0.14s;
     }
-    .start-label {
+    .hud-title {
+      min-width: 240px;
+      display: flex;
+      align-items: center;
+      background: rgba(26, 30, 43, 0.98);
+      border-radius: 7px;
+      border: 2px solid #223659;
+      box-shadow: 0 3px 18px #06448460;
+      pointer-events: auto;
+      padding: 0 40px 0 26px;
       font-size: 1.32em;
       font-weight: 700;
       letter-spacing: 1.2px;
       color: #f5f7fa;
       text-shadow: 0 2px 10px #193c8040;
       white-space: nowrap;
-      margin-left: 8px;
+      opacity: 1;
+      transition: box-shadow 0.14s;
     }
     @media (max-width: 950px) {
       .ps4-dashboard { padding-left: 15px;}
-      .start-info-box { min-width:180px; font-size:0.86em;}
-      .start-label { font-size:1em;}
+      .hud-row { min-width: 90px; font-size:0.86em; }
+      .hud-title { font-size:1em;}
     }
   </style>
 </head>
 <body>
-  <div class="ps4-dashboard" id="ps4Dashboard">
+  <div class="ps4-dashboard">
     <div class="menu-item-wrapper">
       <div class="menu-item selected" tabindex="0" data-title="Red Dead Redemption 2">
         <img src="https://upload.wikimedia.org/wikipedia/pt/4/44/Red_Dead_Redemption_II_capa.png" alt="Red Dead Redemption 2">
       </div>
-      <div class="start-info-box">
-        <button class="start-btn">START</button>
-        <span class="start-label">Red Dead Redemption 2</span>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title">Red Dead Redemption 2</div>
       </div>
     </div>
     <div class="menu-item-wrapper">
       <div class="menu-item" tabindex="0" data-title="Fortnite">
         <img src="https://static-cdn.jtvnw.net/ttv-boxart/33214-285x380.jpg" alt="Fortnite">
       </div>
-      <div class="start-info-box">
-        <button class="start-btn">START</button>
-        <span class="start-label">Fortnite</span>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title">Fortnite</div>
       </div>
     </div>
     <div class="menu-item-wrapper">
       <div class="menu-item" tabindex="0" data-title="Days Gone">
         <img src="https://upload.wikimedia.org/wikipedia/pt/1/16/Days_Gone_capa.png" alt="Days Gone">
       </div>
-      <div class="start-info-box">
-        <button class="start-btn">START</button>
-        <span class="start-label">Days Gone</span>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title">Days Gone</div>
       </div>
     </div>
     <div class="menu-item-wrapper">
       <div class="menu-item" tabindex="0" data-title="Ghost of Tsushima">
         <img src="https://upload.wikimedia.org/wikipedia/pt/9/94/Ghost_of_Tsushima_capa.png" alt="Ghost of Tsushima">
       </div>
-      <div class="start-info-box">
-        <button class="start-btn">START</button>
-        <span class="start-label">Ghost of Tsushima</span>
+      <div class="hud-row">
+        <div class="hud-start">
+          <button class="hud-btn">START</button>
+        </div>
+        <div class="hud-title">Ghost of Tsushima</div>
       </div>
     </div>
-    <!-- Adiciona mais cartões conforme precisares -->
   </div>
   <script>
     const allItems = document.querySelectorAll('.menu-item');
@@ -185,5 +201,3 @@
   </script>
 </body>
 </html>
-
-
