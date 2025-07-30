@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – Apenas um selecionado</title>
+  <title>PS4 Menu – Quadrados no fundo</title>
   <style>
     body {
       min-height: 100vh;
@@ -64,7 +64,6 @@
         z-index 0.16s,
         border 0.18s;
     }
-    /* Só o .selected fica realçado! */
     .menu-item.selected {
       transform: scale(1.22);
       box-shadow: 0 0 90px 15px #33b1f0b9,0 10px 45px #000c;
@@ -91,7 +90,6 @@
       pointer-events: none;
       transition: transform 0.22s, left 0.22s;
     }
-    /* Só o selecionado mostra HUD */
     .menu-item.selected ~ .hud-row {
       display: flex;
       animation: boxin 0.21s;
@@ -165,6 +163,7 @@
   </style>
 </head>
 <body>
+  <!-- Imagem de fundo fixo a ocupar toda a viewport -->
   <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
        class="background-img"
        alt="Fundo especial">
@@ -219,11 +218,9 @@
       allItems[selected].focus();
     }
 
-    // Só “selected”, nunca hover!
     allItems.forEach((item, idx) => {
+      item.addEventListener('mouseover', () => updateHUD(idx));
       item.addEventListener('focus', () => updateHUD(idx));
-      item.addEventListener('click', () => updateHUD(idx));
-      // Se quiseres que o hover faça só highlight de cursor, podes pôr efeito noutro estilo/light.
     });
 
     document.addEventListener('keydown', (e) => {
