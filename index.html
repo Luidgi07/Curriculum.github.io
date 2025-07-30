@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>PS4 Menu – Retângulo START igual ao cartão</title>
+  <title>PS4 Menu – START pequeno e pontas retas</title>
   <style>
     body {
       background: #121a24;
@@ -33,11 +33,11 @@
       width: 160px;
       height: 160px;
       transition: 
-        transform 0.23s cubic-bezier(.32,1.35,.62,1), 
+        transform 0.22s cubic-bezier(.32,1.35,.62,1), 
         box-shadow 0.18s, 
         z-index 0.16s, 
-        height 0.22s, 
-        width 0.22s;
+        width 0.21s, 
+        height 0.21s;
       border-radius: 0;
     }
     .menu-item {
@@ -85,8 +85,9 @@
     }
     @keyframes boxin { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
     .hud-start {
+      height: 48px; /* Altura fixa e pequena */
       background: rgba(26, 30, 43, 0.98);
-      border-radius: 7px;
+      border-radius: 0;
       border: 2px solid #223659;
       box-shadow: 0 3px 18px #06448460;
       pointer-events: auto;
@@ -95,48 +96,50 @@
       align-items: center;
       justify-content: center;
       opacity: 1;
-      min-height: 64px;
+      /* Largura acompanha tamanho do cartão seleccionado */
+      width: 160px;
+      transition: width 0.22s;
     }
-    /* Quando cartão cresce, HUD também cresce */
     .menu-item.selected ~ .hud-row .hud-start,
     .menu-item:hover ~ .hud-row .hud-start {
-      transform: scale(1.22);
+      width: calc(160px * 1.22);
     }
     .hud-btn {
       background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
       color: #fff;
       border: none;
-      border-radius: 19px;
+      border-radius: 0;
       font-size: 1em;
       font-weight: 600;
       letter-spacing: 2px;
-      padding: 13px 36px;
+      padding: 8px 32px;
       cursor: pointer;
       outline: none;
       pointer-events: auto;
       box-shadow: 0 1px 8px #149ccc90;
       transition: background 0.14s;
+      height: 32px;
     }
     .hud-title {
-      min-width: 240px;
+      min-width: 180px;
+      height: 48px;
       display: flex;
       align-items: center;
       background: rgba(26, 30, 43, 0.98);
-      border-radius: 7px;
+      border-radius: 0;
       border: 2px solid #223659;
       box-shadow: 0 3px 18px #06448460;
       pointer-events: auto;
-      padding: 0 40px 0 26px;
-      font-size: 1.32em;
+      padding: 0 35px 0 20px;
+      font-size: 1.13em;
       font-weight: 700;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.0px;
       color: #f5f7fa;
       text-shadow: 0 2px 10px #193c8040;
       white-space: nowrap;
       opacity: 1;
       transition: box-shadow 0.14s;
-      height: 64px;
-      line-height: 64px;
+      line-height: 46px;
     }
     @media (max-width: 950px) {
       .ps4-dashboard { padding-left: 15px;}
