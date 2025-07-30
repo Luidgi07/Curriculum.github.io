@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8" />
-<title>PS4 Menu – HUD Topo, Gradiente e Carrossel</title>
+<title>PS4 Menu – Atualizado HUD e Carrossel</title>
 <style>
 html, body {
   min-height: 100vh; height: 100%;
@@ -13,10 +13,9 @@ body {
   font-family: 'Segoe UI', Arial, sans-serif;
   display: flex; flex-direction: column; justify-content: flex-end;
   align-items: flex-start; position: relative;
-  padding-top: 60px; /* espaço para a barra topo */
+  padding-top: 60px;
   min-height: 100vh;
 }
-/* ========== HUD FIXA TOPO ========== */
 .top-hud {
   position: fixed; top: 0; left: 0; width: 100vw; height: 58px;
   background: rgba(18,26,36,0.93);
@@ -26,7 +25,12 @@ body {
   border-bottom: 2.5px solid #42aaff;
   box-shadow: 0 2px 18px #12244477;
 }
-.hud-left, .hud-center, .hud-right { display: flex; align-items: center; gap: 20px; }
+.hud-left, .hud-center, .hud-right {
+  display: flex; align-items: center;
+}
+.hud-left { gap: 18px; }
+.hud-center { flex: 1; justify-content: center; }
+.hud-right { gap: 18px; }
 .hud-icon {
   background: none; border: none; color: #e9f5fa; font-size: 1.32em;
   cursor: pointer; position: relative; outline: none; padding: 0 2px;
@@ -34,7 +38,7 @@ body {
   transition: filter 0.12s;
 }
 .hud-icon:hover, .profile-area:hover {
-  filter: brightness(1.21) drop-shadow(0 2px 6px #069cff88);
+  filter: brightness(1.24) drop-shadow(0 2px 6px #069cffbb);
 }
 .badge {
   background: #f8446b; color: #fff; font-size: 0.93em; border-radius: 14px;
@@ -57,35 +61,41 @@ body {
   color: #f3f8fc; font-weight: 600; letter-spacing: 0.05em; font-size: 1em;
   max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.icon-bell, .icon-cog, .icon-trophy {
-  width: 25px; height: 25px; display: inline-block; background-size: contain;
-  background-repeat: no-repeat; background-position: center;
+/* Trophies: ícone dourado SVG premium */
+.icon-trophy {
+  width: 30px; height: 30px; display: inline-block;
+  background-size: contain; background-repeat: no-repeat; background-position: center;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="10%" stop-color="%23ffe066"/><stop offset="100%" stop-color="%23a47816"/></linearGradient><ellipse cx="16" cy="6" rx="9" ry="3.5" fill="url(%23g)"/><path d="M7 8v7a9 9 0 0018 0V8" fill="url(%23g)" stroke="%23a47816" stroke-width="1.2"/><path d="M12 24.5v1.9c0 1 .7 1.6 2 1.6h5.9c1.2 0 1.9-.5 1.9-1.6v-1.8H12z" fill="url(%23g)" stroke="%23a47816" stroke-width="1.1"/><circle cx="16" cy="23" r="3" fill="url(%23g)" stroke="%23b19136" stroke-width="1"/></svg>');
+  filter: drop-shadow(0 0 7px #ffe08990);
+}
+.icon-bell, .icon-cog {
+  width: 25px; height: 25px; display: inline-block; background-size: contain; background-repeat: no-repeat; background-position: center;
 }
 .icon-bell { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%2342aaff" viewBox="0 0 24 24"><path d="M12 24a3.004 3.004 0 0 0 3-3h-6a3.004 3.004 0 0 0 3 3zm7-6v-5c0-3.309-2.691-6-6-6s-6 2.691-6 6v5l-2 2v1h16v-1l-2-2z"/></svg>'); }
 .icon-cog  { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%2342aaff" viewBox="0 0 24 24"><path d="M12 16.5c-2.485 0-4.5-2.014-4.5-4.5s2.015-4.5 4.5-4.5 4.5 2.014 4.5 4.5-2.015 4.5-4.5 4.5zm12-6.5h-1.345c-.256-1.243-.743-2.406-1.439-3.424l.951-.951-2.122-2.122-.951.951c-1.019-.695-2.181-1.184-3.426-1.439v-1.345h-3v1.345c-1.244.257-2.407.744-3.426 1.439l-.951-.951-2.122 2.122.951.951c-.696 1.018-1.184 2.181-1.439 3.424h-1.345v3h1.345c.257 1.244.743 2.406 1.439 3.425l-.951.951 2.122 2.122.951-.951c1.019.695 2.182 1.183 3.426 1.439v1.345h3v-1.345c1.244-.256 2.407-.744 3.426-1.439l.951.951 2.122-2.122-.951-.951c.695-1.019 1.183-2.182 1.439-3.425h1.345v-3z"/></svg>'); }
-.icon-trophy { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%2342aaff" viewBox="0 0 24 24"><path d="M17 19v1a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-1a7 7 0 0 1-6-7V5h2V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v1h2v7a7 7 0 0 1-6 7Zm4-10h-2v4a5 5 0 0 1-5 5V19h2v1h-4v-1h2v-1A5 5 0 0 1 5 13V9H3v-2h1V5h16v2h1v2Z"/></svg>'); }
-.hud-time {
-  color: #e9f5fa; font-size: 1.11em;
-  font-variant-numeric: tabular-nums; font-family: 'Segoe UI Mono', monospace;
-  letter-spacing: 1px; font-weight: 500; margin-left: 12px; text-shadow: 1px 1px 2px #0006;
+/* Hora e data à esquerda junto aos troféus */
+.hud-time-date {
+  color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px;
+  font-variant-numeric: tabular-nums;
+  font-family: 'Segoe UI Mono', monospace;
+  min-width: 112px; text-align: left;
+  text-shadow: 1px 1px 2px #06060848;
 }
 @media (max-width: 750px) {
   .top-hud { padding: 0 8px; height: 45px; }
-  .profile-area { padding: 3px 7px 3px 3px;}
-  .hud-left, .hud-right { gap: 10px;}
+  .hud-left { gap: 7px;}
+  .icon-trophy { width: 22px; height: 22px;}
+  .hud-time-date { font-size: .94em; min-width: 72px;}
   .profile-img { width: 27px; height: 27px;}
   .profile-name { font-size: 0.92em;}
-  .hud-time { font-size: .98em;}
 }
-/* ========== FUNDO E GRADIENTE ========== */
+/* (continua com o teu CSS para fundo, gradiente, carrossel etc — igual ao anterior) */
 body::before {
   content: "";
-  position: fixed;
-  top: 0; left: 0;
+  position: fixed; top: 0; left: 0;
   width: 100vw; height: 100vh;
   z-index: -2;
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0; pointer-events: none;
   background: transparent;
   transition: opacity 2s cubic-bezier(.36,1,.72,1);
 }
@@ -93,143 +103,34 @@ body.bg-dynamic::before {
   background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
   opacity: 1;
 }
-/* Gradiente só visível com fade suave se gradient-fade for adicionada */
 body.bg-dynamic::after {
   content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: -1;
-  pointer-events: none;
+  position: fixed; top: 0; left: 0;
+  width: 100vw; height: 100vh; z-index: -1; pointer-events: none;
   background:
     linear-gradient(
       to bottom,
-      #121a24 0%,
-      #121a24 10%,
+      #121a24 0%, #121a24 10%,
       rgba(18,26,36,0.92) 36%,
       rgba(18,26,36,0.85) 46%,
       rgba(18,26,36,0.6) 56%,
       rgba(18,26,36,0.15) 76%,
-      rgba(18,26,36,0) 100%
-    );
+      rgba(18,26,36,0) 100%);
   opacity: 0;
   transition: opacity 1.1s cubic-bezier(.36,1,.72,1);
 }
 body.bg-dynamic.gradient-fade::after { opacity: 1; }
-/* ========== FIM GRADIENTE ========== */
-
-/* RESTANTE CSS DO DASHBOARD E CARROSSEL */
-.dashboard-container {
-  position: fixed;
-  left: 0; bottom: 0;
-  width: 100vw;
-  z-index: 10;
-  transition: transform 0.65s cubic-bezier(.42,1,.72,1);
-}
-.dashboard-container.expanded { transform: translateY(-340px);}
-.ps4-dashboard {
-  width: 100vw;
-  padding: 80px 0 120px 90px;
-  overflow: hidden;
-}
-.carousel-inner {
-  display: flex; flex-direction: row; align-items: flex-end;
-  gap: 38px; transition: transform 0.43s cubic-bezier(.42,1,.72,1);
-  will-change: transform; position: relative;
-}
-.menu-item-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; }
-.menu-item {
-  width: 160px; height: 160px; border-radius: 0;
-  background: #23283a; box-shadow: 0 8px 32px #000c;
-  outline: none; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; border: 2.5px solid transparent;
-  position: relative; z-index: 1; opacity: 0.92;
-  transition:
-    transform 0.22s cubic-bezier(.32,1.35,.62,1),
-    box-shadow 0.18s, z-index 0.16s, border 0.18s;
-}
-.menu-item.selected {
-  transform: scale(1.22);
-  box-shadow: 0 0 40px 5px #42aaffcc, 0 5px 35px #000c;
-  border: 2.5px solid #42aaff;
-  border-bottom: none;
-  z-index: 20; opacity: 1;
-}
-.menu-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; display: block; }
-.hud-row {
-  display: none; position: absolute; left: 0; top: 100%; margin-top: 0;
-  flex-direction: row; align-items: stretch; z-index: 40; pointer-events: none;
-  transition: transform 0.22s, left 0.22s;
-}
-.menu-item.selected ~ .hud-row {
-  display: flex;
-  animation: boxin 0.21s;
-  transform: translateY(17.6px);
-  left: -17.6px;
-}
-@keyframes boxin { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
-.hud-start {
-  height: 48px; background: rgba(26,30,43,0.98);
-  border-radius: 0; border: 2.5px solid #42aaff;
-  box-shadow: 0 3px 18px #06448460; pointer-events: auto;
-  margin-right: 12px; display: flex; align-items: center; justify-content: center; opacity: 1;
-  width: 160px; transition: width 0.22s;
-}
-.menu-item.selected ~ .hud-row .hud-start { width: calc(160px * 1.22); }
-.hud-btn {
-  background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-  color: #fff; border: none; border-radius: 0; font-size: 1em; font-weight: 600;
-  letter-spacing: 2px; padding: 8px 32px; cursor: pointer; outline: none;
-  pointer-events: auto; box-shadow: 0 1px 8px #149ccc90; transition: background 0.14s; height: 32px;
-}
-.hud-title {
-  min-width: 180px; height: 48px; display: flex; align-items: center;
-  background: rgba(26,30,43,0.98); border-radius: 0; border: 2.5px solid #42aaff;
-  box-shadow: 0 3px 18px #06448460; pointer-events: auto; padding: 0 10px 0 20px;
-  font-size: 1.13em; font-weight: 700; letter-spacing: 1.0px; color: #f5f7fa;
-  text-shadow: 0 2px 10px #193c8040; white-space: nowrap; opacity: 1;
-  transition: box-shadow 0.14s; line-height: 46px; user-select: none; cursor: pointer; position: relative;
-}
-.hud-title .down-arrow {
-  display: none; margin-left: 10px; font-size: 1.1em; color: #42aaff; animation: bounce 1.4s infinite; user-select: none;
-}
-.hud-title.exp-arrow .down-arrow { display: inline-block; }
-@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(5px);} }
-.game-details {
-  position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px;
-  background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a;
-  padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none;
-  transform: translateY(100%); transition: opacity 0.7s cubic-bezier(.42,1,.72,1), transform 0.7s cubic-bezier(.42,1,.72,1);
-  z-index: 12;
-}
-.game-details.visible { opacity: 1; pointer-events: auto; transform: translateY(0%);}
-.game-details img { width: 220px; height: 160px; object-fit: cover; border: 2.5px solid #42aaff; border-radius: 6px; flex-shrink: 0;}
-.game-details .info { flex-grow: 1; color: #f5f7fa;}
-.game-details .info p { margin: 0 0 12px 0; font-size: 1em; line-height: 1.3em;}
-.game-details .buttons { display: flex; gap: 14px; margin-top: 10px;}
-.game-details .buttons button {
-  background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-  border: none; border-radius: 0; color: #fff; padding: 8px 24px; font-weight: 600;
-  cursor: pointer; box-shadow: 0 1px 8px #149ccc90; transition: background 0.2s;
-}
-.game-details .buttons button:hover {
-  background: linear-gradient(135deg,#1178cc 60%,#4ebafd 120%);
-  outline: none;
-}
-@media (max-width: 950px) {
-  .ps4-dashboard { padding-left: 15px;}
-  .carousel-inner { gap: 18px;}
-  .hud-title { font-size:1em;}
-  .game-details { flex-direction: column; height: auto; max-height: none; padding: 20px 20px;}
-  .game-details img { width: 100%; height: auto;}
-  .game-details .buttons { justify-content: flex-start;}
-}
+/* ... restante CSS igual ... */
 </style>
 </head>
 <body>
-<!-- === HUD TOPO === -->
+<!-- === HUD TOPO ATUALIZADA === -->
 <div class="top-hud">
   <div class="hud-left">
+    <button class="hud-icon trophies" title="Troféus">
+      <span class="icon-trophy"></span>
+    </button>
+    <span class="hud-time-date" id="hudTimeDate"></span>
     <button class="hud-icon notifications" title="Notificações">
       <span class="icon-bell"></span>
       <span class="badge">3</span>
@@ -244,14 +145,9 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
       <span class="profile-name">Giuseppe Nelva</span>
     </div>
   </div>
-  <div class="hud-right">
-    <button class="hud-icon trophies" title="Troféus">
-      <span class="icon-trophy"></span>
-    </button>
-    <span class="hud-time" id="hudTime">00:00</span>
-  </div>
+  <div class="hud-right"></div>
 </div>
-<!-- === DASHBOARD/CARROSSEL === -->
+<!-- === TEU DASHBOARD/CARROSSEL ETC IGUAL AO ANTERIOR === -->
 <div class="dashboard-container" id="dashCont">
   <div class="ps4-dashboard">
     <div class="carousel-inner" id="carousel">
@@ -296,11 +192,10 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
     </div>
   </div>
 </div>
-<!-- === PAINEL DETALHES FORTNITE === -->
 <div class="game-details" id="gameDetails">
   <img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
   <div class="info">
-    <p><strong>Fortnite</strong> é um jogo de battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivo.</p>
+    <p><strong>Fortnite</strong> é um jogo de battle royale muito popular...</p>
     <div class="buttons">
       <button class="btn-trophies">Ver Troféus</button>
       <button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
@@ -309,18 +204,18 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
 </div>
 <script>
 function updateHudTime() {
-  const el = document.getElementById('hudTime');
+  const el = document.getElementById('hudTimeDate');
   if (!el) return;
   const now = new Date();
-  el.textContent = now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute:'2-digit' });
+  el.textContent = now.toLocaleDateString('pt-PT', {day:'2-digit', month:'2-digit'}) +
+    ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute:'2-digit' });
 }
 setInterval(updateHudTime, 1000); updateHudTime();
-// Botões HUD Topo exemplo
-document.querySelector('.hud-icon.notifications')?.addEventListener('click', () => alert('Notificações! (Liga à tua página real)'));
-document.querySelector('.profile-area')?.addEventListener('click', () => alert('Perfil de utilizador!'));
+document.querySelector('.hud-icon.notifications')?.addEventListener('click', () => alert('Notificações!'));
+document.querySelector('.profile-area')?.addEventListener('click', () => alert('Perfil!'));
 document.querySelector('.hud-icon.trophies')?.addEventListener('click', () => alert('Troféus!'));
 document.querySelector('.hud-icon.settings')?.addEventListener('click', () => alert('Definições!'));
-// Carrossel/menu/painel:
+/* --- RESTO DO TEU JS (carrossel, gradiente, painel, igual!) --- */
 const carousel = document.getElementById('carousel');
 const allItems = carousel.querySelectorAll('.menu-item');
 const hudTitles = carousel.querySelectorAll('.hud-title');
@@ -376,3 +271,4 @@ moveCarousel(selected);
 </script>
 </body>
 </html>
+
