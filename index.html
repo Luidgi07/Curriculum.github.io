@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>PS4 Menu – Carrossel, fundo fade e transição suave</title>
+  <title>PS4 Menu – Carrossel, fundo fade com gradiente</title>
   <style>
     html, body {
       min-height: 100vh;
@@ -19,10 +19,11 @@
       align-items: flex-start;
       position: relative;
     }
-    /* Pseudo-elemento cobre totalmente o topo, faz fade lento, inclui gradiente */
+    /* Gradiente no topo para esbater a imagem suavemente */
     body::before {
       content: "";
-      position: fixed; top: 0; left: 0;
+      position: fixed;
+      top: 0; left: 0;
       width: 100vw; height: 100vh;
       background: transparent;
       z-index: -1;
@@ -32,10 +33,11 @@
     }
     body.bg-dynamic::before {
       background:
-        linear-gradient(to bottom, #121a24 0%, rgba(18,26,36,0) 14%),
+        linear-gradient(to bottom, #121a24 0%, rgba(18,26,36,0) 55%),
         url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
       opacity: 1;
     }
+
     .dashboard-container {
       position: fixed;
       left: 0; bottom: 0;
@@ -58,10 +60,6 @@
       will-change: transform;
       position: relative;
     }
-    .carousel-inner .empty {
-      min-width: calc(50vw - 90px - 80px);
-      pointer-events: none;
-    }
     .menu-item-wrapper {
       position: relative;
       display: flex;
@@ -80,7 +78,9 @@
       position: relative; z-index: 1; opacity: 0.92;
       transition:
         transform 0.22s cubic-bezier(.32,1.35,.62,1),
-        box-shadow 0.18s, border 0.18s;
+        box-shadow 0.18s,
+        z-index 0.16s,
+        border 0.18s;
     }
     .menu-item.selected {
       transform: scale(1.22);
@@ -126,7 +126,7 @@
       min-width: 180px; height: 48px; display: flex; align-items: center;
       background: rgba(26, 30, 43, 0.98); border-radius: 0; border: 2.5px solid #42aaff;
       box-shadow: 0 3px 18px #06448460; pointer-events: auto; padding: 0 10px 0 20px;
-      font-size: 1.15em; font-weight: 700; letter-spacing: 1.0px; color: #f5f7fa;
+      font-size: 1.13em; font-weight: 700; letter-spacing: 1.0px; color: #f5f7fa;
       text-shadow: 0 2px 10px #193c8040; white-space: nowrap; opacity: 1;
       transition: box-shadow 0.14s; line-height: 46px; user-select: none; cursor: pointer; position: relative;
     }
@@ -135,6 +135,7 @@
     }
     .hud-title.exp-arrow .down-arrow { display: inline-block; }
     @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(5px);} }
+
     .game-details {
       position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px;
       background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a;
@@ -159,11 +160,10 @@
     @media (max-width: 950px) {
       .ps4-dashboard { padding-left: 15px;}
       .carousel-inner { gap: 18px;}
-      .hud-title { font-size: 1em;}
+      .hud-title { font-size:1em;}
       .game-details { flex-direction: column; height: auto; max-height: none; padding: 20px 20px;}
       .game-details img { width: 100%; height: auto;}
       .game-details .buttons { justify-content: flex-start;}
-      .carousel-inner .empty { min-width: 10vw; }
     }
   </style>
 </head>
@@ -171,7 +171,6 @@
 <div class="dashboard-container" id="dashCont">
   <div class="ps4-dashboard">
     <div class="carousel-inner" id="carousel">
-      <div class="empty"></div>
       <div class="menu-item-wrapper">
         <div class="menu-item selected" tabindex="0">
           <img src="https://upload.wikimedia.org/wikipedia/pt/4/44/Red_Dead_Redemption_II_capa.png" alt="Red Dead Redemption 2" />
@@ -210,20 +209,21 @@
           <div class="hud-title">Ghost of Tsushima</div>
         </div>
       </div>
-      <div class="empty"></div>
     </div>
   </div>
 </div>
+
 <div class="game-details" id="gameDetails">
   <img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
   <div class="info">
-    <p><strong>Fortnite</strong> é um jogo de battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivossssssssss.</p>
+    <p><strong>Fortnite</strong> é um jogo de battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivo.</p>
     <div class="buttons">
       <button class="btn-trophies">Ver Troféus</button>
       <button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
     </div>
   </div>
 </div>
+
 <script>
 const carousel = document.getElementById('carousel');
 const wrappers = carousel.querySelectorAll('.menu-item-wrapper');
@@ -233,11 +233,11 @@ const dashboardsContainer = document.getElementById('dashCont');
 const gameDetails = document.getElementById('gameDetails');
 let selected = 0, expanded = false;
 const quadW = 160, gap = 38;
+
 function moveCarousel(idx) {
-  const leftPad = carousel.querySelector('.empty').offsetWidth;
-  const translate = leftPad + idx * (quadW + gap);
-  carousel.style.transform = `translateX(calc(50vw - ${translate + quadW / 2}px))`;
+  carousel.style.transform = `translateX(calc(50vw - 90px - ${(quadW + gap) * idx + quadW / 2}px))`;
 }
+
 function updateHUD(idx) {
   if (expanded || idx === selected) return;
   allItems[selected].classList.remove('selected');
@@ -247,6 +247,7 @@ function updateHUD(idx) {
   moveCarousel(idx);
   document.body.classList.toggle('bg-dynamic', selected === 1);
 }
+
 function expandDetails() {
   if (selected !== 1 || expanded) return;
   expanded = true;
@@ -261,11 +262,14 @@ function collapseDetails() {
   gameDetails.classList.remove('visible');
   hudTitles[1].classList.remove('exp-arrow');
 }
+
 hudTitles[1].addEventListener('click', expandDetails);
+
 document.addEventListener('keydown', e => {
   if (!expanded && selected === 1 && (e.key === 'ArrowDown' || e.key === 'PageDown')) expandDetails();
   if (expanded && (e.key === 'Escape' || e.key === 'ArrowUp')) collapseDetails();
 });
+
 allItems.forEach((item, idx) => {
   item.addEventListener('focus', () => { if (!expanded) updateHUD(idx); });
   item.addEventListener('click',   () => { if (!expanded) updateHUD(idx); });
@@ -276,9 +280,9 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
   if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
 });
-// Iniciar carrossel centrado
-window.addEventListener('load', () => moveCarousel(selected));
-window.addEventListener('resize',   () => moveCarousel(selected));
+
+// Inicializar posição do carrossel
+moveCarousel(selected);
 </script>
 </body>
 </html>
