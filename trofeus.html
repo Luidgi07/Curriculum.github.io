@@ -39,28 +39,17 @@ body {
 .profile-area { display: flex; align-items: center; gap: 11px; background: rgba(42,62,94,0.82); border-radius: 9px; padding: 5px 55px 5px 55px; box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412; cursor: pointer; border: 1.5px solid #42aaff60; transition: filter 0.13s; min-width: 0; max-width: 260px;}
 .profile-img { width: 38px; height: 38px; border-radius: 7px; object-fit: cover; border: 2.5px solid #42aaff; box-shadow: 0 2px 12px #0a79e058; background: #202a41;}
 .profile-name { color: #f3f8fc; font-weight: 600; font-size: 1em; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* TROFÉUS */
 .trofeus-container {
-  width: 100vw;
-  max-width: 1024px;
+  width: 100vw; max-width: 1024px;
   margin: 80px auto 0 auto;
   padding: 36px 24px 32px 24px;
   background: rgba(24,32,50,0.91);
   border-radius: 14px;
   box-shadow: 0 10px 40px #121a2466;
-  display: flex;
-  flex-direction: column;
-  gap: 42px;
-  align-items: center;
+  display: flex; flex-direction: column; gap: 42px; align-items: center;
 }
-.trofeus-header {
-  display: flex; align-items: flex-start; gap: 36px; width: 100%;
-  justify-content: space-between; margin-bottom: 12px;
-}
-.trofeus-title {
-  color: #fff; font-size: 2em; font-weight: 800; letter-spacing: 1px; display: flex; align-items:center; gap:12px;
-}
+.trofeus-header { display: flex; align-items: flex-start; gap: 36px; width: 100%; justify-content: space-between; margin-bottom: 12px; }
+.trofeus-title { color: #fff; font-size: 2em; font-weight: 800; letter-spacing: 1px; display: flex; align-items:center; gap:12px; }
 .contador-trofeus {
   color: #ffffffd9; background: #1462a7; font-size: 1.1em; border-radius: 10px; padding: 8px 22px; font-weight: 600; box-shadow: 0 1px 7px #2468b988;
   letter-spacing: 0.8px; display:flex; gap:10px; align-items:center;
@@ -76,9 +65,7 @@ body {
   width: 60px; height: 60px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center;
 }
 .trofeu-icone svg { width: 100%; height: 100%; }
-.trofeu-nome {
-  color: #fff; font-size: 1.04em; font-weight: 700; text-align: center;
-}
+.trofeu-nome { color: #fff; font-size: 1.04em; font-weight: 700; text-align: center; }
 .trofeu-data { color: #b5caf8; font-size: .98em; margin-top: 4px; text-align: center; }
 .trofeu-desc { color: #c7e7fe; font-size: .92em; margin-top: 11px; margin-bottom: 0; text-align: center; line-height: 1.25em; }
 .trofeu-oculto { filter: grayscale(1) brightness(0.55); opacity: 0.73; border-color: #222c45; }
@@ -86,13 +73,11 @@ body {
 .trofeu-oculto .trofeu-desc { color: #7786ae; }
 .voltar-link { color: #74afe6; font-size: 1.1em; text-decoration: none; font-weight: 600; transition: color 0.13s; margin-bottom: 14px; display: flex; align-items: center; gap:7px;}
 .voltar-link:hover { color: #fff; text-decoration: underline; }
-
-/* Cores dos troféus tipo PS4 */
-.trofeu-ouro .ps-trophy { fill: #ffd700; stroke: #fff2ba; }
-.trofeu-prata .ps-trophy { fill: #c0c0c0; stroke: #e8e8e8; }
+.trofeu-ouro .ps-trophy { fill: #FFD700; stroke: #fff5b0; }
+.trofeu-prata .ps-trophy { fill: #C0C0C0; stroke: #E8E8E8; }
 .trofeu-bronze .ps-trophy { fill: #cd7f32; stroke: #ffd39b; }
-.trofeu-lendario .ps-trophy { fill: #90CAF9; stroke: #7b3fbf; } /* azul/platinum-ps4 */
-.trofeu-oculto .ps-trophy { fill: #222; stroke: #fff; }
+.trofeu-lendario .ps-trophy { fill: #90CAF9; stroke: #7b3fbf; }
+.trofeu-oculto .ps-trophy { fill: #101010; stroke: #fff; }
 @media (max-width: 900px) {
   .trofeus-container { max-width: 97vw; padding: 13vw 4vw 10vw 4vw; }
   .trofeus-header { flex-direction: column; gap: 10px; }
@@ -102,7 +87,6 @@ body {
 </style>
 </head>
 <body>
-
 <div class="top-hud">
   <div class="hud-left">
     <button class="hud-icon trophies" title="Troféus"><span class="icon-trophy"></span></button>
@@ -118,10 +102,7 @@ body {
   </div>
   <div class="hud-right"></div>
 </div>
-
-<!-- Voltar ao perfil -->
 <a class="voltar-link" href="index.html">&larr; Voltar ao Perfil</a>
-
 <div class="trofeus-container">
   <div class="trofeus-header">
     <span class="trofeus-title">
@@ -129,70 +110,75 @@ body {
       Troféus desbloqueados e ocultos
     </span>
     <span class="contador-trofeus">
-      <span id="count-desbloq">0</span> desbloqueado(s) &middot; 
+      <span id="count-desbloq">0</span> desbloqueado(s) &middot;
       <span id="count-ocultos">0</span> oculto(s)
     </span>
   </div>
   <div class="trofeu-lista" id="lista-trofeus">
-    <!-- Troféu OURO -->
     <div class="trofeu-card trofeu-ouro" data-tipo="desbloqueado">
-      <div class="trofeu-icone trofeu-ouro">
-        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Ouro">
-          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
-          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#fff2ba" stroke-width="2"/>
-          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#fffbe6" stroke="#fff2ba" stroke-width="1"/>
+      <div class="trofeu-icone">
+        <svg viewBox="0 0 60 60" class="ps-trophy" aria-label="Troféu Ouro">
+          <ellipse cx="30" cy="16" rx="13" ry="9"/>
+          <path d="M17,18 Q15,37 30,44 Q45,37 43,18"/>
+          <rect x="24" y="44" width="12" height="8" rx="3"/>
+          <path d="M12,17 Q7,32 21,26"/>
+          <path d="M48,17 Q53,32 39,26"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Ouro</div>
       <div class="trofeu-data">2026</div>
       <div class="trofeu-desc">Excelência e destaque — Ouro</div>
     </div>
-    <!-- Troféu PRATA -->
     <div class="trofeu-card trofeu-prata" data-tipo="desbloqueado">
-      <div class="trofeu-icone trofeu-prata">
-        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Prata">
-          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
-          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#e8e8e8" stroke-width="2"/>
-          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#e8e8e8" stroke="#fff" stroke-width="1"/>
+      <div class="trofeu-icone">
+        <svg viewBox="0 0 60 60" class="ps-trophy" aria-label="Troféu Prata">
+          <ellipse cx="30" cy="16" rx="13" ry="9"/>
+          <path d="M17,18 Q15,37 30,44 Q45,37 43,18"/>
+          <rect x="24" y="44" width="12" height="8" rx="3"/>
+          <path d="M12,17 Q7,32 21,26"/>
+          <path d="M48,17 Q53,32 39,26"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Prata</div>
       <div class="trofeu-data">2024</div>
       <div class="trofeu-desc">Conquista valiosa de Prata</div>
     </div>
-    <!-- Troféu BRONZE -->
     <div class="trofeu-card trofeu-bronze" data-tipo="desbloqueado">
-      <div class="trofeu-icone trofeu-bronze">
-        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Bronze">
-          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
-          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#ffd39b" stroke-width="2"/>
-          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#ffd39b" stroke="#fff6dd" stroke-width="1"/>
+      <div class="trofeu-icone">
+        <svg viewBox="0 0 60 60" class="ps-trophy" aria-label="Troféu Bronze">
+          <ellipse cx="30" cy="16" rx="13" ry="9"/>
+          <path d="M17,18 Q15,37 30,44 Q45,37 43,18"/>
+          <rect x="24" y="44" width="12" height="8" rx="3"/>
+          <path d="M12,17 Q7,32 21,26"/>
+          <path d="M48,17 Q53,32 39,26"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Bronze</div>
       <div class="trofeu-data">2023</div>
       <div class="trofeu-desc">Primeiras conquistas — Bronze</div>
     </div>
-    <!-- Troféu LENDÁRIO (Platina) -->
     <div class="trofeu-card trofeu-lendario" data-tipo="desbloqueado">
-      <div class="trofeu-icone trofeu-lendario">
-        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Lendário">
-          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
-          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#7b3fbf" stroke-width="2"/>
-          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#e6bbfd" stroke="#7b3fbf" stroke-width="1"/>
+      <div class="trofeu-icone">
+        <svg viewBox="0 0 60 60" class="ps-trophy" aria-label="Troféu Lendário">
+          <ellipse cx="30" cy="16" rx="13" ry="9"/>
+          <path d="M17,18 Q15,37 30,44 Q45,37 43,18"/>
+          <rect x="24" y="44" width="12" height="8" rx="3"/>
+          <path d="M12,17 Q7,32 21,26"/>
+          <path d="M48,17 Q53,32 39,26"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Lendário</div>
       <div class="trofeu-data">2028</div>
       <div class="trofeu-desc">Troféu máximo da jornada!</div>
     </div>
-    <!-- Troféu OCULTO -->
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
-      <div class="trofeu-icone trofeu-oculto">
-        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Oculto">
-          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
-          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#fff" stroke-width="2"/>
-          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#fff" stroke="#fff" stroke-width="1"/>
+      <div class="trofeu-icone">
+        <svg viewBox="0 0 60 60" class="ps-trophy" aria-label="Troféu Oculto">
+          <ellipse cx="30" cy="16" rx="13" ry="9"/>
+          <path d="M17,18 Q15,37 30,44 Q45,37 43,18"/>
+          <rect x="24" y="44" width="12" height="8" rx="3"/>
+          <path d="M12,17 Q7,32 21,26"/>
+          <path d="M48,17 Q53,32 39,26"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
@@ -200,11 +186,13 @@ body {
       <div class="trofeu-desc">Ainda por descobrir!</div>
     </div>
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
-      <div class="trofeu-icone trofeu-oculto">
-        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Oculto">
-          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
-          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#fff" stroke-width="2"/>
-          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#fff" stroke="#fff" stroke-width="1"/>
+      <div class="trofeu-icone">
+        <svg viewBox="0 0 60 60" class="ps-trophy" aria-label="Troféu Oculto">
+          <ellipse cx="30" cy="16" rx="13" ry="9"/>
+          <path d="M17,18 Q15,37 30,44 Q45,37 43,18"/>
+          <rect x="24" y="44" width="12" height="8" rx="3"/>
+          <path d="M12,17 Q7,32 21,26"/>
+          <path d="M48,17 Q53,32 39,26"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
@@ -223,7 +211,6 @@ function updateHudTime() {
 }
 setInterval(updateHudTime, 1000);
 updateHudTime();
-// Atualiza contadores de troféus
 function atualizarContador() {
   const desbloq = document.querySelectorAll('.trofeu-card[data-tipo="desbloqueado"]').length;
   const ocultos = document.querySelectorAll('.trofeu-card[data-tipo="oculto"]').length;
