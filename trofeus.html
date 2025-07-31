@@ -105,17 +105,16 @@ body {
 }
 
 .trofeu-lista {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cartões por linha */
   gap: 34px;
-  justify-content: flex-start;
+  justify-items: center;
   align-items: flex-start;
   width: 100%;
-  overflow-x: auto; 
-  padding-top: 32px;    /* Espaço superior dentro da caixa */
-  padding-bottom: 32px; /* Espaço inferior dentro da caixa */
-  overflow-y: auto;     /* Scroll permite ver mais linhas */
-  max-height: 400px;    /* Controla quantas linhas cabem antes do scroll */
+  padding-top: 32px;
+  padding-bottom: 32px;
+  overflow-y: auto;
+  max-height: 400px;
 }
 
 .trofeu-card.trofeu-lendario { z-index:50; position:relative; }
