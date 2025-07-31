@@ -259,111 +259,152 @@ body {
   </div>
   <div class="trofeu-vazio-msg" id="msgVazio" aria-live="polite">Nenhum troféu deste tipo por mostrar.</div>
   <div class="trofeu-lista" id="lista-trofeus">
-    <!-- Troféu Lendário sempre primeiro! -->
-    <div class="trofeu-card trofeu-lendario" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1508873699372-7aeab60b44c9" data-desc="Lendário! Todos os troféus obtidos. Parabéns, campeão da platina.">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 81" aria-label="Troféu Lendário">
-          <defs>
-            <radialGradient id="gradLendario" cx="50%" cy="45%" r="60%">
-              <stop offset="0%" stop-color="#e2eafd"/>
-              <stop offset="60%" stop-color="#a3d1fe"/>
-              <stop offset="100%" stop-color="#4db6ff"/>
-            </radialGradient>
-          </defs>
-          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#bdbfff" stroke="#7b3fbf" stroke-width="1.3"/>
-          <rect x="28" y="22" width="4" height="48" rx="2" fill="#bdbfff" stroke="#6fabff" stroke-width="1.2"/>
-          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
-          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
-          <ellipse cx="30" cy="20" rx="12" ry="9" fill="url(#gradLendario)" stroke="#6fabff" stroke-width="2"/>
-          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="url(#gradLendario)" stroke="#445cb3" stroke-width="2"/>
-          <polygon
-            points="30,4 31.3,8 35.5,8.2 32,10.5 33.3,15 30,12.4 26.7,15 28,10.5 24.5,8.2 28.7,8"
-            fill="url(#gradLendario)" stroke="#6fabff" stroke-width="1"/>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Lendário</div>
-      <div class="trofeu-data">2028</div>
-      <div class="trofeu-desc">Troféu máximo da jornada!</div>
-    </div>
-    <!-- Troféu Ouro -->
-    <div class="trofeu-card trofeu-ouro" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1506744038136-46273834b3fb" data-desc="Ganhaste o troféu mais dourado do perfil!">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 75" aria-label="Troféu Ouro">
-          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#fffbe6" stroke="#FFD700" stroke-width="1.3"/>
-          <rect x="28" y="22" width="4" height="48" rx="2" fill="#FFD700" stroke="#fff5b0" stroke-width="1.2"/>
-          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
-          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
-          <ellipse cx="30" cy="20" rx="12" ry="9" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
-          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Ouro</div>
-      <div class="trofeu-data">2026</div>
-      <div class="trofeu-desc">Excelência e destaque — Ouro</div>
-    </div>
-    <!-- Troféu Prata -->
-    <div class="trofeu-card trofeu-prata" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1465101046530-73398c7f28ca" data-desc="Prémio de prata, incrível percurso.">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 75" aria-label="Troféu Prata">
-          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#f3f3f3" stroke="#C0C0C0" stroke-width="1.3"/>
-          <rect x="28" y="22" width="4" height="48" rx="2" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="1.2"/>
-          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
-          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
-          <ellipse cx="30" cy="20" rx="12" ry="9" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
-          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Prata</div>
-      <div class="trofeu-data">2024</div>
-      <div class="trofeu-desc">Conquista valiosa de Prata</div>
-    </div>
-    <!-- Troféu Bronze -->
-    <div class="trofeu-card trofeu-bronze" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1465101178521-c1a9136a3cd7" data-desc="Bronze: início das tuas grandes conquistas.">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 75" aria-label="Troféu Bronze">
-          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.3"/>
-          <rect x="28" y="22" width="4" height="48" rx="2" fill="#cd7f32" stroke="#ffd39b" stroke-width="1.2"/>
-          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
-          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
-          <ellipse cx="30" cy="20" rx="12" ry="9" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
-          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Bronze</div>
-      <div class="trofeu-data">2023</div>
-      <div class="trofeu-desc">Primeira conquistas — Bronze</div>
-    </div>
-    <!-- Troféu Oculto -->
-    <div class="trofeu-card trofeu-oculto" tabindex="0" data-tipo="oculto" data-img="https://images.unsplash.com/photo-1519121784515-796c0eaf22c8" data-desc="Descobre os segredos destes troféus ocultos...">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
-          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
-          <rect x="28" y="22" width="4" height="48" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
-          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
-          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Oculto</div>
-      <div class="trofeu-data"></div>
-      <div class="trofeu-desc">Ainda por descobrir!</div>
-    </div>
-    <div class="trofeu-card trofeu-oculto" tabindex="0" data-tipo="oculto" data-img="https://images.unsplash.com/photo-1522209171808-9c9945de7c94" data-desc="Serás capaz de desbloquear este desafio?">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
-          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
-          <rect x="28" y="22" width="4" height="48" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
-          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
-          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Oculto</div>
-      <div class="trofeu-data"></div>
-      <div class="trofeu-desc">Continua a explorar...</div>
-    </div>
+    <!-- Troféu Lendário -->
+<div class="trofeu-card trofeu-lendario" tabindex="0"
+  data-tipo="desbloqueado"
+  data-nome="Troféu Lendário"
+  data-data="2028"
+  data-raridade="1"
+  data-img="https://images.unsplash.com/photo-1508873699372-7aeab60b44c9"
+  data-desc="Lendário! Todos os troféus obtidos. Parabéns, campeão da platina.">
+  <div class="trofeu-icone">
+    <svg viewBox="0 0 60 81" aria-label="Troféu Lendário">
+      <defs>
+        <radialGradient id="gradLendario" cx="50%" cy="45%" r="60%">
+          <stop offset="0%" stop-color="#e2eafd"/>
+          <stop offset="60%" stop-color="#a3d1fe"/>
+          <stop offset="100%" stop-color="#4db6ff"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="30" cy="70" rx="12" ry="5" fill="#bdbfff" stroke="#7b3fbf" stroke-width="1.3"/>
+      <rect x="28" y="22" width="4" height="48" rx="2" fill="#bdbfff" stroke="#6fabff" stroke-width="1.2"/>
+      <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
+      <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
+      <ellipse cx="30" cy="20" rx="12" ry="9" fill="url(#gradLendario)" stroke="#6fabff" stroke-width="2"/>
+      <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="url(#gradLendario)" stroke="#445cb3" stroke-width="2"/>
+      <polygon points="30,4 31.3,8 35.5,8.2 32,10.5 33.3,15 30,12.4 26.7,15 28,10.5 24.5,8.2 28.7,8" fill="url(#gradLendario)" stroke="#6fabff" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="trofeu-nome">Troféu Lendário</div>
+  <div class="trofeu-data">2028</div>
+  <div class="trofeu-desc">Troféu máximo da jornada!</div>
+</div>
+
+<!-- Troféu Ouro -->
+<div class="trofeu-card trofeu-ouro" tabindex="0"
+  data-tipo="desbloqueado"
+  data-nome="Troféu Ouro"
+  data-data="2026"
+  data-raridade="2"
+  data-img="https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+  data-desc="Ganhaste o troféu mais dourado do perfil!">
+  <div class="trofeu-icone">
+    <svg viewBox="0 0 60 75" aria-label="Troféu Ouro">
+      <ellipse cx="30" cy="70" rx="12" ry="5" fill="#fffbe6" stroke="#FFD700" stroke-width="1.3"/>
+      <rect x="28" y="22" width="4" height="48" rx="2" fill="#FFD700" stroke="#fff5b0" stroke-width="1.2"/>
+      <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
+      <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
+      <ellipse cx="30" cy="20" rx="12" ry="9" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
+      <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="trofeu-nome">Troféu Ouro</div>
+  <div class="trofeu-data">2026</div>
+  <div class="trofeu-desc">Excelência e destaque — Ouro</div>
+</div>
+
+<!-- Troféu Prata -->
+<div class="trofeu-card trofeu-prata" tabindex="0"
+  data-tipo="desbloqueado"
+  data-nome="Troféu Prata"
+  data-data="2024"
+  data-raridade="3"
+  data-img="https://images.unsplash.com/photo-1465101046530-73398c7f28ca"
+  data-desc="Prémio de prata, incrível percurso.">
+  <div class="trofeu-icone">
+    <svg viewBox="0 0 60 75" aria-label="Troféu Prata">
+      <ellipse cx="30" cy="70" rx="12" ry="5" fill="#f3f3f3" stroke="#C0C0C0" stroke-width="1.3"/>
+      <rect x="28" y="22" width="4" height="48" rx="2" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="1.2"/>
+      <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
+      <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
+      <ellipse cx="30" cy="20" rx="12" ry="9" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
+      <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="trofeu-nome">Troféu Prata</div>
+  <div class="trofeu-data">2024</div>
+  <div class="trofeu-desc">Conquista valiosa de Prata</div>
+</div>
+
+<!-- Troféu Bronze -->
+<div class="trofeu-card trofeu-bronze" tabindex="0"
+  data-tipo="desbloqueado"
+  data-nome="Troféu Bronze"
+  data-data="2023"
+  data-raridade="4"
+  data-img="https://images.unsplash.com/photo-1465101178521-c1a9136a3cd7"
+  data-desc="Bronze: início das tuas grandes conquistas.">
+  <div class="trofeu-icone">
+    <svg viewBox="0 0 60 75" aria-label="Troféu Bronze">
+      <ellipse cx="30" cy="70" rx="12" ry="5" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.3"/>
+      <rect x="28" y="22" width="4" height="48" rx="2" fill="#cd7f32" stroke="#ffd39b" stroke-width="1.2"/>
+      <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
+      <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
+      <ellipse cx="30" cy="20" rx="12" ry="9" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
+      <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="trofeu-nome">Troféu Bronze</div>
+  <div class="trofeu-data">2023</div>
+  <div class="trofeu-desc">Primeira conquistas — Bronze</div>
+</div>
+
+<!-- Troféu Oculto 1 -->
+<div class="trofeu-card trofeu-oculto" tabindex="0"
+  data-tipo="oculto"
+  data-nome="Troféu Oculto 1"
+  data-data="2021"
+  data-raridade="9"
+  data-img="https://images.unsplash.com/photo-1519121784515-796c0eaf22c8"
+  data-desc="Descobre os segredos destes troféus ocultos...">
+  <div class="trofeu-icone">
+    <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
+      <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
+      <rect x="28" y="22" width="4" height="48" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
+      <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#fff" stroke-width="2.8" fill="none"/>
+      <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#fff" stroke-width="2.8" fill="none"/>
+      <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
+      <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="trofeu-nome">Troféu Oculto</div>
+  <div class="trofeu-data"></div>
+  <div class="trofeu-desc">Ainda por descobrir!</div>
+</div>
+
+<!-- Troféu Oculto 2 -->
+<div class="trofeu-card trofeu-oculto" tabindex="0"
+  data-tipo="oculto"
+  data-nome="Troféu Oculto 2"
+  data-data=""
+  data-raridade="9"
+  data-img="https://images.unsplash.com/photo-1522209171808-9c9945de7c94"
+  data-desc="Serás capaz de desbloquear este desafio?">
+  <div class="trofeu-icone">
+    <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
+      <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
+      <rect x="28" y="22" width="4" height="48" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
+      <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#fff" stroke-width="2.8" fill="none"/>
+      <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#fff" stroke-width="2.8" fill="none"/>
+      <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
+      <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="trofeu-nome">Troféu Oculto</div>
+  <div class="trofeu-data"></div>
+  <div class="trofeu-desc">Continua a explorar...</div>
+</div>
+
   </div>
   </div>
 </div>
