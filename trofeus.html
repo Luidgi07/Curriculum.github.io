@@ -5,10 +5,7 @@
 <title>Troféus – Luís Correia</title>
 <style>
 html, body { width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden; }
-body {
-  background: url('- --- .- .-.  -. .-  .- --. ..- .- --..--  -.-. ..- .. -.. .- .-.  -. .-  - . .-. .-. .- (3).png') center center/cover no-repeat;
-  font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; padding-top: 60px;
-}
+body { background: url('- --- .- .-.  -. .-  .- --. ..- .- --..--  -.-. ..- .. -.. .- .-.  -. .-  - . .-. .-. .- (3).png') center center/cover no-repeat; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; padding-top: 60px; }
 .top-hud {
   position: fixed; top: 0; left: 0; width: 100vw; height: 58px;
   background: rgba(18,26,36,0.93); display: flex; align-items: center; justify-content: flex-start;
@@ -84,16 +81,15 @@ body {
     <div class="trofeu-card trofeu-ouro" data-tipo="desbloqueado">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Ouro">
-          <!-- Pegas/orelhas: começam no topo e terminam na base -->
-          <path d="M18,22 Q8,40 17,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
-          <path d="M42,22 Q52,40 43,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
-          <!-- Base grande -->
+          <!-- Base, perna trás (PRIMEIRO para ficar atrás do corpo) -->
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#fffbe6" stroke="#FFD700" stroke-width="1.3"/>
-          <!-- Perna por trás -->
           <rect x="28" y="22" width="4" height="48" rx="2" fill="#FFD700" stroke="#fff5b0" stroke-width="1.2"/>
+          <!-- Orelhas/pegas -->
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#FFD700" stroke-width="2.8" fill="none"/>
           <!-- Taça -->
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
-          <path d="M18,22 Q15,43 30,52 Q45,43 42,22 Z" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
+          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Ouro</div>
@@ -104,12 +100,12 @@ body {
     <div class="trofeu-card trofeu-prata" data-tipo="desbloqueado">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Prata">
-          <path d="M18,22 Q8,40 17,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
-          <path d="M42,22 Q52,40 43,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#f3f3f3" stroke="#C0C0C0" stroke-width="1.3"/>
           <rect x="28" y="22" width="4" height="48" rx="2" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="1.2"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
-          <path d="M18,22 Q15,43 30,52 Q45,43 42,22 Z" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
+          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Prata</div>
@@ -120,12 +116,12 @@ body {
     <div class="trofeu-card trofeu-bronze" data-tipo="desbloqueado">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Bronze">
-          <path d="M18,22 Q8,40 17,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
-          <path d="M42,22 Q52,40 43,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.3"/>
           <rect x="28" y="22" width="4" height="48" rx="2" fill="#cd7f32" stroke="#ffd39b" stroke-width="1.2"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
-          <path d="M18,22 Q15,43 30,52 Q45,43 42,22 Z" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
+          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Bronze</div>
@@ -139,20 +135,22 @@ body {
           <defs>
             <radialGradient id="gradLendario" cx="50%" cy="45%" r="60%">
               <stop offset="0%" stop-color="#e2eafd"/>
-              <stop offset="65%" stop-color="#a3d1fe"/>
+              <stop offset="60%" stop-color="#a3d1fe"/>
               <stop offset="100%" stop-color="#4db6ff"/>
             </radialGradient>
           </defs>
-          <!-- ESTRELA colada por cima com 2 pontas nas laterais da taça -->
-          <polygon points="30,4 33,15 44,15.5 35.5,21.5 39,32 30,26.5 21,32 24.5,21.5 16,15.5 27,15"
-            fill="#ffe53c" stroke="#b3b9d9" stroke-width="2" />
-          <!-- Pegas/orelhas -->
-          <path d="M18,22 Q8,40 17,75" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
-          <path d="M42,22 Q52,40 43,75" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
+          <!-- Base, perna trás -->
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#bdbfff" stroke="#7b3fbf" stroke-width="1.3"/>
-          <rect x="28" y="22" width="4" height="53" rx="2" fill="#bdbfff" stroke="#6fabff" stroke-width="1.2"/>
+          <rect x="28" y="22" width="4" height="48" rx="2" fill="#bdbfff" stroke="#6fabff" stroke-width="1.2"/>
+          <!-- ESTRELA colada pelas duas pontas -->
+          <polygon points="30,9 33.25,17 42,17.3 35.3,22.6 37.8,31.1 30,26.4 22.2,31.1 24.7,22.6 18,17.3 26.75,17"
+            fill="#ffe53c" stroke="#b3b9d9" stroke-width="1.7"/>
+          <!-- Orelhas/pegas -->
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
+          <!-- Taça -->
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="url(#gradLendario)" stroke="#6fabff" stroke-width="2"/>
-          <path d="M18,22 Q15,43 30,52 Q45,43 42,22 Z" fill="url(#gradLendario)" stroke="#445cb3" stroke-width="2"/>
+          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="url(#gradLendario)" stroke="#445cb3" stroke-width="2"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Lendário</div>
@@ -163,12 +161,12 @@ body {
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
-          <path d="M18,22 Q8,40 17,70" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <path d="M42,22 Q52,40 43,70" stroke="#fff" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
           <rect x="28" y="22" width="4" height="48" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#fff" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#fff" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
-          <path d="M18,22 Q15,43 30,52 Q45,43 42,22 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
+          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
@@ -178,12 +176,12 @@ body {
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
-          <path d="M18,22 Q8,40 17,70" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <path d="M42,22 Q52,40 43,70" stroke="#fff" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
           <rect x="28" y="22" width="4" height="48" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,70" stroke="#fff" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,70" stroke="#fff" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
-          <path d="M18,22 Q15,43 30,52 Q45,43 42,22 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
+          <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
