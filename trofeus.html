@@ -51,21 +51,13 @@ body {
 .trofeus-title { color: #fff; font-size:2em; font-weight:800; letter-spacing:1px; display:flex; align-items:center; gap:12px;}
 .contador-trofeus{color:#ffffffd9; background:#1462a7; font-size:1.1em; border-radius:10px; padding:8px 22px; font-weight:600; box-shadow:0 1px 7px #2468b988; letter-spacing:0.8px; display:flex; gap:10px; align-items:center;}
 
-/* FILTRO NOVO: aparência moderna tipo toggle/buttons */
+/* --- Filtro visual (igual ao anterior, para contexto) --- */
 .trofeus-filtros {
-  margin:0 0 25px 0; display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center; justify-content:center;
+  margin:0 0 18px 0; display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center; justify-content:center;
   background:rgba(36,55,100,0.62); border-radius:13px; padding:14px 19px 6px 19px; box-shadow:0 2px 16px #2a3b5a36;
-  position:relative;
 }
-.trofeu-toggle {
-  display: inline-flex; align-items: center; cursor: pointer; position:relative;
-  margin:0 9px 8px 0;
-  font-family:inherit;
-  font-size:1.01em;
-}
-.trofeu-toggle input[type="checkbox"] {
-  display: none;
-}
+.trofeu-toggle { display: inline-flex; align-items: center; cursor: pointer; position:relative; margin:0 9px 8px 0; font-family:inherit;font-size:1.01em;}
+.trofeu-toggle input[type="checkbox"] { display: none;}
 .trofeu-toggle .filtro-visu {
   min-width:36px; min-height:36px; padding:0 13px; border-radius:8px; border:2px solid #345693;
   background:rgba(44,74,150,0.21);
@@ -74,35 +66,59 @@ body {
   position:relative; font-weight:600; letter-spacing:0.3px;
   box-shadow:0 2px 6px #0587c320, 0 1px 3px #1d233911;
 }
-.trofeu-toggle input[type="checkbox"]:checked + .filtro-visu {
-  background: linear-gradient(90deg,#42aaffcc 30%,#265ccf 100%);
-  color:#fff; border-color:#42aaff;
-  box-shadow:0 0 0 2.5px #20bafe44;
-  filter: brightness(1.11);
-}
-.trofeu-toggle .icon {
-  display:inline-block;
-  width:19px; height:19px; margin-right:7px; margin-bottom:-2px;
-  vertical-align:middle;
-}
+.trofeu-toggle input[type="checkbox"]:checked + .filtro-visu { background: linear-gradient(90deg,#42aaffcc 30%,#265ccf 100%); color:#fff; border-color:#42aaff; box-shadow:0 0 0 2.5px #20bafe44; filter: brightness(1.11);}
+.trofeu-toggle .icon { display:inline-block; width:19px; height:19px; margin-right:7px; margin-bottom:-2px; vertical-align:middle;}
 .trofeu-toggle[data-cor="ouro"] .icon { filter: drop-shadow(0 2px 3px #FFD70055);}
 .trofeu-toggle[data-cor="prata"] .icon { filter: drop-shadow(0 1px 2px #AAA);}
 .trofeu-toggle[data-cor="bronze"] .icon { filter: drop-shadow(0 1.5px 3px #cd7f3230);}
 .trofeu-toggle[data-cor="lendario"] .icon { filter: drop-shadow(0 2px 6px #4db6ff99);}
 .trofeu-toggle[data-cor="oculto"] .icon { filter: grayscale(1) brightness(0.55); }
-/* Melhor espaçamento mobile */
-@media (max-width:900px) {
-  .trofeus-container{max-width:97vw;padding:13vw 4vw 10vw 4vw;}
-  .trofeus-header{flex-direction:column;gap:10px;}
-  .trofeus-filtros{flex-wrap:wrap;gap:10px 12px;padding:11px 5vw 2vw 5vw;}
-  .trofeu-lista{justify-content:center;gap:18px;}
-  .trofeu-card{width:49vw;min-width:128px;max-width:240px;}
-  .trofeu-modal-card{min-width:0;width:94vw;padding:12vw 3vw 6vw 3vw;}
+
+/* ----------------------- Busca/Rápida Moderno ---------------------- */
+.trofeu-busca-wrap {
+  display: flex; align-items: center; width:100%; max-width:440px; margin:0 auto 16px auto; position:relative;
 }
-.trofeu-lista {
-  display:flex; flex-wrap:wrap; gap:34px;
-  justify-content:center;
-  margin-top:10px; margin-bottom:10px;
+.trofeu-busca-input {
+  width:100%; font-size:1.1em; background: #212e43; color:#f7faff;
+  border-radius:9px; border:2px solid #42aaff70; padding:13px 46px 13px 16px; outline: none;
+  box-shadow:0 1.5px 8px #21006f18 inset, 0 0.5px 1.5px #20bafe11;
+  transition: border 0.14s;
+}
+.trofeu-busca-input:focus { border:2px solid #42aaff; background:#202b3f;}
+.trofeu-busca-icone {
+  position:absolute; right:15px; font-size:1.3em; color:#42aaff; pointer-events:none; top:7px;
+  display:flex; align-items:center; height:26px;
+}
+/* Mensagem quando não há troféus visíveis */
+.trofeu-vazio-msg {
+  color:#fff; background:#2658c1e0; border-radius:9px; padding:23px 36px; font-size:1.13em; font-weight:600;
+  margin:33px auto 30px auto; text-align:center; box-shadow:0 2px 14px #14295a55;
+  letter-spacing:0.41px; display:none;
+}
+.trofeu-vazio-msg.mostrar { display:block; animation:fadeInBG 0.26s; }
+/* Destacar troféus "novos"! */
+.trofeu-card.novo {
+  animation:highlightGlow 1.18s cubic-bezier(.43,.8,.16,1.16) 1;
+  box-shadow:0 0px 24px #42aaff88, 0 4px 38px #12005840;
+  border-color: #ffd700;
+  position:relative;
+}
+.trofeu-card.novo:after {
+  content: "Novo!";
+  position: absolute; top:9px; left:9px; background:#f9d675; color:#175ab0; border-radius:6px; font-size:.85em; font-weight:800; padding:2px 14px 2px 12px; box-shadow:0 2px 6px #fffaaa99;
+  letter-spacing:1px; border:1px solid #d9b53e;
+  animation:popBadge .65s cubic-bezier(.4,1.6,.22,1.18) 1;
+}
+@keyframes highlightGlow {
+  0% {box-shadow:0 0 0 #fff,0 0 0 #fff; border-color:#42aaff;}
+  30% {box-shadow:0 3px 40px #ffd700ee, 0 4px 38px #12005845; border-color:#ffd700;}
+  80% {box-shadow:0 2px 22px #42aaffaa, 0 6px 20px #5438b3cc; border-color:#ffd700;}
+  100% {box-shadow:0 0 0 #42aaff, 0 2px 18px #0adfff45; border-color:#ffd700;}
+}
+@keyframes popBadge {
+  0% {transform:scale(0.5);}
+  70% {transform:scale(1.13);}
+  100% {transform:scale(1);}
 }
 .trofeu-card.trofeu-lendario { z-index:50; position:relative; }
 .trofeu-card          { width:160px; background:rgba(32,45,70,0.94); border-radius:10px; box-shadow:0 4px 22px #043f5f40; display:flex; flex-direction:column; align-items:center; padding:19px 10px 14px 10px; position:relative; border:2px solid #225099; transition:transform 0.19s cubic-bezier(.5,1,.8,1), box-shadow 0.19s;}
@@ -170,56 +186,55 @@ body {
       <span id="count-ocultos">0</span> oculto(s)
     </span>
   </div>
-  <div class="trofeus-filtros">
+  <!-- Busca rápida -->
+  <form class="trofeu-busca-wrap" onsubmit="return false;" autocomplete="off" role="search" aria-label="Procurar troféus">
+    <input class="trofeu-busca-input" id="buscaTrof" type="search" placeholder="Procurar troféu pelo nome ou descrição…" aria-label="Pesquisar troféus" />
+    <span class="trofeu-busca-icone" aria-hidden="true">
+      <svg width="21" height="21" viewBox="0 0 20 20"><circle cx="8.7" cy="8.7" r="7.2" stroke="#42aaff" stroke-width="2" fill="none"/><path d="M15.3 15.3l3.5 3.5" stroke="#42aaff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </span>
+  </form>
+  <!-- Filtros por tipo -->
+  <div class="trofeus-filtros" aria-label="Filtro por tipo de troféu">
     <label class="trofeu-toggle" data-cor="ouro">
-      <input type="checkbox" class="filtro-tipo" value="trofeu-ouro" checked>
-      <span class="filtro-visu">
-        <span class="icon">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="#FFD700"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#fffbe6"/></svg>
-        </span>
-        Ouro
-      </span>
+      <input type="checkbox" class="filtro-tipo" value="trofeu-ouro" checked aria-checked="true">
+      <span class="filtro-visu"><span class="icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="#FFD700"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#fffbe6"/></svg></span>Ouro</span>
     </label>
     <label class="trofeu-toggle" data-cor="prata">
-      <input type="checkbox" class="filtro-tipo" value="trofeu-prata" checked>
-      <span class="filtro-visu">
-        <span class="icon">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="#C0C0C0"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#f3f3f3"/></svg>
-        </span>
-        Prata
-      </span>
+      <input type="checkbox" class="filtro-tipo" value="trofeu-prata" checked aria-checked="true">
+      <span class="filtro-visu"><span class="icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="#C0C0C0"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#f3f3f3"/></svg></span>Prata</span>
     </label>
     <label class="trofeu-toggle" data-cor="bronze">
-      <input type="checkbox" class="filtro-tipo" value="trofeu-bronze" checked>
-      <span class="filtro-visu">
-        <span class="icon">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="#cd7f32"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#ffd39b"/></svg>
-        </span>
-        Bronze
-      </span>
+      <input type="checkbox" class="filtro-tipo" value="trofeu-bronze" checked aria-checked="true">
+      <span class="filtro-visu"><span class="icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="#cd7f32"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#ffd39b"/></svg></span>Bronze</span>
     </label>
     <label class="trofeu-toggle" data-cor="lendario">
-      <input type="checkbox" class="filtro-tipo" value="trofeu-lendario" checked>
-      <span class="filtro-visu">
-        <span class="icon">
-          <svg width="16" height="16" viewBox="0 0 20 20"><defs><radialGradient id="lendgrad" cx="50%" cy="47%" r="60%"><stop offset="0%" stop-color="#e2eafd"/><stop offset="60%" stop-color="#a3d1fe"/><stop offset="100%" stop-color="#4db6ff"/></radialGradient></defs><circle cx="10" cy="10" r="7" fill="url(#lendgrad)"/><circle cx="10" cy="10" r="4" fill="#bdbfff"/></svg>
-        </span>
-        Lendário
-      </span>
+      <input type="checkbox" class="filtro-tipo" value="trofeu-lendario" checked aria-checked="true">
+      <span class="filtro-visu"><span class="icon"><svg width="16" height="16" viewBox="0 0 20 20"><defs><radialGradient id="lendgrad" cx="50%" cy="47%" r="60%"><stop offset="0%" stop-color="#e2eafd"/><stop offset="60%" stop-color="#a3d1fe"/><stop offset="100%" stop-color="#4db6ff"/></radialGradient></defs><circle cx="10" cy="10" r="7" fill="url(#lendgrad)"/><circle cx="10" cy="10" r="4" fill="#bdbfff"/></svg></span>Lendário</span>
     </label>
     <label class="trofeu-toggle" data-cor="oculto">
-      <input type="checkbox" class="filtro-tipo" value="trofeu-oculto" checked>
-      <span class="filtro-visu">
-        <span class="icon">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="#777"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#232323"/></svg>
-        </span>
-        Oculto
-      </span>
+      <input type="checkbox" class="filtro-tipo" value="trofeu-oculto" checked aria-checked="true">
+      <span class="filtro-visu"><span class="icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="#777"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#232323"/></svg></span>Oculto</span>
     </label>
+    <div style="margin-left:22px;display:flex;align-items:center;gap:16px;">
+      <!-- Ordenar custom -->
+      <label style="display:flex;align-items:center;gap:7px;font-size:1em;color:#d7eeff;font-weight:500;">
+        <svg height="19" width="19" viewBox="0 0 24 24" style="vertical-align:-4px;margin-right:1px"><path d="M14,6 L14,19 M14,19 L10,15 M14,19 L18,15" fill="none" stroke="#49bcff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="5" width="4" height="4" rx="2" fill="#FFD700"/><rect x="4" y="10" width="4" height="4" rx="2" fill="#C0C0C0"/><rect x="4" y="15" width="4" height="4" rx="2" fill="#cd7f32"/></svg>
+        <select id="trofeu-ordenar" style="background:#182846;color:#fff;border:1.8px solid #42aaff88;padding:6.5px 10px 6.5px 9px;border-radius:6px;font-size:1.02em;">
+          <option value="default">Ordem: original</option>
+          <option value="dataDesc">Data (mais recente)</option>
+          <option value="dataAsc">Data (mais antiga)</option>
+          <option value="nomeA">Nome (A-Z)</option>
+          <option value="nomeZ">Nome (Z-A)</option>
+          <option value="raridade">Raridade</option>
+          <option value="alcançado">Desbloqueados primeiro</option>
+        </select>
+      </label>
+    </div>
   </div>
+  <div class="trofeu-vazio-msg" id="msgVazio" aria-live="polite">Nenhum troféu deste tipo por mostrar.</div>
   <div class="trofeu-lista" id="lista-trofeus">
-    <!-- Troféu Lendário sempre primeiro! -->
-    <div class="trofeu-card trofeu-lendario" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1508873699372-7aeab60b44c9" data-desc="Lendário! Todos os troféus obtidos. Parabéns, campeão da platina.">
+    <!-- Troféus (lendário e outros) -->
+    <div class="trofeu-card trofeu-lendario novo" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1508873699372-7aeab60b44c9" data-desc="Lendário! Todos os troféus obtidos. Parabéns, campeão da platina." data-nome="Troféu Lendário" data-data="2028" data-raridade="1">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 81" aria-label="Troféu Lendário">
           <defs>
@@ -244,8 +259,7 @@ body {
       <div class="trofeu-data">2028</div>
       <div class="trofeu-desc">Troféu máximo da jornada!</div>
     </div>
-    <!-- Troféu Ouro -->
-    <div class="trofeu-card trofeu-ouro" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1506744038136-46273834b3fb" data-desc="Ganhaste o troféu mais dourado do perfil!">
+    <div class="trofeu-card trofeu-ouro" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1506744038136-46273834b3fb" data-desc="Ganhaste o troféu mais dourado do perfil!" data-nome="Troféu Ouro" data-data="2026" data-raridade="2">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Ouro">
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#fffbe6" stroke="#FFD700" stroke-width="1.3"/>
@@ -260,8 +274,7 @@ body {
       <div class="trofeu-data">2026</div>
       <div class="trofeu-desc">Excelência e destaque — Ouro</div>
     </div>
-    <!-- Troféu Prata -->
-    <div class="trofeu-card trofeu-prata" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1465101046530-73398c7f28ca" data-desc="Prémio de prata, incrível percurso.">
+    <div class="trofeu-card trofeu-prata novo" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1465101046530-73398c7f28ca" data-desc="Prémio de prata, incrível percurso." data-nome="Troféu Prata" data-data="2024" data-raridade="3">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Prata">
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#f3f3f3" stroke="#C0C0C0" stroke-width="1.3"/>
@@ -276,8 +289,7 @@ body {
       <div class="trofeu-data">2024</div>
       <div class="trofeu-desc">Conquista valiosa de Prata</div>
     </div>
-    <!-- Troféu Bronze -->
-    <div class="trofeu-card trofeu-bronze" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1465101178521-c1a9136a3cd7" data-desc="Bronze: início das tuas grandes conquistas.">
+    <div class="trofeu-card trofeu-bronze" tabindex="0" data-tipo="desbloqueado" data-img="https://images.unsplash.com/photo-1465101178521-c1a9136a3cd7" data-desc="Bronze: início das tuas grandes conquistas." data-nome="Troféu Bronze" data-data="2023" data-raridade="4">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Bronze">
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.3"/>
@@ -292,8 +304,7 @@ body {
       <div class="trofeu-data">2023</div>
       <div class="trofeu-desc">Primeira conquistas — Bronze</div>
     </div>
-    <!-- Troféu Oculto -->
-    <div class="trofeu-card trofeu-oculto" tabindex="0" data-tipo="oculto" data-img="https://images.unsplash.com/photo-1519121784515-796c0eaf22c8" data-desc="Descobre os segredos destes troféus ocultos...">
+    <div class="trofeu-card trofeu-oculto" tabindex="0" data-tipo="oculto" data-img="https://images.unsplash.com/photo-1519121784515-796c0eaf22c8" data-desc="Descobre os segredos destes troféus ocultos..." data-nome="Troféu Oculto 1" data-data="2021" data-raridade="9">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
@@ -308,7 +319,7 @@ body {
       <div class="trofeu-data"></div>
       <div class="trofeu-desc">Ainda por descobrir!</div>
     </div>
-    <div class="trofeu-card trofeu-oculto" tabindex="0" data-tipo="oculto" data-img="https://images.unsplash.com/photo-1522209171808-9c9945de7c94" data-desc="Serás capaz de desbloquear este desafio?">
+    <div class="trofeu-card trofeu-oculto" tabindex="0" data-tipo="oculto" data-img="https://images.unsplash.com/photo-1522209171808-9c9945de7c94" data-desc="Serás capaz de desbloquear este desafio?" data-nome="Troféu Oculto 2" data-data="" data-raridade="9">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
           <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
@@ -326,7 +337,7 @@ body {
   </div>
 </div>
 <script>
-// Hora/data no topo
+// Hora/data topo
 function updateHudTime() {
   const el = document.getElementById('hudTimeDate');
   if (!el) return;
@@ -335,29 +346,84 @@ function updateHudTime() {
     ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 }
 setInterval(updateHudTime, 1000); updateHudTime();
-
-// Contador de troféus
+// Contador
 function atualizarContador() {
-  const desbloq = document.querySelectorAll('.trofeu-card[data-tipo="desbloqueado"]').length;
-  const ocultos = document.querySelectorAll('.trofeu-card[data-tipo="oculto"]').length;
+  const desbloq = document.querySelectorAll('.trofeu-card[data-tipo="desbloqueado"]:not([hidden])').length;
+  const ocultos = document.querySelectorAll('.trofeu-card[data-tipo="oculto"]:not([hidden])').length;
   document.getElementById('count-desbloq').textContent = desbloq;
   document.getElementById('count-ocultos').textContent = ocultos;
 }
-atualizarContador();
+
+// Busca rápida
+const busca = document.getElementById('buscaTrof');
+busca.addEventListener('input', actualizarFiltroBusca);
+// Mensagem feedback/nenhum cartão
+const msgVazio = document.getElementById('msgVazio');
 
 // Filtros
 const filtros = document.querySelectorAll('.trofeus-filtros .filtro-tipo');
-filtros.forEach(f => f.addEventListener('change', filtrarTrof));
-function filtrarTrof() {
+filtros.forEach(f => f.addEventListener('change', actualizarFiltroBusca));
+// Ordenação
+const elOrdenar = document.getElementById('trofeu-ordenar');
+elOrdenar.addEventListener('change', ordenarTrof);
+
+function actualizarFiltroBusca() {
   const ativos = Array.from(filtros).filter(f=>f.checked).map(f=>f.value);
+  const termo = busca.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  let algumVisivel = false;
   document.querySelectorAll('.trofeu-card').forEach(card => {
-    card.hidden = !ativos.some(tipo => card.classList.contains(tipo));
+    // Filtro tipo
+    let okTipo = ativos.some(tipo => card.classList.contains(tipo));
+    // Filtro busca
+    let nome = (card.getAttribute('data-nome')||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    let desc = (card.getAttribute('data-desc')||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    let buscaOk = !termo || nome.includes(termo) || desc.includes(termo);
+    card.hidden = !(okTipo && buscaOk);
+    if (!card.hidden) algumVisivel = true;
   });
+  msgVazio.classList.toggle('mostrar', !algumVisivel);
+  actualizarContador();
 }
+
+function ordenarTrof() {
+  const lista = document.getElementById('lista-trofeus');
+  let cardsArr = Array.from(lista.children);
+  let val = elOrdenar.value;
+  if(val==='default'){
+    // Lendário primeiro, resto como veio
+    let lends = cardsArr.filter(c=>c.classList.contains('trofeu-lendario'));
+    let outros = cardsArr.filter(c=>!c.classList.contains('trofeu-lendario'));
+    cardsArr = lends.concat(outros);
+  }else if(val==='nomeA'){
+    cardsArr.sort((a,b)=>(a.getAttribute('data-nome')||'').localeCompare((b.getAttribute('data-nome')||''), 'pt', {sensitivity:'base'}));
+  }else if(val==='nomeZ'){
+    cardsArr.sort((a,b)=>(b.getAttribute('data-nome')||'').localeCompare((a.getAttribute('data-nome')||''), 'pt', {sensitivity:'base'}));
+  }else if(val==='dataDesc'){
+    cardsArr.sort((a,b)=>(parseInt(b.getAttribute('data-data')||'0'))-(parseInt(a.getAttribute('data-data')||'0')));
+  }else if(val==='dataAsc'){
+    cardsArr.sort((a,b)=>(parseInt(a.getAttribute('data-data')||'0'))-(parseInt(b.getAttribute('data-data')||'0')));
+  }else if(val==='raridade'){
+    cardsArr.sort((a,b)=>(parseInt(a.getAttribute('data-raridade')||'99'))-(parseInt(b.getAttribute('data-raridade')||'99')));
+  }else if(val==='alcançado'){
+    cardsArr.sort((a,b)=>{
+      // desbloqueado primeiro
+      const ord = {'desbloqueado':0,'oculto':1};
+      return ord[a.getAttribute('data-tipo')] - ord[b.getAttribute('data-tipo')];
+    });
+  }
+  cardsArr.forEach(card=>lista.appendChild(card));
+  actualizarFiltroBusca();
+}
+
+// Highlight a "Novo" (animação glow temporária, depois retira)
+document.querySelectorAll('.trofeu-card.novo').forEach(card=>{
+  setTimeout(()=>card.classList.remove('novo'), 3000);
+});
 
 // Navegação e modal dos troféus
 const cards = Array.from(document.querySelectorAll('.trofeu-card'));
 let sel = 0, lockModal = false;
+actualizarFiltroBusca(); // mostra correta
 cards[sel]?.classList.add('selected');
 cards[sel]?.focus();
 
@@ -405,11 +471,12 @@ function openModal(idx) {
   window.addEventListener('keydown', function handler(ev) {
     if (ev.key === "Escape") { fechar(); window.removeEventListener('keydown', handler);}
   });
-}
+};
 cards.forEach((card,i) => {
   card.addEventListener('click', ()=>openModal(i));
   card.addEventListener('keydown', e => { if (e.key === "Enter") openModal(i); });
 });
+// Navegação teclado eficiente (tabindex, visíveis)
 window.addEventListener('keydown', function(e) {
   if (lockModal) return;
   // Calcula apenas os cartões visíveis
