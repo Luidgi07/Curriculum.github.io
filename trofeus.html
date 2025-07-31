@@ -115,111 +115,65 @@ body {
       <span id="count-ocultos">0</span> oculto(s)
     </span>
   </div>
-  <div class="trofeu-lista" id="lista-trofeus">
+  <div class="trofeu-icone">
+  <!-- OURO -->
+  <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Ouro">
+    <ellipse cx="30" cy="16" rx="12" ry="8" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
+    <path d="M18,18 Q15,38 30,46 Q45,38 42,18 Z" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
+    <rect x="23" y="46" width="14" height="6" rx="2.5" fill="#fffbe6" stroke="#FFD700" stroke-width="1"/>
+    <!-- ASAS: apenas traço, verticais, não pintadas -->
+    <path d="M15 20 Q5 35 23 29" stroke="#FFD700" stroke-width="2.2" fill="none"/>
+    <path d="M45 20 Q55 35 37 29" stroke="#FFD700" stroke-width="2.2" fill="none"/>
+  </svg>
+</div>
+<div class="trofeu-icone">
+  <!-- PRATA -->
+  <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Prata">
+    <ellipse cx="30" cy="16" rx="12" ry="8" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
+    <path d="M18,18 Q15,38 30,46 Q45,38 42,18 Z" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
+    <rect x="23" y="46" width="14" height="6" rx="2.5" fill="#f3f3f3" stroke="#C0C0C0" stroke-width="1"/>
+    <path d="M15 20 Q5 35 23 29" stroke="#e8e8e8" stroke-width="2.2" fill="none"/>
+    <path d="M45 20 Q55 35 37 29" stroke="#e8e8e8" stroke-width="2.2" fill="none"/>
+  </svg>
+</div>
+<div class="trofeu-icone">
+  <!-- BRONZE -->
+  <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Bronze">
+    <ellipse cx="30" cy="16" rx="12" ry="8" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
+    <path d="M18,18 Q15,38 30,46 Q45,38 42,18 Z" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
+    <rect x="23" y="46" width="14" height="6" rx="2.5" fill="#ffd39b" stroke="#cd7f32" stroke-width="1"/>
+    <path d="M15 20 Q5 35 23 29" stroke="#ffd39b" stroke-width="2.2" fill="none"/>
+    <path d="M45 20 Q55 35 37 29" stroke="#ffd39b" stroke-width="2.2" fill="none"/>
+  </svg>
+</div>
+<div class="trofeu-icone">
+  <!-- LENDÁRIO/PLATINA -->
+  <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Lendário">
+    <defs>
+      <radialGradient id="gradLendario" cx="50%" cy="50%" r="60%">
+        <stop offset="30%" stop-color="#e2eafd"/>
+        <stop offset="60%" stop-color="#a3d1fe"/>
+        <stop offset="100%" stop-color="#4db6ff"/>
+      </radialGradient>
+    </defs>
+    <ellipse cx="30" cy="16" rx="12" ry="8" fill="url(#gradLendario)" stroke="#6fabff" stroke-width="2"/>
+    <path d="M18,18 Q15,38 30,46 Q45,38 42,18 Z" fill="url(#gradLendario)" stroke="#445cb3" stroke-width="2"/>
+    <rect x="23" y="46" width="14" height="6" rx="2.5" fill="#e6bbfd" stroke="#7b3fbf" stroke-width="1"/>
+    <path d="M15 20 Q5 35 23 29" stroke="#b1d7fd" stroke-width="2.2" fill="none"/>
+    <path d="M45 20 Q55 35 37 29" stroke="#b1d7fd" stroke-width="2.2" fill="none"/>
+  </svg>
+</div>
+<div class="trofeu-icone">
+  <!-- OCULTO/PRETO -->
+  <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Oculto">
+    <ellipse cx="30" cy="16" rx="12" ry="8" fill="#101010" stroke="#fff" stroke-width="2"/>
+    <path d="M18,18 Q15,38 30,46 Q45,38 42,18 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
+    <rect x="23" y="46" width="14" height="6" rx="2.5" fill="#999" stroke="#fff" stroke-width="1"/>
+    <path d="M15 20 Q5 35 23 29" stroke="#fff" stroke-width="2.2" fill="none"/>
+    <path d="M45 20 Q55 35 37 29" stroke="#fff" stroke-width="2.2" fill="none"/>
+  </svg>
+</div>
 
-    <div class="trofeu-card trofeu-ouro" data-tipo="desbloqueado">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Ouro">
-          <g>
-            <path class="cup" d="M18 18 Q15 38 30 46 Q45 38 42 18 Z" stroke-width="2"/>
-            <ellipse class="cup" cx="30" cy="16" rx="12" ry="7.5" stroke-width="2"/>
-            <rect class="base" x="23" y="46" width="14" height="6" rx="2.5" stroke-width="1"/>
-            <path class="side" d="M14 20 Q6 32 23 28" stroke-width="2" fill="none"/>
-            <path class="side" d="M46 20 Q54 32 37 28" stroke-width="2" fill="none"/>
-          </g>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Ouro</div>
-      <div class="trofeu-data">2026</div>
-      <div class="trofeu-desc">Excelência e destaque — Ouro</div>
-    </div>
-    <div class="trofeu-card trofeu-prata" data-tipo="desbloqueado">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Prata">
-          <g>
-            <path class="cup" d="M18 18 Q15 38 30 46 Q45 38 42 18 Z" stroke-width="2"/>
-            <ellipse class="cup" cx="30" cy="16" rx="12" ry="7.5" stroke-width="2"/>
-            <rect class="base" x="23" y="46" width="14" height="6" rx="2.5" stroke-width="1"/>
-            <path class="side" d="M14 20 Q6 32 23 28" stroke-width="2" fill="none"/>
-            <path class="side" d="M46 20 Q54 32 37 28" stroke-width="2" fill="none"/>
-          </g>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Prata</div>
-      <div class="trofeu-data">2024</div>
-      <div class="trofeu-desc">Conquista valiosa de Prata</div>
-    </div>
-    <div class="trofeu-card trofeu-bronze" data-tipo="desbloqueado">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Bronze">
-          <g>
-            <path class="cup" d="M18 18 Q15 38 30 46 Q45 38 42 18 Z" stroke-width="2"/>
-            <ellipse class="cup" cx="30" cy="16" rx="12" ry="7.5" stroke-width="2"/>
-            <rect class="base" x="23" y="46" width="14" height="6" rx="2.5" stroke-width="1"/>
-            <path class="side" d="M14 20 Q6 32 23 28" stroke-width="2" fill="none"/>
-            <path class="side" d="M46 20 Q54 32 37 28" stroke-width="2" fill="none"/>
-          </g>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Bronze</div>
-      <div class="trofeu-data">2023</div>
-      <div class="trofeu-desc">Primeiras conquistas — Bronze</div>
-    </div>
-    <div class="trofeu-card trofeu-lendario" data-tipo="desbloqueado">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Lendário">
-          <defs>
-            <radialGradient id="gradLendario" cx="50%" cy="45%" r="50%">
-              <stop offset="15%" stop-color="#e2eafd" />
-              <stop offset="55%" stop-color="#4db6ff" />
-              <stop offset="100%" stop-color="#3b2c80" />
-            </radialGradient>
-          </defs>
-          <g>
-            <path class="cup" d="M18 18 Q15 38 30 46 Q45 38 42 18 Z" stroke-width="2"/>
-            <ellipse class="cup" cx="30" cy="16" rx="12" ry="7.5" stroke-width="2"/>
-            <rect class="base" x="23" y="46" width="14" height="6" rx="2.5" class="base" stroke-width="1"/>
-            <path class="side" d="M14 20 Q6 32 23 28" stroke-width="2" fill="none"/>
-            <path class="side" d="M46 20 Q54 32 37 28" stroke-width="2" fill="none"/>
-          </g>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Lendário</div>
-      <div class="trofeu-data">2028</div>
-      <div class="trofeu-desc">Troféu máximo da jornada!</div>
-    </div>
-    <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Oculto">
-            <g>
-            <path class="cup" d="M18 18 Q15 38 30 46 Q45 38 42 18 Z" stroke-width="2"/>
-            <ellipse class="cup" cx="30" cy="16" rx="12" ry="7.5" stroke-width="2"/>
-            <rect class="base" x="23" y="46" width="14" height="6" rx="2.5" stroke-width="1"/>
-            <path class="side" d="M14 20 Q6 32 23 28" stroke-width="2" fill="none"/>
-            <path class="side" d="M46 20 Q54 32 37 28" stroke-width="2" fill="none"/>
-          </g>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Oculto</div>
-      <div class="trofeu-data"></div>
-      <div class="trofeu-desc">Ainda por descobrir!</div>
-    </div>
-    <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
-      <div class="trofeu-icone">
-        <svg viewBox="0 0 60 60" class="ps-trophy-ps4" aria-label="Troféu Oculto">
-          <g>
-            <path class="cup" d="M18 18 Q15 38 30 46 Q45 38 42 18 Z" stroke-width="2"/>
-            <ellipse class="cup" cx="30" cy="16" rx="12" ry="7.5" stroke-width="2"/>
-            <rect class="base" x="23" y="46" width="14" height="6" rx="2.5" stroke-width="1"/>
-            <path class="side" d="M14 20 Q6 32 23 28" stroke-width="2" fill="none"/>
-            <path class="side" d="M46 20 Q54 32 37 28" stroke-width="2" fill="none"/>
-          </g>
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Oculto</div>
-      <div class="trofeu-data"></div>
-      <div class="trofeu-desc">Continua a explorar...</div>
-    </div>
   </div>
 </div>
 <script>
