@@ -87,13 +87,12 @@ body {
 .voltar-link { color: #74afe6; font-size: 1.1em; text-decoration: none; font-weight: 600; transition: color 0.13s; margin-bottom: 14px; display: flex; align-items: center; gap:7px;}
 .voltar-link:hover { color: #fff; text-decoration: underline; }
 
-/* Estilos para variantes dos troféus */
-.trofeu-preto svg .body     { stroke: #fff; fill: #000;    stroke-width:2.3 }
-.trofeu-prata svg .body     { stroke: #e8e8e8; fill: #c0c0c0; stroke-width:2.3 }
-.trofeu-bronze svg .body    { stroke: #ffd39b; fill: #cd7f32;  stroke-width:2.3 }
-.trofeu-ouro svg .body      { stroke: #fffbe6; fill: #ffd700;  stroke-width:2.3 }
-.trofeu-lendario svg .body  { stroke: #e6bbfd; fill: #9f65f7;  stroke-width:2.3 }
-.trofeu-oculto svg .body    { stroke: #bbb;    fill: #333;     stroke-width:2.3 }
+/* Cores dos troféus tipo PS4 */
+.trofeu-ouro .ps-trophy { fill: #ffd700; stroke: #fff2ba; }
+.trofeu-prata .ps-trophy { fill: #c0c0c0; stroke: #e8e8e8; }
+.trofeu-bronze .ps-trophy { fill: #cd7f32; stroke: #ffd39b; }
+.trofeu-lendario .ps-trophy { fill: #90CAF9; stroke: #7b3fbf; } /* azul/platinum-ps4 */
+.trofeu-oculto .ps-trophy { fill: #222; stroke: #fff; }
 @media (max-width: 900px) {
   .trofeus-container { max-width: 97vw; padding: 13vw 4vw 10vw 4vw; }
   .trofeus-header { flex-direction: column; gap: 10px; }
@@ -123,7 +122,6 @@ body {
 <!-- Voltar ao perfil -->
 <a class="voltar-link" href="index.html">&larr; Voltar ao Perfil</a>
 
-<!-- Secção dos troféus -->
 <div class="trofeus-container">
   <div class="trofeus-header">
     <span class="trofeus-title">
@@ -136,94 +134,85 @@ body {
     </span>
   </div>
   <div class="trofeu-lista" id="lista-trofeus">
-    <!-- Troféu PRETO -->
-    <div class="trofeu-card trofeu-preto" data-tipo="desbloqueado">
-      <div class="trofeu-icone trofeu-preto">
-        <svg viewBox="0 0 48 48" aria-label="Troféu Preto">
-          <ellipse class="body" cx="24" cy="25" rx="17" ry="13"/>
-          <rect x="19" y="36" width="10" height="6" rx="2.5" fill="#fff" />
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Preto</div>
-      <div class="trofeu-data">2025</div>
-      <div class="trofeu-desc">Clássico — Desbloqueaste uma meta especial</div>
-    </div>
-
-    <!-- Troféu PRATA -->
-    <div class="trofeu-card trofeu-prata" data-tipo="desbloqueado">
-      <div class="trofeu-icone trofeu-prata">
-        <svg viewBox="0 0 48 48" aria-label="Troféu Prata">
-          <ellipse class="body" cx="24" cy="25" rx="17" ry="13"/>
-          <rect x="19" y="36" width="10" height="6" rx="2.5" fill="#e8e8e8" />
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Prata</div>
-      <div class="trofeu-data">2024</div>
-      <div class="trofeu-desc">Conquista valiosa de Prata</div>
-    </div>
-
-    <!-- Troféu BRONZE -->
-    <div class="trofeu-card trofeu-bronze" data-tipo="desbloqueado">
-      <div class="trofeu-icone trofeu-bronze">
-        <svg viewBox="0 0 48 48" aria-label="Troféu Bronze">
-          <ellipse class="body" cx="24" cy="25" rx="17" ry="13"/>
-          <rect x="19" y="36" width="10" height="6" rx="2.5" fill="#ffd39b" />
-        </svg>
-      </div>
-      <div class="trofeu-nome">Troféu Bronze</div>
-      <div class="trofeu-data">2023</div>
-      <div class="trofeu-desc">Primeiras conquistas — Bronze</div>
-    </div>
-
     <!-- Troféu OURO -->
     <div class="trofeu-card trofeu-ouro" data-tipo="desbloqueado">
       <div class="trofeu-icone trofeu-ouro">
-        <svg viewBox="0 0 48 48" aria-label="Troféu Ouro">
-          <ellipse class="body" cx="24" cy="25" rx="17" ry="13"/>
-          <rect x="19" y="36" width="10" height="6" rx="2.5" fill="#fffbe6" />
+        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Ouro">
+          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
+          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#fff2ba" stroke-width="2"/>
+          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#fffbe6" stroke="#fff2ba" stroke-width="1"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Ouro</div>
       <div class="trofeu-data">2026</div>
       <div class="trofeu-desc">Excelência e destaque — Ouro</div>
     </div>
-
-    <!-- Troféu LENDÁRIO (Roxo) -->
+    <!-- Troféu PRATA -->
+    <div class="trofeu-card trofeu-prata" data-tipo="desbloqueado">
+      <div class="trofeu-icone trofeu-prata">
+        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Prata">
+          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
+          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#e8e8e8" stroke-width="2"/>
+          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#e8e8e8" stroke="#fff" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="trofeu-nome">Troféu Prata</div>
+      <div class="trofeu-data">2024</div>
+      <div class="trofeu-desc">Conquista valiosa de Prata</div>
+    </div>
+    <!-- Troféu BRONZE -->
+    <div class="trofeu-card trofeu-bronze" data-tipo="desbloqueado">
+      <div class="trofeu-icone trofeu-bronze">
+        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Bronze">
+          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
+          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#ffd39b" stroke-width="2"/>
+          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#ffd39b" stroke="#fff6dd" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="trofeu-nome">Troféu Bronze</div>
+      <div class="trofeu-data">2023</div>
+      <div class="trofeu-desc">Primeiras conquistas — Bronze</div>
+    </div>
+    <!-- Troféu LENDÁRIO (Platina) -->
     <div class="trofeu-card trofeu-lendario" data-tipo="desbloqueado">
       <div class="trofeu-icone trofeu-lendario">
-        <svg viewBox="0 0 48 48" aria-label="Troféu Lendário">
-          <ellipse class="body" cx="24" cy="25" rx="17" ry="13"/>
-          <rect x="19" y="36" width="10" height="6" rx="2.5" fill="#e6bbfd" />
+        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Lendário">
+          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
+          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#7b3fbf" stroke-width="2"/>
+          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#e6bbfd" stroke="#7b3fbf" stroke-width="1"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Lendário</div>
-      <div class="trofeu-data">2026</div>
+      <div class="trofeu-data">2028</div>
       <div class="trofeu-desc">Troféu máximo da jornada!</div>
     </div>
-
     <!-- Troféu OCULTO -->
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
       <div class="trofeu-icone trofeu-oculto">
-        <svg viewBox="0 0 48 48"><ellipse class="body" cx="24" cy="25" rx="17" ry="13"/><rect x="19" y="36" width="10" height="6" rx="2.5" fill="#bbb" /></svg>
+        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Oculto">
+          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
+          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#fff" stroke-width="2"/>
+          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#fff" stroke="#fff" stroke-width="1"/>
+        </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
       <div class="trofeu-data"></div>
       <div class="trofeu-desc">Ainda por descobrir!</div>
     </div>
-
-    <!-- Troféu OCULTO -->
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
       <div class="trofeu-icone trofeu-oculto">
-        <svg viewBox="0 0 48 48"><ellipse class="body" cx="24" cy="25" rx="17" ry="13"/><rect x="19" y="36" width="10" height="6" rx="2.5" fill="#bbb" /></svg>
+        <svg viewBox="0 0 64 64" class="ps-trophy" aria-label="Troféu Oculto">
+          <ellipse cx="32" cy="22.5" rx="16.5" ry="12" />
+          <path d="M19 44 Q25 56 32 56 Q39 56 45 44" fill="none" stroke="#fff" stroke-width="2"/>
+          <rect x="24" y="50.5" width="16" height="5" rx="2.5" fill="#fff" stroke="#fff" stroke-width="1"/>
+        </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
       <div class="trofeu-data"></div>
       <div class="trofeu-desc">Continua a explorar...</div>
     </div>
-
   </div>
 </div>
-
 <script>
 function updateHudTime() {
   const el = document.getElementById('hudTimeDate');
@@ -234,7 +223,6 @@ function updateHudTime() {
 }
 setInterval(updateHudTime, 1000);
 updateHudTime();
-
 // Atualiza contadores de troféus
 function atualizarContador() {
   const desbloq = document.querySelectorAll('.trofeu-card[data-tipo="desbloqueado"]').length;
