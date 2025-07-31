@@ -287,6 +287,9 @@ allItems.forEach((item, idx) => {
 });
 moveCarousel(selected);
 hudRows.forEach((row, i) => { row.style.display = (i === selected) ? 'flex' : 'none'; });
+  document.querySelector('.hud-icon.trophies')?.addEventListener('click', function() {
+  window.location.href = "trofeus.html";
+});
 </script>
 </body>
 </html>
