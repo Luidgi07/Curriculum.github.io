@@ -10,12 +10,19 @@ html, body {
 }
 body {
   background: url('- --- .- .-.  -. .-  .- --. ..- .- --..--  -.-. ..- .. -.. .- .-.  -. .-  - . .-. .-. .- (3).png') center center/contain no-repeat;
-  min-height: 100vh;
-  padding-top: 58px;
   font-family: 'Segoe UI', Arial, sans-serif;
   display: flex; flex-direction: column; justify-content: flex-end;
   align-items: flex-start; position: relative; padding-top: 60px; min-height: 100vh; transition: background 0.4s;
 }
+  html, body {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 /* === Top HUD === */
 .top-hud {
   position: fixed;
