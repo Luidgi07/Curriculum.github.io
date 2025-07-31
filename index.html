@@ -100,28 +100,61 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
 .dashboard-container { position: fixed; left: 0; bottom: 0; width: 100vw; z-index: 10; transition: transform 0.65s cubic-bezier(.42,1,.72,1);}
 .dashboard-container.expanded { transform: translateY(-340px);}
 .ps4-dashboard { width: 100vw; padding: 80px 0 120px 90px; overflow: hidden;}
+
+/* ======= Responsividade para carousel ======= */
 .carousel-inner { 
   display: flex; 
-  flex-direction: row; 
-  align-items: flex-end; 
-  gap: 38px; 
-  transition: transform 0.43s cubic-bezier(.42,1,.72,1);
-  will-change: transform; 
-  position: relative;
-  
-  /* Permitindo wrap para criar várias linhas */
-  flex-wrap: wrap;
+  flex-wrap: wrap;   /* permite quebra em telas pequenas */
+  gap: 20px 38px;    /* vertical 20px, horizontal 38px */
+  justify-content: flex-start;
+  align-items: flex-start;
   padding-bottom: 20px;
+  overflow-x: hidden; /* Esconde scroll horizontal em ecrãs estreitos */
+  position: relative;
+  will-change: transform;
 }
-.menu-item-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; margin-bottom: 24px;}
-.menu-item { width: 160px; height: 240px; border-radius: 0; background: #23283a; box-shadow: 0 8px 32px #000c; outline: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2.5px solid transparent; position: relative; z-index: 1; opacity: 0.92; transition: transform 0.22s cubic-bezier(.32,1.35,.62,1), box-shadow 0.18s, z-index 0.16s, border 0.18s;}
+
+.menu-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
+  width: 160px;      /* largura fixa padrão para telas grandes */
+  flex-shrink: 0;
+}
+
+/* 4 blocos por linha em telas médias */
+@media (max-width: 1200px) {
+  .menu-item-wrapper {
+    width: calc((100% - 3 * 38px) / 4); /* 4 por linha + 3 gaps horizontais */
+    min-width: 140px;
+  }
+}
+
+/* 2 blocos por linha em tablets */
+@media (max-width: 900px) {
+  .menu-item-wrapper {
+    width: calc((100% - 1 * 38px) / 2); /* 2 por linha + 1 gap */
+    min-width: 140px;
+  }
+}
+
+/* 1 bloco por linha em telemóveis */
+@media (max-width: 600px) {
+  .menu-item-wrapper {
+    width: 96%;
+    min-width: auto;
+  }
+}
+
+.menu-item { width: 100%; height: 240px; border-radius: 0; background: #23283a; box-shadow: 0 8px 32px #000c; outline: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2.5px solid transparent; position: relative; z-index: 1; opacity: 0.92; transition: transform 0.22s cubic-bezier(.32,1.35,.62,1), box-shadow 0.18s, z-index 0.16s, border 0.18s;}
 .menu-item.selected { transform: scale(1.22); box-shadow: 0 0 40px 5px #42aaffcc, 0 5px 35px #000c; border: 2.5px solid #42aaff; border-bottom: none; z-index: 20; opacity: 1;}
 .menu-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; display: block;}
 .hud-row { display: none; position: absolute; left: 0; top: 100%; margin-top: 0; flex-direction: row; align-items: stretch; z-index: 40; pointer-events: none; transition: transform 0.22s, left 0.22s; }
 .menu-item.selected ~ .hud-row { display: flex; animation: boxin 0.21s; transform: translateY(17.6px); left: -17.6px;}
 @keyframes boxin { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
 .hud-start { height: 48px; background: rgba(26,30,43,0.98); border-radius: 0; border: 2.5px solid #42aaff; box-shadow: 0 3px 18px #06448460; pointer-events: auto; margin-right: 12px; display: flex; align-items: center; justify-content: center; opacity: 1; width: 160px; transition: width 0.22s;}
-.menu-item.selected ~ .hud-row .hud-start { width: calc(160px * 1.22); }
+.menu-item.selected ~ .hud-row .hud-start { width: calc(100% * 1.22); }
 .hud-btn { background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%); color: #fff; border: none; border-radius: 0; font-size: 1em; font-weight: 600; letter-spacing: 2px; padding: 8px 32px; cursor: pointer; outline: none; pointer-events: auto; box-shadow: 0 1px 8px #149ccc90; transition: background 0.14s; height: 32px;}
 .hud-title { min-width: 180px; height: 48px; display: flex; align-items: center; background: rgba(26,30,43,0.98); border-radius: 0; border: 2.5px solid #42aaff; box-shadow: 0 3px 18px #06448460; pointer-events: auto; padding: 0 10px 0 20px; font-size: 1.13em; font-weight: 700; letter-spacing: 1.0px; color: #f5f7fa; text-shadow: 0 2px 10px #193c8040; white-space: nowrap; opacity: 1; transition: box-shadow 0.14s; line-height: 46px; user-select: none; cursor: pointer; position: relative;}
 .hud-title .down-arrow { display: inline-block; margin-left: 10px; font-size: 1.1em; color: #42aaff; animation: bounce 1.4s infinite; user-select: none;}
