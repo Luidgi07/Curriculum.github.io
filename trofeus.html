@@ -107,13 +107,15 @@ body {
 .trofeu-lista {
   display: flex;
   flex-wrap: wrap;
-  overflow: hidden;   
   gap: 34px;
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  min-height: 200px;
-  max-height: 360px;
+
+  padding-top: 32px;    /* Espaço superior dentro da caixa */
+  padding-bottom: 32px; /* Espaço inferior dentro da caixa */
+  overflow-y: auto;     /* Scroll permite ver mais linhas */
+  max-height: 400px;    /* Controla quantas linhas cabem antes do scroll */
 }
 
 .trofeu-card.trofeu-lendario { z-index:50; position:relative; }
