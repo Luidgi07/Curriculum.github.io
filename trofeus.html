@@ -50,8 +50,54 @@ body {
 }
 .trofeus-title { color: #fff; font-size:2em; font-weight:800; letter-spacing:1px; display:flex; align-items:center; gap:12px;}
 .contador-trofeus{color:#ffffffd9; background:#1462a7; font-size:1.1em; border-radius:10px; padding:8px 22px; font-weight:600; box-shadow:0 1px 7px #2468b988; letter-spacing:0.8px; display:flex; gap:10px; align-items:center;}
+
+/* FILTRO NOVO: aparência moderna tipo toggle/buttons */
 .trofeus-filtros {
-  margin:0 0 25px 0; display:flex; flex-wrap:wrap; gap:18px 24px; align-items:center; justify-content:center;
+  margin:0 0 25px 0; display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center; justify-content:center;
+  background:rgba(36,55,100,0.62); border-radius:13px; padding:14px 19px 6px 19px; box-shadow:0 2px 16px #2a3b5a36;
+  position:relative;
+}
+.trofeu-toggle {
+  display: inline-flex; align-items: center; cursor: pointer; position:relative;
+  margin:0 9px 8px 0;
+  font-family:inherit;
+  font-size:1.01em;
+}
+.trofeu-toggle input[type="checkbox"] {
+  display: none;
+}
+.trofeu-toggle .filtro-visu {
+  min-width:36px; min-height:36px; padding:0 13px; border-radius:8px; border:2px solid #345693;
+  background:rgba(44,74,150,0.21);
+  color:#dbedff;
+  display:flex; align-items:center; justify-content:center; transition:all 0.15s cubic-bezier(.55,.15,.25,1);
+  position:relative; font-weight:600; letter-spacing:0.3px;
+  box-shadow:0 2px 6px #0587c320, 0 1px 3px #1d233911;
+}
+.trofeu-toggle input[type="checkbox"]:checked + .filtro-visu {
+  background: linear-gradient(90deg,#42aaffcc 30%,#265ccf 100%);
+  color:#fff; border-color:#42aaff;
+  box-shadow:0 0 0 2.5px #20bafe44;
+  filter: brightness(1.11);
+}
+.trofeu-toggle .icon {
+  display:inline-block;
+  width:19px; height:19px; margin-right:7px; margin-bottom:-2px;
+  vertical-align:middle;
+}
+.trofeu-toggle[data-cor="ouro"] .icon { filter: drop-shadow(0 2px 3px #FFD70055);}
+.trofeu-toggle[data-cor="prata"] .icon { filter: drop-shadow(0 1px 2px #AAA);}
+.trofeu-toggle[data-cor="bronze"] .icon { filter: drop-shadow(0 1.5px 3px #cd7f3230);}
+.trofeu-toggle[data-cor="lendario"] .icon { filter: drop-shadow(0 2px 6px #4db6ff99);}
+.trofeu-toggle[data-cor="oculto"] .icon { filter: grayscale(1) brightness(0.55); }
+/* Melhor espaçamento mobile */
+@media (max-width:900px) {
+  .trofeus-container{max-width:97vw;padding:13vw 4vw 10vw 4vw;}
+  .trofeus-header{flex-direction:column;gap:10px;}
+  .trofeus-filtros{flex-wrap:wrap;gap:10px 12px;padding:11px 5vw 2vw 5vw;}
+  .trofeu-lista{justify-content:center;gap:18px;}
+  .trofeu-card{width:49vw;min-width:128px;max-width:240px;}
+  .trofeu-modal-card{min-width:0;width:94vw;padding:12vw 3vw 6vw 3vw;}
 }
 .trofeu-lista {
   display:flex; flex-wrap:wrap; gap:34px;
@@ -94,13 +140,6 @@ body {
 .trofeu-modal-card .trofeu-modal-desc{color:#c0eaff;font-size:1em;font-weight:500;text-align:center;}
 .trofeu-modal-close{position:absolute;top:14px;right:20px;font-size:2.2em;font-family:Arial,sans-serif;background:none;border:none;color:#acedff;cursor:pointer;font-weight:900;line-height:1;z-index:2;filter:drop-shadow(0 0 5px #29a7f933);transition:color 0.12s;}
 .trofeu-modal-close:hover{color:#fff;}
-@media (max-width:900px) {
-  .trofeus-container{max-width:97vw;padding:13vw 4vw 10vw 4vw;}
-  .trofeus-header{flex-direction:column;gap:10px;}
-  .trofeu-lista{justify-content:center;gap:18px;}
-  .trofeu-card{width:49vw;min-width:128px;max-width:240px;}
-  .trofeu-modal-card{min-width:0;width:94vw;padding:12vw 3vw 6vw 3vw;}
-}
 </style>
 </head>
 <body>
@@ -125,18 +164,58 @@ body {
 </div>
 <div class="trofeus-container">
   <div class="trofeus-header">
-    <span class="trofeus-title">Conquistas Alcançadas</span>
+    <span class="trofeus-title">Troféus desbloqueados e ocultos</span>
     <span class="contador-trofeus">
-      <span id="count-desbloq">0</span> desbloqueadas &middot;
-      <span id="count-ocultos">0</span> ocultas
+      <span id="count-desbloq">0</span> desbloqueado(s) &middot;
+      <span id="count-ocultos">0</span> oculto(s)
     </span>
   </div>
   <div class="trofeus-filtros">
-    <label><input type="checkbox" class="filtro-tipo" value="trofeu-ouro" checked> Ouro</label>
-    <label><input type="checkbox" class="filtro-tipo" value="trofeu-prata" checked> Prata</label>
-    <label><input type="checkbox" class="filtro-tipo" value="trofeu-bronze" checked> Bronze</label>
-    <label><input type="checkbox" class="filtro-tipo" value="trofeu-lendario" checked> Lendário</label>
-    <label><input type="checkbox" class="filtro-tipo" value="trofeu-oculto" checked> Oculto</label>
+    <label class="trofeu-toggle" data-cor="ouro">
+      <input type="checkbox" class="filtro-tipo" value="trofeu-ouro" checked>
+      <span class="filtro-visu">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="#FFD700"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#fffbe6"/></svg>
+        </span>
+        Ouro
+      </span>
+    </label>
+    <label class="trofeu-toggle" data-cor="prata">
+      <input type="checkbox" class="filtro-tipo" value="trofeu-prata" checked>
+      <span class="filtro-visu">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="#C0C0C0"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#f3f3f3"/></svg>
+        </span>
+        Prata
+      </span>
+    </label>
+    <label class="trofeu-toggle" data-cor="bronze">
+      <input type="checkbox" class="filtro-tipo" value="trofeu-bronze" checked>
+      <span class="filtro-visu">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="#cd7f32"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#ffd39b"/></svg>
+        </span>
+        Bronze
+      </span>
+    </label>
+    <label class="trofeu-toggle" data-cor="lendario">
+      <input type="checkbox" class="filtro-tipo" value="trofeu-lendario" checked>
+      <span class="filtro-visu">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 20 20"><defs><radialGradient id="lendgrad" cx="50%" cy="47%" r="60%"><stop offset="0%" stop-color="#e2eafd"/><stop offset="60%" stop-color="#a3d1fe"/><stop offset="100%" stop-color="#4db6ff"/></radialGradient></defs><circle cx="10" cy="10" r="7" fill="url(#lendgrad)"/><circle cx="10" cy="10" r="4" fill="#bdbfff"/></svg>
+        </span>
+        Lendário
+      </span>
+    </label>
+    <label class="trofeu-toggle" data-cor="oculto">
+      <input type="checkbox" class="filtro-tipo" value="trofeu-oculto" checked>
+      <span class="filtro-visu">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="#777"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4" fill="#232323"/></svg>
+        </span>
+        Oculto
+      </span>
+    </label>
   </div>
   <div class="trofeu-lista" id="lista-trofeus">
     <!-- Troféu Lendário sempre primeiro! -->
