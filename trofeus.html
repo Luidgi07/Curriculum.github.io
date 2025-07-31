@@ -7,7 +7,8 @@
 html, body { width:100vw; height:100vh; margin:0; padding:0; overflow:hidden;}
 body {
   background: #28345A;
-  font-family: 'Segoe UI', Arial, sans-serif; min-height:100vh; display:flex; flex-direction:column; padding-top:60px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-height:100vh; display:flex; flex-direction:column; padding-top:60px;
 }
 .top-hud {
   position: fixed; top:0; left:0; width:100vw; height:58px; background:rgba(18,26,36,0.93);
@@ -57,7 +58,6 @@ body {
   justify-content:center;
   margin-top:10px; margin-bottom:10px;
 }
-/* Garante lendários sempre à frente visualmente */
 .trofeu-card.trofeu-lendario { z-index:50; position:relative; }
 .trofeu-card          { width:160px; background:rgba(32,45,70,0.94); border-radius:10px; box-shadow:0 4px 22px #043f5f40; display:flex; flex-direction:column; align-items:center; padding:19px 10px 14px 10px; position:relative; border:2px solid #225099; transition:transform 0.19s cubic-bezier(.5,1,.8,1), box-shadow 0.19s;}
 .trofeu-card.selected { border-color:#42aaff; box-shadow:0 0 15px #43b2ffb4, 0 4px 28px #123;}
@@ -125,10 +125,10 @@ body {
 </div>
 <div class="trofeus-container">
   <div class="trofeus-header">
-    <span class="trofeus-title">Conquistas Alcançadas</span>
+    <span class="trofeus-title">Troféus desbloqueados e ocultos</span>
     <span class="contador-trofeus">
-      <span id="count-desbloq">0</span> desbloqueadas &middot;
-      <span id="count-ocultos">0</span> ocultas
+      <span id="count-desbloq">0</span> desbloqueado(s) &middot;
+      <span id="count-ocultos">0</span> oculto(s)
     </span>
   </div>
   <div class="trofeus-filtros">
@@ -276,7 +276,7 @@ function filtrarTrof() {
   });
 }
 
-// Navegação e modal dos troféus (igual ao anterior)
+// Navegação e modal dos troféus
 const cards = Array.from(document.querySelectorAll('.trofeu-card'));
 let sel = 0, lockModal = false;
 cards[sel]?.classList.add('selected');
