@@ -26,34 +26,30 @@ body {
 .icon-bell { background-image: url('data:image/svg+xml;utf8,<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 24a2.5 2.5 0 002.5-2.5h-5A2.5 2.5 0 0013 24Zm8-6V12a8 8 0 10-16 0v6l-2 2v1h20v-1l-2-2Z" fill="%2342aaff" stroke="%231a2436" stroke-width="1.2"/></svg>');}
 .icon-cog { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%2342aaff" viewBox="0 0 24 24"><path d="M12 16.5c-2.485 0-4.5-2.014-4.5-4.5s2.015-4.5 4.5-4.5 4.5 2.014 4.5 4.5-2.015 4.5-4.5 4.5zm12-6.5h-1.345c-.256-1.243-.743-2.406-1.439-3.424l.951-.951-2.122-2.122-.951.951c-1.019-.695-2.181-1.184-3.426-1.439v-1.345h-3v1.345c-1.244.257-2.407.744-3.426 1.439l-.951-.951-2.122 2.122.951.951c-.696 1.018-1.184 2.181-1.439 3.424h-1.345v3h1.345c.257 1.244.743 2.406 1.439 3.425l-.951.951 2.122 2.122.951-.951c1.019.695 2.182 1.183 3.426 1.439v1.345h3v-1.345c1.244-.256 2.407-.744 3.426-1.439l.951.951 2.122-2.122-.951-.951c.695-1.019 1.183-2.182 1.439-3.425h1.345v-3z"/></svg>');}
 .hud-time-date { color: #e9f5fa; font-size: 1.07em;}
-.profile-area { display: flex; align-items: center; gap: 11px; background: rgba(42,62,94,0.82); border-radius: 9px; padding: 5px 55px 5px 55px; box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412; cursor: pointer; border: 1.5px solid #42aaff60; transition: filter 0.13s; min-width: 0; max-width: 260px;}
+.profile-area { display: flex; align-items: center; gap: 11px; background: rgba(42,62,94,0.82); border-radius: 9px; padding: 5px 55px 5px 55px; box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412; cursor: pointer; border: 1.5px solid #42aaff60; min-width: 0; max-width: 260px;}
 .profile-img { width: 38px; height: 38px; border-radius: 7px; object-fit: cover; border: 2.5px solid #42aaff; box-shadow: 0 2px 12px #0a79e058; background: #202a41;}
 .profile-name { color: #f3f8fc; font-weight: 600; font-size: 1em; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.trofeus-container {
-  width: 100vw; max-width: 1024px; margin: 80px auto 0 auto;
-  padding: 36px 24px 32px 24px; background: rgba(24,32,50,0.91); border-radius: 14px;
-  box-shadow: 0 10px 40px #121a2466; display: flex; flex-direction: column; gap: 42px; align-items: center;
-}
-.trofeus-header { display: flex; align-items: flex-start; gap: 36px; width: 100%; justify-content: space-between; margin-bottom: 12px; }
-.trofeus-title { color: #fff; font-size: 2em; font-weight: 800; letter-spacing: 1px; display: flex; align-items:center; gap:12px; }
+.trofeus-container { width: 100vw; max-width: 1024px; margin: 80px auto 0 auto; padding: 36px 24px 32px 24px; background: rgba(24,32,50,0.91); border-radius: 14px; box-shadow: 0 10px 40px #121a2466; display: flex; flex-direction: column; gap: 42px; align-items: center;}
+.trofeus-header { display: flex; align-items: flex-start; gap: 36px; width: 100%; justify-content: space-between; margin-bottom: 12px;}
+.trofeus-title { color: #fff; font-size: 2em; font-weight: 800; letter-spacing: 1px; display: flex; align-items:center; gap:12px;}
 .contador-trofeus { color: #ffffffd9; background: #1462a7; font-size: 1.1em; border-radius: 10px; padding: 8px 22px; font-weight: 600; box-shadow: 0 1px 7px #2468b988; letter-spacing: 0.8px; display:flex; gap:10px; align-items:center;}
 .trofeu-lista { display: flex; flex-wrap: wrap; gap: 34px; justify-content: flex-start;}
 .trofeu-card { width: 160px; background: rgba(32,45,70,0.94); border-radius: 10px; box-shadow: 0 4px 22px #043f5f40; display: flex; flex-direction: column; align-items: center; padding: 19px 10px 14px 10px; position: relative; border: 2px solid #225099; transition: transform 0.19s cubic-bezier(.5,1,.8,1), box-shadow 0.19s;}
 .trofeu-card:hover { transform: scale(1.06); box-shadow: 0 2px 18px #29a7f985, 0 8px 22px #14204380; border-color: #42aaff; }
-.trofeu-icone { width: 60px; height: 70px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; }
-.trofeu-icone svg { width: 100%; height: 100%; }
-.trofeu-nome { color: #fff; font-size: 1.04em; font-weight: 700; text-align: center; }
-.trofeu-data { color: #b5caf8; font-size: .98em; margin-top: 4px; text-align: center; }
-.trofeu-desc { color: #c7e7fe; font-size: .92em; margin-top: 11px; margin-bottom: 0; text-align: center; line-height: 1.25em; }
+.trofeu-icone { width: 60px; height: 75px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center;}
+.trofeu-icone svg { width: 100%; height: 100%;}
+.trofeu-nome { color: #fff; font-size: 1.04em; font-weight: 700; text-align: center;}
+.trofeu-data { color: #b5caf8; font-size: .98em; margin-top: 4px; text-align: center;}
+.trofeu-desc { color: #c7e7fe; font-size: .92em; margin-top: 11px; margin-bottom: 0; text-align: center; line-height: 1.25em;}
 .trofeu-oculto { filter: grayscale(1) brightness(0.55); opacity: 0.73; border-color: #222c45;}
-.trofeu-oculto .trofeu-nome { color: #7593be; }
-.trofeu-oculto .trofeu-desc { color: #7786ae; }
-.voltar-link { color: #74afe6; font-size: 1.1em; text-decoration: none; font-weight: 600; transition: color 0.13s; margin-bottom: 14px; display: flex; align-items: center; gap:7px;}
+.trofeu-oculto .trofeu-nome { color: #7593be;}
+.trofeu-oculto .trofeu-desc { color: #7786ae;}
+.voltar-link { color: #74afe6; font-size: 1.1em; text-decoration: none; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap:7px;}
 .voltar-link:hover { color: #fff; text-decoration: underline; }
 @media (max-width: 900px) {
-  .trofeus-container { max-width: 97vw; padding: 13vw 4vw 10vw 4vw; }
-  .trofeus-header { flex-direction: column; gap: 10px; }
-  .trofeu-lista { justify-content: center; gap: 18px; }
+  .trofeus-container { max-width: 97vw; padding: 13vw 4vw 10vw 4vw;}
+  .trofeus-header { flex-direction: column; gap: 10px;}
+  .trofeu-lista { justify-content: center; gap: 18px;}
   .trofeu-card { width: 49vw; min-width: 128px; max-width: 240px;}
 }
 </style>
@@ -87,55 +83,51 @@ body {
     </span>
   </div>
   <div class="trofeu-lista" id="lista-trofeus">
-    <!-- OURO -->
     <div class="trofeu-card trofeu-ouro" data-tipo="desbloqueado">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Ouro">
-          <path d="M18,23 Q10,36 18,46 Q22,52 23,57" stroke="#FFD700" stroke-width="2.8" fill="none"/>
-          <path d="M42,23 Q50,36 42,46 Q38,52 37,57" stroke="#FFD700" stroke-width="2.8" fill="none"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,68" stroke="#FFD700" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,68" stroke="#FFD700" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
           <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#FFD700" stroke="#fff5b0" stroke-width="2"/>
-          <rect x="27.5" y="57" width="5" height="7" rx="2.5" fill="#FFD700" stroke="#fff5b0" stroke-width="1.2"/>
-          <ellipse cx="30" cy="68" rx="10" ry="4" fill="#fffbe6" stroke="#FFD700" stroke-width="1.3"/>
+          <rect x="28" y="43" width="4" height="25" rx="2" fill="#FFD700" stroke="#fff5b0" stroke-width="1.2"/>
+          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#fffbe6" stroke="#FFD700" stroke-width="1.3"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Ouro</div>
       <div class="trofeu-data">2026</div>
       <div class="trofeu-desc">Excelência e destaque — Ouro</div>
     </div>
-    <!-- PRATA -->
     <div class="trofeu-card trofeu-prata" data-tipo="desbloqueado">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Prata">
-          <path d="M18,23 Q10,36 18,46 Q22,52 23,57" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
-          <path d="M42,23 Q50,36 42,46 Q38,52 37,57" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,68" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,68" stroke="#e8e8e8" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
           <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#C0C0C0" stroke="#e8e8e8" stroke-width="2"/>
-          <rect x="27.5" y="57" width="5" height="7" rx="2.5" fill="#e8e8e8" stroke="#e8e8e8" stroke-width="1.2"/>
-          <ellipse cx="30" cy="68" rx="10" ry="4" fill="#f3f3f3" stroke="#C0C0C0" stroke-width="1.3"/>
+          <rect x="28" y="43" width="4" height="25" rx="2" fill="#e8e8e8" stroke="#e8e8e8" stroke-width="1.2"/>
+          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#f3f3f3" stroke="#C0C0C0" stroke-width="1.3"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Prata</div>
       <div class="trofeu-data">2024</div>
       <div class="trofeu-desc">Conquista valiosa de Prata</div>
     </div>
-    <!-- BRONZE -->
     <div class="trofeu-card trofeu-bronze" data-tipo="desbloqueado">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Bronze">
-          <path d="M18,23 Q10,36 18,46 Q22,52 23,57" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
-          <path d="M42,23 Q50,36 42,46 Q38,52 37,57" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,68" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,68" stroke="#ffd39b" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
           <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#cd7f32" stroke="#ffd39b" stroke-width="2"/>
-          <rect x="27.5" y="57" width="5" height="7" rx="2.5" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.2"/>
-          <ellipse cx="30" cy="68" rx="10" ry="4" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.3"/>
+          <rect x="28" y="43" width="4" height="25" rx="2" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.2"/>
+          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#ffd39b" stroke="#cd7f32" stroke-width="1.3"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Bronze</div>
       <div class="trofeu-data">2023</div>
       <div class="trofeu-desc">Primeiras conquistas — Bronze</div>
     </div>
-    <!-- LENDÁRIO -->
     <div class="trofeu-card trofeu-lendario" data-tipo="desbloqueado">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Lendário">
@@ -146,28 +138,27 @@ body {
               <stop offset="100%" stop-color="#4db6ff"/>
             </radialGradient>
           </defs>
-          <path d="M18,23 Q10,36 18,46 Q22,52 23,57" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
-          <path d="M42,23 Q50,36 42,46 Q38,52 37,57" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,68" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,68" stroke="#b1d7fd" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="url(#gradLendario)" stroke="#6fabff" stroke-width="2"/>
           <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="url(#gradLendario)" stroke="#445cb3" stroke-width="2"/>
-          <rect x="27.5" y="57" width="5" height="7" rx="2.5" fill="#bdbfff" stroke="#6fabff" stroke-width="1.2"/>
-          <ellipse cx="30" cy="68" rx="10" ry="4" fill="#bdbfff" stroke="#7b3fbf" stroke-width="1.3"/>
+          <rect x="28" y="43" width="4" height="25" rx="2" fill="#bdbfff" stroke="#6fabff" stroke-width="1.2"/>
+          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#bdbfff" stroke="#7b3fbf" stroke-width="1.3"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Lendário</div>
       <div class="trofeu-data">2028</div>
       <div class="trofeu-desc">Troféu máximo da jornada!</div>
     </div>
-    <!-- OCULTO -->
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
-          <path d="M18,23 Q10,36 18,46 Q22,52 23,57" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <path d="M42,23 Q50,36 42,46 Q38,52 37,57" stroke="#fff" stroke-width="2.8" fill="none"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,68" stroke="#fff" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,68" stroke="#fff" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
           <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
-          <rect x="27.5" y="57" width="5" height="7" rx="2.5" fill="#999" stroke="#fff" stroke-width="1.2"/>
-          <ellipse cx="30" cy="68" rx="10" ry="4" fill="#999" stroke="#fff" stroke-width="1.3"/>
+          <rect x="28" y="43" width="4" height="25" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
+          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
@@ -177,12 +168,12 @@ body {
     <div class="trofeu-card trofeu-oculto" data-tipo="oculto">
       <div class="trofeu-icone">
         <svg viewBox="0 0 60 75" aria-label="Troféu Oculto">
-          <path d="M18,23 Q10,36 18,46 Q22,52 23,57" stroke="#fff" stroke-width="2.8" fill="none"/>
-          <path d="M42,23 Q50,36 42,46 Q38,52 37,57" stroke="#fff" stroke-width="2.8" fill="none"/>
+          <path d="M17.5,23 Q10,36 18,46 Q22,52 23,68" stroke="#fff" stroke-width="2.8" fill="none"/>
+          <path d="M42.5,23 Q50,36 42,46 Q38,52 37,68" stroke="#fff" stroke-width="2.8" fill="none"/>
           <ellipse cx="30" cy="20" rx="12" ry="9" fill="#101010" stroke="#fff" stroke-width="2"/>
           <path d="M18,23 Q15,43 30,52 Q45,43 42,23 Z" fill="#232323" stroke="#fff" stroke-width="2"/>
-          <rect x="27.5" y="57" width="5" height="7" rx="2.5" fill="#999" stroke="#fff" stroke-width="1.2"/>
-          <ellipse cx="30" cy="68" rx="10" ry="4" fill="#999" stroke="#fff" stroke-width="1.3"/>
+          <rect x="28" y="43" width="4" height="25" rx="2" fill="#999" stroke="#fff" stroke-width="1.2"/>
+          <ellipse cx="30" cy="70" rx="12" ry="5" fill="#999" stroke="#fff" stroke-width="1.3"/>
         </svg>
       </div>
       <div class="trofeu-nome">Troféu Oculto</div>
@@ -211,4 +202,5 @@ atualizarContador();
 </script>
 </body>
 </html>
+
 
