@@ -129,7 +129,7 @@ padding-bottom: 20px;
 .scroll-top-btn {
   position: absolute;
   left: 50%;
-  top: -38px;   /* Ajusta se quiseres mais junto ao painel ou mais acima */
+  top: -38px; /* ajusta levemente se precisares para ficar mesmo colado ao topo da caixa */
   transform: translateX(-50%);
   background: #1da1f2;
   border: none;
@@ -142,16 +142,18 @@ padding-bottom: 20px;
   box-shadow: 0 2px 14px #1da1f277;
   cursor: pointer;
   z-index: 30;
+  padding: 0;     /* retira padding extra! */
   transition: background 0.15s;
-  color: #fff;
-  padding: 0;
 }
 
 .scroll-top-btn:hover {
   background: #1493d2;
 }
 
-
+.scroll-top-btn svg {
+  display: block;
+  margin: 0 auto;
+}
 .game-details { position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px; background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a; padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none; transform: translateY(100%); transition: opacity 0.7s cubic-bezier(.42,1,.72,1), transform 0.7s cubic-bezier(.42,1,.72,1); z-index: 12;overflow: visible;}
 .game-details.visible { opacity: 1; pointer-events: auto; transform: translateY(0%);}
 .game-details img { width: 220px; height: 160px; object-fit: cover; border: 2px solid #42aaff; border-radius: 6px; flex-shrink: 0;}
@@ -266,8 +268,8 @@ padding-bottom: 20px;
 
 <div class="game-details" id="gameDetails">
 <button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
-  <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
-    <polyline points="14,28 24,18 34,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <svg width="38" height="38" viewBox="0 0 48 48" fill="none" style="display: block;">
+    <polyline points="14,30 24,20 34,30" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     <polyline points="14,38 24,28 34,38" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
