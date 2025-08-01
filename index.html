@@ -126,7 +126,28 @@ padding-bottom: 20px;
 .hud-title .down-arrow { display: inline-block; margin-left: 10px; font-size: 1.1em; color: #42aaff; animation: bounce 1.4s infinite; user-select: none;}
 .hud-title.exp-arrow .down-arrow { display: inline-block; }
 @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(5px);} }
-.game-details { position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px; background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a; padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none; transform: translateY(100%); transition: opacity 0.7s cubic-bezier(.42,1,.72,1), transform 0.7s cubic-bezier(.42,1,.72,1); z-index: 12;}
+.scroll-top-btn {
+position: absolute;
+right: 24px;
+top: 18px;
+background: rgba(20,120,255,0.8);
+border: none;
+color: #fff;
+font-size: 2em;
+font-weight: bold;
+border-radius: 50%;
+width: 46px;
+height: 46px;
+cursor: pointer;
+box-shadow: 0 2px 8px #13447744;
+z-index: 50;
+transition: background 0.18s;
+}
+.scroll-top-btn:hover {
+  background: #42aaff;
+  color: #182542;
+}
+.game-details { position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px; background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a; padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none; transform: translateY(100%); transition: opacity 0.7s cubic-bezier(.42,1,.72,1), transform 0.7s cubic-bezier(.42,1,.72,1); z-index: 12;overflow: visible;}
 .game-details.visible { opacity: 1; pointer-events: auto; transform: translateY(0%);}
 .game-details img { width: 220px; height: 160px; object-fit: cover; border: 2px solid #42aaff; border-radius: 6px; flex-shrink: 0;}
 .game-details .info { flex-grow: 1; color: #f5f7fa;}
@@ -239,6 +260,7 @@ padding-bottom: 20px;
 </div>
 
 <div class="game-details" id="gameDetails">
+<button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">^</button>
 <img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
 <div class="info">
 <p><strong>Fortnite</strong> é um jogo xde battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivo.</p>
@@ -332,6 +354,13 @@ hudRows.forEach((row, i) => { row.style.display = (i === selected) ? 'flex' : 'n
 document.querySelector('.hud-icon.trophies')?.addEventListener('click', function() {
 window.location.href = "trofeus.html";
 });
+function scrollToCarousel() {
+// Oculta o painel de detalhes se estiver visível, depois faz scroll.
+collapseDetails();
+// Scroll suave ao topo do carrossel (ajusta o seletor se necessário)
+document.querySelector(".carousel-inner").scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
 </script>
 </body>
 </html>
