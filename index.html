@@ -147,6 +147,8 @@ padding-bottom: 20px;
 }
 .scroll-top-btn:hover { background: #1493d2; }
 
+.scroll-top-btn svg { padding: 15px }
+  
 .game-details { position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px; background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a; padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none; transform: translateY(100%); transition: opacity 0.7s cubic-bezier(.42,1,.72,1), transform 0.7s cubic-bezier(.42,1,.72,1); z-index: 12;overflow: visible;}
 .game-details.visible { opacity: 1; pointer-events: auto; transform: translateY(0%);}
 .game-details img { width: 220px; height: 160px; object-fit: cover; border: 2px solid #42aaff; border-radius: 6px; flex-shrink: 0;}
@@ -263,9 +265,9 @@ padding-bottom: 20px;
 <button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
   <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
     <!-- Seta superior: vértice exato no centro -->
-    <polyline points="16,28 50,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     <!-- Seta inferior: vértice exato no centro também, mas só um pouco abaixo -->
-    <polyline points="16,36 50,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
 <img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
