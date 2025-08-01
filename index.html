@@ -127,26 +127,27 @@ padding-bottom: 20px;
 .hud-title.exp-arrow .down-arrow { display: inline-block; }
 @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(5px);} }
 .scroll-top-btn {
-position: absolute;
-right: 24px;
-top: 18px;
-background: rgba(20,120,255,0.8);
-border: none;
-color: #fff;
-font-size: 2em;
-font-weight: bold;
-border-radius: 50%;
-width: 46px;
-height: 46px;
-cursor: pointer;
-box-shadow: 0 2px 8px #13447744;
-z-index: 50;
-transition: background 0.18s;
+  position: absolute;
+  right: 50px;   /* Aumenta este valor até achares o espaçamento ideal */
+  top: 25px;     /* Se quiseres afastar também para baixo */
+  background: rgba(20,120,255,0.8);
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 46px;
+  height: 46px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #13447744;
+  z-index: 50;
+  transition: background 0.18s;
 }
 .scroll-top-btn:hover {
   background: #42aaff;
   color: #182542;
 }
+
 .game-details { position: fixed; left: 0; bottom: 0; width: 100vw; max-height: 320px; background: rgba(26,30,43,0.98); border-top: 3px solid #42aaff; box-shadow: 0 -5px 30px #000a; padding: 22px 40px; display: flex; gap: 24px; opacity: 0; pointer-events: none; transform: translateY(100%); transition: opacity 0.7s cubic-bezier(.42,1,.72,1), transform 0.7s cubic-bezier(.42,1,.72,1); z-index: 12;overflow: visible;}
 .game-details.visible { opacity: 1; pointer-events: auto; transform: translateY(0%);}
 .game-details img { width: 220px; height: 160px; object-fit: cover; border: 2px solid #42aaff; border-radius: 6px; flex-shrink: 0;}
