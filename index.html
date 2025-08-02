@@ -183,7 +183,6 @@ padding-bottom: 20px;
 <div class="dashboard-container" id="dashCont">
 <div class="ps4-dashboard">
 <div class="carousel-inner" id="carousel">
-
 <!-- Linha 1: 5 blocos -->
 <div class="menu-item-wrapper">
 <div class="menu-item selected" tabindex="0">
@@ -261,24 +260,82 @@ padding-bottom: 20px;
 </div>
 </div>
 
-<div class="game-details" id="gameDetails">
+<!-- ========= PAINÉIS DE GAME-DETAILS INDIVIDUAIS ========= -->
+
+<!-- Detalhes para "Desporto" (índice 1) -->
+<div class="game-details" id="gameDetails-1">
 <button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
   <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
-    <!-- Seta superior: vértice exato no centro -->
     <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Seta inferior: vértice exato no centro também, mas só um pouco abaixo -->
     <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
-<img src="https://cdn2.unrealengine.com/Fortnite%2Fblog%2Ffortnite-season-1%2FSeason1_Screenshot_LTM_04-1920x1080-cf728f4ed458f1aa84bd25310faf429cbcdf8f37.jpg" alt="Fortnite Screenshot" />
+<img src="https://static3.tcdn.com.br/img/img_prod/460977/bola_de_futebol_campo_penalty_society_2109_1_0dc5965991c7e47a8ca5c2eed4943c06.jpg" alt="Desporto" />
 <div class="info">
-<p><strong>Fortnite</strong> é um jogo xde battle royale muito popular com uma comunidade enorme. Tem modos cooperativos, conteúdos dinâmicos e eventos ao vivo.</p>
+<p><strong>Desporto</strong>: Aqui encontras todos os teus jogos e estatísticas de desporto! Treina, joga e compete.</p>
 <div class="buttons">
 <button class="btn-trophies">Ver Troféus</button>
 <button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
 </div>
 </div>
 </div>
+
+<!-- Detalhes para "Educação" (índice 2) -->
+<div class="game-details" id="gameDetails-2">
+<button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
+  <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+    <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+<img src="https://static.vecteezy.com/system/resources/previews/000/550/475/non_2x/vector-education-background.jpg" alt="Educação" />
+<div class="info">
+<p><strong>Educação</strong>: As tuas conquistas e progressos académicos, cursos e formações registados num só local!</p>
+<div class="buttons">
+<button class="btn-trophies">Ver Troféus</button>
+<button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
+</div>
+</div>
+</div>
+
+<!-- Detalhes para "Formações" (índice 3) -->
+<div class="game-details" id="gameDetails-3">
+<button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
+  <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+    <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+<img src="https://img.freepik.com/free-vector/gradient-training-background_23-2149911572.jpg" alt="Formações" />
+<div class="info">
+<p><strong>Formações</strong>: Visualiza e inicia as tuas formações, workshops e cursos técnicos preferidos.</p>
+<div class="buttons">
+<button class="btn-trophies">Ver Troféus</button>
+<button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
+</div>
+</div>
+</div>
+
+<!-- Detalhes para "Experiências" (índice 4) -->
+<div class="game-details" id="gameDetails-4">
+<button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
+  <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+    <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+<img src="https://www.shutterstock.com/image-illustration/work-experience-cubes-260nw-184221152.jpg" alt="Experiências" />
+<div class="info">
+<p><strong>Experiências</strong>: Consulta e partilha as tuas experiências profissionais, estágios e voluntariado.</p>
+<div class="buttons">
+<button class="btn-trophies">Ver Troféus</button>
+<button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
+</div>
+</div>
+</div>
+
+<!-- Exemplos de painéis para outros blocos? Acrescenta conforme necessário seguindo mesma estrutura! -->
+
 
 <script>
 function updateHudTime() {
@@ -300,7 +357,15 @@ const allItems = carousel.querySelectorAll('.menu-item');
 const hudRows = document.querySelectorAll('.hud-row');
 const hudTitles = carousel.querySelectorAll('.hud-title');
 const dashboardsContainer = document.getElementById('dashCont');
-const gameDetails = document.getElementById('gameDetails');
+// MODIFICADO: agora não usamos só gameDetails, mas vários:
+const gameDetailsPanels = [
+    null,
+    document.getElementById('gameDetails-1'),
+    document.getElementById('gameDetails-2'),
+    document.getElementById('gameDetails-3'),
+    document.getElementById('gameDetails-4'),
+    // ...se adicionar mais painéis, coloca neste array no índice certo...
+];
 
 let selected = 0, expanded = false;
 const quadW = 160, gap = 38;
@@ -330,7 +395,14 @@ function expandDetails() {
 if (![1, 2, 3, 4].includes(selected) || expanded) return;
 expanded = true;
 dashboardsContainer.classList.add('expanded');
-gameDetails.classList.add('visible');
+  
+// Esconde todos os painéis game-details
+for (let i = 1; i <= 4; i++) {
+    if (gameDetailsPanels[i]) gameDetailsPanels[i].classList.remove('visible');
+}
+// Mostra só o painel do item expandido
+if (gameDetailsPanels[selected]) gameDetailsPanels[selected].classList.add('visible');
+
 hudTitles.forEach((t, i) => t.classList.toggle('exp-arrow', i === selected));
 document.body.classList.add('gradient-fade');
 }
@@ -338,7 +410,9 @@ document.body.classList.add('gradient-fade');
 function collapseDetails() {
 expanded = false;
 dashboardsContainer.classList.remove('expanded');
-gameDetails.classList.remove('visible');
+for (let i = 1; i <= 4; i++) {
+    if (gameDetailsPanels[i]) gameDetailsPanels[i].classList.remove('visible');
+}
 hudTitles.forEach(t => t.classList.remove('exp-arrow'));
 document.body.classList.remove('gradient-fade');
 }
@@ -373,3 +447,4 @@ document.querySelector(".carousel-inner").scrollIntoView({behavior: 'smooth', bl
 </script>
 </body>
 </html>
+
