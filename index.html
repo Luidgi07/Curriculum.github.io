@@ -232,7 +232,7 @@ padding-bottom: 20px;
 <img src="3c924d2a-8986-4445-a71e-a9ef40853344.png" alt="Desporto" />
 </div>
 <div class="hud-row">
-<div class="hud-start"><button class="hud-btn">START</button></div>
+<div class="hud-start"><button class="hud-btn" id="hud-desporto-start">START</button></div>
 <div class="hud-title">Desporto <span class="down-arrow">▼</span></div>
 </div>
 </div>
@@ -307,8 +307,8 @@ padding-bottom: 20px;
 <div class="info">
 <p><strong>Desporto:</strong> Praticante regular de natação pura, águas abertas e salvamento aquático desportivo, atividades que promovem o desenvolvimento global da condição física, reforço muscular, resistência cardiovascular e respiratória, melhora da flexibilidade, postura e coordenação motora. A prática destes desportos também contribui para o aumento da resiliência mental, redução do stress, um estilo de vida mais saudável e permitiu-me desenvolver competências como a gestão de tempo, disciplina e foco em objetivos. Para ver mais informação sobre os meus desportos, carregue em START.</p>
 <div class="buttons">
-<button class="btn-trophies">Ver Troféus</button>
-<button class="hud-btn" style="height:auto; padding:10px 36px;">START</button>
+<button class="btn-trophies" id="desporto-trofeus">Ver Troféus</button>
+<button class="hud-btn" style="height:auto; padding:10px 36px;" id="hud-desporto-start">START</button>
 </div>
 </div>
 </div>
@@ -472,6 +472,20 @@ function scrollToCarousel() {
 collapseDetails();
 document.querySelector(".carousel-inner").scrollIntoView({behavior: 'smooth', block: 'start'});
 }
+
+// Botão START do retângulo grande do HUD menu Desporto
+document.getElementById('hud-desporto-start')?.addEventListener('click', function(e) {
+  window.location.href = 'desporto.html';
+});
+
+// Botões dentro do painel de game-details Desporto
+document.getElementById('desporto-trofeus')?.addEventListener('click', function(e) {
+  window.location.href = 'desporto.html';
+});
+document.getElementById('desporto-start')?.addEventListener('click', function(e) {
+  window.location.href = 'desporto.html';
+});
+
 </script>
 </body>
 </html>
