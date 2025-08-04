@@ -308,7 +308,7 @@ padding-bottom: 20px;
 <p><strong>Desporto:</strong> Praticante regular de natação pura, águas abertas e salvamento aquático desportivo, atividades que promovem o desenvolvimento global da condição física, reforço muscular, resistência cardiovascular e respiratória, melhora da flexibilidade, postura e coordenação motora. A prática destes desportos também contribui para o aumento da resiliência mental, redução do stress, um estilo de vida mais saudável e permitiu-me desenvolver competências como a gestão de tempo, disciplina e foco em objetivos. Para ver mais informação sobre os meus desportos, carregue em START.</p>
 <div class="buttons">
 <button class="btn-trophies" id="desporto-trofeus">Ver Troféus</button>
-<button class="hud-btn" style="height:auto; padding:10px 36px;" id="hud-desporto-start">START</button>
+<button class="hud-btn" id="hud-desporto-start-detail" style="height:auto; padding:10px 36px;">START</button>
 </div>
 </div>
 </div>
@@ -485,6 +485,10 @@ document.getElementById('desporto-trofeus')?.addEventListener('click', function(
 document.getElementById('hud-desporto-start')?.addEventListener('click', function(e) {
   window.location.href = 'desporto.html';
 });
+document.getElementById('hud-desporto-start-detail')?.addEventListener('click', function(e) {
+window.location.href = 'desporto.html';
+});
+
 
 </script>
 </body>
