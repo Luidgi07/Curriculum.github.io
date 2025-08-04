@@ -1,198 +1,188 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8" />
-<title>Modalidade Aquática</title>
-<style>
-html, body { height:100%; margin:0; padding:0; box-sizing:border-box;}
-body {
-  min-height:100vh; 
-  margin:0; 
-  background:#28345A; 
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
+  <meta charset="UTF-8" />
+  <title>Modalidade Aquática</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #28345A;
+    }
+    body {
+      min-height: 100vh;
+    }
 
-/* Topo igual ao teu código */
-.top-hud {
-  position: fixed; top:0; left:0; width:100vw; height:58px; background:rgba(18,26,36,0.93);
-  display:flex; align-items:center; justify-content:space-between; padding:0 32px; z-index:9999; border-bottom:2.5px solid #42aaff; box-shadow:0 2px 18px #12244477;
-}
-.hud-left{display:flex;align-items:center;gap:18px;}
-.hud-time-date{
-  color:#e9f5fa; font-size:1.07em; letter-spacing:.1px; font-variant-numeric:tabular-nums; font-family:'Segoe UI Mono', monospace;
-  min-width:115px; text-align:left; text-shadow:1px 1px 2px #06060848;
-}
-.left-decor-btn{width:44px; height:44px; border-radius:9px; margin-left:18px; border:2.5px solid #42aaff; box-shadow:0 2px 10px #45baff88; background:none; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;}
-.left-decor-btn svg { width:20px; height:20px; }
-.hud-center{flex:1; display:flex; justify-content:flex-end; margin-left:auto; margin-right:80px;}
-.profile-area{
-  display:flex; align-items:center; gap:11px; background:rgba(42,62,94,0.82); border-radius:9px; padding:5px 55px 5px 55px;
-  box-shadow:0 1px 6px #006fff21, 0 2px 8px #121a2412; cursor:pointer; border:1.5px solid #42aaff60; min-width:0; max-width:260px;
-}
-.profile-img { width:38px; height:38px; border-radius:7px; object-fit:cover; border:2.5px solid #42aaff; box-shadow:0 2px 12px #0a79e058; background:#202a41;}
-.profile-name { color:#f3f8fc; font-weight:600; font-size:1em; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .top-hud {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 58px;
+      background: rgba(18,26,36,0.93);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      z-index: 9999;
+      border-bottom: 2.5px solid #42aaff;
+      box-shadow: 0 2px 18px #12244477;
+    }
+    .hud-left { display: flex; align-items: center; gap: 18px; }
+    .hud-time-date {
+      color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
+      font-family: 'Segoe UI Mono', monospace;
+      min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
+    }
+    .left-decor-btn {
+      width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
+      border: 2.5px solid #42aaff;
+      box-shadow: 0 2px 10px #45baff88;
+      background: none;
+      display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .left-decor-btn svg { width: 20px; height: 20px; }
+    .hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
+    .profile-area {
+      display: flex; align-items: center; gap: 11px;
+      background: rgba(42,62,94,0.82); border-radius: 9px;
+      padding: 5px 55px 5px 55px;
+      box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
+      cursor: pointer; border: 1.5px solid #42aaff60;
+      min-width: 0; max-width: 260px;
+    }
+    .profile-img {
+      width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
+      border: 2.5px solid #42aaff;
+      box-shadow: 0 2px 12px #0a79e058; background: #202a41;
+    }
+    .profile-name {
+      color: #f3f8fc; font-weight: 600; font-size: 1em;
+      max-width: 120px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
 
-/* 3 colunas lado a lado prontas para imagem realista */
-
-.main-sections {
-  display: flex;
-  width: 100vw;
-  height: calc(100vh - 58px);
-  margin-top: 58px;
-  overflow: hidden;
-  position: relative;
-}
-
-.section {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  transition: flex 0.36s cubic-bezier(.63,1.35,.74,.92);
-  cursor: pointer;
-  min-width: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.img-recorte {
-  position: absolute;
-  left: 0; top: 0; width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  z-index: 1;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Ajusta a mask-image para simular o recorte rasgado */
-.section.natacao img {
-  mask-image: url('recorte_esquerda.svg');
-  -webkit-mask-image: url('recorte_esquerda.svg');
-  mask-size: 100% 100%;
-  -webkit-mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-}
-.section.aguasabertas img {
-  mask-image: url('recorte_centro.svg');
-  -webkit-mask-image: url('recorte_centro.svg');
-  mask-size: 100% 100%;
-  -webkit-mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-}
-.section.salvamento img {
-  mask-image: url('recorte_direita.svg');
-  -webkit-mask-image: url('recorte_direita.svg');
-  mask-size: 100% 100%;
-  -webkit-mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-}
-
-.section-title {
-  width: 80%;
-  left: 10%;
-  position: absolute;
-  bottom: 20%;
-  background: linear-gradient(to top, #102041 90%, transparent 100%);
-  text-align: center;
-  color: #fff;
-  font-size: 2em;
-  font-weight: bold;
-  letter-spacing: 1.2px;
-  box-shadow: 0 6px 58px #10143a96;
-  opacity: 0;
-  padding: 20px 0;
-  border-radius: 12px;
-  z-index: 2;
-  transition: opacity 0.23s, background 0.19s, font-size 0.23s, bottom 0.28s;
-  pointer-events: none;
-}
-
-.section:hover .section-title, .section:focus .section-title, .section.active .section-title {
-  opacity: 0.98;
-  bottom: 25%;
-}
-
-/* Efeito de destaque ao hover/focus */
-.section:hover, .section:focus, .section.active {
-  flex: 1.65;
-  z-index:2;
-}
-.section:not(:hover):not(.active) {
-  filter: brightness(0.93) blur(0.5px);
-}
-.section:focus {outline:2.5px solid #42aaff;}
-</style>
+    /* Retângulos fullscreen abaixo do topo */
+    .gallery {
+      position: absolute;
+      top: 58px;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 58px);
+      display: flex;
+      overflow: hidden;
+      margin: 0;
+      background: #fff;
+      z-index: 9;
+    }
+    .col {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+      cursor: pointer;
+      transition: filter 0.25s;
+    }
+    .col img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(38,38,38,0.56);
+      color: #fff;
+      font-weight: bold;
+      font-size: 2.4em;
+      letter-spacing: 1px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.33s;
+      text-shadow: 1px 1px 12px #181818ad;
+      text-align: center;
+      z-index: 2;
+    }
+    .col:hover .overlay, .col:focus .overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .col:hover img, .col:focus img {
+      filter: brightness(0.44);
+    }
+  </style>
 </head>
 <body>
-<div class="top-hud">
-  <div class="hud-left">
-    <span class="hud-time-date" id="hudTimeDate"></span>
-    <button class="left-decor-btn" title="Voltar ao menu inicial">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 11.5L12 4l9 7.5"/>
-        <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
-        <path d="M9 22V12h6v10"/>
-      </svg>
-    </button>
+  <div class="top-hud">
+    <div class="hud-left">
+      <span class="hud-time-date" id="hudTimeDate"></span>
+      <button class="left-decor-btn" title="Voltar ao menu inicial">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11.5L12 4l9 7.5"/>
+          <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
+          <path d="M9 22V12h6v10"/>
+        </svg>
+      </button>
+    </div>
+    <div class="hud-center">
+      <div class="profile-area" title="Meu Perfil">
+        <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
+        <span class="profile-name">Luís Correia</span>
+      </div>
+    </div>
+    <div class="hud-right"></div>
   </div>
-  <div class="hud-center">
-    <div class="profile-area" title="Meu Perfil">
-      <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
-      <span class="profile-name">Luís Correia</span>
+
+  <div class="gallery">
+    <!-- Coluna 1 -->
+    <div class="col" tabindex="0" data-link="pagina1.html">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="">
+      <div class="overlay">Natureza</div>
+    </div>
+    <!-- Coluna 2 -->
+    <div class="col" tabindex="0" data-link="pagina2.html">
+      <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80" alt="">
+      <div class="overlay">Montanha</div>
+    </div>
+    <!-- Coluna 3 -->
+    <div class="col" tabindex="0" data-link="pagina3.html">
+      <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80" alt="">
+      <div class="overlay">Diversão</div>
     </div>
   </div>
-  <div class="hud-right"></div>
-</div>
 
-<div class="main-sections">
-  <div class="section natacao" tabindex="0">
-    <img src="imagem_esquerda.jpg" alt="Natação Pura" class="img-recorte" />
-    <div class="section-title">Natação Pura</div>
-  </div>
-  <div class="section aguasabertas" tabindex="0">
-    <img src="imagem_centro.jpg" alt="Águas Abertas" class="img-recorte" />
-    <div class="section-title">Águas Abertas</div>
-  </div>
-  <div class="section salvamento" tabindex="0">
-    <img src="imagem_direita.jpg" alt="Salvamento Aquático Desportivo" class="img-recorte" />
-    <div class="section-title">Salvamento Aquático Desportivo</div>
-  </div>
-</div>
+  <script>
+    // Atualiza o relógio no topo
+    function updateHudTime() {
+      const el = document.getElementById('hudTimeDate');
+      if (!el) return;
+      const now = new Date();
+      el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
+        ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(updateHudTime, 1000); updateHudTime();
 
-<script>
-// Atualiza o relógio como no teu topo
-function updateHudTime() {
-  const el = document.getElementById('hudTimeDate');
-  if (!el) return;
-  const now = new Date();
-  el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
-    ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
-}
-setInterval(updateHudTime, 1000); updateHudTime();
-
-// Efeito "seta" por teclado e focus (destacar)
-const sections = document.querySelectorAll('.section');
-let idx = 0;
-function setActive(i) {
-  sections.forEach((sec,j)=>sec.classList.toggle('active', j===i));
-  sections[i]?.focus();
-}
-sections.forEach((section,i)=>{
-  section.addEventListener('mouseenter',()=>setActive(i));
-  section.addEventListener('focus',()=>setActive(i));
-  section.addEventListener('mouseleave',()=>sections.forEach(s=>s.classList.remove('active')));
-});
-window.addEventListener('keydown',e=>{
-  if(['ArrowLeft','ArrowRight'].includes(e.key)){
-    if(e.key==='ArrowLeft') idx=(idx+2)%3;
-    if(e.key==='ArrowRight') idx=(idx+1)%3;
-    setActive(idx);
-  }
-});
-</script>
+    // Navegação por clique ou Enter/Espaço
+    document.querySelectorAll('.col').forEach(col => {
+      col.addEventListener('click', function() {
+        const link = this.getAttribute('data-link');
+        if (link) window.location.href = link;
+      });
+      col.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const link = this.getAttribute('data-link');
+          if (link) window.location.href = link;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
