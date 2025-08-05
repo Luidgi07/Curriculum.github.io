@@ -194,22 +194,22 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
 .loading-bar-simple {
   width: 96%;
   height: 18px;
-  background: #23283a;   /* fundo escuro, igual ao tema do site */
-  border-radius: 0;      /* cantos retos! */
+  background: #23283a;    /* Fundo escuro! */
+  border-radius: 0;       /* Cantos retos */
+  border: 1.5px solid #161b22; /* Opcional: pequena borda escura */
   overflow: hidden;
   margin: 0 auto;
-  box-shadow: none;      /* Sem brilho nem sombras */
-  border: 1.5px solid #202a2a; /* ligeira borda para delimitar */
+  box-shadow: none;
   position: relative;
 }
+
 .loading-bar-simple > .fill {
-  background: #42aaff;   /* azul vibrante para o preenchido */
+  background: linear-gradient(90deg, #14aaff 0%, #75d5ff 100%); /* Degradê azul! */
   height: 100%;
   width: 0%;
   transition: width 0.2s linear;
-  border-radius: 0;      /* cantos retos também no preenchido! */
+  border-radius: 0;
 }
-
 
 </style>
 </head>
