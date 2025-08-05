@@ -10,6 +10,53 @@
       background: #101024;
       overflow-x: hidden;
     }
+    .top-hud {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 58px;
+      background: rgba(18,26,36,0.93);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      z-index: 9999;
+      border-bottom: 2.5px solid #42aaff;
+      box-shadow: 0 2px 18px #12244477;
+    }
+    .hud-left { display: flex; align-items: center; gap: 18px; }
+    .hud-time-date {
+      color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
+      font-family: 'Segoe UI Mono', monospace;
+      min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
+    }
+    .left-decor-btn {
+      width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
+      border: 2.5px solid #42aaff;
+      box-shadow: 0 2px 10px #45baff88;
+      background: none;
+      display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .left-decor-btn svg { width: 20px; height: 20px; }
+    .hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
+    .profile-area {
+      display: flex; align-items: center; gap: 11px;
+      background: rgba(42,62,94,0.82); border-radius: 9px;
+      padding: 5px 55px 5px 55px;
+      box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
+      cursor: pointer; border: 1.5px solid #42aaff60;
+      min-width: 0; max-width: 260px;
+    }
+    .profile-img {
+      width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
+      border: 2.5px solid #42aaff;
+      box-shadow: 0 2px 12px #0a79e058; background: #202a41;
+    }
+    .profile-name {
+      color: #f3f8fc; font-weight: 600; font-size: 1em;
+      max-width: 120px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+
+
     .balneario-container {
       position: relative;
       width: 100vw;         /* Ou usa max-width: 1920px, conforme teu layout */
