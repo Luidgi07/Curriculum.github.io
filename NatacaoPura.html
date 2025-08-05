@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Glow sobre camisolas do balneário</title>
+  <title>Glow EXATO sobre camisolas do balneário</title>
   <style>
     html, body {
       width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden; background: #111;
@@ -10,91 +10,69 @@
     body { position: relative; }
     .locker-bg {
       position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: url('ss.png') center center/cover no-repeat;
+      background: url('ss.jpg') center center/cover no-repeat;
       z-index: 1;
     }
-    .outline-camisola {
+    .camisola-outline {
       position: absolute;
-      width: 126px;   /* AJUSTA ao tamanho real das camisolas desenhadas na imagem de fundo */
-      height: 160px;
+      width: 126px;    /* Ajusta para o tamanho da tua camisola desenhada */
+      height: 160px;   /* Ajusta para o tamanho da camisola desenhada */
+      opacity: 0.18;   /* Mostra sempre um leve brilho */
       pointer-events: auto;
-      opacity: 0;
-      transition: opacity 0.18s;
+      filter: drop-shadow(0 0 8px #42aaff);
+      transition: opacity 0.22s, filter 0.22s;
+      z-index: 2;
     }
-    /* Efeito de glow ao hover por cima da área da cabine */
-    .outline-camisola:hover,
-    .outline-camisola:focus,
-    .outline-camisola.active {
+    .camisola-outline:hover, .camisola-outline:focus {
       opacity: 1;
-      z-index: 99;
+      filter: drop-shadow(0 0 24px #42aaff) drop-shadow(0 0 54px #14b8ff);
+      cursor: pointer;
+      z-index: 10;
     }
-    /* OPCIONAL: deixa o contorno um pouco visível por padrão, troca o valor do opacity */
-    /* .outline-camisola { opacity: 0.16; } */
   </style>
 </head>
 <body>
+  <!-- Fundo do balneário -->
   <div class="locker-bg"></div>
 
-  <!-- Outlines SVG: uma para cada camisola, ajusta left/top para cada cabine! -->
-  <svg class="outline-camisola" tabindex="0" style="left:110px; top:255px;" viewBox="0 0 143 181">
-    <defs>
-      <filter id="glow1" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#42aaff" flood-opacity="0.82"/>
-      </filter>
-    </defs>
-    <path d="M16,41 Q17,20 40,12 Q72,3 104,12 Q127,20 128,41 Q131,61 135,85 Q130,109 123,134 Q120,165 70,173 Q23,167 20,134 Q13,109 8,85 Q12,61 16,41 Z"
-          fill="none" stroke="#42aaff" stroke-width="6" filter="url(#glow1)" />
+  <!-- OUTLINE SVG - Copia para cada camisola, ajustando left/top à posição do fundo! -->
+  
+  <!-- CABINE 1 -->
+  <svg class="camisola-outline" style="left:113px; top:255px;" viewBox="0 0 720 1080">
+    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
+      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
+      fill="none" stroke="#42aaff" stroke-width="18" />
   </svg>
-  <svg class="outline-camisola" tabindex="0" style="left:270px; top:255px;" viewBox="0 0 143 181">
-    <use href="#cam_path" />
-    <defs>
-      <filter id="glow2" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#42aaff" flood-opacity="0.82"/>
-      </filter>
-    </defs>
-    <path d="M16,41 Q17,20 40,12 Q72,3 104,12 Q127,20 128,41 Q131,61 135,85 Q130,109 123,134 Q120,165 70,173 Q23,167 20,134 Q13,109 8,85 Q12,61 16,41 Z"
-          fill="none" stroke="#42aaff" stroke-width="6" filter="url(#glow2)" />
+  <!-- CABINE 2 -->
+  <svg class="camisola-outline" style="left:272px; top:255px;" viewBox="0 0 720 1080">
+    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
+      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
+      fill="none" stroke="#42aaff" stroke-width="18" />
   </svg>
-  <svg class="outline-camisola" tabindex="0" style="left:427px; top:257px;" viewBox="0 0 143 181">
-    <defs>
-      <filter id="glow3" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#42aaff" flood-opacity="0.82"/>
-      </filter>
-    </defs>
-    <path d="M16,41 Q17,20 40,12 Q72,3 104,12 Q127,20 128,41 Q131,61 135,85 Q130,109 123,134 Q120,165 70,173 Q23,167 20,134 Q13,109 8,85 Q12,61 16,41 Z"
-          fill="none" stroke="#42aaff" stroke-width="6" filter="url(#glow3)" />
+  <!-- CABINE 3 -->
+  <svg class="camisola-outline" style="left:427px; top:257px;" viewBox="0 0 720 1080">
+    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
+      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
+      fill="none" stroke="#42aaff" stroke-width="18" />
   </svg>
-  <svg class="outline-camisola" tabindex="0" style="left:580px; top:257px;" viewBox="0 0 143 181">
-    <defs>
-      <filter id="glow4" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#42aaff" flood-opacity="0.82"/>
-      </filter>
-    </defs>
-    <path d="M16,41 Q17,20 40,12 Q72,3 104,12 Q127,20 128,41 Q131,61 135,85 Q130,109 123,134 Q120,165 70,173 Q23,167 20,134 Q13,109 8,85 Q12,61 16,41 Z"
-          fill="none" stroke="#42aaff" stroke-width="6" filter="url(#glow4)" />
+  <!-- CABINE 4 -->
+  <svg class="camisola-outline" style="left:580px; top:257px;" viewBox="0 0 720 1080">
+    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
+      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
+      fill="none" stroke="#42aaff" stroke-width="18" />
   </svg>
-  <svg class="outline-camisola" tabindex="0" style="left:750px; top:255px;" viewBox="0 0 143 181">
-    <defs>
-      <filter id="glow5" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#42aaff" flood-opacity="0.82"/>
-      </filter>
-    </defs>
-    <path d="M16,41 Q17,20 40,12 Q72,3 104,12 Q127,20 128,41 Q131,61 135,85 Q130,109 123,134 Q120,165 70,173 Q23,167 20,134 Q13,109 8,85 Q12,61 16,41 Z"
-          fill="none" stroke="#42aaff" stroke-width="6" filter="url(#glow5)" />
+  <!-- CABINE 5 -->
+  <svg class="camisola-outline" style="left:750px; top:255px;" viewBox="0 0 720 1080">
+    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
+      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
+      fill="none" stroke="#42aaff" stroke-width="18" />
   </svg>
 
-  <script>
-    // Torna os outlines focáveis para tab/enter
-    document.querySelectorAll('.outline-camisola').forEach(svg => {
-      svg.addEventListener('focus', function(){ this.style.opacity = 1; });
-      svg.addEventListener('blur', function(){ this.style.opacity = 0; });
-      svg.addEventListener('mouseenter', function(){ this.style.opacity = 1; });
-      svg.addEventListener('mouseleave', function(){ this.style.opacity = 0; });
-      // Para clique ou Enter, redireciona se quiseres!
-      // svg.addEventListener('click', function(){ window.location.href = 'pagina.html'; });
-    });
-  </script>
+  <!-- 
+    Ajusta os valores de left/top para alinhar cada outline com cada camisola do fundo!
+    Ajusta width/height/viewBox/path conforme for necessário (a outline dada encaixa genericamente!).
+    Para melhor resultado vai testando os valores visuais no browser.
+  -->
+
 </body>
 </html>
-
-
