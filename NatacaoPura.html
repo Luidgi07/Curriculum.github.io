@@ -2,21 +2,20 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Gaveta a tapar buraco com HUD</title>
+  <title>Gaveta alinhada ao buraco com HUD</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       width: 100vw;
-      box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
+      box-sizing: border-box;
     }
     body {
       min-height: 100vh;
       min-width: 100vw;
-      background: #111;
-      background: url('Só o Futuro saberá.png') no-repeat center center fixed;
+      background: url('So-o-Futuro-sabera.jpg') no-repeat center center fixed;
       background-size: cover;
       overflow-x: hidden;
     }
@@ -66,53 +65,55 @@
       text-overflow: ellipsis; white-space: nowrap;
     }
 
-    .gaveta-container {
+    /* Porta da gaveta perfeitamente alinhada ao buraco */
+    .buraco-gaveta {
       position: absolute;
-      left: calc(50% - 195px); /* ajusta para o cacifo certo */
-      bottom: 60px;
-      width: 390px;
-      height: 175px;
-      z-index: 200;
-      background: transparent;
+      /* para a tua imagem, ajusta estes valores! */
+      width: 185px;   /* largura do buraco */
+      height: 90px;   /* altura do buraco */
+      left: 32vw;     /* posiciona no cacifo certo (ajusta consoante tua imagem de fundo) */
+      bottom: 68px;   /* distância à base da página */
+      z-index: 500;
       display: flex;
       align-items: flex-end;
-      border-radius: 0 0 60px 60px;
+      background: transparent;
+      pointer-events: auto;
     }
     .porta-gaveta {
       width: 100%;
       height: 100%;
       background: #222;
-      border-radius: 0 0 60px 60px;
-      border-top: 8px solid #7a5435;
-      box-shadow: 0 4px 20px #0009, 0 1px 0 #fff4 inset;
+      border-top: 7px solid #7a5435;
+      border-radius: 0 0 34px 34px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
       position: relative;
       cursor: pointer;
-      overflow: hidden;
+      box-shadow: 0 4px 16px #000a;
+      transition: filter 0.16s;
     }
     .porta-gaveta:hover {
-      filter: brightness(1.09);
+      filter: brightness(1.14);
     }
     .macaneta {
-      width: 68px; height: 44px;
+      width: 38px; height: 24px;
       background: #efdba4;
-      border-radius: 28px;
-      box-shadow: 0 1px 8px #4328;
-      border: 4px solid #aa905d;
+      border-radius: 16px;
+      box-shadow: 0 1px 6px #432a;
+      border: 3px solid #aa905d;
       position: absolute;
       left: 50%;
-      bottom: 44px;
+      bottom: 19px;
       transform: translateX(-50%);
     }
     .cartao {
       position: fixed;
       left: 50%; top: 78vh;
       transform: translate(-50%, 0) scale(0.85);
-      width: 220px; height: 120px;
+      width: 150px; height: 90px;
       background: linear-gradient(120deg, #3794fa 70%, #c3e2ff 98%);
-      border-radius: 15px;
+      border-radius: 13px;
       box-shadow: 0 4px 22px #0007;
       border: 2.5px solid #fff;
       opacity: 0;
@@ -121,12 +122,12 @@
       font-family: 'Segoe UI', Arial, sans-serif;
       font-weight: bold;
       color: #153850;
-      font-size: 1.22em;
+      font-size: 1.08em;
       z-index: 9999;
       transition:
-        top 0.8s cubic-bezier(.77,1.11,.23,1.02),
+        top 0.7s cubic-bezier(.77,1.11,.23,1.02),
         opacity 0.5s cubic-bezier(.41,.45,.36,.9),
-        transform 0.36s cubic-bezier(.62,-0.04,.79,1.13);
+        transform 0.35s cubic-bezier(.62,-0.04,.79,1.13);
     }
     .cartao.visivel {
       top: 47vh;
@@ -167,12 +168,13 @@
     <div class="hud-right"></div>
   </div>
 
-  <!-- Gaveta tapando o buraco do cacifo -->
-  <div class="gaveta-container">
+  <!-- Gaveta perfeitamente sobre o buraco do cacifo -->
+  <div class="buraco-gaveta">
     <div class="porta-gaveta" onclick="mostrarCartao()">
       <div class="macaneta"></div>
     </div>
   </div>
+
   <!-- Cartão animado ao centro -->
   <div class="cartao" id="cartao">
     Cartão Secreto
