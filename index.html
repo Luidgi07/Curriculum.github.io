@@ -201,13 +201,6 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
   position: relative;
   margin: 0 auto; /* centraliza na largura do botão */
 }
-.loading-bar-simple > .fill {
-  background: linear-gradient(90deg, #14aaff, #75d5ff);
-  height: 100%;
-  width: 0;
-  transition: width 0.2s linear;
-  border-radius: 6px;
-}
 
 
 </style>
@@ -557,55 +550,6 @@ btnStartDetail.addEventListener('click', function(e) {
   animateLoadingBarWithFade(() => {
     window.location.href = 'desporto.html';
   }, 3000);
-});
-
-const hudDesportoStartBtn = document.getElementById('hud-desporto-start');
-const screenFade = document.getElementById('screen-fade');
-
-hudDesportoStartBtn?.addEventListener('click', function(e) {
-  e.preventDefault();
-
-  // Impede cliques múltiplos
-  if (this.disabled) return;
-  this.disabled = true;
-
-  // Limpa texto do botão
-  this.textContent = '';
-
-  // Cria barra de loading interna
-  const loadingBar = document.createElement('div');
-  loadingBar.classList.add('loading-bar-simple');
-  const fill = document.createElement('div');
-  fill.classList.add('fill');
-  loadingBar.appendChild(fill);
-
-  this.appendChild(loadingBar);
-
-  // Animar barra
-  let widthPercent = 0;
-  const steps = 60;
-  const stepDuration = 3000 / steps;
-  const increment = 100 / steps;
-
-  let currentStep = 0;
-  const interval = setInterval(() => {
-    currentStep++;
-    widthPercent += increment;
-    if (widthPercent > 100) widthPercent = 100;
-
-    fill.style.width = widthPercent + '%';
-
-    if (currentStep >= steps) {
-      clearInterval(interval);
-
-      setTimeout(() => {
-        screenFade.style.opacity = '1';
-        setTimeout(() => {
-          window.location.href = 'desporto.html';
-        }, 700);
-      }, 400);
-    }
-  }, stepDuration);
 });
 
 
