@@ -522,7 +522,66 @@ const bar = document.getElementById('desporto-loading-bar');
 const barLabel = document.getElementById('desporto-loading-label');
 const btnStartDetail = document.getElementById('hud-desporto-start-detail');
 const screenFade = document.getElementById('screen-fade');
+const hudDesportoStartBtn = document.getElementById('hud-desporto-start');
 
+
+hudDesportoStartBtn?.addEventListener('click', function(e) {
+  e.preventDefault();
+
+  if (this.disabled) return;
+  this.disabled = true;
+
+  // Esconde o texto dentro do botão, mas mantém o espaço
+  this.style.color = 'transparent';
+  this.style.position = 'relative';
+
+  // Cria a barra de loading dentro do botão
+  const loadingBar = document.createElement('div');
+  loadingBar.classList.add('loading-bar-simple');
+
+  // Posiciona a barra dentro do botão (centrada verticalmente)
+  loadingBar.style.position = 'absolute';
+  loadingBar.style.top = '50%';
+  loadingBar.style.left = '0';
+  loadingBar.style.transform = 'translateY(-50%)';
+  loadingBar.style.width = '100%';
+  loadingBar.style.boxSizing = 'border-box';
+
+  const fill = document.createElement('div');
+  fill.classList.add('fill');
+  loadingBar.appendChild(fill);
+
+  this.appendChild(loadingBar);
+
+  let widthPercent = 0;
+  const totalDuration = 3000; // 3 segundos
+  const frameCount = 60;
+  const increment = 100 / frameCount;
+  const frameDuration = totalDuration / frameCount;
+
+  let frame = 0;
+  const interval = setInterval(() => {
+    frame++;
+    widthPercent += increment;
+    if (widthPercent > 100) widthPercent = 100;
+
+    fill.style.width = widthPercent + '%';
+
+    if (frame >= frameCount) {
+      clearInterval(interval);
+
+      // Pequena pausa
+      setTimeout(() => {
+        screenFade.style.opacity = '1'; // faz o fade para preto
+        setTimeout(() => {
+          window.location.href = 'desporto.html'; // redireciona ao fim do fade
+        }, 700);
+      }, 400);
+    }
+  }, frameDuration);
+});
+
+  
 
 function animateLoadingBarWithFade(callback, loadDuration = 3000) {
   let percent = 0;
