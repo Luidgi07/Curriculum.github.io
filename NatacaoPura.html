@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Balneário – Camisolas Selecionáveis</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0; padding: 0;
+      width: 100vw;
+      overflow: hidden;
+    }
+    body {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      min-width: 100vw;
+      background: #181818;
+      position: relative;
+    }
+    /* Fundo do balneário */
+    .lockers-bg {
+      width: 100vw;
+      height: 100vh;
+      background: url('TROCA_PARA_A_TUA_IMAGEM_DE_FUNDO.jpg') center center/cover no-repeat;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 1;
+    }
+    /* Linha de camisolas */
+    .shirts-row {
+      position: absolute;
+      left: 50%;
+      top: 51.8%;          /* Ajusta conforme necessário para alinhar com o cabide */
+      transform: translate(-50%, -50%);
+      width: 72vw;         /* Ajusta conforme o spacing do teu fundo (ou usa 1000px por ex) */
+      display: flex;
+      justify-content: space-between;
+      z-index: 2;
+      pointer-events: none; /* Só permite pointer nas imagens das camisolas */
+    }
+    /* Camisolas */
+    .locker-shirt {
+      height: 85px;         /* Ajusta conforme o tamanho do cabide no fundo */
+      pointer-events: auto;
+      cursor: pointer;
+      background: transparent;
+      transition: box-shadow 0.3s, outline 0.3s;
+      /* Centraliza à vertical no cabide, pode precisar de ajustar com margin-top */
+      margin-top: -7px;
+      /* Remove seleção azul dos browsers */
+      user-select: none;
+    }
+    .locker-shirt.selected, .locker-shirt:focus {
+      box-shadow: 0 0 40px 14px #42aaffc0, 0 0 70px 34px #42aaff33;
+      outline: 2.5px solid #42aaff;
+      z-index: 5;
+      border-radius: 10px;
+    }
+    /* Opcional: Camisola semi-transparente ao hover */
+    .locker-shirt:hover {
+      filter: brightness(1.10) drop-shadow(0 2px 12px #42aaff55);
+    }
+    @media (max-width: 950px) {
+      .shirts-row { width: 97vw; }
+      .locker-shirt { height: 58px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="lockers-bg"></div>
+  <div class="shirts-row">
+    <!-- Adiciona as tuas imagens de camisolas. Usa PNGs renderizados a partir do teu design -->
+    <img src="camisola1.png" alt="Camisola 2014-17" class="locker-shirt selectable" data-link="clube1.html">
+    <img src="camisola2.png" alt="Camisola 2017-19" class="locker-shirt selectable" data-link="clube2.html">
+    <img src="camisola3.png" alt="Camisola 2019-23" class="locker-shirt selectable" data-link="clube3.html">
+    <img src="camisola4.png" alt="Camisola 2023-" class="locker-shirt selectable" data-link="clube4.html">
+    <img src="camisola5.png" alt="Camisola futuro" class="locker-shirt selectable" data-link="futuro.html">
+  </div>
+  <script>
+    document.querySelectorAll('.locker-shirt').forEach(img => {
+      img.addEventListener('click', function() {
+        // Remove seleção atual
+        document.querySelectorAll('.locker-shirt.selected').forEach(el => el.classList.remove('selected'));
+        // Adiciona à camisola atual o efeito selecionado
+        this.classList.add('selected');
+        // Redireciona para a página correspondente (podes mostrar um efeito antes se quiseres)
+        setTimeout(() => window.location.href = this.dataset.link, 200);
+      });
+      // Para acessibilidade: seleção via teclado
+      img.addEventListener('focus', function() {
+        document.querySelectorAll('.locker-shirt.selected').forEach(el => el.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+  </script>
+</body>
+</html>
