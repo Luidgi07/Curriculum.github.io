@@ -192,23 +192,24 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
 @media (max-width: 950px) { .ps4-dashboard { padding-left: 15px;} .carousel-inner { gap: 18px;} .hud-title { font-size:1em;} .game-details { height: auto; max-height: none; padding: 20px 20px;} .game-details .buttons { justify-content: flex-start;} }
 
 .loading-bar-simple {
-  width: 96%;      /* Largura quase total do botão */
-  height: 18px;    /* Altura razoável dentro do botão */
-  border-radius: 6px;
-  background: #2a3350;
+  width: 96%;
+  height: 18px;
+  background: #23283a;   /* fundo escuro, igual ao tema do site */
+  border-radius: 0;      /* cantos retos! */
   overflow: hidden;
-  box-shadow: inset 0 0 6px #1a2a49cc;
+  margin: 0 auto;
+  box-shadow: none;      /* Sem brilho nem sombras */
+  border: 1.5px solid #202a2a; /* ligeira borda para delimitar */
   position: relative;
-  margin: 0.1 auto;
 }
-
 .loading-bar-simple > .fill {
-  background: #42aaff;
+  background: #42aaff;   /* azul vibrante para o preenchido */
   height: 100%;
   width: 0%;
   transition: width 0.2s linear;
-  border-radius: 6px 0 0 6px;
+  border-radius: 0;      /* cantos retos também no preenchido! */
 }
+
 
 </style>
 </head>
