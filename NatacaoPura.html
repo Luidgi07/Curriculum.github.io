@@ -5,91 +5,49 @@
   <title>Balneário Interativo</title>
   <style>
     body {
+      /* Imagem de fundo centralizada e ajustada */
       background: url('So-o-Futuro-sabera.jpg') no-repeat center center fixed;
       background-size: cover;
       margin: 0;
       padding: 0;
       height: 100vh;
     }
-    header {
-      width: 100%;
-      background: rgba(25, 25, 25, 0.85);
-      color: #fff;
-      padding: 20px 0 10px 0;
-      text-align: center;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 1.2rem;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 10;
-    }
-    .header-container {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 30px;
-    }
-    .perfil {
-      font-weight: bold;
-    }
-    #horaAtual {
-      font-family: 'Monaco', monospace;
-      font-size: 1.1rem;
-    }
-    .voltar {
-      color: #ffcc00;
-      background: none;
-      border: 2px solid #ffcc00;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .voltar:hover {
-      background: #ffcc00;
-      color: #222;
-    }
-    /* Espaço para não tapar o topo */
-    .spacer {
-      height: 65px;
-    }
     .mapa-container {
       position: relative;
-      width: 1080px;
-      max-width: 100%;
+      width: 1080px;  /* Largura original da imagem */
+      max-width: 100vw;
       margin: 0 auto;
       top: 0;
+      height: 608px;   /* Altura da imagem */
     }
-    img {
+    .mapa-imagem {
       width: 100%;
       height: auto;
       display: block;
-      opacity: 0.01;
-      pointer-events: none;
+      opacity: 0.01;  /* Invisível, apenas para o mapa de imagem */
+      pointer-events: none; 
       position: absolute;
+      top: 0;
+      left: 0;
     }
     @media (max-width: 1080px) {
-      .mapa-container { width: 100vw; }
-      .header-container { padding: 0 5vw; }
+      .mapa-container { width: 100vw; height: auto; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-container">
-      <div class="perfil">Sou aluno de tecnologia biomédica no politécnico de Setúbal e de Lisboa</div>
-      <div id="horaAtual"></div>
-      <button class="voltar" onclick="history.back();">Voltar atrás</button>
-    </div>
-  </header>
-  <div class="spacer"></div>
   <div class="mapa-container">
-    <img src="So-o-Futuro-sabera.jpg" usemap="#mapaCacifos" alt="Balneário"/>
+    <!-- Imagem invisível só para o <map> (tamanho original: 1080x608) -->
+    <img class="mapa-imagem"
+      src="So-o-Futuro-sabera.jpg"
+      usemap="#mapaCacifos"
+      alt="Balneário"
+      width="1080"
+      height="608"
+    />
+
     <map name="mapaCacifos">
+      <!-- Ajusta as coords conforme necessário para cada cacifo -->
       <area shape="rect" coords="127,166,270,508" href="/2014-2017" alt="2014-2017">
       <area shape="rect" coords="271,167,410,508" href="/2017-2019" alt="2017-2019">
       <area shape="rect" coords="410,167,555,508" href="/2019-2023" alt="2019-2023">
@@ -97,16 +55,8 @@
       <area shape="rect" coords="698,167,840,508" href="/futuro" alt="Só o Futuro Saberá">
     </map>
   </div>
-  <!-- Script para hora atual -->
-  <script>
-    function atualizarHora() {
-      const agora = new Date();
-      const hora = agora.toLocaleTimeString('pt-PT');
-      document.getElementById('horaAtual').textContent = hora;
-    }
-    setInterval(atualizarHora, 1000);
-    atualizarHora();
-  </script>
+
+  <!-- Responsividade do mapa (altamente recomendado) -->
   <script src="https://unpkg.com/image-map-resizer@1.0.10/js/imageMapResizer.min.js"></script>
   <script>
     window.onload = function() {
