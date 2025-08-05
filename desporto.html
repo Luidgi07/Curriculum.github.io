@@ -196,16 +196,14 @@
 document.querySelector('.left-decor-btn').onclick = function() {
   window.location.href = 'index.html';
 };
-    window.addEventListener('load', () => {
+window.addEventListener('load', () => {
   const screenFade = document.getElementById('screen-fade');
   if (!screenFade) return;
   
-  // Dá uma pequena pausa para garantir que o usuário percebe o fade
   setTimeout(() => {
     screenFade.style.opacity = '0';
-  }, 100); // 100ms delay (ajusta se quiseres)
+  }, 100);
   
-  // Opcional: remove o elemento do DOM após o fade acabar para otimizar
   screenFade.addEventListener('transitionend', () => {
     screenFade.remove();
   });
