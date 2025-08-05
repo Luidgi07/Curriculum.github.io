@@ -2,80 +2,105 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Balneário Interativo</title>
+  <title>Balneário Interativo com Glow nas Camisolas</title>
   <style>
     html, body {
-      height: 100%; width: 100vw;
-      margin: 0; padding: 0; overflow: hidden;
-      background: #181818;
+      width: 100vw; height: 100vh; margin: 0; padding: 0; background: #181818; overflow: hidden;
     }
-    body {
-      width: 100vw; height: 100vh; min-height: 100vh;
-    }
+    body { position: relative; }
     .locker-bg {
       position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: url('ss.png') center center/cover no-repeat; /* balneário */
+      background: url('ss.png') center center/cover no-repeat;
       z-index: 1;
     }
-    .shirts-layers {
+    .shirts-layer {
       position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2;
       pointer-events: none;
     }
-    .shirt-interactive {
+    .cabine-camisola {
       position: absolute;
+      width: 137px;  /* largura real da camisola no fundo, ajusta se precisares */
+      height: 110px; /* altura real da camisola no fundo, ajusta se precisares */
       pointer-events: auto;
-      cursor: pointer;
-      height: 110px;         /* Ajusta para bater com a cabine */
-      transition: box-shadow 0.3s, filter 0.16s;
-      user-select: none;
+      /* Ajusta left/top conforme o balneário */
     }
-    /* Posicionamento ajustado para cada cabine/camisola */
-    .shirt1 { left: 19.4vw; top: 37.5vh; }
-    .shirt2 { left: 33vw;   top: 37.5vh; }
-    .shirt3 { left: 46.4vw; top: 37.5vh; }
-    .shirt4 { left: 60vw;   top: 37.5vh; }
-    .shirt5 { left: 73.2vw; top: 37.5vh; }
-    /* Glow ao passar ou selecionar */
-    .shirt-interactive:hover,
-    .shirt-interactive.selected,
-    .shirt-interactive:focus {
-      box-shadow: 0 0 32px 14px #42aaffb0, 0 0 74px 30px #14aaff70;
-      outline: 2.5px solid #42aaff;
-      border-radius: 20px;
-      z-index: 10;
-      filter: brightness(1.09);
+    /* Posicionamento manual para cada cabine */
+    .cab1 { left: 181px;  top: 228px; }
+    .cab2 { left: 317px;  top: 229px; }
+    .cab3 { left: 461px;  top: 229px; }
+    .cab4 { left: 609px;  top: 229px; }
+    .cab5 { left: 757px;  top: 229px; }
+
+    /* SVG efeito glow só aparece em hover/selecionado */
+    .camisola-glow {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.17s;
+      z-index: 3;
+      filter: drop-shadow(0px 0px 16px #42aaffcc);
     }
-    @media (max-width:900px) {
-      .shirt-interactive { height: 60px;}
-      .shirt1 { left: 15vw;  } .shirt2 { left: 32vw; }
-      .shirt3 { left: 49vw; } .shirt4 { left: 66vw; } .shirt5 { left: 81vw; }
+    .cabine-camisola:hover .camisola-glow,
+    .cabine-camisola:focus .camisola-glow,
+    .cabine-camisola.selected .camisola-glow {
+      opacity: 1;
     }
+    /* Tornar clicável com realce ao teclado */
+    .cabine-camisola { outline: none; }
+    .cabine-camisola:focus { z-index: 10; }
   </style>
 </head>
 <body>
-  <!-- Fundo balneário -->
   <div class="locker-bg"></div>
-  <!-- Camisolas (adiciona tuas imagens e links) -->
-  <div class="shirts-layers">
-    <img src="dwdw.jpg" alt="Camisola 2014-2017" class="shirt-interactive shirt1" tabindex="0" data-link="clube1.html">
-    <img src="dwdw.jpg" alt="Camisola 2017-2019" class="shirt-interactive shirt2" tabindex="0" data-link="clube2.html">
-    <img src="dwdw.jpg" alt="Camisola 2019-2023" class="shirt-interactive shirt3" tabindex="0" data-link="clube3.html">
-    <img src="dwdw.jpg" alt="Camisola 2023-"      class="shirt-interactive shirt4" tabindex="0" data-link="clube4.html">
-    <img src="dwdw.jpg" alt="Camisola futura"     class="shirt-interactive shirt5" tabindex="0" data-link="clube5.html">
+  <div class="shirts-layer">
+    <!-- Posição exata sobre cada camisola do fundo -->
+    <div class="cabine-camisola cab1" tabindex="0" data-link="clube1.html"
+         title="Camisola 2014-2017">
+      <!-- SVG do contorno/glow da camisola -->
+      <svg class="camisola-glow" viewBox="0 0 185 150">
+        <path d="M25,30 Q35,18 92,16 Q149,18 159,30 Q154,41 164,60 Q175,71 174,85 
+        Q166,93 169,141 Q91,146 22,139 Q24,83 13,76 Q8,71 27,60 Q29,45 25,30 Z"
+              fill="none"
+              stroke="#42aaff"
+              stroke-width="7"
+              filter="url(#glow)" />
+        <defs>
+          <filter id="glow" width="300%" height="300%" x="-100%" y="-100%">
+            <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#42aaff" flood-opacity="0.89"/>
+          </filter>
+        </defs>
+      </svg>
+    </div>
+    <div class="cabine-camisola cab2" tabindex="0" data-link="clube2.html" title="Camisola 2017-2019">
+      <svg class="camisola-glow" viewBox="0 0 185 150"><path d="M25,30 Q35,18 92,16 Q149,18 159,30 Q154,41 164,60 Q175,71 174,85 Q166,93 169,141 Q91,146 22,139 Q24,83 13,76 Q8,71 27,60 Q29,45 25,30 Z" fill="none" stroke="#42aaff" stroke-width="7" filter="url(#glow)" /></svg>
+    </div>
+    <div class="cabine-camisola cab3" tabindex="0" data-link="clube3.html" title="Camisola 2019-2023">
+      <svg class="camisola-glow" viewBox="0 0 185 150"><path d="M25,30 Q35,18 92,16 Q149,18 159,30 Q154,41 164,60 Q175,71 174,85 Q166,93 169,141 Q91,146 22,139 Q24,83 13,76 Q8,71 27,60 Q29,45 25,30 Z" fill="none" stroke="#42aaff" stroke-width="7" filter="url(#glow)" /></svg>
+    </div>
+    <div class="cabine-camisola cab4" tabindex="0" data-link="clube4.html" title="Camisola 2023-...">
+      <svg class="camisola-glow" viewBox="0 0 185 150"><path d="M25,30 Q35,18 92,16 Q149,18 159,30 Q154,41 164,60 Q175,71 174,85 Q166,93 169,141 Q91,146 22,139 Q24,83 13,76 Q8,71 27,60 Q29,45 25,30 Z" fill="none" stroke="#42aaff" stroke-width="7" filter="url(#glow)" /></svg>
+    </div>
+    <div class="cabine-camisola cab5" tabindex="0" data-link="clube5.html" title="Camisola Futuro">
+      <svg class="camisola-glow" viewBox="0 0 185 150"><path d="M25,30 Q35,18 92,16 Q149,18 159,30 Q154,41 164,60 Q175,71 174,85 Q166,93 169,141 Q91,146 22,139 Q24,83 13,76 Q8,71 27,60 Q29,45 25,30 Z" fill="none" stroke="#42aaff" stroke-width="7" filter="url(#glow)" /></svg>
+    </div>
   </div>
   <script>
-    // Efeito selecionado + clique
-    document.querySelectorAll('.shirt-interactive').forEach(img => {
-      img.addEventListener('click', function() {
-        document.querySelectorAll('.shirt-interactive.selected').forEach(el => el.classList.remove('selected'));
+    // Efeito selecionado + redirecionamento
+    document.querySelectorAll('.cabine-camisola').forEach(div => {
+      div.addEventListener('click', function() {
+        document.querySelectorAll('.cabine-camisola.selected').forEach(el => el.classList.remove('selected'));
         this.classList.add('selected');
-        setTimeout(() => window.location.href = this.dataset.link, 200);
+        setTimeout(() => window.location.href = this.dataset.link, 240);
       });
-      img.addEventListener('focus', function() {
-        document.querySelectorAll('.shirt-interactive.selected').forEach(el => el.classList.remove('selected'));
-        this.classList.add('selected');
+      div.addEventListener('keydown', function(e) {
+        if(e.key === "Enter" || e.key === " ") {
+          this.click();
+        }
       });
     });
   </script>
 </body>
 </html>
+
