@@ -1,78 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Glow EXATO sobre camisolas do balneário</title>
+  <meta charset="UTF-8">
+  <title>Glow Camisola EXATO</title>
   <style>
     html, body {
-      width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden; background: #111;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100vw; height: 100vh;
+      background: #000;
     }
     body { position: relative; }
     .locker-bg {
-      position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: url('ss.jpg') center center/cover no-repeat;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-image: url('ss.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       z-index: 1;
+    }
+    .camisola-container {
+      position: absolute;
+      width: 143px;  /* igual ao SVG da camisola */
+      height: 181px;
+      top: 257px;    /* AJUSTA para encaixar na tua cabine! */
+      left: 114px;   /* AJUSTA para encaixar na tua cabine! */
     }
     .camisola-outline {
       position: absolute;
-      width: 126px;    /* Ajusta para o tamanho da tua camisola desenhada */
-      height: 160px;   /* Ajusta para o tamanho da camisola desenhada */
-      opacity: 0.18;   /* Mostra sempre um leve brilho */
-      pointer-events: auto;
-      filter: drop-shadow(0 0 8px #42aaff);
-      transition: opacity 0.22s, filter 0.22s;
-      z-index: 2;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease-in-out;
     }
-    .camisola-outline:hover, .camisola-outline:focus {
+    .camisola-container:hover .camisola-outline,
+    .camisola-container:focus .camisola-outline {
       opacity: 1;
-      filter: drop-shadow(0 0 24px #42aaff) drop-shadow(0 0 54px #14b8ff);
+      filter:
+        drop-shadow(0 0 12px #33aaff)
+        drop-shadow(0 0 24px #33aaff90);
+      pointer-events: auto;
       cursor: pointer;
       z-index: 10;
     }
   </style>
 </head>
 <body>
-  <!-- Fundo do balneário -->
   <div class="locker-bg"></div>
-
-  <!-- OUTLINE SVG - Copia para cada camisola, ajustando left/top à posição do fundo! -->
-  
-  <!-- CABINE 1 -->
-  <svg class="camisola-outline" style="left:113px; top:255px;" viewBox="0 0 720 1080">
-    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
-      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
-      fill="none" stroke="#42aaff" stroke-width="18" />
-  </svg>
-  <!-- CABINE 2 -->
-  <svg class="camisola-outline" style="left:272px; top:255px;" viewBox="0 0 720 1080">
-    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
-      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
-      fill="none" stroke="#42aaff" stroke-width="18" />
-  </svg>
-  <!-- CABINE 3 -->
-  <svg class="camisola-outline" style="left:427px; top:257px;" viewBox="0 0 720 1080">
-    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
-      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
-      fill="none" stroke="#42aaff" stroke-width="18" />
-  </svg>
-  <!-- CABINE 4 -->
-  <svg class="camisola-outline" style="left:580px; top:257px;" viewBox="0 0 720 1080">
-    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
-      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
-      fill="none" stroke="#42aaff" stroke-width="18" />
-  </svg>
-  <!-- CABINE 5 -->
-  <svg class="camisola-outline" style="left:750px; top:255px;" viewBox="0 0 720 1080">
-    <path d="M60,250 Q100,80 360,60 Q620,80 660,250 Q690,340 700,570 Q710,740 600,900 Q480,1050 360,1020 Q240,1050 120,900 Q10,740 20,570 Q30,340 60,250 Z
-      M200,140 Q240,210 320,260 Q400,310 480,260 Q560,210 600,140"
-      fill="none" stroke="#42aaff" stroke-width="18" />
-  </svg>
-
-  <!-- 
-    Ajusta os valores de left/top para alinhar cada outline com cada camisola do fundo!
-    Ajusta width/height/viewBox/path conforme for necessário (a outline dada encaixa genericamente!).
-    Para melhor resultado vai testando os valores visuais no browser.
-  -->
-
+  <!-- Ajusta os valores de .camisola-container para cada cabine/camisola! -->
+  <div class="camisola-container" tabindex="0">
+    <svg class="camisola-outline" viewBox="0 0 143 181" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="blueGlow">
+          <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#33aaff" flood-opacity="0.85" />
+          <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#66ccff" flood-opacity="0.5" />
+        </filter>
+      </defs>
+      <!-- O path encaixa EXATAMENTE à camisola desenhada (usa-o tal como está): -->
+      <path d="M26,46 C22,28 17,10 43,7 C63,5 93,10 120,40 C125,65 125,114 120,131 C110,168 70,166 50,170 C32,175 10,150 15,120 C25,100 29,65 26,46"
+        stroke="#33aaff" stroke-width="1.5" fill="none" filter="url(#blueGlow)" />
+    </svg>
+  </div>
 </body>
 </html>
+
