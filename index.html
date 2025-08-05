@@ -190,121 +190,133 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
 .game-details .buttons button { background: linear-gradient(135deg,#14aaff 60%,#75d5ff 120%); border: none; border-radius: 0; color: #fff; padding: 8px 24px; font-weight: 600; cursor: pointer; box-shadow: 0 1px 8px #149ccc90; transition: background 0.2s;}
 .game-details .buttons button:hover { background: linear-gradient(135deg,#1178cc 60%,#4ebafd 120%); outline: none;}
 @media (max-width: 950px) { .ps4-dashboard { padding-left: 15px;} .carousel-inner { gap: 18px;} .hud-title { font-size:1em;} .game-details { height: auto; max-height: none; padding: 20px 20px;} .game-details .buttons { justify-content: flex-start;} }
-
-
 </style>
 </head>
 <body>
 
 <div class="top-hud">
-  <div class="hud-left">
-    <button class="hud-icon trophies" title="Troféus"><span class="icon-trophy"></span></button>
-    <span class="hud-time-date" id="hudTimeDate"></span>
-    <button class="hud-icon notifications" title="Notificações"><span class="icon-bell"></span><span class="notif-num">3</span></button>
-    <button class="hud-icon settings" title="Definições"><span class="icon-cog"></span></button>
-  </div>
-  <div class="hud-center">
-    <div class="profile-area" title="Meu Perfil">
-      <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
-      <span class="profile-name">Luís Correia</span>
-    </div>
-  </div>
-  <div class="hud-right"></div>
+<div class="hud-left">
+<button class="hud-icon trophies" title="Troféus">
+<span class="icon-trophy"></span>
+</button>
+<span class="hud-time-date" id="hudTimeDate"></span>
+<button class="hud-icon notifications" title="Notificações"><span class="icon-bell"></span><span class="notif-num">3</span></button>
+<button class="hud-icon settings" title="Definições"><span class="icon-cog"></span></button>
+</div>
+<div class="hud-center">
+<div class="profile-area" title="Meu Perfil">
+<img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
+<span class="profile-name">Luís Correia</span>
+</div>
+</div>
+<div class="hud-right"></div>
 </div>
 
 <div class="dashboard-container" id="dashCont">
-  <div class="ps4-dashboard">
-    <div class="carousel-inner" id="carousel">
+<div class="ps4-dashboard">
+<div class="carousel-inner" id="carousel">
 
-      <!-- Linha 1: 5 blocos -->
-      <div class="menu-item-wrapper">
-        <div class="menu-item selected" tabindex="0"><img src="a1771bdd-c824-4fc4-9310-3479b887080a.png" alt="Habilidades"/></div>
-        <div class="hud-row">
-          <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title">Habilidades</div>
-        </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0">
-          <img src="3c924d2a-8986-4445-a71e-a9ef40853344.png" alt="Desporto"/>
-        </div>
-        <div class="hud-row">
-          <div class="hud-start"><button class="hud-btn" id="hud-desporto-start">START</button></div>
-          <div class="hud-title">Desporto <span class="down-arrow">▼</span></div>
-        </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0"><img src="b99a94aa-3bbd-4292-b2fa-789f23416bc9.png" alt="Educação"/></div>
-        <div class="hud-row">
-          <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title">Educação <span class="down-arrow">▼</span></div>
-        </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0"><img src="8ac9e92f-5912-427d-aae2-d382f30773cd.png" alt="Formações"/></div>
-        <div class="hud-row">
-          <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title"> Formações <span class="down-arrow">▼</span></div>
-        </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0"><img src="601f3591-b066-459e-a364-7c458c7ce68a.png" alt="Experiências"/></div>
-        <div class="hud-row">
-          <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title">Experiências <span class="down-arrow">▼</span></div>
-        </div>
-      </div>
-
-      <!-- Linha 2: 2 blocos em baixo -->
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0"><img src="af126983-cdf7-4dc0-a72f-571d654035ed.png" alt="Definições"/></div>
-        <div class="hud-row">
-          <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title">Definições </div>
-        </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0"><img src="732d3a76-d3cc-4e89-b9d1-53bfedaf1257.png" alt="Biblioteca"/></div>
-        <div class="hud-row">
-          <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title">Biblioteca</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+<!-- Linha 1: 5 blocos -->
+<div class="menu-item-wrapper">
+<div class="menu-item selected" tabindex="0">
+<img src="a1771bdd-c824-4fc4-9310-3479b887080a.png" alt="Habilidades"/>
+</div>
+<div class="hud-row">
+<div class="hud-start"><button class="hud-btn">START</button></div>
+<div class="hud-title">Habilidades</div>
+</div>
 </div>
 
-<!-- Painel Desporto detalhes -->
+<div class="menu-item-wrapper">
+<div class="menu-item" tabindex="0">
+<img src="3c924d2a-8986-4445-a71e-a9ef40853344.png" alt="Desporto" />
+</div>
+<div class="hud-row">
+<div class="hud-start"><button class="hud-btn" id="hud-desporto-start">START</button></div>
+<div class="hud-title">Desporto <span class="down-arrow">▼</span></div>
+</div>
+</div>
+
+<div class="menu-item-wrapper">
+<div class="menu-item" tabindex="0">
+<img src="b99a94aa-3bbd-4292-b2fa-789f23416bc9.png" alt="Educação" />
+</div>
+<div class="hud-row">
+<div class="hud-start"><button class="hud-btn">START</button></div>
+<div class="hud-title">Educação <span class="down-arrow">▼</span></div>
+</div>
+</div>
+
+<div class="menu-item-wrapper">
+<div class="menu-item" tabindex="0">
+<img src="8ac9e92f-5912-427d-aae2-d382f30773cd.png" alt="Formações" />
+</div>
+<div class="hud-row">
+<div class="hud-start"><button class="hud-btn">START</button></div>
+<div class="hud-title"> Formações <span class="down-arrow">▼</span></div>
+</div>
+</div>
+
+<!-- Novo bloco 5 na linha 1 -->
+<div class="menu-item-wrapper">
+<div class="menu-item" tabindex="0">
+<img src="601f3591-b066-459e-a364-7c458c7ce68a.png" alt="Experiências" />
+</div>
+<div class="hud-row">
+<div class="hud-start"><button class="hud-btn">START</button></div>
+<div class="hud-title">Experiências <span class="down-arrow">▼</span></div>
+</div>
+</div>
+
+<!-- Linha 2: 2 blocos em baixo -->
+<div class="menu-item-wrapper">
+<div class="menu-item" tabindex="0">
+<img src="af126983-cdf7-4dc0-a72f-571d654035ed.png" alt="Definições" />
+</div>
+<div class="hud-row">
+<div class="hud-start"><button class="hud-btn">START</button></div>
+<div class="hud-title">Definições </div>
+</div>
+</div>
+
+<div class="menu-item-wrapper">
+<div class="menu-item" tabindex="0">
+<img src="732d3a76-d3cc-4e89-b9d1-53bfedaf1257.png" alt="Biblioteca" />
+</div>
+<div class="hud-row">
+<div class="hud-start"><button class="hud-btn">START</button></div>
+<div class="hud-title">Biblioteca</span></div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- ========= PAINÉIS DE GAME-DETAILS INDIVIDUAIS ========= -->
+
+<!-- Detalhes para "Desporto" (índice 1) -->
 <div class="game-details" id="gameDetails-1">
-  <button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
-    <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+<button class="scroll-top-btn" title="Voltar acima" onclick="scrollToCarousel()">
+  <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
     <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
-  <img src="ChatGPT Image 2_08_2025, 19_35_09.png" alt="Desporto" />
-  <div class="info">
-    <p><strong>Desporto:</strong> Praticante regular de natação pura, águas abertas e salvamento aquático desportivo, atividades que promovem o desenvolvimento global da condição física, reforço muscular, resistência cardiovascular e respiratória, melhora da flexibilidade, postura e coordenação motora. A prática destes desportos também contribui para o aumento da resiliência mental, redução do stress, um estilo de vida mais saudável e permitiu-me desenvolver competências como a gestão de tempo, disciplina e foco em objetivos. Para ver mais informação sobre os meus desportos, carregue em START.</p>
-
-    <!-- Barra de Loading para o painel detalhes Desporto -->
-    <div class="loading-bar-wrapper" id="desporto-loading-bar-wrapper" style="display:none; margin: 15px 0;">
-      <div class="loading-bar-bg" style="width:100%; height:20px; background:#273449; border-radius:6px; overflow:hidden;">
-        <div class="loading-bar-fg" id="desporto-loading-bar" style="width:0%; height:100%; background:linear-gradient(90deg,#14aaff,#75d5ff); transition:width 0.2s; border-radius:6px;"></div>
-      </div>
-      <span id="desporto-loading-label" style="color:#fff; margin-left:12px; font-weight:600;">0%</span>
+  </svg>
+</button>
+<img src="ChatGPT Image 2_08_2025, 19_35_09.png" alt="Desporto" />
+<div class="info">
+<p><strong>Desporto:</strong> Praticante regular de natação pura, águas abertas e salvamento aquático desportivo, atividades que promovem o desenvolvimento global da condição física, reforço muscular, resistência cardiovascular e respiratória, melhora da flexibilidade, postura e coordenação motora. A prática destes desportos também contribui para o aumento da resiliência mental, redução do stress, um estilo de vida mais saudável e permitiu-me desenvolver competências como a gestão de tempo, disciplina e foco em objetivos. Para ver mais informação sobre os meus desportos, carregue em START.</p>
+<div class="loading-bar-wrapper" id="desporto-loading-bar-wrapper" style="display:none; margin: 15px 0;">
+    <div class="loading-bar-bg" style="width:100%; height:20px; background:#273449; border-radius:6px; overflow:hidden;">
+      <div class="loading-bar-fg" id="desporto-loading-bar" style="width:0%; height:100%; background:linear-gradient(90deg,#14aaff,#75d5ff); transition:width 0.2s; border-radius:6px;"></div>
     </div>
-
-    <div class="buttons">
-      <button class="btn-trophies" id="desporto-trofeus">Ver Troféus</button>
-      <button class="hud-btn" id="hud-desporto-start-detail" style="height:auto; padding:10px 36px;">START</button>
-    </div>
-  </div>
+    <span id="desporto-loading-label" style="color:#fff; margin-left:12px; font-weight:600;">0%</span>
+</div>
+<div class="buttons">
+<button class="btn-trophies" id="desporto-trofeus">Ver Troféus</button>
+<button class="hud-btn" id="hud-desporto-start-detail" style="height:auto; padding:10px 36px;">START</button>
+</div>
+</div>
 </div>
 
 <!-- Detalhes para "Educação" (índice 2) -->
@@ -366,12 +378,7 @@ Para ver mais informação sobre as minhas experiências profissionais e estági
 </div>
 
 <!-- Exemplos de painéis para outros blocos? Acrescenta conforme necessário seguindo mesma estrutura! -->
-<div id="screen-fade" style="
-  position: fixed; left: 0; top: 0; z-index: 999999;
-  width: 100vw; height: 100vh;
-  background: #000; pointer-events: none;
-  opacity: 0; transition: opacity 0.65s cubic-bezier(.4,1,.72,1);
-"></div>
+
 
 <script>
 function updateHudTime() {
@@ -516,54 +523,14 @@ function animateLoadingBarWithFade(callback, loadDuration = 3000) {
   }, loadDuration / 60); // ~60 frames p/ 3 segundos
 }
 
- // Variáveis elementos para loading e fade
-  const barWrapper = document.getElementById('desporto-loading-bar-wrapper');
-  const bar = document.getElementById('desporto-loading-bar');
-  const barLabel = document.getElementById('desporto-loading-label');
-  const btnStartDetail = document.getElementById('hud-desporto-start-detail');
-  const screenFade = document.getElementById('screen-fade');
-
-  // Função para animar barra loading + fade + callback depois
-  function animateLoadingBarWithFade(callback, loadDuration = 3000) {
-    let percent = 0;
-    bar.style.width = "0%";
-    barLabel.textContent = "0%";
-    barWrapper.style.display = "block";
-    btnStartDetail.disabled = true;
-
-    const interval = setInterval(() => {
-      percent += 100/60 + Math.random() * 2; // ~60 frames
-      if (percent >= 100) percent = 100;
-      bar.style.width = percent + "%";
-      barLabel.textContent = Math.round(percent) + "%";
-      if (percent >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
-          // Aplica o fade escuro
-          screenFade.style.opacity = "1";
-          setTimeout(() => {
-            callback();
-          }, 700); // Aguarda tempo do fade
-        }, 400);
-      }
-    }, loadDuration / 60);
-  }
-
-  // Remove outros event listeners "diretos" para este botão, não deixa redirecionar direto
-  // Assume que não tens duplicados no teu código
-
-  // Evento do botão START do painel Desporto
-  btnStartDetail.addEventListener('click', (e) => {
-    e.preventDefault();
-    animateLoadingBarWithFade(() => {
-      window.location.href = 'desporto.html';
-    }, 3000);
-  });
-
-
-  // Lógica para HUD/carrossel/menu abaixo omitida para foco no loading/fade
-
+// SUBSTITUI o event listener por:
+btnStartDetail.addEventListener('click', function(e) {
+  e.preventDefault();
+  animateLoadingBarWithFade(() => {
+    window.location.href = 'desporto.html';
+  }, 3000); // 3 segundos de animation
 });
+
 
 </script>
 
