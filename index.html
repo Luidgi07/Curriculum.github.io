@@ -191,6 +191,11 @@ body.bg-dynamic.gradient-fade::after { opacity: 1; }
 .game-details .buttons button:hover { background: linear-gradient(135deg,#1178cc 60%,#4ebafd 120%); outline: none;}
 @media (max-width: 950px) { .ps4-dashboard { padding-left: 15px;} .carousel-inner { gap: 18px;} .hud-title { font-size:1em;} .game-details { height: auto; max-height: none; padding: 20px 20px;} .game-details .buttons { justify-content: flex-start;} }
 
+  .hud-start.loading {
+  background: #23283a !important;  /* azul escuro só quando estiver no loading */
+  transition: background 0.3s ease;
+}
+
 .loading-bar-simple {
   width: 96%;
   height: 18px;
@@ -529,12 +534,16 @@ hudDesportoStartBtn?.addEventListener('click', function(e) {
   if (this.disabled) return;
   this.disabled = true;
 
-  // Obtém o retângulo HUD pai (a div .hud-start)
+  // Pai do botão START, div hud-start
   const hudStartDiv = this.closest('.hud-start');
-  // Limpa todo o conteúdo da div (remove o botão)
+
+  // Liga o estado loading (coloca o fundo azul escuro)
+  hudStartDiv.classList.add('loading');
+
+  // Limpa conteúdo (remove botão)
   hudStartDiv.innerHTML = '';
 
-  // Cria a barra de loading e insere
+  // Cria barra loading e adiciona
   const loadingBar = document.createElement('div');
   loadingBar.classList.add('loading-bar-simple');
   const fill = document.createElement('div');
@@ -558,6 +567,7 @@ hudDesportoStartBtn?.addEventListener('click', function(e) {
 
     if (frame >= frameCount) {
       clearInterval(interval);
+
       setTimeout(() => {
         screenFade.style.opacity = '1';
         setTimeout(() => {
@@ -567,34 +577,6 @@ hudDesportoStartBtn?.addEventListener('click', function(e) {
     }
   }, frameDuration);
 });
-
-
-  
-
-function animateLoadingBarWithFade(callback, loadDuration = 3000) {
-  let percent = 0;
-  bar.style.width = "0%";
-  barLabel.textContent = "0%";
-  barWrapper.style.display = "block";
-  btnStartDetail.disabled = true;
-
-  const interval = setInterval(() => {
-    percent += 100/60 + Math.random()*2; // ~60 frames
-    if (percent >= 100) percent = 100;
-    bar.style.width = percent + "%";
-    barLabel.textContent = Math.round(percent) + "%";
-    if (percent >= 100) {
-      clearInterval(interval);
-      setTimeout(() => {
-        // Fade escuro entra!
-        screenFade.style.opacity = "1";
-        setTimeout(() => {
-          callback();
-        }, 700); // Espera o fade (~0.7s) antes do redirect
-      }, 400); // pequena pausa antes do fade
-    }
-  }, loadDuration / 60); // ~60 frames p/ 3 segundos
-}
 
   
 btnStartDetail.addEventListener('click', function(e) {
