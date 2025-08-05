@@ -520,9 +520,8 @@ const barWrapper = document.getElementById('desporto-loading-bar-wrapper');
 const bar = document.getElementById('desporto-loading-bar');
 const barLabel = document.getElementById('desporto-loading-label');
 const btnStartDetail = document.getElementById('hud-desporto-start-detail');
-const screenFade = document.getElementById('screen-fade');
 const hudDesportoStartBtn = document.getElementById('hud-desporto-start');
-
+const screenFade = document.getElementById('screen-fade');
 
 hudDesportoStartBtn?.addEventListener('click', function(e) {
   e.preventDefault();
@@ -530,30 +529,22 @@ hudDesportoStartBtn?.addEventListener('click', function(e) {
   if (this.disabled) return;
   this.disabled = true;
 
-  // Esconde o texto dentro do botão, mas mantém o espaço
-  this.style.color = 'transparent';
-  this.style.position = 'relative';
+  // Obtém o retângulo HUD pai (a div .hud-start)
+  const hudStartDiv = this.closest('.hud-start');
+  // Limpa todo o conteúdo da div (remove o botão)
+  hudStartDiv.innerHTML = '';
 
-  // Cria a barra de loading dentro do botão
+  // Cria a barra de loading e insere
   const loadingBar = document.createElement('div');
   loadingBar.classList.add('loading-bar-simple');
-
-  // Posiciona a barra dentro do botão (centrada verticalmente)
-  loadingBar.style.position = 'absolute';
-  loadingBar.style.top = '50%';
-  loadingBar.style.left = '0';
-  loadingBar.style.transform = 'translateY(-50%)';
-  loadingBar.style.width = '100%';
-  loadingBar.style.boxSizing = 'border-box';
-
   const fill = document.createElement('div');
   fill.classList.add('fill');
   loadingBar.appendChild(fill);
+  hudStartDiv.appendChild(loadingBar);
 
-  this.appendChild(loadingBar);
-
+  // Animação da barra
   let widthPercent = 0;
-  const totalDuration = 3000; // 3 segundos
+  const totalDuration = 3000;
   const frameCount = 60;
   const increment = 100 / frameCount;
   const frameDuration = totalDuration / frameCount;
@@ -563,22 +554,20 @@ hudDesportoStartBtn?.addEventListener('click', function(e) {
     frame++;
     widthPercent += increment;
     if (widthPercent > 100) widthPercent = 100;
-
     fill.style.width = widthPercent + '%';
 
     if (frame >= frameCount) {
       clearInterval(interval);
-
-      // Pequena pausa
       setTimeout(() => {
-        screenFade.style.opacity = '1'; // faz o fade para preto
+        screenFade.style.opacity = '1';
         setTimeout(() => {
-          window.location.href = 'desporto.html'; // redireciona ao fim do fade
+          window.location.href = 'desporto.html';
         }, 700);
       }, 400);
     }
   }, frameDuration);
 });
+
 
   
 
