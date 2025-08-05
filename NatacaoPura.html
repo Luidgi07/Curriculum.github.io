@@ -8,13 +8,15 @@
       margin: 0;
       padding: 0;
       height: 100%;
+      width: 100vw;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #28345A;
     }
     body {
       min-height: 100vh;
-      background: #28345A;
+      min-width: 100vw;
+      background: url('So-o-Futuro-sabera.jpg') no-repeat center center fixed;
+      background-size: cover;
     }
     .top-hud {
       position: fixed;
@@ -62,42 +64,28 @@
       text-overflow: ellipsis; white-space: nowrap;
     }
 
-    /* Espaço abaixo do HUD para o mapa dos cacifos */
-    .balneario {
-      margin-top: 70px; /* Para não ficar escondido atrás do HUD */
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: calc(100vh - 70px);
-      background: none;
+    /* Cacifos responsivos e centrados no ecrã */
+    .mapa-cacifos {
+      position: absolute;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90vw;
+      max-width: 1080px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      /* pointer-events será ativado na imagem invisível */
     }
-    .mapa-container {
-      position: relative;
-      width: 1080px;  /* largura original da imagem */
-      max-width: 96vw;
-      margin: 0 auto;
-      height: 608px;
-      background: url('So-o-Futuro-sabera.jpg') no-repeat center center;
-      background-size: cover;
-      box-shadow: 0 4px 28px 3px #181e2b55;
-      border-radius: 14px;
-    }
-    .mapa-imagem {
+    .mapa-img {
       width: 100%;
       height: auto;
+      opacity: 0; /* Só o mapa, não visível */
+      pointer-events: auto;
       display: block;
-      opacity: 0.01;  /* Invisível, só para o <map> */
-      pointer-events: none;
-      position: absolute;
-      top: 0; left: 0;
-      z-index: 1;
-    }
-    @media (max-width: 1130px) {
-      .mapa-container { width: 98vw; }
     }
     @media (max-width: 680px) {
-      .mapa-container { width: 100vw; border-radius: 0;}
+      .mapa-cacifos { width: 100vw; }
     }
   </style>
 </head>
@@ -121,11 +109,11 @@
     </div>
     <div class="hud-right"></div>
   </div>
-
-  <div class="balneario">
-    <div class="mapa-container">
-      <img 
-        class="mapa-imagem"
+  
+  <!-- MAPA DE CACIFOS INVISÍVEL, SÓ PARA ÁREAS CLICÁVEIS -->
+  <div class="mapa-cacifos">
+    <img 
+        class="mapa-img"
         src="So-o-Futuro-sabera.jpg" 
         usemap="#mapaCacifos" 
         alt="Os cacifos do balneário" 
@@ -133,20 +121,19 @@
         height="608"
       />
       <map name="mapaCacifos">
-        <!-- Ajusta as coordenadas conforme tua imagem -->
+        <!-- Corrige as coords se precisares -->
         <area shape="rect" coords="127,166,270,508" href="/2014-2017" alt="2014-2017">
         <area shape="rect" coords="271,167,410,508" href="/2017-2019" alt="2017-2019">
         <area shape="rect" coords="410,167,555,508" href="/2019-2023" alt="2019-2023">
         <area shape="rect" coords="555,167,698,508" href="/2023-" alt="2023-...">
         <area shape="rect" coords="698,167,840,508" href="/futuro" alt="Só o Futuro Saberá">
       </map>
-    </div>
   </div>
 
-  <!-- Responsividade para o mapa de imagem -->
+  <!-- Responsividade do mapa -->
   <script src="https://unpkg.com/image-map-resizer@1.0.10/js/imageMapResizer.min.js"></script>
   <script>
-    // Atualiza HUD
+    // HUD time
     function updateHudTime() {
       const el = document.getElementById('hudTimeDate');
       if (!el) return;
@@ -161,7 +148,7 @@
       window.location.href = 'index.html';
     };
 
-    // Tornar map responsive ao redimensionar
+    // Mapa de imagem responsivo
     window.onload = function() {
       if(window.imageMapResize) imageMapResize();
     };
