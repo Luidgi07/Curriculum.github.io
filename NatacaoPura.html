@@ -15,9 +15,11 @@
     body {
       min-height: 100vh;
       min-width: 100vw;
-      background: url('Só o Futuro saberá.png') no-repeat center center fixed;
+      background: url('So-o-Futuro-sabera.jpg') no-repeat center center fixed;
       background-size: cover;
+      overflow-x: hidden;
     }
+
     .top-hud {
       position: fixed;
       top: 0; left: 0;
@@ -64,53 +66,56 @@
       text-overflow: ellipsis; white-space: nowrap;
     }
 
-    /* GAVETA INTERATIVA --------------------- */
+    /* Gaveta perfeitamente alinhada no fundo de um cacifo */
     .gaveta-container {
       position: absolute;
-      left: 50.5%; /* Aproxima-se do centro do terceiro cacifo */
-      bottom: 85px; /* Ajusta até ficar na zona preta do cacifo */
-      transform: translateX(-50%);
-      width: 134px;
-      height: 56px;
-      z-index: 100;
+      /* Ajusta estes valores conforme o cacifo (Exemplo: terceiro cacifo) */
+      left: calc(50% - 90px);   /* Para o centro do 3º cacifo (900px/5 = 180px cada, -90px metade da width) */
+      bottom: 72px;             /* Ajusta conforme a altura da tua imagem! */
+      width: 180px;             /* Tamanho do espaço escuro do cacifo */
+      height: 72px;             /* Altura aproximada do espaço escuro */
+      z-index: 200;
       display: flex;
       align-items: flex-end;
+      /* Não mexas nestas */
+      background: transparent;
     }
     .porta-gaveta {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       background: #222;
-      border-radius: 0 0 10px 10px;
-      border-top: 4px solid #7a5435;
-      cursor: pointer;
+      border-radius: 0 0 22px 22px;
+      border-top: 6px solid #7a5435;
+      box-shadow: 0 4px 20px #0009, 0 1px 0 #fff4 inset;
       display: flex;
       align-items: flex-end;
       justify-content: center;
       position: relative;
-      box-shadow: 0 4px 16px #0008, 0 1px 0 #fff4 inset;
+      cursor: pointer;
       transition: filter 0.2s;
     }
     .porta-gaveta:hover {
-      filter: brightness(1.15);
+      filter: brightness(1.12);
     }
     .macaneta {
-      width: 18px; height: 8px;
-      background: #e9d2a9;
-      border-radius: 16px;
-      margin-bottom: 8px;
-      box-shadow: 0 1px 2px #432;
-      border: 2px solid #aa905d;
+      width: 38px; height: 22px;
+      background: #e9d29a;
+      border-radius: 14px;
+      box-shadow: 0 2px 6px #4329;
+      border: 2.5px solid #aa905d;
       position: absolute;
       left: 50%;
+      bottom: 16px;
       transform: translateX(-50%);
-      bottom: 8px;
     }
+
     .cartao {
       position: fixed;
       left: 50%; top: 78vh;
       transform: translate(-50%, 0) scale(0.85);
-      width: 140px; height: 80px;
+      width: 160px; height: 95px;
       background: linear-gradient(120deg, #3794fa 70%, #c3e2ff 98%);
-      border-radius: 9px;
+      border-radius: 13px;
       box-shadow: 0 4px 22px #0007;
       border: 2.5px solid #fff;
       opacity: 0;
@@ -119,12 +124,12 @@
       font-family: 'Segoe UI', Arial, sans-serif;
       font-weight: bold;
       color: #153850;
-      font-size: 1.2em;
+      font-size: 1.22em;
       z-index: 9999;
       transition:
-        top 0.9s cubic-bezier(.77,1.11,.23,1.02),
-        opacity 0.6s cubic-bezier(.41,.45,.36,.9),
-        filter 0.2s, transform 0.32s cubic-bezier(.62,-0.04,.79,1.13);
+        top 0.8s cubic-bezier(.77,1.11,.23,1.02),
+        opacity 0.5s cubic-bezier(.41,.45,.36,.9),
+        transform 0.36s cubic-bezier(.62,-0.04,.79,1.13);
     }
     .cartao.visivel {
       top: 47vh;
@@ -165,13 +170,13 @@
     <div class="hud-right"></div>
   </div>
 
-  <!-- Gaveta na parte debaixo do cacifo -->
+  <!-- Gaveta alinhada exatamente no fundo do cacifo (ajusta left, width e bottom se mudar de cacifo/posição) -->
   <div class="gaveta-container">
     <div class="porta-gaveta" onclick="mostrarCartao()">
       <div class="macaneta"></div>
     </div>
   </div>
-  <!-- Cartão animado no centro do ecrã -->
+  <!-- Cartão animado ao centro -->
   <div class="cartao" id="cartao">
     Cartão Secreto
     <button class="fechar" onclick="fecharCartao(event)">✕</button>
