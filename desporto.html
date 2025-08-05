@@ -158,6 +158,15 @@
       <div class="overlay">Salvamento Aquático</div>
     </div>
   </div>
+  <div id="screen-fade" style="
+  position: fixed; 
+  top: 0; left: 0; width: 100vw; height: 100vh; 
+  background: black; 
+  opacity: 1; 
+  pointer-events: none; 
+  transition: opacity 0.8s ease-out;
+  z-index: 10000;
+  "></div>
 
   <script>
     // Atualiza o relógio no topo
@@ -187,6 +196,21 @@
 document.querySelector('.left-decor-btn').onclick = function() {
   window.location.href = 'index.html';
 };
+    window.addEventListener('load', () => {
+  const screenFade = document.getElementById('screen-fade');
+  if (!screenFade) return;
+  
+  // Dá uma pequena pausa para garantir que o usuário percebe o fade
+  setTimeout(() => {
+    screenFade.style.opacity = '0';
+  }, 100); // 100ms delay (ajusta se quiseres)
+  
+  // Opcional: remove o elemento do DOM após o fade acabar para otimizar
+  screenFade.addEventListener('transitionend', () => {
+    screenFade.remove();
+  });
+});
+
 
   </script>
 </body>
