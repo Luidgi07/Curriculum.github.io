@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Gaveta alinhada ao buraco com HUD</title>
+  <title>Gavetas alinhadas ao buraco com HUD</title>
   <style>
     html, body {
       margin: 0;
@@ -65,14 +65,11 @@
       text-overflow: ellipsis; white-space: nowrap;
     }
 
-    /* Porta da gaveta perfeitamente alinhada ao buraco */
     .buraco-gaveta {
       position: absolute;
-      /* para a tua imagem, ajusta estes valores! */
-      width: 192px;   /* largura do buraco */
-      height: 80px;   /* altura do buraco */
-      left: 412px;     /* posiciona no cacifo certo (ajusta consoante tua imagem de fundo) */
-      bottom: 62px;   /* distância à base da página */
+      width: 192px;
+      height: 80px;
+      bottom: 62px;
       z-index: 500;
       display: flex;
       align-items: flex-end;
@@ -168,8 +165,28 @@
     <div class="hud-right"></div>
   </div>
 
-  <!-- Gaveta perfeitamente sobre o buraco do cacifo -->
-  <div class="buraco-gaveta">
+  <!-- GAVETAS PARA TODOS OS BURACOS: ajusta "left" de cada ".buraco-gaveta" -->
+  <div class="buraco-gaveta" style="left: 58px;">
+    <div class="porta-gaveta" onclick="mostrarCartao()">
+      <div class="macaneta"></div>
+    </div>
+  </div>
+  <div class="buraco-gaveta" style="left: 270px;">
+    <div class="porta-gaveta" onclick="mostrarCartao()">
+      <div class="macaneta"></div>
+    </div>
+  </div>
+  <div class="buraco-gaveta" style="left: 482px;">
+    <div class="porta-gaveta" onclick="mostrarCartao()">
+      <div class="macaneta"></div>
+    </div>
+  </div>
+  <div class="buraco-gaveta" style="left: 694px;">
+    <div class="porta-gaveta" onclick="mostrarCartao()">
+      <div class="macaneta"></div>
+    </div>
+  </div>
+  <div class="buraco-gaveta" style="left: 906px;">
     <div class="porta-gaveta" onclick="mostrarCartao()">
       <div class="macaneta"></div>
     </div>
@@ -207,3 +224,4 @@
   </script>
 </body>
 </html>
+
