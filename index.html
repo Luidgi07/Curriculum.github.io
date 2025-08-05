@@ -306,6 +306,12 @@ padding-bottom: 20px;
 <img src="ChatGPT Image 2_08_2025, 19_35_09.png" alt="Desporto" />
 <div class="info">
 <p><strong>Desporto:</strong> Praticante regular de natação pura, águas abertas e salvamento aquático desportivo, atividades que promovem o desenvolvimento global da condição física, reforço muscular, resistência cardiovascular e respiratória, melhora da flexibilidade, postura e coordenação motora. A prática destes desportos também contribui para o aumento da resiliência mental, redução do stress, um estilo de vida mais saudável e permitiu-me desenvolver competências como a gestão de tempo, disciplina e foco em objetivos. Para ver mais informação sobre os meus desportos, carregue em START.</p>
+<div class="loading-bar-wrapper" id="desporto-loading-bar-wrapper" style="display:none; margin: 15px 0;">
+    <div class="loading-bar-bg" style="width:100%; height:20px; background:#273449; border-radius:6px; overflow:hidden;">
+      <div class="loading-bar-fg" id="desporto-loading-bar" style="width:0%; height:100%; background:linear-gradient(90deg,#14aaff,#75d5ff); transition:width 0.2s; border-radius:6px;"></div>
+    </div>
+    <span id="desporto-loading-label" style="color:#fff; margin-left:12px; font-weight:600;">0%</span>
+</div>
 <div class="buttons">
 <button class="btn-trophies" id="desporto-trofeus">Ver Troféus</button>
 <button class="hud-btn" id="hud-desporto-start-detail" style="height:auto; padding:10px 36px;">START</button>
@@ -488,8 +494,47 @@ document.getElementById('hud-desporto-start')?.addEventListener('click', functio
 document.getElementById('hud-desporto-start-detail')?.addEventListener('click', function(e) {
 window.location.href = 'desporto.html';
 });
+const barWrapper = document.getElementById('desporto-loading-bar-wrapper');
+const bar = document.getElementById('desporto-loading-bar');
+const barLabel = document.getElementById('desporto-loading-label');
+const btnStartDetail = document.getElementById('hud-desporto-start-detail');
+const screenFade = document.getElementById('screen-fade');
+
+function animateLoadingBarWithFade(callback, loadDuration = 3000) {
+  let percent = 0;
+  bar.style.width = "0%";
+  barLabel.textContent = "0%";
+  barWrapper.style.display = "block";
+  btnStartDetail.disabled = true;
+
+  const interval = setInterval(() => {
+    percent += 100/60 + Math.random()*2; // ~60 frames
+    if (percent >= 100) percent = 100;
+    bar.style.width = percent + "%";
+    barLabel.textContent = Math.round(percent) + "%";
+    if (percent >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        // Fade escuro entra!
+        screenFade.style.opacity = "1";
+        setTimeout(() => {
+          callback();
+        }, 700); // Espera o fade (~0.65s) antes do redirect
+      }, 400); // pequena pausa antes do fade
+    }
+  }, loadDuration / 60); // ~60 frames p/ 3 segundos
+}
+
+// SUBSTITUI o event listener por:
+btnStartDetail.addEventListener('click', function(e) {
+  e.preventDefault();
+  animateLoadingBarWithFade(() => {
+    window.location.href = 'desporto.html';
+  }, 3000); // 3 segundos de animation
+});
 
 
 </script>
+
 </body>
 </html>
