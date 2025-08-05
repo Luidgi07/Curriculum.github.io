@@ -2,66 +2,58 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Glow camisola interativo</title>
+  <title>Balneário Interativo</title>
   <style>
-    html, body {
-      margin: 0; padding: 0;
-      width: 100vw; height: 100vh;
-      overflow: hidden; background: #000;
-    }
-    body { position: relative; }
-    .locker-bg {
-      position: absolute;
-      width: 100vw; height: 100vh;
-      top: 0; left: 0;
-      background-image: url('ss.png'); /* <-- teu balneário */
-      background-position: center center;
-      background-repeat: no-repeat;
+    body {
+      /* Torna a imagem de fundo centralizada e ajustada */
+      background: url('Só o Futuro saberá.png') no-repeat center center fixed;
       background-size: cover;
-      z-index: 1;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
     }
-    .camisola-container {
+    .mapa-container {
+      position: relative;
+      width: 1080px;  /* largura original da imagem */
+      max-width: 100%;
+      margin: 0 auto;
+      /* Ajuste o topo se necessário para encaixar na página */
+      top: 0;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.01;  /* Torna a imagem invisível, pois o fundo já está aplicado */
+      pointer-events: none; /* Não interfere com os clicks; uso apenas para o <map> */
       position: absolute;
-      width: 143px;   /* IGUAL à tua camisola SVG */
-      height: 181px;
-      top: 256px;     /* AJUSTA até bater certo na cabine */
-      left: 120px;    /* AJUSTA para bater certo na cabine */
     }
-    .camisola-outline {
-      position: absolute;
-      width: 100%; height: 100%;
-      top: 0; left: 0;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s;
-    }
-    .camisola-container:hover .camisola-outline,
-    .camisola-container:focus .camisola-outline {
-      opacity: 1; /* aparece só ao hover/focus */
-      filter:
-        drop-shadow(0 0 12px #33aaff)
-        drop-shadow(0 0 24px #33aaff40);
-      pointer-events: auto;
-      cursor: pointer;
-      z-index: 12;
+    @media (max-width: 1080px) {
+      .mapa-container { width: 100vw; }
     }
   </style>
 </head>
 <body>
-  <div class="locker-bg"></div>
-  <!-- Repete esta div para cada camisola, mudando top/left -->
-  <div class="camisola-container" tabindex="0">
-    <svg class="camisola-outline" viewBox="0 0 143 181" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="glow">
-          <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#33aaff" flood-opacity="0.85" />
-          <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#66ccff" flood-opacity="0.5" />
-        </filter>
-      </defs>
-      <!-- ESTE PATH É O CONTORNO DA PRIMEIRA IMAGEM QUE ENVIASTE!! -->
-      <path d="M26,46 C22,28 17,10 43,7 C63,5 93,10 120,40 C125,65 125,114 120,131 C110,168 70,166 50,170 C32,175 10,150 15,120 C25,100 29,65 26,46"
-        stroke="#33aaff" stroke-width="1.6" fill="none" filter="url(#glow)" />
-    </svg>
+  <div class="mapa-container">
+    <!-- Imagem invisível só para usar o mapa de imagem -->
+    <img src="So-o-Futuro-sabera.jpg" usemap="#mapaCacifos" alt="Balneário"/>
+
+    <!-- Mapa de imagem, coords para cacifos, ajuste conforme a tua imagem -->
+    <map name="mapaCacifos">
+      <area shape="rect" coords="127,166,270,508" href="/2014-2017" alt="2014-2017">
+      <area shape="rect" coords="271,167,410,508" href="/2017-2019" alt="2017-2019">
+      <area shape="rect" coords="410,167,555,508" href="/2019-2023" alt="2019-2023">
+      <area shape="rect" coords="555,167,698,508" href="/2023-" alt="2023-...">
+      <area shape="rect" coords="698,167,840,508" href="/futuro" alt="Só o Futuro Saberá">
+    </map>
   </div>
+
+  <!-- Script para responsividade do mapa (opcional mas recomendado) -->
+  <script src="https://unpkg.com/image-map-resizer@1.0.10/js/imageMapResizer.min.js"></script>
+  <script>
+    window.onload = function() {
+      if(window.imageMapResize) imageMapResize();
+    };
+  </script>
 </body>
 </html>
