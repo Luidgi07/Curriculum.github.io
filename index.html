@@ -378,6 +378,15 @@ Para ver mais informação sobre as minhas experiências profissionais e estági
 </div>
 
 <!-- Exemplos de painéis para outros blocos? Acrescenta conforme necessário seguindo mesma estrutura! -->
+<div id="screen-fade" style="
+  position: fixed; 
+  top: 0; left: 0; width: 100vw; height: 100vh; 
+  background: black; 
+  opacity: 0; 
+  pointer-events: none; 
+  transition: opacity 0.7s ease;
+  z-index: 99999;
+"></div>
 
 
 <script>
@@ -488,15 +497,14 @@ document.getElementById('hud-desporto-start')?.addEventListener('click', functio
 document.getElementById('desporto-trofeus')?.addEventListener('click', function(e) {
   window.location.href = 'dd.html';
 });
-document.getElementById('hud-desporto-start')?.addEventListener('click', function(e) {
-  window.location.href = 'desporto.html';
-});
+
 
 const barWrapper = document.getElementById('desporto-loading-bar-wrapper');
 const bar = document.getElementById('desporto-loading-bar');
 const barLabel = document.getElementById('desporto-loading-label');
 const btnStartDetail = document.getElementById('hud-desporto-start-detail');
 const screenFade = document.getElementById('screen-fade');
+
 
 function animateLoadingBarWithFade(callback, loadDuration = 3000) {
   let percent = 0;
@@ -517,19 +525,20 @@ function animateLoadingBarWithFade(callback, loadDuration = 3000) {
         screenFade.style.opacity = "1";
         setTimeout(() => {
           callback();
-        }, 700); // Espera o fade (~0.65s) antes do redirect
+        }, 700); // Espera o fade (~0.7s) antes do redirect
       }, 400); // pequena pausa antes do fade
     }
   }, loadDuration / 60); // ~60 frames p/ 3 segundos
 }
 
-// SUBSTITUI o event listener por:
+  
 btnStartDetail.addEventListener('click', function(e) {
   e.preventDefault();
   animateLoadingBarWithFade(() => {
     window.location.href = 'desporto.html';
-  }, 3000); // 3 segundos de animation
+  }, 3000);
 });
+
 
 
 </script>
