@@ -12,15 +12,12 @@
       font-family: 'Segoe UI', Arial, sans-serif;
       background: #28345A;
     }
-    body {
-      min-height: 100vh;
-    }
-
+    body { min-height: 100vh; }
+    /* ---------- HUD fixo topo ---------- */
     .top-hud {
       position: fixed;
       top: 0; left: 0;
-      width: 100vw;
-      height: 58px;
+      width: 100vw; height: 58px;
       background: rgba(18,26,36,0.93);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 32px;
@@ -40,8 +37,10 @@
       box-shadow: 0 2px 10px #45baff88;
       background: none;
       display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+      transition: background-color 0.2s ease;
     }
     .left-decor-btn svg { width: 20px; height: 20px; }
+    .left-decor-btn:hover { background: #428cff22; }
     .hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
     .profile-area {
       display: flex; align-items: center; gap: 11px;
@@ -50,6 +49,7 @@
       box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
       cursor: pointer; border: 1.5px solid #42aaff60;
       min-width: 0; max-width: 260px;
+      user-select: none;
     }
     .profile-img {
       width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
@@ -60,9 +60,9 @@
       color: #f3f8fc; font-weight: 600; font-size: 1em;
       max-width: 120px; overflow: hidden;
       text-overflow: ellipsis; white-space: nowrap;
+      user-select: text;
     }
-
-    /* Retângulos fullscreen abaixo do topo */
+    /* ---------- Galeria/Colunas ---------- */
     .gallery {
       position: absolute;
       top: 58px;
@@ -118,15 +118,15 @@
     .col:hover img, .col:focus img {
       filter: brightness(0.44);
     }
+    /* ---------- Loader HUD ---------- */
     #screen-fade .loader-wrapper {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  inset: 0;
-  z-index: 20000;
-}
-
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      inset: 0;
+      z-index: 20000;
+    }
   </style>
 </head>
 <body>
@@ -167,88 +167,86 @@
       <div class="overlay">Salvamento Aquático</div>
     </div>
   </div>
+
+  <!-- Fader/Loader (usado ao entrar e navegar) -->
   <div id="screen-fade" style="
-  position: fixed; 
-  top: 0; left: 0; width: 100vw; height: 100vh; 
-  background: black; 
-  opacity: 1; 
-  pointer-events: none; 
-  transition: opacity 0.8s ease-out;
-  z-index: 10000;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: black;
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity 0.8s ease-out;
+    z-index: 10000;
   "></div>
 
   <script>
-      // ---- Fade ao entrar na página (mantém o teu efeito inicial) ----
-  window.addEventListener('load', () => {
-    const screenFade = document.getElementById('screen-fade');
-    if (!screenFade) return;
-    setTimeout(() => {
-      screenFade.style.opacity = '0';
-    }, 100);
-    screenFade.addEventListener('transitionend', () => {
-      if (screenFade.style.opacity === '0') screenFade.style.pointerEvents = 'none';
+    // ---- Fade ao entrar na página ----
+    window.addEventListener('load', () => {
+      const screenFade = document.getElementById('screen-fade');
+      if (!screenFade) return;
+      setTimeout(() => {
+        screenFade.style.opacity = '0';
+      }, 100);
+      screenFade.addEventListener('transitionend', () => {
+        if (screenFade.style.opacity === '0') screenFade.style.pointerEvents = 'none';
+      });
     });
-  });
 
-  // ---- Função para mostrar o loader após clique ----
-  function createLoadingHUD() {
-    return `
-      <div class="loader-wrapper">
-        <svg width="150" height="150">
-          <circle cx="75" cy="75" r="60" stroke="#28345A" stroke-width="12" fill="none"/>
-          <circle cx="75" cy="75" r="60" stroke="#27eefd" stroke-width="9" fill="none"
-            stroke-dasharray="120 320" stroke-linecap="round" stroke-dashoffset="60">
-            <animate attributeName="stroke-dasharray" values="30 320;210 320;30 320"
-              dur="1.4s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-        <div style="
-          position:absolute;
-          left:50%; top:54%; transform: translate(-50%,-50%);
-          font-size:1.7em;font-weight:bold;color:#27eefd;text-shadow:0 2px 12px #222a;
-          letter-spacing:1.6px;
-        ">A carregar…</div>
-      </div>
-    `;
-  }
+    // ---- Loader HUD + Navegação Fade/Up ----
+    function createLoadingHUD() {
+      return `
+        <div class="loader-wrapper">
+          <svg width="150" height="150">
+            <circle cx="75" cy="75" r="60" stroke="#28345A" stroke-width="12" fill="none"/>
+            <circle cx="75" cy="75" r="60" stroke="#27eefd" stroke-width="9" fill="none"
+              stroke-dasharray="120 320" stroke-linecap="round" stroke-dashoffset="60">
+              <animate attributeName="stroke-dasharray" values="30 320;210 320;30 320"
+                dur="1.35s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <div style="
+            position:absolute;
+            left:50%; top:54%; transform: translate(-50%,-50%);
+            font-size:1.7em;font-weight:bold;color:#27eefd;text-shadow:0 2px 12px #222a;
+            letter-spacing:1.6px;
+          ">A carregar…</div>
+        </div>
+      `;
+    }
 
-  // ---- Handler para fade+loader ao clicar numa coluna ----
-  function fadeAndLoad(link) {
-    const screenFade = document.getElementById('screen-fade');
-    if (!screenFade) return;
+    function fadeAndLoad(link) {
+      const screenFade = document.getElementById('screen-fade');
+      if (!screenFade) return;
 
-    screenFade.innerHTML = '';
-    screenFade.style.pointerEvents = 'auto';
-    // 1. Fade up (para opacidade 1)
-    screenFade.style.transition = 'opacity 0.8s ease-out';
-    screenFade.style.opacity = '1';
+      screenFade.innerHTML = '';
+      screenFade.style.pointerEvents = 'auto';
+      // Fade up para preto (de 0 a 1)
+      screenFade.style.transition = 'opacity 0.8s ease-out';
+      screenFade.style.opacity = '1';
 
-    // 2. Após fade preto, mostra o loader/barra circular
-    setTimeout(() => {
-      screenFade.innerHTML = createLoadingHUD();
-    }, 800); // espera o fade ficar preto antes de mostrar HUD
+      setTimeout(() => {
+        screenFade.innerHTML = createLoadingHUD();
+      }, 800); // Mostra loader depois do fade preto
 
-    // 3. Ao fim do loading, vai para o link
-    setTimeout(() => {
-      window.location.href = link;
-    }, 2200); // total: 1.4s HUD visível (ajusta este valor!)
-  }
+      setTimeout(() => {
+        window.location.href = link;
+      }, 2200); // Total: 1.4s HUD (ajusta aqui se quiseres mais/menos tempo de loading)
+    }
 
-  // ---- Liga o efeito só às 3 colunas ----
-  document.querySelectorAll('.col').forEach(col => {
-    col.addEventListener('click', function handler(e) {
-      // Impede navegação instantânea
-      e.preventDefault?.(); // caso seja link
-      fadeAndLoad(this.getAttribute('data-link'));
-    });
-    col.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
+    // Só este bloco para TODOS os cliques
+    document.querySelectorAll('.col').forEach(col => {
+      col.addEventListener('click', function(e) {
+        e.preventDefault?.();
         fadeAndLoad(this.getAttribute('data-link'));
-      }
+      });
+      col.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          fadeAndLoad(this.getAttribute('data-link'));
+        }
+      });
     });
-  });
 
-    // Atualiza o relógio no topo
+    // ---- Atualiza o relógio ----
     function updateHudTime() {
       const el = document.getElementById('hudTimeDate');
       if (!el) return;
@@ -258,37 +256,10 @@
     }
     setInterval(updateHudTime, 1000); updateHudTime();
 
-    // Navegação por clique ou Enter/Espaço
-    document.querySelectorAll('.col').forEach(col => {
-      col.addEventListener('click', function() {
-        const link = this.getAttribute('data-link');
-        if (link) window.location.href = link;
-      });
-      col.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          const link = this.getAttribute('data-link');
-          if (link) window.location.href = link;
-        }
-      });
-    });
-    // Botão do menu inicial leva ao index.html
-document.querySelector('.left-decor-btn').onclick = function() {
-  window.location.href = 'index.html';
-};
-window.addEventListener('load', () => {
-  const screenFade = document.getElementById('screen-fade');
-  if (!screenFade) return;
-  
-  setTimeout(() => {
-    screenFade.style.opacity = '0';
-  }, 100);
-  
-  screenFade.addEventListener('transitionend', () => {
-    screenFade.remove();
-  });
-});
-
-
+    // ---- Botão do menu inicial (index) ----
+    document.querySelector('.left-decor-btn').onclick = function() {
+      window.location.href = 'index.html';
+    };
   </script>
 </body>
 </html>
