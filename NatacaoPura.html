@@ -2,225 +2,335 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=1440, height=900, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Gavetas alinhadas ao buraco com HUD</title>
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100vw;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  box-sizing: border-box;
+margin: 0;
+padding: 0;
+height: 100%;
+width: 100vw;
+font-family: 'Segoe UI', Arial, sans-serif;
+box-sizing: border-box;
 }
 body {
-  min-height: 100vh;
-  min-width: 100vw;
-  background: url('Só o Futuro saberá.png') no-repeat center center fixed;
-  overflow-x: hidden;
-  
+min-height: 100vh;
+min-width: 100vw;
+background: url('Só o Futuro saberá.png') no-repeat center center fixed;
+background-size: cover;
+overflow-x: hidden;
 }
-
-/* HUD fixa no topo */
 .top-hud {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 58px;
-  background: rgba(18,26,36,0.93);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px;
-  z-index: 9999;
-  border-bottom: 2.5px solid #42aaff;
-  box-shadow: 0 2px 18px #12244477;
+position: fixed;
+top: 0; left: 0;
+width: 100vw;
+height: 58px;
+background: rgba(18,26,36,0.93);
+display: flex; align-items: center; justify-content: space-between;
+padding: 0 32px;
+z-index: 9999;
+border-bottom: 2.5px solid #42aaff;
+box-shadow: 0 2px 18px #12244477;
 }
 .hud-left { display: flex; align-items: center; gap: 18px; }
 .hud-time-date {
-  color: #e9f5fa; font-size: 1.07em; font-variant-numeric: tabular-nums;
-  font-family: 'Segoe UI Mono', monospace;
-  min-width: 115px;
+color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
+font-family: 'Segoe UI Mono', monospace;
+min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
 }
 .left-decor-btn {
-  width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
-  border: 2.5px solid #42aaff;
-  box-shadow: 0 2px 10px #45baff88;
-  background: none;
-  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
+border: 2.5px solid #42aaff;
+box-shadow: 0 2px 10px #45baff88;
+background: none;
+display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
 }
 .left-decor-btn svg { width: 20px; height: 20px; }
-
-/* Container das gavetas */
-.gavetas-container {
-  position: relative;
-  width: 100vw;
-  min-width: 100vw;
-  height: 440px;  /* Ajusta à tua cena */
-  margin-top: 90px; /* para não ficar atrás do HUD */
+.hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
+.profile-area {
+display: flex; align-items: center; gap: 11px;
+background: rgba(42,62,94,0.82); border-radius: 9px;
+padding: 5px 55px 5px 55px;
+box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
+cursor: pointer; border: 1.5px solid #42aaff60;
+min-width: 0; max-width: 260px;
+}
+.profile-img {
+width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
+border: 2.5px solid #42aaff;
+box-shadow: 0 2px 12px #0a79e058; background: #202a41;
+}
+.profile-name {
+color: #f3f8fc; font-weight: 600; font-size: 1em;
+max-width: 120px; overflow: hidden;
+text-overflow: ellipsis; white-space: nowrap;
 }
 
-/* Gavetas */
 .buraco-gaveta {
-  position: absolute;
-  width: 192px;
-  height: 80px;
-  bottom: 62px;
-  z-index: 500;
-  display: flex;
-  align-items: flex-end;
-  background: transparent;
-  pointer-events: auto;
-  /* Não metas left ou transform no CSS, só pelo JS! */
+position: absolute;
+width: 192px;
+height: 80px;
+bottom: 62px;
+z-index: 500;
+display: flex;
+align-items: flex-end;
+background: transparent;
+pointer-events: auto;
 }
 .porta-gaveta {
-  width: 100%;
-  height: 100%;
-  background: #222;
-  border-top: 7px solid #7a5435;
-  border-radius: 0 0 0 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  position: relative;
-  cursor: pointer;
-  box-shadow: 0 4px 16px #000a;
-  transition: filter 0.16s;
+width: 100%;
+height: 100%;
+background: #222;
+border-top: 7px solid #7a5435;
+border-radius: 0 0 0 0;
+display: flex;
+align-items: flex-end;
+justify-content: center;
+position: relative;
+cursor: pointer;
+box-shadow: 0 4px 16px #000a;
+transition: filter 0.16s;
 }
 .porta-gaveta:hover {
-  filter: brightness(1.14);
+filter: brightness(1.14);
 }
 .macaneta {
-  width: 38px; height: 24px;
-  background: #efdba4;
-  border-radius: 16px;
-  box-shadow: 0 1px 6px #432a;
-  border: 3px solid #aa905d;
-  position: absolute;
-  left: 50%;
-  bottom: 19px;
-  transform: translateX(-50%);
+width: 38px; height: 24px;
+background: #efdba4;
+border-radius: 16px;
+box-shadow: 0 1px 6px #432a;
+border: 3px solid #aa905d;
+position: absolute;
+left: 50%;
+bottom: 19px;
+transform: translateX(-50%);
 }
-
-/* Cartão popup */
 .cartao {
-  position: fixed;
-  left: 50%; top: 78vh;
-  transform: translate(-50%, 0) scale(0.85);
-  width: 150px; height: 90px;
-  background: linear-gradient(120deg, #3794fa 70%, #c3e2ff 98%);
-  border-radius: 13px;
-  box-shadow: 0 4px 22px #0007;
-  border: 2.5px solid #fff;
-  opacity: 0;
-  pointer-events: none;
-  display: flex; justify-content: center; align-items: center;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  font-weight: bold;
-  color: #153850;
-  font-size: 1.08em;
-  z-index: 9999;
-  transition:
-    top 0.7s cubic-bezier(.77,1.11,.23,1.02),
-    opacity 0.5s cubic-bezier(.41,.45,.36,.9),
-    transform 0.35s cubic-bezier(.62,-0.04,.79,1.13);
+position: fixed;
+left: 50%; top: 78vh;
+transform: translate(-50%, 0) scale(0.85);
+width: 150px; height: 90px;
+background: linear-gradient(120deg, #3794fa 70%, #c3e2ff 98%);
+border-radius: 13px;
+box-shadow: 0 4px 22px #0007;
+border: 2.5px solid #fff;
+opacity: 0;
+pointer-events: none;
+display: flex; justify-content: center; align-items: center;
+font-family: 'Segoe UI', Arial, sans-serif;
+font-weight: bold;
+color: #153850;
+font-size: 1.08em;
+z-index: 9999;
+transition:
+top 0.7s cubic-bezier(.77,1.11,.23,1.02),
+opacity 0.5s cubic-bezier(.41,.45,.36,.9),
+transform 0.35s cubic-bezier(.62,-0.04,.79,1.13);
 }
 .cartao.visivel {
-  top: 47vh;
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
+top: 47vh;
+opacity: 1;
+pointer-events: auto;
+transform: translate(-50%, -50%) scale(1);
 }
 .cartao .fechar {
-  position: absolute;
-  top: 4px; right: 9px;
-  background: none;
-  color: #234;
-  border: none;
-  font-size: 1em;
-  cursor: pointer;
-  font-weight: bold;
+position: absolute;
+top: 4px; right: 9px;
+background: none;
+color: #234;
+border: none;
+font-size: 1em;
+cursor: pointer;
+font-weight: bold;
 }
 </style>
 </head>
 <body>
 <div class="top-hud">
-  <div class="hud-left">
-    <span class="hud-time-date" id="hudTimeDate"></span>
-    <button class="left-decor-btn" title="Voltar ao menu inicial">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 11.5L12 4l9 7.5"/>
-        <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
-        <path d="M9 22V12h6v10"/>
-      </svg>
-    </button>
-  </div>
-  <div class="hud-center">
-    <div class="profile-area" title="Meu Perfil">
-      <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
-      <span class="profile-name">Luís Correia</span>
-    </div>
-  </div>
-  <div class="hud-right"></div>
+<div class="hud-left">
+<span class="hud-time-date" id="hudTimeDate"></span>
+<button class="left-decor-btn" title="Voltar ao menu inicial">
+<svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 11.5L12 4l9 7.5"/>
+<path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
+<path d="M9 22V12h6v10"/>
+</svg>
+</button>
+</div>
+<div class="hud-center">
+<div class="profile-area" title="Meu Perfil">
+<img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
+<span class="profile-name">Luís Correia</span>
+</div>
+</div>
+<div class="hud-right"></div>
 </div>
 
-<!-- Gavetas alinhadas -->
-<div class="gavetas-container">
-  <div class="buraco-gaveta"><div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div></div>
-  <div class="buraco-gaveta"><div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div></div>
-  <div class="buraco-gaveta"><div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div></div>
-  <div class="buraco-gaveta"><div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div></div>
-  <div class="buraco-gaveta"><div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div></div>
+<!-- GAVETAS PARA TODOS OS BURACOS: ajusta "left" de cada ".buraco-gaveta" -->
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
+<div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
 </div>
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
+<div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
+</div>
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
+<div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
+</div>
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
+<div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
+</div>
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
+<div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
+</div>
+
+
 
 <!-- Cartão animado ao centro -->
 <div class="cartao" id="cartao">
-  Cartão Secreto
-  <button class="fechar" onclick="fecharCartao(event)">✕</button>
+Cartão Secreto
+<button class="fechar" onclick="fecharCartao(event)">✕</button>
 </div>
 <script>
 // HUD time
 function updateHudTime() {
-  const el = document.getElementById('hudTimeDate');
-  if (!el) return;
-  const now = new Date();
-  el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
-    ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+const el = document.getElementById('hudTimeDate');
+if (!el) return;
+const now = new Date();
+el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
+' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 }
 setInterval(updateHudTime, 1000); updateHudTime();
 
 // Botão voltar ao menu
 document.querySelector('.left-decor-btn').onclick = function() {
-  window.location.href = 'index.html';
+window.location.href = 'index.html';
 };
 
 // Gaveta interativa
 function mostrarCartao() {
-  document.getElementById('cartao').classList.add('visivel');
+document.getElementById('cartao').classList.add('visivel');
 }
 function fecharCartao(e) {
-  e.stopPropagation();
-  document.getElementById('cartao').classList.remove('visivel');
+e.stopPropagation();
+document.getElementById('cartao').classList.remove('visivel');
 }
+// Funcionalidade atual para o botão START da carousel — mantém igual
+hudDesportoStartBtn?.addEventListener('click', function(e) {
+e.preventDefault();
 
-// ALINHAMENTO DAS GAVETAS (proporcional à largura da janela)
+if (this.disabled) return;
+this.disabled = true;
+
+// Pai do botão START, div hud-start
+const hudStartDiv = this.closest('.hud-start');
+
+// Liga o estado loading (coloca o fundo azul escuro)
+hudStartDiv.classList.add('loading');
+
+// Limpa conteúdo (remove botão)
+hudStartDiv.innerHTML = '';
+
+// Cria barra loading e adiciona
+const loadingBar = document.createElement('div');
+loadingBar.classList.add('loading-bar-simple');
+const fill = document.createElement('div');
+fill.classList.add('fill');
+loadingBar.appendChild(fill);
+hudStartDiv.appendChild(loadingBar);
+
+// Animação da barra retangular (carousel)
+let widthPercent = 0;
+const totalDuration = 3000;
+const frameCount = 60;
+const increment = 100 / frameCount;
+const frameDuration = totalDuration / frameCount;
+
+let frame = 0;
+const interval = setInterval(() => {
+frame++;
+widthPercent += increment;
+if (widthPercent > 100) widthPercent = 100;
+fill.style.width = widthPercent + '%';
+
+if (frame >= frameCount) {
+clearInterval(interval);
+
+setTimeout(() => {
+screenFade.style.opacity = '1';
+setTimeout(() => {
+window.location.href = 'desporto.html';
+}, 700);
+}, 400);
+}
+}, frameDuration);
+});
+
+
+// Nova funcionalidade para o botão dentro do painel gameDetails-1
+btnStartDetail?.addEventListener('click', function(e) {
+e.preventDefault();
+
+if (this.disabled) return;
+this.disabled = true;
+
+// Mostra o wrapper da loading bar (ela já existe no HTML, com pontas arredondadas)
+if (barWrapper) barWrapper.style.display = 'flex';
+
+// Inicializa barra e label
+if (bar) bar.style.width = '0%';
+if (barLabel) barLabel.textContent = '0%';
+
+let progress = 0;
+const totalDuration = 3000; // 3 segundos
+const frameCount = 60;
+const increment = 100 / frameCount;
+const frameDuration = totalDuration / frameCount;
+
+const interval = setInterval(() => {
+progress += increment;
+if (progress > 100) progress = 100;
+
+if (bar) bar.style.width = progress + '%';
+if (barLabel) barLabel.textContent = Math.round(progress) + '%';
+
+if (progress >= 100) {
+clearInterval(interval);
+
+setTimeout(() => {
+screenFade.style.opacity = '1';
+setTimeout(() => {
+window.location.href = 'desporto.html';
+}, 700);
+}, 400);
+}
+}, frameDuration);
+});
+
+// REFERÊNCIA ORIGINAL:
 const posicoesBasePx = [410, 633, 856, 1079, 1302];
-const larguraBase = 1647;
+const larguraBase = 1647; // a largura para a qual as posições foram pensadas originalmente
+
 const container = document.querySelector('.gavetas-container');
 
 window.addEventListener('resize', ajustarGavetas);
 ajustarGavetas();
 
 function ajustarGavetas() {
-    const larguraAtual = container.offsetWidth;
-    const gavetas = container.querySelectorAll('.buraco-gaveta');
+const larguraAtual = container.offsetWidth;
+const gavetas = container.querySelectorAll('.buraco-gaveta');
 
-    gavetas.forEach((gaveta, i) => {
-        // Calcula percentagem na referência e usa essa percentagem em qualquer largura
-        const percentNaBase = (posicoesBasePx[i] / larguraBase) * 100;
-        gaveta.style.left = percentNaBase + "%";
-        gaveta.style.transform = 'translateX(-50%)';
-    });
+gavetas.forEach((gaveta, i) => {
+// Calcula % de cada posição na referência e aplica à largura nova
+const percentNaBase = posicoesBasePx[i] / larguraBase; // Ex: 410 / 1647 = ~0.249
+const pxNovaJanela = larguraAtual * percentNaBase; // posição em px para janela nova
+const percentNovaJanela = (pxNovaJanela / larguraAtual) * 100; // percentagem para left
+
+gaveta.style.left = percentNovaJanela + "%";
+gaveta.style.transform = 'translateX(-50%)';
+});
 }
+
+
 </script>
 </body>
 </html>
-
