@@ -118,6 +118,15 @@
     .col:hover img, .col:focus img {
       filter: brightness(0.44);
     }
+    #screen-fade .loader-wrapper {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  z-index: 20000;
+}
+
   </style>
 </head>
 <body>
@@ -169,6 +178,76 @@
   "></div>
 
   <script>
+      // ---- Fade ao entrar na página (mantém o teu efeito inicial) ----
+  window.addEventListener('load', () => {
+    const screenFade = document.getElementById('screen-fade');
+    if (!screenFade) return;
+    setTimeout(() => {
+      screenFade.style.opacity = '0';
+    }, 100);
+    screenFade.addEventListener('transitionend', () => {
+      if (screenFade.style.opacity === '0') screenFade.style.pointerEvents = 'none';
+    });
+  });
+
+  // ---- Função para mostrar o loader após clique ----
+  function createLoadingHUD() {
+    return `
+      <div class="loader-wrapper">
+        <svg width="150" height="150">
+          <circle cx="75" cy="75" r="60" stroke="#28345A" stroke-width="12" fill="none"/>
+          <circle cx="75" cy="75" r="60" stroke="#27eefd" stroke-width="9" fill="none"
+            stroke-dasharray="120 320" stroke-linecap="round" stroke-dashoffset="60">
+            <animate attributeName="stroke-dasharray" values="30 320;210 320;30 320"
+              dur="1.4s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        <div style="
+          position:absolute;
+          left:50%; top:54%; transform: translate(-50%,-50%);
+          font-size:1.7em;font-weight:bold;color:#27eefd;text-shadow:0 2px 12px #222a;
+          letter-spacing:1.6px;
+        ">A carregar…</div>
+      </div>
+    `;
+  }
+
+  // ---- Handler para fade+loader ao clicar numa coluna ----
+  function fadeAndLoad(link) {
+    const screenFade = document.getElementById('screen-fade');
+    if (!screenFade) return;
+
+    screenFade.innerHTML = '';
+    screenFade.style.pointerEvents = 'auto';
+    // 1. Fade up (para opacidade 1)
+    screenFade.style.transition = 'opacity 0.8s ease-out';
+    screenFade.style.opacity = '1';
+
+    // 2. Após fade preto, mostra o loader/barra circular
+    setTimeout(() => {
+      screenFade.innerHTML = createLoadingHUD();
+    }, 800); // espera o fade ficar preto antes de mostrar HUD
+
+    // 3. Ao fim do loading, vai para o link
+    setTimeout(() => {
+      window.location.href = link;
+    }, 2200); // total: 1.4s HUD visível (ajusta este valor!)
+  }
+
+  // ---- Liga o efeito só às 3 colunas ----
+  document.querySelectorAll('.col').forEach(col => {
+    col.addEventListener('click', function handler(e) {
+      // Impede navegação instantânea
+      e.preventDefault?.(); // caso seja link
+      fadeAndLoad(this.getAttribute('data-link'));
+    });
+    col.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        fadeAndLoad(this.getAttribute('data-link'));
+      }
+    });
+  });
+
     // Atualiza o relógio no topo
     function updateHudTime() {
       const el = document.getElementById('hudTimeDate');
