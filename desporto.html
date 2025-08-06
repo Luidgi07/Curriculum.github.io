@@ -119,13 +119,25 @@
       filter: brightness(0.44);
     }
     /* ---------- Loader HUD ---------- */
-    #screen-fade .loader-wrapper {
-      position: absolute;
+    #screen-fade {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: black;
+      opacity: 1; /* começa opaco */
+      pointer-events: none;
+      transition: opacity 0.8s ease-out;
+      z-index: 10000;
       display: flex;
       align-items: center;
       justify-content: center;
-      inset: 0;
-      z-index: 20000;
+    }
+    #screen-fade .loader-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 150px;
     }
   </style>
 </head>
@@ -133,7 +145,7 @@
   <div class="top-hud">
     <div class="hud-left">
       <span class="hud-time-date" id="hudTimeDate"></span>
-      <button class="left-decor-btn" title="Voltar ao menu inicial">
+      <button class="left-decor-btn" title="Voltar ao menu inicial" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 11.5L12 4l9 7.5"/>
           <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
@@ -142,7 +154,7 @@
       </button>
     </div>
     <div class="hud-center">
-      <div class="profile-area" title="Meu Perfil">
+      <div class="profile-area" title="Meu Perfil" tabindex="0">
         <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
         <span class="profile-name">Luís Correia</span>
       </div>
@@ -153,50 +165,46 @@
   <div class="gallery">
     <!-- Coluna 1 -->
     <div class="col" tabindex="0" data-link="NatacaoPura.html">
-      <img src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg" alt="">
+      <img src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg" alt="Natação Pura">
       <div class="overlay">Natação Pura</div>
     </div>
     <!-- Coluna 2 -->
     <div class="col" tabindex="0" data-link="pagina2.html">
-      <img src="FB_IMG_1696068644775 (1).jpg" alt="">
+      <img src="FB_IMG_1696068644775 (1).jpg" alt="Águas Abertas">
       <div class="overlay">Águas Abertas</div>
     </div>
     <!-- Coluna 3 -->
     <div class="col" tabindex="0" data-link="pagina3.html">
-      <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="">
+      <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático">
       <div class="overlay">Salvamento Aquático</div>
     </div>
   </div>
 
   <!-- Fader/Loader (usado ao entrar e navegar) -->
-  <div id="screen-fade" style="
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: black;
-    opacity: 1;
-    pointer-events: none;
-    transition: opacity 0.8s ease-out;
-    z-index: 10000;
-  "></div>
+  <div id="screen-fade"></div>
 
   <script>
     // ---- Fade ao entrar na página ----
     window.addEventListener('load', () => {
       const screenFade = document.getElementById('screen-fade');
       if (!screenFade) return;
+      // Esconde o screen fade no load inicial com fade out
       setTimeout(() => {
         screenFade.style.opacity = '0';
       }, 100);
       screenFade.addEventListener('transitionend', () => {
-        if (screenFade.style.opacity === '0') screenFade.style.pointerEvents = 'none';
+        if (screenFade.style.opacity === '0') {
+          screenFade.style.pointerEvents = 'none';
+          screenFade.innerHTML = ''; // limpa conteúdo após loader inicial
+        }
       });
     });
 
-    // ---- Loader HUD + Navegação Fade/Up ----
+    // ---- Cria o loader SVG com texto ----
     function createLoadingHUD() {
       return `
-        <div class="loader-wrapper">
-          <svg width="150" height="150">
+        <div class="loader-wrapper" aria-label="A carregar">
+          <svg width="150" height="150" role="img" aria-hidden="true" focusable="false">
             <circle cx="75" cy="75" r="60" stroke="#28345A" stroke-width="12" fill="none"/>
             <circle cx="75" cy="75" r="60" stroke="#27eefd" stroke-width="9" fill="none"
               stroke-dasharray="120 320" stroke-linecap="round" stroke-dashoffset="60">
@@ -214,39 +222,43 @@
       `;
     }
 
+    // ---- Função para fazer fade e carregar nova página ----
     function fadeAndLoad(link) {
       const screenFade = document.getElementById('screen-fade');
       if (!screenFade) return;
 
-      screenFade.innerHTML = '';
+      // Insere o loader imediatamente
+      screenFade.innerHTML = createLoadingHUD();
       screenFade.style.pointerEvents = 'auto';
-      // Fade up para preto (de 0 a 1)
       screenFade.style.transition = 'opacity 0.8s ease-out';
-      screenFade.style.opacity = '1';
+      // Força o browser a processar o innerHTML antes de começar o fade
+      requestAnimationFrame(() => {
+        screenFade.style.opacity = '1'; // faz fade para preto mostrando loader
+      });
 
-      setTimeout(() => {
-        screenFade.innerHTML = createLoadingHUD();
-      }, 800); // Mostra loader depois do fade preto
-
+      // Depois de 2.2s, navega para a página
       setTimeout(() => {
         window.location.href = link;
-      }, 2200); // Total: 1.4s HUD (ajusta aqui se quiseres mais/menos tempo de loading)
+      }, 2200);
     }
 
-    // Só este bloco para TODOS os cliques
+    // ---- Liga eventos aos cliques e teclas das colunas ----
     document.querySelectorAll('.col').forEach(col => {
       col.addEventListener('click', function(e) {
-        e.preventDefault?.();
-        fadeAndLoad(this.getAttribute('data-link'));
+        e.preventDefault();
+        const link = this.getAttribute('data-link');
+        if (link) fadeAndLoad(link);
       });
       col.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
-          fadeAndLoad(this.getAttribute('data-link'));
+          e.preventDefault();
+          const link = this.getAttribute('data-link');
+          if (link) fadeAndLoad(link);
         }
       });
     });
 
-    // ---- Atualiza o relógio ----
+    // ---- Atualiza o relógio da HUD ----
     function updateHudTime() {
       const el = document.getElementById('hudTimeDate');
       if (!el) return;
@@ -254,11 +266,12 @@
       el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
         ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
     }
-    setInterval(updateHudTime, 1000); updateHudTime();
+    setInterval(updateHudTime, 1000);
+    updateHudTime();
 
     // ---- Botão do menu inicial (index) ----
     document.querySelector('.left-decor-btn').onclick = function() {
-      window.location.href = 'index.html';
+      fadeAndLoad('index.html');
     };
   </script>
 </body>
