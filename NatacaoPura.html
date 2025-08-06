@@ -14,27 +14,16 @@
       font-family: 'Segoe UI', Arial, sans-serif;
     }
     .balneario-fundo {
-      width: 900px;
-      height: 500px;
-      border-radius: 24px;
-      background: url('SO_O_FUTURO_SABERA.png') center center no-repeat;
+      position: fixed;      /* Ocupa sempre a área visível da janela */
+      top: 0; left: 0;      /* Encosta ao topo e à esquerda */
+      width: 100vw;         /* 100% da largura da viewport */
+      height: 100vh;        /* 100% da altura da viewport */
+      background: url('SUA_IMAGEM.png') center center no-repeat;
       background-size: cover;
-      box-shadow: 0 18px 54px #0a151e99;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      /* Opcional: darken overlay para facilitar leitura de texto por cima */
+      border-radius: 0;     /* ângulos retos nas pontas */
+      z-index: 0;           /* Fica atrás de outros elementos, ajusta se necessário */
     }
-    /* Se quiseres um overlay escuro, descomenta:
-    .balneario-fundo::before {
-      content: "";
-      position: absolute; inset: 0;
-      background: rgba(20,30,50, 0.18);
-      z-index: 2;
-    }
+
     */
     /* Responsivo para écrans pequenos */
     @media (max-width: 1000px) {
