@@ -147,17 +147,36 @@
       white-space: nowrap;
     }
     @keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
+    
+    /* Usado no carregamento da página */
+    #screen-fade {
+      position: fixed; 
+      top: 0; left: 0; width: 100vw; height: 100vh; 
+      background: black; 
+      opacity: 0.35;
+      pointer-events: none; 
+      transition: opacity 0.8s ease-out;
+      z-index: 10000;
+    }
+
+    /* Modal com fade in/out transparente */
     .cartao-modal-bg {
       position: fixed;
       inset: 0;
       background: rgba(12,13,20,0.67);
-      z-index: 9999;
+      z-index: 10000;
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: fadeIn 0.16s;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    .cartao-modal-bg.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .cartao-modal {
       background: #f5f7fa;
       color: #234;
@@ -177,7 +196,15 @@
       font-size: 1.1em;
       text-align: center;
       border: 2.5px solid #dde1e8;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
+    .cartao-modal-bg.show .cartao-modal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .cartao-fechar {
       position: absolute;
       top: 11px; right: 15px;
@@ -199,15 +226,7 @@
   </style>
 </head>
 <body>
-  <div id="screen-fade" style="
-    position: fixed; 
-    top: 0; left: 0; width: 100vw; height: 100vh; 
-    background: black; 
-    opacity: 0.35;
-    pointer-events: none; 
-    transition: opacity 0.8s ease-out;
-    z-index: 10000;
-  "></div>
+  <div id="screen-fade"></div>
 
   <div class="top-hud">
     <div class="hud-left">
@@ -294,13 +313,14 @@
       5: `<h2>Cartão Personalizado 5</h2><p>Texto único para a quinta imagem.<br>É só personalizar o HTML.</p>`
     };
 
+    // Abrir o modal com fade in
     function abrirCartao(idx) {
       const conteudo = conteudosCartao[idx] || "Cartão não definido.";
       const bg = document.createElement('div');
       bg.className = 'cartao-modal-bg';
       bg.setAttribute('tabindex', '-1');
       bg.onclick = function(e){
-        if (e.target === bg) document.body.removeChild(bg);
+        if (e.target === bg) fecharCartao(bg);
       };
       const box = document.createElement('div');
       box.className = 'cartao-modal';
@@ -309,13 +329,29 @@
         `<button class="cartao-fechar" title="Fechar" aria-label="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
       bg.appendChild(box);
       document.body.appendChild(bg);
-      box.focus();
+
+      // Usar requestAnimationFrame para garantir que o DOM já inseriu o elemento antes de adicionar classe .show
+      requestAnimationFrame(() => {
+        bg.classList.add('show');
+        box.focus();
+      });
+    }
+
+    // Fechar o modal com fade out
+    function fecharCartao(bg) {
+      if (!bg) return;
+      bg.classList.remove('show');
+      // Escutar fim da transição pra remover o elemento
+      bg.addEventListener('transitionend', function handler() {
+        if (bg.parentNode) bg.parentNode.removeChild(bg);
+        bg.removeEventListener('transitionend', handler);
+      });
     }
 
     function fecharCartaoModal(e) {
       e.stopPropagation();
-      const modal = e.target.closest('.cartao-modal-bg');
-      if(modal) document.body.removeChild(modal);
+      const modalBg = e.target.closest('.cartao-modal-bg');
+      fecharCartao(modalBg);
     }
 
     // Fade up suave ao iniciar a página
@@ -332,3 +368,4 @@
   </script>
 </body>
 </html>
+
