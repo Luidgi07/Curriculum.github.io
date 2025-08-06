@@ -2,51 +2,108 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Balneário com Imagem de Fundo</title>
+  <title>Imagem Central com Gavetas Laterais</title>
   <style>
-    body {
+    html, body {
       margin: 0; padding: 0;
-      min-height: 100vh;
+      width: 100vw; height: 100vh;
+      box-sizing: border-box;
+    }
+    body {
+      width: 100vw; height: 100vh;
+      min-height: 100vh; min-width: 100vw;
       background: #142534;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-family: 'Segoe UI', Arial, sans-serif;
+      justify-content: center;
     }
     .balneario-fundo {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: calc(100vw / (16/9));
-      max-height: 100vh;
-      background: url('A_TUA_IMAGEM.png') center center no-repeat;
-      background-size: cover;
+      position: relative;
+      width: 100vw; height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      /* sem border-radius para ângulos retos */
+      background: #142534;
+    }
+    .imagem-centro {
+      max-width: 65vw;
+      max-height: 85vh;
+      width: auto;
+      height: auto;
+      display: block;
+      box-shadow: 0 8px 32px #0006;
+      background: #ccc;
       border-radius: 0;
+      margin-left: 3vw;
+      margin-right: 3vw;
+      z-index: 1;
     }
-    @media (min-aspect-ratio: 16/9) {
-      .balneario-fundo {
-        width: calc(100vh * (16/9));
-        height: 100vh;
-      }
+    .gavetas-panel {
+      width: 260px;
+      height: 80vh;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 24px;
+      padding-right: 20px;
+      /* levemente translúcido por cima do fundo */
+      background: rgba(25,28,38,0.13);
+      backdrop-filter: blur(1px);
     }
-
-
-    */
-    /* Responsivo para écrans pequenos */
+    .gaveta {
+      width: 180px;
+      height: 54px;
+      background: #dab889;
+      border: 2.5px solid #755327;
+      border-radius: 7px;
+      box-shadow: 0 2px 14px #0002 inset, 0 3px 10px #b69346d6;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      font-weight: bold;
+      font-size: 1.08em;
+      color: #473308;
+      position: relative;
+      padding-left: 19px;
+      margin-bottom: 5px;
+    }
+    .gaveta::before {
+      content: '';
+      width: 17px; height: 17px;
+      border-radius: 50%;
+      background: #b18c5a;
+      border: 1.5px solid #8b6833;
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 2px 6px #0007;
+    }
+    /* Responsivo (menos largo em ecrãs pequenos) */
     @media (max-width: 1000px) {
-      .balneario-fundo {
-        width: 98vw;
-        height: 44vw;
-        min-height: 260px;
-        min-width: 200px;
-      }
+      .balneario-fundo { flex-direction: column; }
+      .imagem-centro { max-width: 92vw; min-width: 20vw; margin: 1vw auto 3vw auto; }
+      .gavetas-panel { width: 94vw; height: auto; flex-direction: row; padding: 8px 5vw; gap: 12px; }
+      .gaveta { width: 26vw; min-width: 90px; font-size: 0.97em; }
     }
   </style>
 </head>
 <body>
   <div class="balneario-fundo">
-      <img src="ss.png" alt="Descrição" style="width:100%; border-radius:24px;">
+    <!-- Painel de gavetas à direita -->
+    <div class="gavetas-panel">
+      <div class="gaveta">Gaveta 1</div>
+      <div class="gaveta">Gaveta 2</div>
+      <div class="gaveta">Gaveta 3</div>
+      <div class="gaveta">Gaveta 4</div>
+      <div class="gaveta">Gaveta 5</div>
+    </div>
+    <!-- Imagem central -->
+    <img src="ss.png" alt="Fundo do Balneário" class="imagem-centro">
   </div>
 </body>
 </html>
-
