@@ -167,19 +167,19 @@ font-weight: bold;
 </div>
 
 <!-- GAVETAS PARA TODOS OS BURACOS: ajusta "left" de cada ".buraco-gaveta" -->
-<div class="buraco-gaveta" style="left: 410px; width:198px; height:80px; bottom:62px;">
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
 <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
 </div>
-<div class="buraco-gaveta" style="left: 633px; width:198px; height:80px; bottom:62px;">
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
 <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
 </div>
-<div class="buraco-gaveta" style="left: 856px; width:198px; height:80px; bottom:62px;">
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
 <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
 </div>
-<div class="buraco-gaveta" style="left: 1079px; width:198px; height:80px; bottom:62px;">
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
 <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
 </div>
-<div class="buraco-gaveta" style="left: 1302px; width:198px; height:80px; bottom:62px;">
+<div class="buraco-gaveta" style=" width:198px; height:80px; bottom:62px;">
 <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
 </div>
 
@@ -305,6 +305,20 @@ window.location.href = 'desporto.html';
 }
 }, frameDuration);
 });
+
+  
+const gavetasPercent = [24.9, 38.4, 52.0, 65.5, 79.1];
+
+window.addEventListener('resize', ajustarGavetas);
+ajustarGavetas();
+
+function ajustarGavetas() {
+    const gavetas = document.querySelectorAll('.buraco-gaveta');
+    gavetas.forEach((gaveta, i) => {
+        gaveta.style.left = gavetasPercent[i] + '%';
+        gaveta.style.transform = 'translateX(-50%)';
+    });
+}
 
 </script>
 </body>
