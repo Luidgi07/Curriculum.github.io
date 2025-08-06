@@ -65,7 +65,7 @@
       max-width: 120px; overflow: hidden;
       text-overflow: ellipsis; white-space: nowrap;
     }
-
+    
     .buraco-gaveta {
       position: absolute;
       width: 192px;
@@ -143,6 +143,18 @@
       cursor: pointer;
       font-weight: bold;
     }
+    .gavetas-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+    .buraco-gaveta {
+      position: absolute;
+      width: 192px;
+      height: 80px;
+      bottom: 62px;
+      /* o left e transform são dados pelo JS */
+    }
   </style>
 </head>
 <body>
@@ -166,21 +178,12 @@
     <div class="hud-right"></div>
   </div>
 
-  <!-- GAVETAS PARA TODOS OS BURACOS: ajusta "left" de cada ".buraco-gaveta" -->
-<div class="buraco-gaveta">
-    <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
-</div>
-<div class="buraco-gaveta">
-    <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
-</div>
-<div class="buraco-gaveta">
-    <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
-</div>
-<div class="buraco-gaveta">
-    <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
-</div>
-<div class="buraco-gaveta">
-    <div class="porta-gaveta" onclick="mostrarCartao()"><div class="macaneta"></div></div>
+<div class="gavetas-container">
+  <div class="buraco-gaveta"><div class="porta-gaveta"></div></div>
+  <div class="buraco-gaveta"><div class="porta-gaveta"></div></div>
+  <div class="buraco-gaveta"><div class="porta-gaveta"></div></div>
+  <div class="buraco-gaveta"><div class="porta-gaveta"></div></div>
+  <div class="buraco-gaveta"><div class="porta-gaveta"></div></div>
 </div>
 
   <!-- Cartão animado ao centro -->
@@ -303,21 +306,22 @@ btnStartDetail?.addEventListener('click', function(e) {
     }
   }, frameDuration);
 });
-const gavetasPx = [410, 633, 856, 1079, 1302]; // Os teus valores em px
-const container = document.body; // ou outro container
+const gavetasPx = [410, 633, 856, 1079, 1302];
+const container = document.querySelector('.gavetas-container');
 
 window.addEventListener('resize', ajustarGavetas);
 ajustarGavetas();
 
 function ajustarGavetas() {
-    const largura = container.offsetWidth; // Ou .clientWidth
-    const gavetas = document.querySelectorAll('.buraco-gaveta');
+    const largura = container.offsetWidth;
+    const gavetas = container.querySelectorAll('.buraco-gaveta');
     gavetas.forEach((gaveta, i) => {
         const percent = (gavetasPx[i] / largura) * 100;
         gaveta.style.left = percent + '%';
         gaveta.style.transform = 'translateX(-50%)';
     });
 }
+
 
   </script>
 </body>
