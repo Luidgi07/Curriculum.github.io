@@ -547,6 +547,14 @@ function animateLoadingBarWithFade(callback, duration = 3000) {
     }
   }, frameDuration);
 }
+const btnStartDetail = document.getElementById('hud-desporto-start-detail');
+btnStartDetail.addEventListener('click', function(e) {
+  e.preventDefault();
+  // Chama a função de animação, e ao final redireciona
+  animateLoadingBarWithFade(() => {
+    window.location.href = 'desporto.html';
+  }, 3000);
+});
 
 
 
