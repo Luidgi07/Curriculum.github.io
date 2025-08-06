@@ -55,22 +55,103 @@
         height: 3mm; max-height: 3mm; min-height: 3mm; width: 100vw;
       }
     }
+      .cartao-modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(12,13,20,0.67);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.16s;
+  }
+  @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+  .cartao-modal {
+    background: #f5f7fa;
+    color: #234;
+    border-radius: 14px;
+    box-shadow: 0 11px 36px #000a;
+    min-width: 290px;
+    max-width: 80vw;
+    min-height: 120px;
+    max-height: 75vh;
+    padding: 28px 28px 28px 28px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 1.1em;
+    text-align: center;
+    border: 2.5px solid #dde1e8;
+  }
+  .cartao-fechar {
+    position: absolute;
+    top: 11px; right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #36537e;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background .15s;
+    line-height: 1;
+    z-index: 2;
+  }
+  .cartao-fechar:hover {
+    background: #dde3fa;
+    color: #b02;
+  }
   </style>
 </head>
 <body>
   <div class="sala-imagens">
     <img src="ab13e542-fc6d-4634-9cd1-8e8dd6b08065.png" alt="imagem 1">
     <div class="separador"></div>
-    <img src="cmb.png" alt="imagem 2">
+    <img src="cmb.png" alt="imagem 2" onclick="abrirCartao(2)">
     <div class="separador"></div>
-    <img src="ANA.png" alt="imagem 3">
+    <img src="ANA.png" alt="imagem 3" onclick="abrirCartao(3)">
     <div class="separador"></div>
-    <img src="SFUAP.png" alt="imagem 4">
+    <img src="SFUAP.png" alt="imagem 4" onclick="abrirCartao(4)">
     <div class="separador"></div>
-    <img src="CIRL.png" alt="imagem 5">
+    <img src="CIRL.png" alt="imagem 5" onclick="abrirCartao(5)">
     <div class="separador"></div>
     <img src="any.png" alt="imagem 6">
-    <div class="separador"></div>
   </div>
+  <script>
+  // Conteúdo personalizado para cada imagem/modal
+  const conteudosCartao = {
+    2: `<h2>Cartão para Imagem 2</h2><p>Conteúdo especial para a 2ª imagem.<br>Podes adaptar à tua necessidade.</p>`,
+    3: `<h2>Informação da Imagem 3</h2><p>Outro conteúdo ou imagem para o cartão 3.</p>`,
+    4: `<h2>História do Clube 4</h2><p>Cartão exclusivo da 4ª imagem.<br><strong>Podes inserir imagens, listas, etc.</strong></p>`,
+    5: `<h2>Cartão Personalizado 5</h2><p>Texto único para a quinta imagem.<br>É só personalizar o HTML.</p>`
+  };
+
+  function abrirCartao(idx) {
+    const conteudo = conteudosCartao[idx] || "Cartão não definido.";
+    // Cria o modal (fundo escuro)
+    const bg = document.createElement('div');
+    bg.className = 'cartao-modal-bg';
+    bg.onclick = function(e){
+      if (e.target === bg) document.body.removeChild(bg);
+    };
+    // Caixa do cartão/modal
+    const box = document.createElement('div');
+    box.className = 'cartao-modal';
+    box.innerHTML = conteudo +
+      `<button class="cartao-fechar" title="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
+    bg.appendChild(box);
+    document.body.appendChild(bg);
+  }
+
+  function fecharCartaoModal(e) {
+    e.stopPropagation();
+    const modal = e.target.closest('.cartao-modal-bg');
+    if(modal) document.body.removeChild(modal);
+  }
+</script>
+
 </body>
 </html>
