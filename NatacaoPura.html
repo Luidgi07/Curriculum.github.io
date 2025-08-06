@@ -212,6 +212,16 @@
   </style>
 </head>
 <body>
+  <div id="screen-fade" style="
+  position: fixed; 
+  top: 0; left: 0; width: 100vw; height: 100vh; 
+  background: black; 
+  opacity: 1; 
+  pointer-events: none; 
+  transition: opacity 0.8s ease-out;
+  z-index: 10000;
+"></div>
+
   <!-- HUD fixo no topo -->
   <div class="top-hud">
     <div class="hud-left">
@@ -327,6 +337,21 @@
       const modal = e.target.closest('.cartao-modal-bg');
       if(modal) document.body.removeChild(modal);
     }
+    <script>
+  window.addEventListener('load', () => {
+    const screenFade = document.getElementById('screen-fade');
+    if (!screenFade) return;
+    
+    setTimeout(() => {
+      screenFade.style.opacity = '0';
+    }, 100); // espera 100ms antes de iniciar o fade
+    
+    screenFade.addEventListener('transitionend', () => {
+      screenFade.remove();
+    });
+  });
+</script>
+
   </script>
 </body>
 </html>
