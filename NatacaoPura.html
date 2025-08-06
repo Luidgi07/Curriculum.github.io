@@ -2,51 +2,75 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Sete Imagens Coladas</title>
+  <title>Imagens Coladas com Retângulos</title>
   <style>
-    body {
+    html, body {
       margin: 0; padding: 0;
+      width: 100vw; height: 100vh;
       background: #1a1817;
-      min-height: 100vh;
-      min-width: 100vw;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    body {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      height: 100vh; width: 100vw;
     }
     .sala-imagens {
       display: flex;
       flex-direction: row;
-      justify-content: center;
-      align-items: flex-end;
-      /* opcional: define uma largura máxima total */
-      max-width: 98vw;
-      /* opcional: define altura total das imagens */
-      height: 350px;
-      background: transparent;
-      gap: 0;
+      align-items: stretch;
+      width: 100vw;
+      height: 100vh;
       font-size: 0;
-      /* Sem border/padding para que fique tudo “colado” */
     }
     .sala-imagens img {
-      height: 100%;
-      width: auto;
+      flex: 1 1 0;
+      width: 0;  /* força partilha igual do espaço */
+      height: 100vh;
       object-fit: cover;
       display: block;
-      margin: 0;
-      border: none;
-      padding: 0;
+      margin: 0; border: none; padding: 0;
       box-shadow: none;
+      min-width: 0; min-height: 0;
+    }
+    .separador {
+      width: 3mm;
+      min-width: 3mm;
+      height: 100vh;
+      background: #878677;
+      display: block;
+      border: none;
+      margin: 0; padding: 0;
+      flex: 0 0 3mm;
+    }
+    @media (max-width:900px) {
+      .sala-imagens { flex-direction: column; height: 100vh; width: 100vw; }
+      .sala-imagens img, .separador {
+        width: 100vw !important; max-width: 100vw;
+        height: auto;
+      }
+      .separador {
+        height: 3mm; max-height: 3mm; min-height: 3mm; width: 100vw;
+      }
     }
   </style>
 </head>
 <body>
   <div class="sala-imagens">
     <img src="cmpng" alt="imagem 1">
+    <div class="separador"></div>
     <img src="cmb.png" alt="imagem 2">
+    <div class="separador"></div>
     <img src="ANA.png" alt="imagem 3">
+    <div class="separador"></div>
     <img src="SFUAP.png" alt="imagem 4">
+    <div class="separador"></div>
     <img src="CIRL.png" alt="imagem 5">
+    <div class="separador"></div>
     <img src="any.png" alt="imagem 6">
+    <div class="separador"></div>
     <img src="csb.png" alt="imagem 7">
   </div>
 </body>
