@@ -2,236 +2,51 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Recriação Locker/Balneário</title>
+  <title>Sete Imagens Coladas</title>
   <style>
-    html, body {
-      margin: 0; padding: 0;
-      width: 100vw; height: 100vh;
-      background: #21170f;
-      box-sizing: border-box;
-    }
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin: 0; padding: 0;
+      background: #1a1817;
       min-height: 100vh;
       min-width: 100vw;
-    }
-    .balneario-box {
-      position: relative;
-      width: 960px;
-      height: 510px;
-      background: #261a10;
-      border-radius: 20px;
-      box-shadow: 0 6px 45px #000b;
-      overflow: hidden;
       display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      padding-bottom: 42px;
-    }
-    /* Luz de teto */
-    .teto-luz {
-      position: absolute;
-      top: 0; left: 50%;
-      width: 420px; height: 145px;
-      background: radial-gradient(ellipse 75% 52% at 50% 31%, #665646 35%, #2d210d 90%);
-      border-radius: 47% 47% 58% 49% / 60% 60% 100% 100%;
-      transform: translateX(-50%);
-      opacity: 0.88;
-      z-index: 5;
-    }
-    /* Armário lateral branco */
-    .armario-lateral {
-      width: 180px;
-      height: 396px;
-      background: #f5f5f5;
-      border: 9px solid #462d16;
-      border-radius: 10px;
-      margin-left: 28px;
-      margin-right: 32px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 2;
-      box-shadow: 0 3px 18px #0003;
-    }
-    .armario-lateral-porta {
-      width: 66px; height: 85%;
-      background: #fff;
-      border-radius: 3px;
-      box-shadow: 0 0 8px #baa;
-      margin: 10px 7px;
-      border: 2px solid #c09867;
-      display: inline-block;
-      position: relative;
-    }
-    .armario-lateral-porta + .armario-lateral-porta {
-      margin-left: 10px;
-    }
-    .armario-lateral-puxador {
-      position: absolute;
-      left: 55%; top: 50%;
-      transform: translate(-50%, -50%);
-      width: 9px; height: 44px;
-      background: #2e2924;
-      border-radius: 99px;
-    }
-    .armario-lateral-portas {
-      display: flex;
-      flex-direction: row;
+      justify-content: center;
       align-items: center;
     }
-    /* Cacifos centrais */
-    .cacifos-area {
-      flex: 1;
-      height: 396px;
+    .sala-imagens {
       display: flex;
       flex-direction: row;
-      gap: 4px;
-      z-index: 1;
+      justify-content: center;
       align-items: flex-end;
+      /* opcional: define uma largura máxima total */
+      max-width: 98vw;
+      /* opcional: define altura total das imagens */
+      height: 350px;
+      background: transparent;
+      gap: 0;
+      /* Sem border/padding para que fique tudo “colado” */
     }
-    .cacifo-bloco {
-      width: 113px;
+    .sala-imagens img {
       height: 100%;
-      background: linear-gradient(180deg, #784f1c 58%, #2a190b 100%);
-      border-radius: 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      position: relative;
-      margin: 0 3px;
-      box-shadow: 0 8px 26px #100a0150 inset;
-    }
-    /* Caixas por cima */
-    .cx-topo {
-      height: 54px;
-      width: 111px;
-      background: #7a441f;
-      border-radius: 8px 8px 6px 6px;
-      position: absolute;
-      top: -58px;
-      left: 0;
-      box-shadow: 0 8px 24px #27120670;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      z-index: 3;
-    }
-    .cx-topo-lombada {
-      width: 33px; height: 7px;
-      background: #64340e;
-      border-radius: 8px;
-      margin-bottom: 3px;
-    }
-    /* Puxador da caixa */
-    .cx-topo-puxador {
-      width: 31px; height: 8px;
-      background: #fff7;
-      border-radius: 4px;
-      margin-bottom: 6px;
-    }
-    /* Gavetas em baixo */
-    .gaveta-fundo {
-      width: 92px; height: 44px;
-      margin-bottom: 8px;
-      background: #ece7db;
-      border-radius: 7px;
-      border: 2px solid #cab282;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 1px 8px #fff5;
-      position: relative;
-    }
-    .gaveta-puxador {
-      width: 32px; height: 13px;
-      background: #c6b78d;
-      border-radius: 33px;
-      border: 1.5px solid #9d936c;
-      margin: 0 auto;
-      position: absolute;
-      left: 50%; top: 53%;
-      transform: translate(-50%, -50%);
-    }
-    @media (max-width:1100px) {
-      .balneario-box { width: 97vw; padding-left: 2vw; }
-      .armario-lateral { margin-left: 2vw; margin-right: 3vw; }
-    }
-    @media (max-width:850px) {
-      .balneario-box { flex-direction: column; width: 100vw; height: auto; margin: 0; border-radius: 0;}
-      .armario-lateral { margin-right: 10vw; margin-left: 10vw; margin-bottom: 20px;}
-      .cacifos-area { justify-content: center; }
+      width: auto;
+      object-fit: cover;
+      display: block;
+      margin: 0;
+      border: none;
+      padding: 0;
+      box-shadow: none;
     }
   </style>
 </head>
 <body>
-  <div class="balneario-box">
-    <!-- Luz do teto -->
-    <div class="teto-luz"></div>
-    <!-- Armário branco lateral -->
-    <div class="armario-lateral">
-      <div class="armario-lateral-portas">
-        <div class="armario-lateral-porta">
-          <div class="armario-lateral-puxador"></div>
-        </div>
-        <div class="armario-lateral-porta">
-          <div class="armario-lateral-puxador"></div>
-        </div>
-      </div>
-    </div>
-    <!-- Cacifos centrais -->
-    <div class="cacifos-area">
-      <!-- Cada cacifo -->
-      <div class="cacifo-bloco">
-        <div class="cx-topo">
-          <div class="cx-topo-puxador"></div>
-        </div>
-        <div style="flex:1;"></div>
-        <div class="gaveta-fundo">
-          <div class="gaveta-puxador"></div>
-        </div>
-      </div>
-      <div class="cacifo-bloco">
-        <div class="cx-topo">
-          <div class="cx-topo-puxador"></div>
-        </div>
-        <div style="flex:1;"></div>
-        <div class="gaveta-fundo">
-          <div class="gaveta-puxador"></div>
-        </div>
-      </div>
-      <div class="cacifo-bloco">
-        <div class="cx-topo">
-          <div class="cx-topo-puxador"></div>
-        </div>
-        <div style="flex:1;"></div>
-        <div class="gaveta-fundo">
-          <div class="gaveta-puxador"></div>
-        </div>
-      </div>
-      <div class="cacifo-bloco">
-        <div class="cx-topo">
-          <div class="cx-topo-puxador"></div>
-        </div>
-        <div style="flex:1;"></div>
-        <div class="gaveta-fundo">
-          <div class="gaveta-puxador"></div>
-        </div>
-      </div>
-      <div class="cacifo-bloco">
-        <div class="cx-topo">
-          <div class="cx-topo-puxador"></div>
-        </div>
-        <div style="flex:1;"></div>
-        <div class="gaveta-fundo">
-          <div class="gaveta-puxador"></div>
-        </div>
-      </div>
-    </div>
+  <div class="sala-imagens">
+    <img src="cmb.png" alt="imagem 1">
+    <img src="cmb.png" alt="imagem 2">
+    <img src="cmb.png" alt="imagem 3">
+    <img src="cmb.png" alt="imagem 4">
+    <img src="cmb.png" alt="imagem 5">
+    <img src="cmb.png" alt="imagem 6">
+    <img src="cmb.png" alt="imagem 7">
   </div>
 </body>
 </html>
