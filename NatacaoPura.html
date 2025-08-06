@@ -14,15 +14,22 @@
       font-family: 'Segoe UI', Arial, sans-serif;
     }
     .balneario-fundo {
-      position: fixed;      /* Ocupa sempre a área visível da janela */
-      top: 0; left: 0;      /* Encosta ao topo e à esquerda */
-      width: 100vw;         /* 100% da largura da viewport */
-      height: 100vh;        /* 100% da altura da viewport */
-      background: url('SUA_IMAGEM.png') center center no-repeat;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: calc(100vw / (16/9));
+      max-height: 100vh;
+      background: url('A_TUA_IMAGEM.png') center center no-repeat;
       background-size: cover;
-      border-radius: 0;     /* ângulos retos nas pontas */
-      z-index: 0;           /* Fica atrás de outros elementos, ajusta se necessário */
+      border-radius: 0;
     }
+    @media (min-aspect-ratio: 16/9) {
+      .balneario-fundo {
+        width: calc(100vh * (16/9));
+        height: 100vh;
+      }
+    }
+
 
     */
     /* Responsivo para écrans pequenos */
