@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Modalidade Aquática</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400&family=Share+Tech+Mono&display=swap');
     html, body {
       margin: 0;
       padding: 0;
@@ -130,14 +131,56 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: 'Orbitron', 'Share Tech Mono', monospace;
+      user-select: none;
     }
-    #screen-fade .loader-wrapper {
+    #screen-fade .loader-circle-ret {
       position: relative;
+      width: 150px;
+      height: 150px;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    #screen-fade .loader-svg {
       width: 150px;
       height: 150px;
+      display: block;
+    }
+    #screen-fade .loader-rect {
+      transition: fill 0.12s;
+    }
+    #screen-fade .loader-percent,
+    #screen-fade .loader-complete {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Orbitron', 'Share Tech Mono', monospace;
+      font-weight: 400;
+      user-select: none;
+      pointer-events: none;
+      letter-spacing: 0.01em;
+      line-height: 1;
+    }
+    #screen-fade .loader-percent {
+      top: 43.2%;
+      font-size: 1.5em;
+      color: #17e6ff;
+    }
+    #screen-fade .loader-complete {
+      top: 57.5%;
+      font-size: 0.8em;
+      color: #5effe2;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      width: max-content;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #screen-fade .loader-complete.show {
+      opacity: 1;
     }
   </style>
 </head>
@@ -146,10 +189,17 @@
     <div class="hud-left">
       <span class="hud-time-date" id="hudTimeDate"></span>
       <button class="left-decor-btn" title="Voltar ao menu inicial" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 11.5L12 4l9 7.5"/>
-          <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
-          <path d="M9 22V12h6v10"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#42aaff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 11.5L12 4l9 7.5" />
+          <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8" />
+          <path d="M9 22V12h6v10" />
         </svg>
       </button>
     </div>
@@ -165,17 +215,20 @@
   <div class="gallery">
     <!-- Coluna 1 -->
     <div class="col" tabindex="0" data-link="NatacaoPura.html">
-      <img src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg" alt="Natação Pura">
+      <img
+        src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg"
+        alt="Natação Pura"
+      />
       <div class="overlay">Natação Pura</div>
     </div>
     <!-- Coluna 2 -->
     <div class="col" tabindex="0" data-link="pagina2.html">
-      <img src="FB_IMG_1696068644775 (1).jpg" alt="Águas Abertas">
+      <img src="FB_IMG_1696068644775 (1).jpg" alt="Águas Abertas" />
       <div class="overlay">Águas Abertas</div>
     </div>
     <!-- Coluna 3 -->
     <div class="col" tabindex="0" data-link="pagina3.html">
-      <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático">
+      <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático" />
       <div class="overlay">Salvamento Aquático</div>
     </div>
   </div>
@@ -185,74 +238,64 @@
 
   <script>
     // ---- Fade ao entrar na página ----
-    window.addEventListener('load', () => {
-      const screenFade = document.getElementById('screen-fade');
+    window.addEventListener("load", () => {
+      const screenFade = document.getElementById("screen-fade");
       if (!screenFade) return;
-      // Esconde o screen fade no load inicial com fade out
+      // Só fade out simples sem loader na entrada
+      screenFade.style.pointerEvents = "auto";
+      screenFade.style.opacity = "1";
       setTimeout(() => {
-        screenFade.style.opacity = '0';
+        screenFade.style.opacity = "0";
       }, 100);
-      screenFade.addEventListener('transitionend', () => {
-        if (screenFade.style.opacity === '0') {
-          screenFade.style.pointerEvents = 'none';
-          screenFade.innerHTML = ''; // limpa conteúdo após loader inicial
-        }
-      });
+      screenFade.addEventListener(
+        "transitionend",
+        () => {
+          if (screenFade.style.opacity === "0") {
+            screenFade.style.pointerEvents = "none";
+            // Não adiciona loader aqui - deixa vazio
+            screenFade.innerHTML = "";
+          }
+        },
+        { once: true }
+      );
     });
 
-    // ---- Cria o loader SVG com texto ----
-    function createLoadingHUD() {
-      return `
-        <div class="loader-wrapper" aria-label="A carregar">
-          <svg width="150" height="150" role="img" aria-hidden="true" focusable="false">
-            <circle cx="75" cy="75" r="60" stroke="#28345A" stroke-width="12" fill="none"/>
-            <circle cx="75" cy="75" r="60" stroke="#27eefd" stroke-width="9" fill="none"
-              stroke-dasharray="120 320" stroke-linecap="round" stroke-dashoffset="60">
-              <animate attributeName="stroke-dasharray" values="30 320;210 320;30 320"
-                dur="1.35s" repeatCount="indefinite"/>
-            </circle>
-          </svg>
-          <div style="
-            position:absolute;
-            left:50%; top:54%; transform: translate(-50%,-50%);
-            font-size:1.7em;font-weight:bold;color:#27eefd;text-shadow:0 2px 12px #222a;
-            letter-spacing:1.6px;
-          ">A carregar…</div>
-        </div>
-      `;
-    }
-
-    // ---- Função para fazer fade e carregar nova página ----
+    // ---- Troca do loader no fade and load ----
     function fadeAndLoad(link) {
-      const screenFade = document.getElementById('screen-fade');
+      const screenFade = document.getElementById("screen-fade");
       if (!screenFade) return;
 
-      // Insere o loader imediatamente
-      screenFade.innerHTML = createLoadingHUD();
-      screenFade.style.pointerEvents = 'auto';
-      screenFade.style.transition = 'opacity 0.8s ease-out';
-      // Força o browser a processar o innerHTML antes de começar o fade
+      // Insere o loader circular de retângulos aqui
+      screenFade.innerHTML = `
+        <div class="loader-circle-ret" aria-label="A carregar">
+          <svg class="loader-svg" aria-hidden="true" focusable="false"></svg>
+          <div class="loader-percent" id="loaderPercent">0%</div>
+          <div class="loader-complete" id="loaderComplete">COMPLETE</div>
+        </div>
+      `;
+
+      screenFade.style.pointerEvents = "auto";
+      screenFade.style.transition = "opacity 0.8s ease-out";
       requestAnimationFrame(() => {
-        screenFade.style.opacity = '1'; // faz fade para preto mostrando loader
+        screenFade.style.opacity = "1";
       });
 
-      // Depois de 2.2s, navega para a página
-      setTimeout(() => {
+      createRectangularLoaderAnimation(() => {
         window.location.href = link;
-      }, 2200);
+      });
     }
 
     // ---- Liga eventos aos cliques e teclas das colunas ----
-    document.querySelectorAll('.col').forEach(col => {
-      col.addEventListener('click', function(e) {
+    document.querySelectorAll(".col").forEach((col) => {
+      col.addEventListener("click", function (e) {
         e.preventDefault();
-        const link = this.getAttribute('data-link');
+        const link = this.getAttribute("data-link");
         if (link) fadeAndLoad(link);
       });
-      col.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
+      col.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          const link = this.getAttribute('data-link');
+          const link = this.getAttribute("data-link");
           if (link) fadeAndLoad(link);
         }
       });
@@ -260,19 +303,102 @@
 
     // ---- Atualiza o relógio da HUD ----
     function updateHudTime() {
-      const el = document.getElementById('hudTimeDate');
+      const el = document.getElementById("hudTimeDate");
       if (!el) return;
       const now = new Date();
-      el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
-        ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+      el.textContent =
+        now.toLocaleDateString("pt-PT", { day: "2-digit", month: "2-digit" }) +
+        " " +
+        now.toLocaleTimeString("pt-PT", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
     }
     setInterval(updateHudTime, 1000);
     updateHudTime();
 
     // ---- Botão do menu inicial (index) ----
-    document.querySelector('.left-decor-btn').onclick = function() {
-      fadeAndLoad('index.html');
+    document.querySelector(".left-decor-btn").onclick = function () {
+      fadeAndLoad("index.html");
     };
+
+    // ---- Função que cria e anima o loader de retângulos circulares ----
+    function createRectangularLoaderAnimation(onComplete) {
+      const svg = document.querySelector(".loader-svg");
+      if (!svg) return;
+      svg.innerHTML = ""; // limpa o SVG antes
+      const WIDTH = 150,
+        HEIGHT = 150;
+      const cx = WIDTH / 2,
+        cy = HEIGHT / 2;
+      const OUTER_RADIUS = 62;
+      const SEGMENTS = 121;
+      const RECT_W = 8,
+        RECT_H = 16;
+      const ANGLE_STEP = (2 * Math.PI) / SEGMENTS;
+
+      // Cria os grupos e retângulos
+      for (let i = 0; i < SEGMENTS; i++) {
+        const angle = i * ANGLE_STEP - Math.PI / 2;
+        const x = cx + Math.cos(angle) * OUTER_RADIUS;
+        const y = cy + Math.sin(angle) * OUTER_RADIUS;
+        const group = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "g"
+        );
+        group.setAttribute(
+          "transform",
+          `translate(${x},${y}) rotate(${(angle * 180) / Math.PI + 90})`
+        );
+        const rect = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "rect"
+        );
+        rect.setAttribute("x", -RECT_W / 2);
+        rect.setAttribute("y", -RECT_H / 2);
+        rect.setAttribute("width", RECT_W);
+        rect.setAttribute("height", RECT_H);
+        rect.setAttribute("rx", 0);
+        rect.setAttribute("fill", "#12324c");
+        rect.setAttribute("opacity", "0.18");
+        rect.classList.add("loader-rect");
+        group.appendChild(rect);
+        svg.appendChild(group);
+      }
+
+      // Animação - pinta retângulos progressivamente e atualiza %
+      const percentEl = document.getElementById("loaderPercent");
+      const completeEl = document.getElementById("loaderComplete");
+      const rects = svg.querySelectorAll(".loader-rect");
+      let start = null;
+      const targetPercent = 100;
+      const duration = 3000;
+
+      function step(now) {
+        if (!start) start = now;
+        const anim = Math.min(1, (now - start) / duration);
+        const curr = Math.round(anim * targetPercent);
+        percentEl.textContent = curr + "%";
+        const rectsToShow = Math.round((SEGMENTS * curr) / 100);
+        rects.forEach((r, i) => {
+          if (i < rectsToShow) {
+            r.setAttribute("fill", "#17e6ff");
+            r.setAttribute("opacity", "1");
+          } else {
+            r.setAttribute("fill", "#12324c");
+            r.setAttribute("opacity", "0.18");
+          }
+        });
+        if (curr < targetPercent) requestAnimationFrame(step);
+        else {
+          percentEl.textContent = targetPercent + "%";
+          completeEl.classList.add("show");
+          if (onComplete) setTimeout(onComplete, 2000);
+        }
+      }
+      requestAnimationFrame(step);
+    }
   </script>
 </body>
 </html>
+
