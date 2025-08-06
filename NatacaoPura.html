@@ -24,6 +24,7 @@
       width: 100vw;
       height: 100vh;
       font-size: 0;
+      position: relative;
     }
     .sala-imagens img {
       flex: 1 1 0;
@@ -55,55 +56,86 @@
         height: 3mm; max-height: 3mm; min-height: 3mm; width: 100vw;
       }
     }
-      .cartao-modal-bg {
-    position: fixed;
-    inset: 0;
-    background: rgba(12,13,20,0.67);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.16s;
-  }
-  @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-  .cartao-modal {
-    background: #f5f7fa;
-    color: #234;
-    border-radius: 14px;
-    box-shadow: 0 11px 36px #000a;
-    min-width: 290px;
-    max-width: 80vw;
-    min-height: 120px;
-    max-height: 75vh;
-    padding: 28px 28px 28px 28px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 1.1em;
-    text-align: center;
-    border: 2.5px solid #dde1e8;
-  }
-  .cartao-fechar {
-    position: absolute;
-    top: 11px; right: 15px;
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    color: #36537e;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background .15s;
-    line-height: 1;
-    z-index: 2;
-  }
-  .cartao-fechar:hover {
-    background: #dde3fa;
-    color: #b02;
-  }
+    /* -------- Destacar imagens clicáveis -------- */
+    .sala-imagens img[onclick] {
+      cursor: pointer;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .sala-imagens img[onclick]:hover {
+      box-shadow: 0 0 20px #ffd70088, 0 0 0 2.5px #ffd700dd;
+      transform: translateY(-4px) scale(1.035);
+      outline: 0;
+    }
+    /* -------- Mensagem de dica -------- */
+    .dica-msg {
+      position: absolute;
+      left: 50%; top: 28px;
+      background: #fff8ce;
+      color: #473c08;
+      font-weight: bold;
+      padding: 8px 17px;
+      border-radius: 13px;
+      font-size: 1.05em;
+      box-shadow: 0 2px 10px #0003;
+      opacity: 0.96;
+      pointer-events: none;
+      z-index: 30;
+      transform: translateX(-50%);
+      transition: opacity 0.17s, top 0.17s;
+      animation: piscarDica 1.6s infinite alternate;
+      white-space: nowrap;
+    }
+    @keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
+    /* -------- Modal/cartão -------- */
+    .cartao-modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(12,13,20,0.67);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.16s;
+    }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    .cartao-modal {
+      background: #f5f7fa;
+      color: #234;
+      border-radius: 14px;
+      box-shadow: 0 11px 36px #000a;
+      min-width: 290px;
+      max-width: 80vw;
+      min-height: 120px;
+      max-height: 75vh;
+      padding: 28px 28px 28px 28px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 1.1em;
+      text-align: center;
+      border: 2.5px solid #dde1e8;
+    }
+    .cartao-fechar {
+      position: absolute;
+      top: 11px; right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      color: #36537e;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background .15s;
+      line-height: 1;
+      z-index: 2;
+    }
+    .cartao-fechar:hover {
+      background: #dde3fa;
+      color: #b02;
+    }
   </style>
 </head>
 <body>
@@ -121,37 +153,58 @@
     <img src="any.png" alt="imagem 6">
   </div>
   <script>
-  // Conteúdo personalizado para cada imagem/modal
-  const conteudosCartao = {
-    2: `<h2>Cartão para Imagem 2</h2><p>Conteúdo especial para a 2ª imagem.<br>Podes adaptar à tua necessidade.</p>`,
-    3: `<h2>Informação da Imagem 3</h2><p>Outro conteúdo ou imagem para o cartão 3.</p>`,
-    4: `<h2>História do Clube 4</h2><p>Cartão exclusivo da 4ª imagem.<br><strong>Podes inserir imagens, listas, etc.</strong></p>`,
-    5: `<h2>Cartão Personalizado 5</h2><p>Texto único para a quinta imagem.<br>É só personalizar o HTML.</p>`
-  };
+    // Mostrar/ocultar mensagem de dica ao passar nas imagens [onclick]
+    document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
+      let dica;
+      img.addEventListener('mouseenter', function(e) {
+        dica = document.createElement('div');
+        dica.className = 'dica-msg';
+        dica.textContent = 'Clica para ver o cartão!';
+        const sala = document.querySelector('.sala-imagens');
+        const imgRect = img.getBoundingClientRect();
+        const salaRect = sala.getBoundingClientRect();
+        // posição da dica centrada sobre a imagem
+        dica.style.top = (imgRect.top - salaRect.top + 22) + 'px';
+        dica.style.left = (imgRect.left - salaRect.left + imgRect.width/2) + 'px';
+        sala.appendChild(dica);
+      });
+      img.addEventListener('mouseleave', function(e) {
+        if (dica && dica.parentNode) dica.parentNode.removeChild(dica);
+        dica = null;
+      });
+    });
 
-  function abrirCartao(idx) {
-    const conteudo = conteudosCartao[idx] || "Cartão não definido.";
-    // Cria o modal (fundo escuro)
-    const bg = document.createElement('div');
-    bg.className = 'cartao-modal-bg';
-    bg.onclick = function(e){
-      if (e.target === bg) document.body.removeChild(bg);
+    // Conteúdo personalizado para cada imagem/modal
+    const conteudosCartao = {
+      2: `<h2>Cartão para Imagem 2</h2><p>Conteúdo especial para a 2ª imagem.<br>Podes adaptar à tua necessidade.</p>`,
+      3: `<h2>Informação da Imagem 3</h2><p>Outro conteúdo ou imagem para o cartão 3.</p>`,
+      4: `<h2>História do Clube 4</h2><p>Cartão exclusivo da 4ª imagem.<br><strong>Podes inserir imagens, listas, etc.</strong></p>`,
+      5: `<h2>Cartão Personalizado 5</h2><p>Texto único para a quinta imagem.<br>É só personalizar o HTML.</p>`
     };
-    // Caixa do cartão/modal
-    const box = document.createElement('div');
-    box.className = 'cartao-modal';
-    box.innerHTML = conteudo +
-      `<button class="cartao-fechar" title="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
-    bg.appendChild(box);
-    document.body.appendChild(bg);
-  }
 
-  function fecharCartaoModal(e) {
-    e.stopPropagation();
-    const modal = e.target.closest('.cartao-modal-bg');
-    if(modal) document.body.removeChild(modal);
-  }
-</script>
+    function abrirCartao(idx) {
+      const conteudo = conteudosCartao[idx] || "Cartão não definido.";
+      // Cria o modal (fundo escuro)
+      const bg = document.createElement('div');
+      bg.className = 'cartao-modal-bg';
+      bg.onclick = function(e){
+        if (e.target === bg) document.body.removeChild(bg);
+      };
+      // Caixa do cartão/modal
+      const box = document.createElement('div');
+      box.className = 'cartao-modal';
+      box.innerHTML = conteudo +
+        `<button class="cartao-fechar" title="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
+      bg.appendChild(box);
+      document.body.appendChild(bg);
+    }
 
+    function fecharCartaoModal(e) {
+      e.stopPropagation();
+      const modal = e.target.closest('.cartao-modal-bg');
+      if(modal) document.body.removeChild(modal);
+    }
+  </script>
 </body>
 </html>
+
