@@ -178,40 +178,125 @@
     }
 
     .cartao-modal {
-      background: #f5f7fa;
-      color: #234;
-      border-radius: 14px;
-      box-shadow: 0 11px 36px #000a;
-      min-width: 290px;
-      max-width: 80vw;
-      min-height: 120px;
-      max-height: 75vh;
-      padding: 28px 28px 28px 28px;
-      position: relative;
+      /* Usa estilos do cartão FIFA */
+      width: 470px;
+      height: 320px;
       display: flex;
+      background: linear-gradient(135deg, #2346a5 60%, #0b101c 100%);
+      color: #e9f8ff;
+      border: 2.5px solid #2efaff60;
+      box-shadow: 0 7px 32px #0008, 0 2px 0 #ccecff44 inset, 0 0 22px #227aff77;
+      border-radius: 0;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      flex-direction: row;
+    }
+    .col-img {
+      width: 105px;
+      background: #1b3260;
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      border-right: 2px solid #26eefe88;
+      padding: 0;
+      height: 100%;
+      position: relative;
+    }
+    .avatar-img {
+      width: 82px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #315282;
+      border: 3px solid #23ddeccc;
+      box-shadow: 0 7px 20px #22e8fd15;
+      display: block;
+      margin: 0 auto;
+    }
+    .right-card {
+      flex: 1;
+      display: flex;
       flex-direction: column;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 1.1em;
-      text-align: center;
-      border: 2.5px solid #dde1e8;
-      opacity: 0;
-      transform: translateY(15px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      justify-content: flex-start;
+      padding: 0;
     }
-    .cartao-modal-bg.show .cartao-modal {
-      opacity: 1;
-      transform: translateY(0);
+    .info-rect {
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background: #183365ec;
+      border-radius: 0;
+      padding: 4px 14px 4px 10px;
+      margin: 0;
+      gap: 11px;
     }
-
+    .club-logo-mini {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      border-radius: 7px;
+      background: #133969;
+      border: 1.5px solid #24cff9;
+      margin-right: 5px;
+      margin-left: 2px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px #1be1fd11;
+      display: block;
+    }
+    .info-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .nome-pessoa {
+      font-size: 0.95em;
+      font-weight: bold;
+      color: #f9f9ff;
+      margin-bottom: 1px;
+      letter-spacing: 0.4px;
+      line-height: 1.1em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .club-nation {
+      font-size: 0.82em;
+      color: #a6e9ff;
+      line-height: 1em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    /* Removidas as barras de loading dos atributos e medalhas */
+    /* Estilos para responsividade */
+    @media (max-width: 600px) {
+      .cartao-modal {
+        flex-direction: column;
+        width: 99vw;
+        height: auto;
+      }
+      .col-img {
+        width: 100%;
+        min-width: 0;
+        flex-direction: row;
+        justify-content: center;
+      }
+      .info-rect {
+        height: auto;
+      }
+    }
     .cartao-fechar {
       position: absolute;
       top: 11px; right: 15px;
       background: none;
       border: none;
       font-size: 1.5em;
-      color: #36537e;
+      color: #e9f8ff;
       font-weight: bold;
       cursor: pointer;
       border-radius: 5px;
@@ -220,7 +305,7 @@
       z-index: 2;
     }
     .cartao-fechar:hover {
-      background: #dde3fa;
+      background: #428cff33;
       color: #b02;
     }
   </style>
@@ -305,12 +390,80 @@
       });
     });
 
-    // Conteúdo personalizado para cada imagem/modal
+    // Conteúdo personalizado para cada imagem/modal usando o cartão estilo FIFA
     const conteudosCartao = {
-      2: `<h2>Cartão para Imagem 2</h2><p>Conteúdo especial para a 2ª imagem.<br>Podes adaptar à tua necessidade.</p>`,
-      3: `<h2>Informação da Imagem 3</h2><p>Outro conteúdo ou imagem para o cartão 3.</p>`,
-      4: `<h2>História do Clube 4</h2><p>Cartão exclusivo da 4ª imagem.<br><strong>Podes inserir imagens, listas, etc.</strong></p>`,
-      5: `<h2>Cartão Personalizado 5</h2><p>Texto único para a quinta imagem.<br>É só personalizar o HTML.</p>`
+      2: `<div class="card-fifa">
+            <div class="col-img">
+              <img class="avatar-img"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
+                alt="Atleta">
+            </div>
+            <div class="right-card">
+              <div class="info-rect">
+                <img class="club-logo-mini"
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
+                  alt="Emblema Clube">
+                <div class="info-data">
+                  <div class="nome-pessoa">LUIS C. CORREIA</div>
+                  <div class="club-nation">SFUAP · 🇵🇹 Portugal</div>
+                </div>
+              </div>
+            </div>
+          </div>`,
+      3: `<div class="card-fifa">
+            <div class="col-img">
+              <img class="avatar-img"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
+                alt="Atleta">
+            </div>
+            <div class="right-card">
+              <div class="info-rect">
+                <img class="club-logo-mini"
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
+                  alt="Emblema Clube">
+                <div class="info-data">
+                  <div class="nome-pessoa">Imagem 3 - Nome</div>
+                  <div class="club-nation">Clube XYZ · 🇵🇹 Portugal</div>
+                </div>
+              </div>
+            </div>
+          </div>`,
+      4: `<div class="card-fifa">
+            <div class="col-img">
+              <img class="avatar-img"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
+                alt="Atleta">
+            </div>
+            <div class="right-card">
+              <div class="info-rect">
+                <img class="club-logo-mini"
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
+                  alt="Emblema Clube">
+                <div class="info-data">
+                  <div class="nome-pessoa">Imagem 4 - Nome</div>
+                  <div class="club-nation">Clube ABC · 🇵🇹 Portugal</div>
+                </div>
+              </div>
+            </div>
+          </div>`,
+      5: `<div class="card-fifa">
+            <div class="col-img">
+              <img class="avatar-img"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
+                alt="Atleta">
+            </div>
+            <div class="right-card">
+              <div class="info-rect">
+                <img class="club-logo-mini"
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
+                  alt="Emblema Clube">
+                <div class="info-data">
+                  <div class="nome-pessoa">Imagem 5 - Nome</div>
+                  <div class="club-nation">Clube DEF · 🇵🇹 Portugal</div>
+                </div>
+              </div>
+            </div>
+          </div>`
     };
 
     // Abrir o modal com fade in
@@ -368,4 +521,3 @@
   </script>
 </body>
 </html>
-
