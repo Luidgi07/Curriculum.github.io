@@ -148,7 +148,6 @@
     }
     @keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
 
-    /* Usado no carregamento da página */
     #screen-fade {
       position: fixed; 
       top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -158,8 +157,6 @@
       transition: opacity 0.8s ease-out;
       z-index: 10000;
     }
-
-    /* Modal com fade in/out transparente */
     .cartao-modal-bg {
       position: fixed;
       inset: 0;
@@ -176,7 +173,6 @@
       opacity: 1;
       pointer-events: auto;
     }
-
     .cartao-modal {
       width: 650px;
       height: 420px;
@@ -196,107 +192,6 @@
       min-height: 200px;
       max-width: 98vw;
       max-height: 96vh;
-      /* Para responsividade */
-    }
-    .col-img {
-      width: 150px;
-      background: #1b3260;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-right: 2px solid #26eefe88;
-      padding: 0;
-      height: 100%;
-      position: relative;
-    }
-    .avatar-img {
-      width: 122px;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 16px;
-      background: #315282;
-      border: 3px solid #23ddeccc;
-      box-shadow: 0 7px 20px #22e8fd15;
-      display: block;
-      margin: 0 auto;
-    }
-    .right-card {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 0;
-    }
-    .info-rect {
-      height: 70px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      background: #183365ec;
-      border-radius: 0;
-      padding: 4px 34px 4px 18px;
-      margin: 0;
-      gap: 18px;
-      font-size: 1.5em;
-    }
-    .club-logo-mini {
-      width: 58px;
-      height: 58px;
-      object-fit: contain;
-      border-radius: 10px;
-      background: #133969;
-      border: 1.5px solid #24cff9;
-      margin-right: 10px;
-      margin-left: 2px;
-      flex-shrink: 0;
-      box-shadow: 0 2px 5px #1be1fd11;
-      display: block;
-    }
-    .info-data {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      flex: 1;
-      min-width: 0;
-    }
-    .nome-pessoa {
-      font-size: 1.15em;
-      font-weight: bold;
-      color: #f9f9ff;
-      margin-bottom: 7px;
-      letter-spacing: 0.5px;
-      line-height: 1.1em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .club-nation {
-      font-size: 1em;
-      color: #a6e9ff;
-      line-height: 1em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    @media (max-width: 750px) {
-      .cartao-modal {
-        flex-direction: column;
-        width: 99vw;
-        height: auto;
-        min-width: 0;
-        min-height: 0;
-      }
-      .col-img {
-        width: 100%;
-        height: 180px;
-        min-width: 0;
-        flex-direction: row;
-        justify-content: center;
-      }
-      .info-rect {
-        height: auto;
-      }
     }
     .cartao-fechar {
       position: absolute;
@@ -398,85 +293,17 @@
       });
     });
 
-    // Conteúdo personalizado para cada imagem/modal usando o cartão estilo FIFA
+    // Conteúdo vazio para o cartão/modal
     const conteudosCartao = {
-      2: `<div class="card-fifa">
-            <div class="col-img">
-              <img class="avatar-img"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
-                alt="Atleta">
-            </div>
-            <div class="right-card">
-              <div class="info-rect">
-                <img class="club-logo-mini"
-                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
-                  alt="Emblema Clube">
-                <div class="info-data">
-                  <div class="nome-pessoa">LUIS C. CORREIA</div>
-                  <div class="club-nation">SFUAP · 🇵🇹 Portugal</div>
-                </div>
-              </div>
-            </div>
-          </div>`,
-      3: `<div class="card-fifa">
-            <div class="col-img">
-              <img class="avatar-img"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
-                alt="Atleta">
-            </div>
-            <div class="right-card">
-              <div class="info-rect">
-                <img class="club-logo-mini"
-                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
-                  alt="Emblema Clube">
-                <div class="info-data">
-                  <div class="nome-pessoa">Imagem 3 - Nome</div>
-                  <div class="club-nation">Clube XYZ · 🇵🇹 Portugal</div>
-                </div>
-              </div>
-            </div>
-          </div>`,
-      4: `<div class="card-fifa">
-            <div class="col-img">
-              <img class="avatar-img"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
-                alt="Atleta">
-            </div>
-            <div class="right-card">
-              <div class="info-rect">
-                <img class="club-logo-mini"
-                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
-                  alt="Emblema Clube">
-                <div class="info-data">
-                  <div class="nome-pessoa">Imagem 4 - Nome</div>
-                  <div class="club-nation">Clube ABC · 🇵🇹 Portugal</div>
-                </div>
-              </div>
-            </div>
-          </div>`,
-      5: `<div class="card-fifa">
-            <div class="col-img">
-              <img class="avatar-img"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Swimming_pictogram.svg/1200px-Swimming_pictogram.svg.png"
-                alt="Atleta">
-            </div>
-            <div class="right-card">
-              <div class="info-rect">
-                <img class="club-logo-mini"
-                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"
-                  alt="Emblema Clube">
-                <div class="info-data">
-                  <div class="nome-pessoa">Imagem 5 - Nome</div>
-                  <div class="club-nation">Clube DEF · 🇵🇹 Portugal</div>
-                </div>
-              </div>
-            </div>
-          </div>`
+      2: ``,
+      3: ``,
+      4: ``,
+      5: ``
     };
 
-    // Abrir o modal com fade in
+    // Abrir o modal vazio com fade in
     function abrirCartao(idx) {
-      const conteudo = conteudosCartao[idx] || "Cartão não definido.";
+      const conteudo = conteudosCartao[idx] || "";
       const bg = document.createElement('div');
       bg.className = 'cartao-modal-bg';
       bg.setAttribute('tabindex', '-1');
@@ -491,7 +318,6 @@
       bg.appendChild(box);
       document.body.appendChild(bg);
 
-      // Usar requestAnimationFrame para garantir que o DOM já inseriu o elemento antes de adicionar classe .show
       requestAnimationFrame(() => {
         bg.classList.add('show');
         box.focus();
@@ -502,7 +328,6 @@
     function fecharCartao(bg) {
       if (!bg) return;
       bg.classList.remove('show');
-      // Escutar fim da transição pra remover o elemento
       bg.addEventListener('transitionend', function handler() {
         if (bg.parentNode) bg.parentNode.removeChild(bg);
         bg.removeEventListener('transitionend', handler);
