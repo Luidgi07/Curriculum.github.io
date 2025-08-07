@@ -216,10 +216,64 @@ body {
   font-size:1.35em;
   font-family: monospace;
   text-align: center;
+  padding: 0 !important;
 }
-.cartao-centro img {
-  max-width: 70%;
-  max-height: 70%;
+/* Centro do mapa, posição relativa para os pins */
+.mapa-centro-rel {
+  position: relative;
+  width: 98%;
+  height: 96%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mapa-centro-rel img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 7px;
+}
+/* PIN vermelhos sobre o mapa */
+.pin-mapa {
+  position: absolute;
+  width: 27px;
+  height: 27px;
+  background: #ff2222;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 9px 2px #a00d;
+  transform: translate(-50%,-50%);
+  z-index: 2;
+  transition: box-shadow 0.12s;
+}
+.pin-mapa:hover {
+  box-shadow: 0 0 15px 4px #ff5252bb;
+  background: #ff5252;
+}
+/* Popup de info dos pins */
+#pin-popup {
+  position: absolute;
+  min-width: 180px;
+  background: #fff;
+  color: #222f;
+  border-radius: 12px;
+  border: 2.5px solid #289affbb;
+  box-shadow: 0 6px 24px #2238;
+  padding: 12px 15px 14px 15px;
+  font-size: 1.07em;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  display: none;
+  pointer-events: none;
+}
+#pin-popup img {
+  display: block;
+  margin: 6px auto 2px auto;
+  max-width: 115px;
+  max-height: 62px;
+  border-radius: 7px;
 }
 .cartao-dir {
   width:270px;
@@ -307,7 +361,7 @@ body {
 </div>
 
 <script>
-// Atualiza o relógio no HUD
+// --- HUD e imagens (mantém tudo igual) ---
 function updateHudTime() {
   const el = document.getElementById('hudTimeDate');
   if (!el) return;
@@ -317,13 +371,9 @@ function updateHudTime() {
 }
 setInterval(updateHudTime, 1000);
 updateHudTime();
-
-// Botão voltar HUD
 document.querySelector('.left-decor-btn').addEventListener('click', () => {
   window.location.href = 'desporto.html';
 });
-
-// Mensagem de dica ao passar nas imagens clicáveis
 document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
   let dica;
   img.addEventListener('mouseenter', function(e) {
@@ -348,23 +398,38 @@ document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
   });
 });
 
+// -- DEFINE PINS PARA O CARTÃO 3 --
+const pins3 = [
+  // Ajusta top/left (%) à posição dos pins do teu mapa. Adiciona tantos quantos precise.
+  { top: 28, left: 60, nome: "Piscina A", local: "Lisboa", imagem: "piscinaa.jpg" },
+  { top: 47, left: 30, nome: "Piscina B", local: "Porto", imagem: "piscinab.jpg" },
+  { top: 63, left: 75, nome: "Piscina C", local: "Faro", imagem: "piscinac.jpg" }
+];
+
+// -- Construção dos cartões --
 const conteudosCartao = {
-  2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png'),
-  3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png'),
-  4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png'),
-  5: getCartaoModal('cirlcart-removebg-preview.png', 'mapacirl.png'),
-  6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png')
+  2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png', []),
+  3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', pins3),
+  4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png', []),
+  5: getCartaoModal('cirlcart-removebg-preview.png', 'mapacirl.png', []),
+  6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png', [])
 };
 
-// Atualizar a função para receber a imagem do mapa
-function getCartaoModal(imagemEsq, imagemMapa) {
+// Função para gerar o cartão. O centro é relative, os pins são absolutos em percentagem.
+function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
   return `
     <div class="cartao-conteudo-flex">
       <div class="cartao-esq">
         <img src="${imagemEsq}" alt="Cartão">
       </div>
       <div class="cartao-centro">
-        <img src="${imagemMapa}" alt="Mapa Portugal"> 
+        <div class="mapa-centro-rel">
+          <img src="${imagemMapa}" alt="Mapa Portugal">
+          ${pins.map(pin =>
+            `<div class="pin-mapa" style="top:${pin.top}%;left:${pin.left}%;" onclick="mostrarInfoPin(event, '${pin.nome}', '${pin.local}', '${pin.imagem}')"></div>`
+          ).join('')}
+          <div id="pin-popup"></div>
+        </div>
       </div>
       <div class="cartao-dir">
         <button>Medalhas</button>
@@ -375,8 +440,7 @@ function getCartaoModal(imagemEsq, imagemMapa) {
   `;
 }
 
-
-// Abrir o modal com layout igual à imagem
+// -- Modal aberto --
 function abrirCartao(idx) {
   const conteudo = conteudosCartao[idx] || "";
   const bg = document.createElement('div');
@@ -398,7 +462,8 @@ function abrirCartao(idx) {
     box.focus();
   });
 }
-// Fechar o modal com fade out
+
+// -- Fechar modal --
 function fecharCartao(bg) {
   if (!bg) return;
   bg.classList.remove('show');
@@ -412,7 +477,33 @@ function fecharCartaoModal(e) {
   const modalBg = e.target.closest('.cartao-modal-bg');
   fecharCartao(modalBg);
 }
-// Fade up suave ao iniciar a página
+
+// Popup info dos pins: mostra nome, local, imagem
+window.mostrarInfoPin = function (e, nome, local, imagem) {
+  e.stopPropagation();
+  const popup = document.querySelector("#pin-popup");
+  popup.innerHTML = `<strong>${nome}</strong><br>${local}<br>${imagem ? `<img src="${imagem}" alt="${nome}">` : ''}`;
+  popup.style.display = "block";
+  // Posição relativa ao pin
+  const parent = e.target.parentElement;
+  const parentRect = parent.getBoundingClientRect();
+  const pinRect = e.target.getBoundingClientRect();
+  const y = pinRect.top - parentRect.top + 40;
+  const x = pinRect.left - parentRect.left + 26;
+  popup.style.top = y + "px";
+  popup.style.left = x + "px";
+  popup.style.pointerEvents = 'auto';
+  // Esconde popup ao clicar fora
+  setTimeout(() => {
+    window.addEventListener('mousedown', esconderPopup, { once: true });
+  }, 0);
+}
+function esconderPopup(e) {
+  const popup = document.querySelector("#pin-popup");
+  if (popup) popup.style.display = "none";
+}
+
+// -- Fade inicial --
 window.addEventListener('load', () => {
   const screenFade = document.getElementById('screen-fade');
   if (!screenFade) return;
@@ -426,4 +517,3 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
-
