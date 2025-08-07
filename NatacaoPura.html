@@ -236,8 +236,8 @@ body {
 /* PIN vermelhos sobre o mapa */
 .pin-mapa {
   position: absolute;
-  width: 27px;
-  height: 27px;
+  width: 12px;
+  height: 12px;
   background: #ff2222;
   border: 3px solid #fff;
   border-radius: 50%;
@@ -406,11 +406,19 @@ const pins3 = [
   { top: 63, left: 75, nome: "Piscina C", local: "Faro", imagem: "piscinac.jpg" }
 ];
 
-// -- Construção dos cartões --
+const pins4 = [
+  // EXEMPLO: substitui por valores reais dos círculos do teu mapa da 4!
+  { top: 25, left: 56, nome: "Piscina D", local: "Setúbal", imagem: "piscinad.jpg" },
+  { top: 48, left: 32, nome: "Piscina E", local: "Almada", imagem: "piscinae.jpg" },
+  { top: 70, left: 63, nome: "Piscina F", local: "Montijo", imagem: "piscinaf.jpg" }
+  // ... outros que precisares!
+];
+
+  
 const conteudosCartao = {
   2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png', []),
-  3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', pins3),
-  4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png', []),
+  3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', []),
+  4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png', pins4),
   5: getCartaoModal('cirlcart-removebg-preview.png', 'mapacirl.png', []),
   6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png', [])
 };
