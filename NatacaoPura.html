@@ -1,703 +1,405 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Imagens Coladas com Retângulos e HUD</title>
-  <style>
-    html, body {
-      margin: 0; padding: 0;
-      width: 100vw; height: 100vh;
-      background: #1a1817;
-      overflow: hidden;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Arial, sans-serif;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100vw;
-    }
-    .top-hud {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 58px;
-      background: rgba(18,26,36,0.93);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-      z-index: 9999;
-      border-bottom: 2.5px solid #42aaff;
-      box-shadow: 0 2px 18px #12244477;
-      user-select: none;
-    }
-    .hud-left {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-    .hud-time-date {
-      color: #e9fae;
-      font-size: 1.07em;
-      letter-spacing: 0.1px;
-      font-variant-numeric: tabular-nums;
-      font-family: 'Segoe UI Mono', monospace;
-      min-width: 115px;
-      text-align: left;
-      text-shadow: 1px 1px 2px #06060848;
-      user-select: text;
-    }
-    .left-decor-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 9px;
-      margin-left: 18px;
-      border: 2.5px solid #42aaff;
-      box-shadow: 0 2px 10px #45baff;
-      background: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-    .left-decor-btn svg {
-      width: 20px;
-      height: 20px;
-    }
-    .left-decor-btn:hover {
-      background: #428cff22;
-    }
-    .hud-center {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-      margin-left: auto;
-      margin-right: 80px;
-    }
-    .profile-area {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      background: rgba(42, 62, 94, 0.82);
-      border-radius: 9px;
-      padding: 5px 55px 5px 55px;
-      box-shadow: 0 4px 8px #0a164f94;
-      cursor: pointer;
-      border: 1.5px solid #42aaff60;
-      min-width: 0;
-      max-width: 260px;
-      user-select: none;
-    }
-    .profile-img {
-      width: 38px;
-      height: 38px;
-      border-radius: 7px;
-      object-fit: cover;
-      border: 2.5px solid #42aaff;
-      box-shadow: 0 2px 8px #0d59bf96;
-      background: #202a41;
-    }
-    .profile-name {
-      color: #f3f8fc;
-      font-weight: 600;
-      font-size: 1em;
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      user-select: text;
-    }
-    .conteudo-wrapper {
-      position: relative;
-      flex: 1 1 auto;
-      margin-top: 58px;
-      width: 100vw;
-      height: calc(100vh - 58px);
-      display: flex;
-      overflow: hidden;
-    }
-    .sala-imagens {
-      display: flex;
-      flex-direction: row;
-      align-items: stretch;
-      width: 100%;
-      height: 100%;
-      font-size: 0;
-      position: relative;
-    }
-    .sala-imagens img {
-      flex: 1;
-      width: auto;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      margin: 0;
-      border: none;
-      padding: 0;
-      box-shadow: none;
-      min-width: 0;
-      min-height: 0;
-    }
-    .separador {
-      width: 3mm;
-      min-width: 3mm;
-      height: 100%;
-      background: #878677;
-      display: block;
-      border: none;
-      margin: 0;
-      padding: 0;
-      flex: 0 0 3mm;
-    }
-    @media (max-width: 900px) {
-      .sala-imagens {
-        flex-direction: column;
-        height: auto;
-        width: 100%;
-      }
-      .sala-imagens img,
-      .separador {
-        width: 100vw !important;
-        max-width: 100vw;
-        height: auto;
-      }
-      .separador {
-        height: 3mm;
-        max-height: 3mm;
-        min-height: 3mm;
-        width: 100vw;
-      }
-    }
-    .sala-imagens img[onclick] {
-      cursor: pointer;
-      transition: box-shadow 0.15s, transform 0.15s;
-    }
-    .sala-imagens img[onclick]:hover {
-      box-shadow: 0 0 20px #ffd70088, 0 0 0 2.5px #ffd700dd;
-      transform: translateY(-4px) scale(1.035);
-      outline: 0;
-    }
-    .dica-msg {
-      position: absolute;
-      left: 50%;
-      top: 28px;
-      background: #fff8ce;
-      color: #473c08;
-      font-weight: bold;
-      padding: 8px 17px;
-      border-radius: 13px;
-      font-size: 1.05em;
-      box-shadow: 0 2px 10px #0000006e;
-      opacity: 0.96;
-      pointer-events: none;
-      z-index: 50;
-      transform: translateX(-50%);
-      transition: opacity 0.17s, top 0.17s;
-      animation: piscarDica 1.6s infinite alternate;
-      white-space: nowrap;
-    }
-    @keyframes piscarDica {
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0.5;
-      }
-    }
-    #screen-fade {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: black;
-      opacity: 1;
-      pointer-events: none;
-      transition: opacity 0.8s ease-out;
-      z-index: 99999;
-    }
-    .cartao-modal-bg {
-      position: fixed;
-      inset: 0;
-      background: rgba(12, 13, 20, 0.85);
-      z-index: 999999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .cartao-modal-bg.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .cartao-modal {
-      width: 1100px;
-      height: 520px;
-      display: flex;
-      background: linear-gradient(135deg, #2346a5 60%, #0b101c 100%);
-      color: #e9f8ff;
-      border: 2.5px solid #42b8e1;
-      box-shadow: 0 8px 35px rgba(18, 62, 132, 0.6);
-      border-radius: 16px;
-      overflow: hidden;
-      position: relative;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      min-width: 320px;
-      min-height: 200px;
-      max-width: 98vw;
-      max-height: 96vh;
-      align-items: stretch;
-      flex-direction: row;
-    }
-    .imagem-cartao-lado-esq {
-      width: 240px;
-      height: 100%;
-      background: #131e39;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      padding-left: 10px;
-      padding-right: 10px;
-      box-sizing: border-box;
-    }
-    .imagem-cartao-lado-esq img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #119eff;
-    }
-    .conteudo-cartao {
-      flex: 1;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: stretch;
-      gap: 20px;
-      padding: 24px;
-      box-sizing: border-box;
-      position: relative;
-    }
-    .mapa-wrapper {
-      position: relative;
-      width: 400px;
-      height: 460px;
-      flex-shrink: 0;
-    }
-    .mapa-wrapper img {
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.75);
-      user-select: none;
-    }
-    .pionese {
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/2/2f/Red_pog.svg') no-repeat center/contain;
-      cursor: pointer;
-      z-index: 2;
-      user-select: none;
-      transition: transform 0.15s ease;
-    }
-    .pionese:hover {
-      transform: scale(1.3);
-    }
-    .popup-piscina {
-      position: absolute;
-      top: 0;
-      left: 0;
-      min-width: 200px;
-      background: #f0f6ff;
-      border-radius: 14px;
-      border: 2px solid #0079ca;
-      box-shadow: 0 6px 25px rgba(0, 0, 100, 0.35);
-      padding: 12px 16px 16px 16px;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 0.95em;
-      color: #003366;
-      z-index: 10;
-      user-select: none;
-      display: none;
-    }
-    .popup-piscina.active {
-      display: block;
-    }
-    .popup-piscina .medalhas {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-    .medalha {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .medalha.ouro {
-      color: #d4af37;
-    }
-    .medalha.prata {
-      color: #c0c0c0;
-    }
-    .medalha.bronze {
-      color: #cd7f32;
-    }
-    .popup-piscina img {
-      width: 100%;
-      height: 90px;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 8px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.3);
-    }
-    .popup-piscina .nome-piscina {
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.1em;
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-    .popup-close-btn {
-      position: absolute;
-      top: 4px;
-      right: 8px;
-      background: transparent;
-      border: none;
-      font-weight: 700;
-      font-size: 1.3em;
-      color: #0079ca;
-      cursor: pointer;
-      border-radius: 8px;
-      padding: 0 6px;
-      transition: background-color 0.2s ease;
-    }
-    .popup-close-btn:hover {
-      background-color: #cce7ff;
-    }
-    .cartao-modal .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      background: transparent;
-      border: none;
-      font-size: 1.6em;
-      color: #0079ca;
-      cursor: pointer;
-      border-radius: 10px;
-      padding: 0 8px;
-      line-height: 1;
-      font-weight: bold;
-      transition: background-color 0.2s;
-      z-index: 20;
-    }
-    .cartao-modal .close-btn:hover {
-      background-color: #0e4bbf;
-      color: white;
-    }
-    @media (max-width: 930px) {
-      .cartao-modal {
-        width: 90vw;
-        height: auto;
-        flex-direction: column;
-        max-height: 95vh;
-      }
-      .imagem-cartao-lado-esq {
-        width: 100%;
-        height: 240px;
-        padding: 10px 0;
-      }
-      .imagem-cartao-lado-esq img {
-        height: 100%;
-        width: auto;
-      }
-      .conteudo-cartao {
-        flex-direction: column;
-        padding: 15px 10px;
-        gap: 12px;
-        overflow-y: auto;
-      }
-      .mapa-wrapper {
-        width: 100%;
-        height: 300px;
-        margin: 0 auto;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>Imagens Coladas com Retângulos e HUD</title>
+<style>
+html, body {
+margin: 0; padding: 0;
+width: 100vw; height: 100vh;
+background: #1a1817;
+overflow: hidden;
+box-sizing: border-box;
+font-family: 'Segoe UI', Arial, sans-serif;
+}
+body {
+display: flex;
+flex-direction: column;
+height: 100vh;
+width: 100vw;
+}
+.top-hud {
+position: fixed;
+top: 0; left: 0;
+width: 100vw;
+height: 58px;
+background: rgba(18,26,36,0.93);
+display: flex; align-items: center; justify-content: space-between;
+padding: 0 32px;
+z-index: 9999;
+border-bottom: 2.5px solid #42aaff;
+box-shadow: 0 2px 18px #12244477;
+user-select: none;
+}
+.hud-left { display: flex; align-items: center; gap: 18px; }
+.hud-time-date {
+color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
+font-family: 'Segoe UI Mono', monospace;
+min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
+user-select: text;
+}
+.left-decor-btn {
+width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
+border: 2.5px solid #42aaff;
+box-shadow: 0 2px 10px #45baff88;
+background: none;
+display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+transition: background-color 0.2s ease;
+}
+.left-decor-btn svg { width: 20px; height: 20px; }
+.left-decor-btn:hover {
+background: #428cff22;
+}
+.hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
+.profile-area {
+display: flex; align-items: center; gap: 11px;
+background: rgba(42,62,94,0.82); border-radius: 9px;
+padding: 5px 55px 5px 55px;
+box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
+cursor: pointer; border: 1.5px solid #42aaff60;
+min-width: 0; max-width: 260px;
+user-select: none;
+}
+.profile-img {
+width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
+border: 2.5px solid #42aaff;
+box-shadow: 0 2px 12px #0a79e058; background: #202a41;
+}
+.profile-name {
+color: #f3f8fc; font-weight: 600; font-size: 1em;
+max-width: 120px; overflow: hidden;
+text-overflow: ellipsis; white-space: nowrap;
+user-select: text;
+}
+.conteudo-wrapper {
+position: relative;
+flex: 1 1 auto;
+margin-top: 58px;
+width: 100vw;
+height: calc(100vh - 58px);
+display: flex;
+overflow: hidden;
+}
+.sala-imagens {
+display: flex;
+flex-direction: row;
+align-items: stretch;
+width: 100%;
+height: 100%;
+font-size: 0;
+position: relative;
+}
+.sala-imagens img {
+flex: 1 1 0;
+width: 0;
+height: 100%;
+object-fit: cover;
+display: block;
+margin: 0; border: none; padding: 0;
+box-shadow: none;
+min-width: 0; min-height: 0;
+}
+.separador {
+width: 3mm;
+min-width: 3mm;
+height: 100%;
+background: #878677;
+display: block;
+border: none;
+margin: 0; padding: 0;
+flex: 0 0 3mm;
+}
+@media (max-width:900px) {
+.sala-imagens { flex-direction: column; height: 100%; width: 100%; }
+.sala-imagens img, .separador {
+width: 100vw !important; max-width: 100vw;
+height: auto;
+}
+.separador {
+height: 3mm; max-height: 3mm; min-height: 3mm; width: 100vw;
+}
+}
+.sala-imagens img[onclick] {
+cursor: pointer;
+transition: box-shadow 0.15s, transform 0.15s;
+}
+.sala-imagens img[onclick]:hover {
+box-shadow: 0 0 20px #ffd70088, 0 0 0 2.5px #ffd700dd;
+transform: translateY(-4px) scale(1.035);
+outline: 0;
+}
+.dica-msg {
+position: absolute;
+left: 50%; top: 28px;
+background: #fff8ce;
+color: #473c08;
+font-weight: bold;
+padding: 8px 17px;
+border-radius: 13px;
+font-size: 1.05em;
+box-shadow: 0 2px 10px #0003;
+opacity: 0.96;
+pointer-events: none;
+z-index: 30;
+transform: translateX(-50%);
+transition: opacity 0.17s, top 0.17s;
+animation: piscarDica 1.6s infinite alternate;
+white-space: nowrap;
+}
+@keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
+
+#screen-fade {
+position: fixed;
+top: 0; left: 0; width: 100vw; height: 100vh;
+background: black;
+opacity: 1;
+pointer-events: none;
+transition: opacity 0.8s ease-out;
+z-index: 10000;
+}
+.cartao-modal-bg {
+position: fixed;
+inset: 0;
+background: rgba(12,13,20,0.67);
+z-index: 10000;
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s ease;
+}
+.cartao-modal-bg.show {
+opacity: 1;
+pointer-events: auto;
+}
+/* Cartão/modal com imagem à esquerda */
+.cartao-modal {
+width: 1100;
+height: 520;
+display: flex;
+background: linear-gradient(135deg, #2346a5 60%, #0b101c 100%);
+color: #e9f8ff;
+border: 2.5px solid #2efaff60;
+box-shadow: 0 7px 32px #0008, 0 2px 0 #ccecff44 inset, 0 0 22px #227aff77;
+border-radius: 0;
+overflow: hidden;
+position: relative;
+font-family: 'Segoe UI', Arial, sans-serif;
+min-width: 320px;
+min-height: 200px;
+max-width: 98vw;
+max-height: 96vh;
+align-items: stretch;
+justify-content: flex-start;
+flex-direction: row;
+}
+.imagem-cartao-lado-esq {
+width: 240px; /* Largura da coluna esquerda da imagem */
+height: 100%;
+background: #131e39;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
+.imagem-cartao-lado-esq img {
+width: 95%;
+height: 95%;
+object-fit: contain;
+display: block;
+border: none;
+border-radius: 0;
+}
+.conteudo-cartao {
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+padding: 18px 30px;
+min-width: 0;
+}
+.cartao-fechar {
+position: absolute;
+top: 11px; right: 15px;
+background: none;
+border: none;
+font-size: 1.5em;
+color: #e9f8ff;
+font-weight: bold;
+cursor: pointer;
+border-radius: 5px;
+transition: background .15s;
+line-height: 1;
+z-index: 2;
+}
+.cartao-fechar:hover {
+background: #428cff33;
+color: #b02;
+}
+</style>
 </head>
 <body>
-  <div id="screen-fade"></div>
+<div id="screen-fade"></div>
 
-  <div class="top-hud">
-    <div class="hud-left">
-      <span class="hud-time-date" id="hud-time-date"></span>
-      <button class="left-decor-btn" title="Voltar ao menu inicial" aria-label="Voltar ao menu inicial">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 11.5L12 4l9 7.5"/>
-          <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
-          <path d="M9 22V12h6v10"/>
-        </svg>
-      </button>
-    </div>
-    <div class="hud-center">
-      <div class="profile-area" title="Meu Perfil" tabindex="0">
-        <img src="Áreas (6).png" alt="Perfil" class="profile-img" />
-        <span class="profile-name">Luís Correia</span>
-      </div>
-    </div>
-    <div class="hud-right"></div>
-  </div>
+<div class="top-hud">
+<div class="hud-left">
+<span class="hud-time-date" id="hudTimeDate"></span>
+<button class="left-decor-btn" title="Voltar ao menu inicial" aria-label="Voltar ao menu inicial">
+<svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M3 11.5L12 4l9 7.5"/>
+<path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
+<path d="M9 22V12h6v10"/>
+</svg>
+</button>
+</div>
+<div class="hud-center">
+<div class="profile-area" title="Meu Perfil" tabindex="0">
+<img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
+<span class="profile-name">Luís Correia</span>
+</div>
+</div>
+<div class="hud-right"></div>
+</div>
+<div class="conteudo-wrapper">
+<div class="sala-imagens" role="list">
+<img src="ab13e542-fc6d-4634-9cd1-8e8dd6b08065.png" alt="imagem 1" role="listitem" tabindex="-1">
+<div class="separador" aria-hidden="true"></div>
+<img src="cmb.png" alt="imagem 2" onclick="abrirCartao(2)" role="listitem" tabindex="0">
+<div class="separador" aria-hidden="true"></div>
+<img src="ANA.png" alt="imagem 3" onclick="abrirCartao(3)" role="listitem" tabindex="0">
+<div class="separador" aria-hidden="true"></div>
+<img src="SFUAP.png" alt="imagem 4" onclick="abrirCartao(4)" role="listitem" tabindex="0">
+<div class="separador" aria-hidden="true"></div>
+<img src="CIRL.png" alt="imagem 5" onclick="abrirCartao(5)" role="listitem" tabindex="0">
+<div class="separador" aria-hidden="true"></div>
+<img src="any.png" alt="imagem 6" onclick="abrirCartao(6)" role="listitem" tabindex="0">
+</div>
+</div>
 
-  <div class="conteudo-wrapper">
-    <div class="sala-imagens" role="list" aria-label="Lista de imagens de clubes">
-      <img src="abac46d8.png" alt="Imagem 1" role="listitem" tabindex="-1" />
-      <div class="separador" aria-hidden="true"></div>
-      <img src="cmb.png" alt="Imagem 2" role="listitem" tabindex="0" onclick="abrirCartao(2)"/>
-      <div class="separador" aria-hidden="true"></div>
-      <img src="ana.png" alt="Imagem 3" role="listitem" tabindex="0" onclick="abrirCartao(3)"/>
-      <div class="separador" aria-hidden="true"></div>
-      <img src="sfuap.png" alt="Imagem 4" role="listitem" tabindex="0" onclick="abrirCartao(4)"/>
-      <div class="separador" aria-hidden="true"></div>
-      <img src="cirle.png" alt="Imagem 5" role="listitem" tabindex="0" onclick="abrirCartao(5)"/>
-      <div class="separador" aria-hidden="true"></div>
-      <img src="any.png" alt="Imagem 6" role="listitem" tabindex="0" onclick="abrirCartao(6)"/>
-    </div>
-  </div>
+<script>
+// Atualiza o relógio no HUD
+function updateHudTime() {
+const el = document.getElementById('hudTimeDate');
+if (!el) return;
+const now = new Date();
+el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
+' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+}
+setInterval(updateHudTime, 1000);
+updateHudTime();
 
-  <script>
-    // Atualiza o relógio no HUD
-    function updateTime() {
-      const el = document.getElementById('hud-time-date');
-      if(!el) return;
-      const now = new Date();
-      el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) + ' ' + now.toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit' });
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
+// Botão voltar HUD
+document.querySelector('.left-decor-btn').addEventListener('click', () => {
+window.location.href = 'desporto.html';
+});
 
-    // Botão voltar
-    document.querySelector('.left-decor-btn').addEventListener('click', () => {
-      window.location.href = 'desporto.html';
-    });
+// Mensagem de dica ao passar nas imagens clicáveis
+document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
+let dica;
+img.addEventListener('mouseenter', function(e) {
+dica = document.createElement('div');
+dica.className = 'dica-msg';
+dica.textContent = 'Clica para ver o cartão!';
+const sala = document.querySelector('.sala-imagens');
+const imgRect = img.getBoundingClientRect();
+const salaRect = sala.getBoundingClientRect();
+dica.style.top = (imgRect.top - salaRect.top + 22) + 'px';
+dica.style.left = (imgRect.left - salaRect.left + imgRect.width/2) + 'px';
+sala.appendChild(dica);
+});
+img.addEventListener('mouseleave', function(e) {
+if (dica && dica.parentNode) dica.parentNode.removeChild(dica);
+dica = null;
+});
+img.addEventListener('keydown', function(e) {
+if(e.key === "Enter" || e.key === " ") {
+abrirCartao(parseInt(e.target.getAttribute('onclick')?.match(/\d+/)?.[0]));
+}
+});
+});
 
-    // Tooltip mensagem
-    document.querySelectorAll('.sala-imagens img[onclick]').forEach(img => {
-      let tooltip;
-      img.addEventListener('mouseenter', e => {
-        tooltip = document.createElement('div');
-        tooltip.className = 'dica-msg';
-        tooltip.textContent = 'Clica para ver o cartão!';
-        const sala = document.querySelector('.sala-imagens');
-        const rect = img.getBoundingClientRect();
-        const salaRect = sala.getBoundingClientRect();
-        tooltip.style.top = `${rect.top - salaRect.top + 22}px`;
-        tooltip.style.left = `${rect.left - salaRect.left + rect.width/2}px`;
-        sala.appendChild(tooltip);
-      });
-      img.addEventListener('mouseleave', e => {
-        if(tooltip) tooltip.remove();
-      });
-      img.addEventListener('keydown', e => {
-        if(e.key === 'Enter' || e.key === ' ') {
-          abrirCartao(parseInt(e.target.getAttribute('onclick').match(/\d+/)[0]));
-        }
-      });
-    });
+const conteudosCartao = {
+2: `
+<div class="imagem-cartao-lado-esq">
+<img src="cmbcart-removebg-preview.png" alt="Imagem Lado Esquerdo">
+</div>
+<div class="conteudo-cartao"></div>
+`,
+3: `
+<div class="imagem-cartao-lado-esq">
+<img src="anacart-removebg-preview.png" alt="Imagem Lado Esquerdo">
+</div>
+<div class="conteudo-cartao"></div>
+`,
+4: `
+<div class="imagem-cartao-lado-esq">
+<img src="sfuapcart-removebg-preview.png" alt="Imagem Lado Esquerdo">
+</div>
+<div class="conteudo-cartao"></div>
+`,
+5: `
+<div class="imagem-cartao-lado-esq">
+<img src="cirlcart-removebg-preview.png" alt="Imagem Lado Esquerdo">
+</div>
+<div class="conteudo-cartao"></div>
+`,
+6: `
+<div class="imagem-cartao-lado-esq">
+<img src="anycart-removebg-preview.png" alt="Imagem Lado Esquerdo">
+</div>
+<div class="conteudo-cartao"></div>
+`
+};
 
-    // Dados piscinas para cada local
-    const dadosPiscinasCartao = {
-      2: {
-        lisboa: { imagem: 'piscina-lisboa.jpg', nome: 'Piscina do Jamor', medalhas: { ouro: 1, prata: 0, bronze: 2 } },
-        setubal: { imagem: 'piscina-setubal.jpg', nome: 'Piscinas Municipais de Setúbal', medalhas: { ouro: 0, prata: 2, bronze: 1 } },
-      },
-      3: {
-        porto: { imagem: 'piscina-porto.jpg', nome: 'Piscina Campanhã', medalhas: { ouro: 1, prata: 1, bronze: 0 } },
-        coimbra: { imagem: 'piscina-coimbra.jpg', nome: 'Piscina Coimbra', medalhas: { ouro: 0, prata: 0, bronze: 2 } },
-      },
-      4: {
-        lisboa: { imagem: 'piscina-lisboa.jpg', nome: 'Piscina do Jamor', medalhas: { ouro: 2, prata: 1, bronze: 1 } },
-        faro: { imagem: 'piscina-faro.jpg', nome: 'Piscina Faro', medalhas: { ouro: 0, prata: 0, bronze: 1 } },
-      },
-      5: {
-        setubal: { imagem: 'piscina-setubal.jpg', nome: 'Piscinas Municipais Setúbal', medalhas: { ouro: 3, prata: 2, bronze: 0 } },
-        evora: { imagem: 'piscina-evora.jpg', nome: 'Piscina Évora', medalhas: { ouro: 0, prata: 0, bronze: 1 } },
-      },
-      6: {
-        braga: { imagem: 'piscina-braga.jpg', nome: 'Piscina Braga', medalhas: { ouro: 1, prata: 0, bronze: 2 } },
-      }
-    };
+// Abrir o modal com imagem à esquerda
+function abrirCartao(idx) {
+const conteudo = conteudosCartao[idx] || "";
+const bg = document.createElement('div');
+bg.className = 'cartao-modal-bg';
+bg.setAttribute('tabindex', '-1');
+bg.onclick = function(e){
+if (e.target === bg) fecharCartao(bg);
+};
+const box = document.createElement('div');
+box.className = 'cartao-modal';
+box.tabIndex = 0;
+box.innerHTML = conteudo +
+`<button class="cartao-fechar" title="Fechar" aria-label="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
+bg.appendChild(box);
+document.body.appendChild(bg);
 
-    // Conteúdos dos cartões com mapas e pins
-    const conteudosCartao = {
-      2: /*html*/`
-        <div class="imagem-cartao-lado-esq">
-          <img src="cmb-removebg.png" alt="CMB Clube">
-        </div>
-        <div class="conteudo-cartao cartao2">
-          <div class="mapa-wrapper">
-            <img class="mapa-img" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Portugal_location_map.svg" alt="Mapa de Portugal" />
-            <span class="pionese pionese-lisboa" data-local="lisboa" style="left: 60%; top: 84%;"></span>
-            <span class="pionese pionese-setubal" data-local="setubal" style="left: 61%; top: 95%;"></span>
-          </div>
-        </div>
-      `,
-      3: /*html*/`
-        <div class="imagem-cartao-lado-esq">
-          <img src="ana-removebg.png" alt="Ana Clube">
-        </div>
-        <div class="conteudo-cartao cartao3">
-          <div class="mapa-wrapper">
-            <img class="mapa-img" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Portugal_location_map.svg" alt="Mapa de Portugal" />
-            <span class="pionese pionese-porto" data-local="porto" style="left: 50%; top: 18%;"></span>
-            <span class="pionese pionese-coimbra" data-local="coimbra" style="left: 55%; top: 43%;"></span>
-          </div>
-        </div>
-      `,
-      4: /*html*/`
-        <div class="imagem-cartao-lado-esq">
-          <img src="sfuap-removebg.png" alt="SFUAP Clube">
-        </div>
-        <div class="conteudo-cartao cartao4">
-          <div class="mapa-wrapper">
-            <img class="mapa-img" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Portugal_location_map.svg" alt="Mapa de Portugal" />
-            <span class="pionese pionese-lisboa" data-local="lisboa" style="left: 60%; top: 84%;"></span>
-            <span class="pionese pionese-faro" data-local="faro" style="left: 62%; top: 100%;"></span>
-          </div>
-        </div>
-      `,
-      5: /*html*/`
-        <div class="imagem-cartao-lado-esq">
-          <img src="cirle-removebg.png" alt="CIRLE Clube">
-        </div>
-        <div class="conteudo-cartao cartao5">
-          <div class="mapa-wrapper">
-            <img class="mapa-img" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Portugal_location_map.svg" alt="Mapa de Portugal" />
-            <span class="pionese pionese-setubal" data-local="setubal" style="left: 61%; top: 95%;"></span>
-            <span class="pionese pionese-evora" data-local="evora" style="left: 70%; top: 68%;"></span>
-          </div>
-        </div>
-      `,
-      6: /*html*/`
-        <div class="imagem-cartao-lado-esq">
-          <img src="any-removebg.png" alt="Qualquer Clube">
-        </div>
-        <div class="conteudo-cartao cartao6">
-          <div class="mapa-wrapper">
-            <img class="mapa-img" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Portugal_location_map.svg" alt="Mapa de Portugal" />
-            <span class="pionese pionese-braga" data-local="braga" style="left: 48%; top: 8%;"></span>
-          </div>
-        </div>
-      `
-    };
-
-    // Função para abrir o cartão/modal
-    function abrirCartao(idx) {
-      const contentHTML = conteudosCartao[idx] || '';
-      const bg = document.createElement('div');
-      bg.className = 'cartao-modal-bg';
-      bg.tabIndex = -1;
-      bg.onclick = event => {
-        if (event.target === bg) fecharCartao(bg);
-      };
-
-      const modal = document.createElement('div');
-      modal.className = 'cartao-modal';
-      modal.innerHTML = contentHTML + `<button class="close-btn" title="Fechar" aria-label="Fechar" onclick="fecharCartaoModal(event)">×</button>`;
-      bg.appendChild(modal);
-      document.body.appendChild(bg);
-
-      requestAnimationFrame(() => {
-        bg.classList.add('show');
-        modal.focus();
-        inicializaPioneses(modal, idx);
-      });
-    }
-
-    // Função para fechar o cartão/modal
-    function fecharCartao(bg) {
-      if (!bg) return;
-      bg.classList.remove('show');
-      bg.addEventListener('transitionend', ev => {
-        if (bg.parentNode) bg.parentNode.removeChild(bg);
-      });
-    }
-
-    function fecharCartaoModal(ev) {
-      ev.stopPropagation();
-      const bg = ev.target.closest('.cartao-modal-bg');
-      fecharCartao(bg);
-    }
-
-    // Inicializa eventos e popup dos pioneses
-    function inicializaPioneses(modal, cardIdx) {
-      if (!modal) return;
-      const pins = modal.querySelectorAll('.pionese');
-      pins.forEach(pin => {
-        pin.onclick = ev => {
-          ev.stopPropagation();
-
-          // Remove qualquer popup aberto
-          modal.querySelectorAll('.popup-piscina.active').forEach(p => p.remove());
-
-          const local = pin.dataset.local;
-          const dados = dadosPiscinasCartao[cardIdx][local];
-          if (!dados) return;
-
-          let medalhasHTML = '';
-          if (dados.medalhas) {
-            medalhasHTML = `<div class="medalhas">` +
-              (dados.medalhas.ouro ? `<div class="medalha ouro">🥇 ${dados.medalhas.ouro}</div>` : '') +
-              (dados.medalhas.prata ? `<div class="medalha prata">🥈 ${dados.medalhas.prata}</div>` : '') +
-              (dados.medalhas.bronze ? `<div class="medalha bronze">🥉 ${dados.medalhas.bronze}</div>` : '') +
-              `</div>`;
-          }
-
-          const popup = document.createElement('div');
-          popup.className = 'popup-piscina active';
-          popup.style.left = (pin.offsetLeft + 32) + 'px';
-          popup.style.top = (pin.offsetTop - 42) + 'px';
-          popup.innerHTML = `<button class="popup-close-btn" title="Fechar" aria-label="Fechar" onclick="this.parentElement.remove()">×</button>` +
-            medalhasHTML +
-            `<img src="${dados.imagem}" alt="${dados.nome}" />` +
-            `<div class="nome-piscina">${dados.nome}</div>`;
-
-          // Insert popup after pin in the map wrapper
-          pin.parentElement.appendChild(popup);
-
-          // Click outside closes popup
-          setTimeout(() => {
-            document.addEventListener('click', function onDocClick(e) {
-              if (!popup.contains(e.target)) {
-                popup.remove();
-                document.removeEventListener('click', onDocClick);
-              }
-            });
-          }, 0);
-        };
-      });
-    }
-
-    // Inicialização do relógio e fade
-    window.addEventListener('load', () => {
-      updateTime();
-      const fade = document.getElementById('screen-fade');
-      if (fade) {
-        setTimeout(() => {
-          fade.style.opacity = '0';
-        }, 100);
-        fade.addEventListener('transitionend', () => {
-          fade.remove();
-        });
-      }
-    });
-  </script>
+requestAnimationFrame(() => {
+bg.classList.add('show');
+box.focus();
+});
+}
+// Fechar o modal com fade out
+function fecharCartao(bg) {
+if (!bg) return;
+bg.classList.remove('show');
+bg.addEventListener('transitionend', function handler() {
+if (bg.parentNode) bg.parentNode.removeChild(bg);
+bg.removeEventListener('transitionend', handler);
+});
+}
+function fecharCartaoModal(e) {
+e.stopPropagation();
+const modalBg = e.target.closest('.cartao-modal-bg');
+fecharCartao(modalBg);
+}
+// Fade up suave ao iniciar a página
+window.addEventListener('load', () => {
+const screenFade = document.getElementById('screen-fade');
+if (!screenFade) return;
+setTimeout(() => {
+screenFade.style.opacity = '0';
+}, 100);
+screenFade.addEventListener('transitionend', () => {
+screenFade.remove();
+});
+});
+</script>
 </body>
 </html>
