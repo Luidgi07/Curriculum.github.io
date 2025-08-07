@@ -173,6 +173,7 @@
       opacity: 1;
       pointer-events: auto;
     }
+    /* Cartão/modal com imagem à esquerda */
     .cartao-modal {
       width: 650px;
       height: 420px;
@@ -185,13 +186,39 @@
       overflow: hidden;
       position: relative;
       font-family: 'Segoe UI', Arial, sans-serif;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
       min-width: 320px;
       min-height: 200px;
       max-width: 98vw;
       max-height: 96vh;
+      align-items: stretch;
+      justify-content: flex-start;
+      flex-direction: row;
+    }
+    .imagem-cartao-lado-esq {
+      width: 240px; /* Ajuste aqui a largura da coluna esquerda */
+      height: 100%;
+      background: #131e39;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .imagem-cartao-lado-esq img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border: none;
+      border-radius: 0;
+    }
+    .conteudo-cartao {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 18px 30px;
+      min-width: 0;
     }
     .cartao-fechar {
       position: absolute;
@@ -293,15 +320,39 @@
       });
     });
 
-    // Conteúdo vazio para o cartão/modal
+    // Cartão/modal com imagem à esquerda (substitua o src para o seu)
+    const imagemLadoEsqSrc = "https://upload.wikimedia.org/wikipedia/commons/7/7c/SFUAP_logo.png"; // Substitua aqui!
+
     const conteudosCartao = {
-      2: ``,
-      3: ``,
-      4: ``,
-      5: ``
+      2: `
+        <div class="imagem-cartao-lado-esq">
+          <img src="${imagemLadoEsqSrc}" alt="Imagem Lado Esquerdo">
+        </div>
+        <div class="conteudo-cartao">
+          <!-- Coloque aqui, se quiser, texto/dados específicos para este cartão -->
+        </div>
+      `,
+      3: `
+        <div class="imagem-cartao-lado-esq">
+          <img src="${imagemLadoEsqSrc}" alt="Imagem Lado Esquerdo">
+        </div>
+        <div class="conteudo-cartao"></div>
+      `,
+      4: `
+        <div class="imagem-cartao-lado-esq">
+          <img src="${imagemLadoEsqSrc}" alt="Imagem Lado Esquerdo">
+        </div>
+        <div class="conteudo-cartao"></div>
+      `,
+      5: `
+        <div class="imagem-cartao-lado-esq">
+          <img src="${imagemLadoEsqSrc}" alt="Imagem Lado Esquerdo">
+        </div>
+        <div class="conteudo-cartao"></div>
+      `
     };
 
-    // Abrir o modal vazio com fade in
+    // Abrir o modal com imagem à esquerda
     function abrirCartao(idx) {
       const conteudo = conteudosCartao[idx] || "";
       const bg = document.createElement('div');
@@ -323,7 +374,6 @@
         box.focus();
       });
     }
-
     // Fechar o modal com fade out
     function fecharCartao(bg) {
       if (!bg) return;
@@ -333,13 +383,11 @@
         bg.removeEventListener('transitionend', handler);
       });
     }
-
     function fecharCartaoModal(e) {
       e.stopPropagation();
       const modalBg = e.target.closest('.cartao-modal-bg');
       fecharCartao(modalBg);
     }
-
     // Fade up suave ao iniciar a página
     window.addEventListener('load', () => {
       const screenFade = document.getElementById('screen-fade');
