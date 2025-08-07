@@ -348,23 +348,23 @@ document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
   });
 });
 
-// NOVO: Layout igual ao da imagem para todos os cartões
 const conteudosCartao = {
-  2: getCartaoModal('cmbcart-removebg-preview.png'),
-  3: getCartaoModal('anacart-removebg-preview.png'),
-  4: getCartaoModal('sfuapcart-removebg-preview.png'),
-  5: getCartaoModal('cirlcart-removebg-preview.png'),
-  6: getCartaoModal('anycart-removebg-preview.png')
+  2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png'),
+  3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png'),
+  4: getCartaoModal('sfuapcart-removebg-preview.png', 'mapasfuap.png'),
+  5: getCartaoModal('cirlcart-removebg-preview.png', 'mapacirl.png'),
+  6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png')
 };
-// Função que gera o HTML do cartão/modal
-function getCartaoModal(imagemEsq) {
+
+// Atualizar a função para receber a imagem do mapa
+function getCartaoModal(imagemEsq, imagemMapa) {
   return `
     <div class="cartao-conteudo-flex">
       <div class="cartao-esq">
         <img src="${imagemEsq}" alt="Cartão">
       </div>
       <div class="cartao-centro">
-        <img src="mapasfuap.png" alt="Mapa Portugal"> 
+        <img src="${imagemMapa}" alt="Mapa Portugal"> 
       </div>
       <div class="cartao-dir">
         <button>Medalhas</button>
@@ -374,6 +374,7 @@ function getCartaoModal(imagemEsq) {
     </div>
   `;
 }
+
 
 // Abrir o modal com layout igual à imagem
 function abrirCartao(idx) {
