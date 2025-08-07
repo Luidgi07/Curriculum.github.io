@@ -147,7 +147,7 @@
       white-space: nowrap;
     }
     @keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
-    
+
     /* Usado no carregamento da página */
     #screen-fade {
       position: fixed; 
@@ -178,9 +178,8 @@
     }
 
     .cartao-modal {
-      /* Usa estilos do cartão FIFA */
-      width: 470px;
-      height: 320px;
+      width: 650px;
+      height: 420px;
       display: flex;
       background: linear-gradient(135deg, #2346a5 60%, #0b101c 100%);
       color: #e9f8ff;
@@ -191,9 +190,16 @@
       position: relative;
       font-family: 'Segoe UI', Arial, sans-serif;
       flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: 320px;
+      min-height: 200px;
+      max-width: 98vw;
+      max-height: 96vh;
+      /* Para responsividade */
     }
     .col-img {
-      width: 105px;
+      width: 150px;
       background: #1b3260;
       display: flex;
       flex-direction: column;
@@ -205,10 +211,10 @@
       position: relative;
     }
     .avatar-img {
-      width: 82px;
-      height: 110px;
+      width: 122px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 16px;
       background: #315282;
       border: 3px solid #23ddeccc;
       box-shadow: 0 7px 20px #22e8fd15;
@@ -223,24 +229,25 @@
       padding: 0;
     }
     .info-rect {
-      height: 50px;
+      height: 70px;
       display: flex;
       flex-direction: row;
       align-items: center;
       background: #183365ec;
       border-radius: 0;
-      padding: 4px 14px 4px 10px;
+      padding: 4px 34px 4px 18px;
       margin: 0;
-      gap: 11px;
+      gap: 18px;
+      font-size: 1.5em;
     }
     .club-logo-mini {
-      width: 34px;
-      height: 34px;
+      width: 58px;
+      height: 58px;
       object-fit: contain;
-      border-radius: 7px;
+      border-radius: 10px;
       background: #133969;
       border: 1.5px solid #24cff9;
-      margin-right: 5px;
+      margin-right: 10px;
       margin-left: 2px;
       flex-shrink: 0;
       box-shadow: 0 2px 5px #1be1fd11;
@@ -254,34 +261,35 @@
       min-width: 0;
     }
     .nome-pessoa {
-      font-size: 0.95em;
+      font-size: 1.15em;
       font-weight: bold;
       color: #f9f9ff;
-      margin-bottom: 1px;
-      letter-spacing: 0.4px;
+      margin-bottom: 7px;
+      letter-spacing: 0.5px;
       line-height: 1.1em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .club-nation {
-      font-size: 0.82em;
+      font-size: 1em;
       color: #a6e9ff;
       line-height: 1em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    /* Removidas as barras de loading dos atributos e medalhas */
-    /* Estilos para responsividade */
-    @media (max-width: 600px) {
+    @media (max-width: 750px) {
       .cartao-modal {
         flex-direction: column;
         width: 99vw;
         height: auto;
+        min-width: 0;
+        min-height: 0;
       }
       .col-img {
         width: 100%;
+        height: 180px;
         min-width: 0;
         flex-direction: row;
         justify-content: center;
