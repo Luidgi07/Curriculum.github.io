@@ -157,6 +157,7 @@ body {
   transition: opacity 0.8s ease-out;
   z-index: 10000;
 }
+/* Modal */
 .cartao-modal-bg {
   position: fixed;
   inset: 0;
@@ -173,66 +174,79 @@ body {
   opacity: 1;
   pointer-events: auto;
 }
-/* Cartão/modal com imagem à esquerda */
 .cartao-modal {
   width: 1100px;
   height: 520px;
-  display: flex;
   background: linear-gradient(135deg, #2346a5 60%, #0b101c 100%);
-  color: #e9f8ff;
   border: 2.5px solid #2efaff60;
   box-shadow: 0 7px 32px #0008, 0 2px 0 #ccecff44 inset, 0 0 22px #227aff77;
   border-radius: 0;
   overflow: hidden;
   position: relative;
   font-family: 'Segoe UI', Arial, sans-serif;
-  min-width: 320px;
-  min-height: 200px;
-  max-width: 98vw;
-  max-height: 96vh;
+  display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  flex-direction: row;
+  padding: 0;
 }
-.imagem-cartao-lado-esq {
-  width: 240px; /* Largura da coluna esquerda da imagem */
+.cartao-conteudo-flex {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
   height: 100%;
-  background: #131e39;
+}
+.cartao-esq {
+  width:210px;
+  background: #101c33;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
-.imagem-cartao-lado-esq img {
-  width: 95%;
-  height: 95%;
-  object-fit: contain;
-  display: block;
-  border: none;
-  border-radius: 0;
+.cartao-esq img {
+  width: 92%;
+  margin-left: 3px;
 }
-.conteudo-cartao {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.cartao-centro {
+  flex:1;
+  background: #7ed5fc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#13394e;
+  font-size:1.35em;
+  font-family: monospace;
+  text-align: center;
+}
+.cartao-centro img {
+  max-width: 92%;
+  max-height: 82%;
+}
+.cartao-dir {
+  width:270px;
+  background: #101e30;
+  display:flex;
+  flex-direction:column;
   justify-content: center;
-  align-items: flex-start;
-  padding: 18px 30px;
-  min-width: 0;
+  align-items: stretch;
+  gap: 27px;
+  padding: 20px 0;
 }
-/* Novo retângulo para fundo azul claro com mapa */
-.map-rectangle {
-  position: absolute;
-  top: 0; left: 0;
-  width: 1100px;
-  height: 520px;
-  background: #add8e6;
-  z-index: -1;
+.cartao-dir button {
+  background:#1a2e45;
+  border:none;
+  color:#e4f3ff;
+  font-size:1.11em;
+  font-family: 'Fira Mono', monospace;
+  border-radius:10px;
+  padding: 28px 0;
+  margin: 0 22px;
+  letter-spacing: 1.2px;
+  cursor:pointer;
+  transition: background .15s, color .15s;
 }
-.map-rectangle img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.cartao-dir button:hover {
+  background: #368df8;
+  color: #fff;
 }
 .cartao-fechar {
   position: absolute;
@@ -334,55 +348,36 @@ document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
   });
 });
 
+// NOVO: Layout igual ao da imagem para todos os cartões
 const conteudosCartao = {
-  2: `
-    <div class="map-rectangle">
-      <img src="mapa_portugal.png" alt="Mapa de Portugal">
-    </div>
-    <div class="imagem-cartao-lado-esq">
-      <img src="cmbcart-removebg-preview.png" alt="Imagem Lado Esquerdo">
-    </div>
-    <div class="conteudo-cartao"></div>
-  `,
-  3: `
-    <div class="map-rectangle">
-      <img src="mapa_portugal.png" alt="Mapa de Portugal">
-    </div>
-    <div class="imagem-cartao-lado-esq">
-      <img src="anacart-removebg-preview.png" alt="Imagem Lado Esquerdo">
-    </div>
-    <div class="conteudo-cartao"></div>
-  `,
-  4: `
-    <div class="map-rectangle">
-      <img src="mapa_portugal.png" alt="Mapa de Portugal">
-    </div>
-    <div class="imagem-cartao-lado-esq">
-      <img src="sfuapcart-removebg-preview.png" alt="Imagem Lado Esquerdo">
-    </div>
-    <div class="conteudo-cartao"></div>
-  `,
-  5: `
-    <div class="map-rectangle">
-      <img src="mapa_portugal.png" alt="Mapa de Portugal">
-    </div>
-    <div class="imagem-cartao-lado-esq">
-      <img src="cirlcart-removebg-preview.png" alt="Imagem Lado Esquerdo">
-    </div>
-    <div class="conteudo-cartao"></div>
-  `,
-  6: `
-    <div class="map-rectangle">
-      <img src="mapa_portugal.png" alt="Mapa de Portugal">
-    </div>
-    <div class="imagem-cartao-lado-esq">
-      <img src="anycart-removebg-preview.png" alt="Imagem Lado Esquerdo">
-    </div>
-    <div class="conteudo-cartao"></div>
-  `
+  2: getCartaoModal('cmbcart-removebg-preview.png'),
+  3: getCartaoModal('anacart-removebg-preview.png'),
+  4: getCartaoModal('sfuapcart-removebg-preview.png'),
+  5: getCartaoModal('cirlcart-removebg-preview.png'),
+  6: getCartaoModal('anycart-removebg-preview.png')
 };
+// Função que gera o HTML do cartão/modal
+function getCartaoModal(imagemEsq) {
+  return `
+    <div class="cartao-conteudo-flex">
+      <div class="cartao-esq">
+        <img src="${imagemEsq}" alt="Cartão">
+      </div>
+      <div class="cartao-centro">
+        "IMAGEM"
+        <!-- Ou, se quiseres o mapa -->
+        <!-- <img src="mapa_portugal.png" alt="Mapa Portugal"> -->
+      </div>
+      <div class="cartao-dir">
+        <button>Medalhas</button>
+        <button>lesoes</button>
+        <button>eventos</button>
+      </div>
+    </div>
+  `;
+}
 
-// Abrir o modal com imagem à esquerda e fundo mapa de Portugal
+// Abrir o modal com layout igual à imagem
 function abrirCartao(idx) {
   const conteudo = conteudosCartao[idx] || "";
   const bg = document.createElement('div');
@@ -432,3 +427,4 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
+
