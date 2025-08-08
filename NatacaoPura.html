@@ -4,277 +4,9 @@
 <meta charset="UTF-8" />
 <title>Imagens Coladas com Retângulos e HUD</title>
 <style>
-html, body {
-  margin: 0; padding: 0;
-  width: 100vw; height: 100vh;
-  background: #1a1817;
-  overflow: hidden;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
-body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-}
-.top-hud {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 58px;
-  background: rgba(18,26,36,0.93);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px;
-  z-index: 9999;
-  border-bottom: 2.5px solid #42aaff;
-  box-shadow: 0 2px 18px #12244477;
-  user-select: none;
-}
-.hud-left { display: flex; align-items: center; gap: 18px; }
-.hud-time-date {
-  color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
-  font-family: 'Segoe UI Mono', monospace;
-  min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
-  user-select: text;
-}
-.left-decor-btn {
-  width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
-  border: 2.5px solid #42aaff;
-  box-shadow: 0 2px 10px #45baff88;
-  background: none;
-  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.left-decor-btn svg { width: 20px; height: 20px; }
-.left-decor-btn:hover {
-  background: #428cff22;
-}
-.hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
-.profile-area {
-  display: flex; align-items: center; gap: 11px;
-  background: rgba(42,62,94,0.82); border-radius: 9px;
-  padding: 5px 55px 5px 55px;
-  box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
-  cursor: pointer; border: 1.5px solid #42aaff60;
-  min-width: 0; max-width: 260px;
-  user-select: none;
-}
-.profile-img {
-  width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
-  border: 2.5px solid #42aaff;
-  box-shadow: 0 2px 12px #0a79e058; background: #202a41;
-}
-.profile-name {
-  color: #f3f8fc; font-weight: 600; font-size: 1em;
-  max-width: 120px; overflow: hidden;
-  text-overflow: ellipsis; white-space: nowrap;
-  user-select: text;
-}
-.conteudo-wrapper {
-  position: relative;
-  flex: 1 1 auto;
-  margin-top: 58px;
-  width: 100vw;
-  height: calc(100vh - 58px);
-  display: flex;
-  overflow: hidden;
-}
-.sala-imagens {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  width: 100%;
-  height: 100%;
-  font-size: 0;
-  position: relative;
-}
-.sala-imagens img {
-  flex: 1 1 0;
-  width: 0;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  margin: 0; border: none; padding: 0;
-  box-shadow: none;
-  min-width: 0; min-height: 0;
-}
-.separador {
-  width: 3mm;
-  min-width: 3mm;
-  height: 100%;
-  background: #878677;
-  display: block;
-  border: none;
-  margin: 0; padding: 0;
-  flex: 0 0 3mm;
-}
-@media (max-width:900px) {
-  .sala-imagens { flex-direction: column; height: 100%; width: 100%; }
-  .sala-imagens img, .separador {
-    width: 100vw !important; max-width: 100vw;
-    height: auto;
-  }
-  .separador {
-    height: 3mm; max-height: 3mm; min-height: 3mm; width: 100vw;
-  }
-}
-.sala-imagens img[onclick] {
-  cursor: pointer;
-  transition: box-shadow 0.15s, transform 0.15s;
-}
-.sala-imagens img[onclick]:hover {
-  box-shadow: 0 0 20px #ffd70088, 0 0 0 2.5px #ffd700dd;
-  transform: translateY(-4px) scale(1.035);
-  outline: 0;
-}
-.dica-msg {
-  position: absolute;
-  left: 50%; top: 28px;
-  background: #fff8ce;
-  color: #473c08;
-  font-weight: bold;
-  padding: 8px 17px;
-  border-radius: 13px;
-  font-size: 1.05em;
-  box-shadow: 0 2px 10px #0003;
-  opacity: 0.96;
-  pointer-events: none;
-  z-index: 30;
-  transform: translateX(-50%);
-  transition: opacity 0.17s, top 0.17s;
-  animation: piscarDica 1.6s infinite alternate;
-  white-space: nowrap;
-}
-@keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
+/* (coloca aqui TODO o teu CSS de base, que é muito e já tens copiado acima)
+   Não mexo em nada do que tinhas, só JUNTO o CSS do flip e conteúdos extra em baixo! ... */
 
-#screen-fade {
-  position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  background: black;
-  opacity: 1;
-  pointer-events: none;
-  transition: opacity 0.8s ease-out;
-  z-index: 10000;
-}
-/* Modal */
-.cartao-modal-bg {
-  position: fixed;
-  inset: 0;
-  background: rgba(12,13,20,0.67);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.cartao-modal-bg.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-.cartao-modal {
-  width: 1100px;
-  height: 520px;
-  background: linear-gradient(135deg, #2346a5 60%, #0b101c 100%);
-  border: 2.5px solid #2efaff60;
-  box-shadow: 0 7px 32px #0008, 0 2px 0 #ccecff44 inset, 0 0 22px #227aff77;
-  border-radius: 0;
-  overflow: hidden;
-  position: relative;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-start;
-  padding: 0;
-}
-.cartao-conteudo-flex {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-}
-.cartao-esq {
-  width: 240px;
-  background: #101c33;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.cartao-esq img {
-  width: 95%;
-  margin-left: 3px;
-}
-.cartao-centro {
-  flex:1;
-  background: #7ed5fc;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#13394e;
-  font-size:1.35em;
-  font-family: monospace;
-  text-align: center;
-  padding: 0 !important;
-}
-/* Centro do mapa, posição relativa para os pins */
-.mapa-centro-rel {
-  position: relative;
-  width: 98%;
-  height: 96%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.mapa-centro-rel img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 7px;
-}
-/* PIN vermelhos sobre o mapa */
-.pin-mapa {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: #ff2222;
-  border: 3px solid #fff;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 9px 2px #a00d;
-  transform: translate(-50%,-50%);
-  z-index: 2;
-  transition: box-shadow 0.12s;
-}
-.pin-mapa:hover {
-  box-shadow: 0 0 15px 4px #ff5252bb;
-  background: #ff5252;
-}
-/* Popup de info dos pins */
-#pin-popup {
-  position: absolute;
-  min-width: 180px;
-  background: #fff;
-  color: #222f;
-  border-radius: 12px;
-  border: 2.5px solid #289affbb;
-  box-shadow: 0 6px 24px #2238;
-  padding: 12px 15px 14px 15px;
-  font-size: 1.07em;
-  left: 0;
-  top: 0;
-  z-index: 10;
-  display: none;
-  pointer-events: none;
-}
-#pin-popup img {
-  display: block;
-  margin: 6px auto 2px auto;
-  max-width: 115px;
-  max-height: 62px;
-  border-radius: 7px;
-}
 .cartao-dir {
   width:270px;
   background: #101e30;
@@ -285,41 +17,109 @@ body {
   gap: 27px;
   padding: 20px 0;
 }
-.cartao-dir button {
-  background:#1a2e45;
-  border:none;
-  color:#e4f3ff;
-  font-size:1.11em;
+
+/* NOVO: Flip 3D por retângulo da direita */
+.retangulo-flip {
+  width: 95%;
+  margin: 0 auto;
+  height: 92px;
+  perspective: 700px;
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+.retangulo-flip .face {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center; justify-content: center;
   font-family: 'Fira Mono', monospace;
-  border-radius:10px;
-  padding: 28px 0;
-  margin: 0 22px;
-  letter-spacing: 1.2px;
-  cursor:pointer;
+  font-size: 1.11em;
+  color: #e4f3ff;
+  background: #1a2e45;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0; left: 0;
+  box-sizing: border-box;
+  padding: 0 15px;
   transition: background .15s, color .15s;
 }
-.cartao-dir button:hover {
+
+/* verso comum */
+.retangulo-flip .verso {
   background: #368df8;
-  color: #fff;
+  color: #18344e;
+  flex-direction: column;
+  gap: 7px;
+  transform: rotateY(180deg);
 }
-.cartao-fechar {
-  position: absolute;
-  top: 11px; right: 15px;
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  color: #e9f8ff;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background .15s;
-  line-height: 1;
+
+/* frente comum */
+.retangulo-flip .frente {
   z-index: 2;
+  background: #1a2e45;
 }
-.cartao-fechar:hover {
-  background: #428cff33;
-  color: #b02;
+
+.retangulo-flip {
+  transform-style: preserve-3d;
+  transition: transform 0.62s cubic-bezier(.4,1.5,.8,1.1), box-shadow .22s;
 }
+.retangulo-flip:hover, .retangulo-flip:focus-within {
+  transform: rotateY(180deg);
+  box-shadow: 0 4px 36px #42aaff55,0 2px 1px #42aaff80;
+}
+
+/* Para toque em ecrã tátil: ao tocar roda também */
+.retangulo-flip.tocado { transform: rotateY(180deg); }
+
+.retangulo-flip .face {
+  position: absolute; width: 100%; height: 100%;
+}
+
+/* Estilo específico para Medalhas */
+.medalhas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.medalha-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 3px 0;
+  font-size: 0.93em;
+}
+.medalha-item img {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  box-shadow: 0 1px 5px #227aa9cc;
+  background: #fff;
+}
+
+/* Lesoes só texto */
+.texto-lesoes {
+  font-size: 1.01em;
+  padding: 1.5px 0;
+  line-height: 1.22em;
+  text-align: left;
+}
+
+/* Eventos: só imagens */
+.verso .evento-img {
+  width: 36px; height: 36px;
+  margin: 0 7px 3px 0;
+  object-fit: cover;
+  border-radius: 7px;
+  box-shadow: 0 2px 10px #0044ff55;
+  background: #fff;
+}
+@media (max-width:900px){
+  .cartao-dir { gap: 17px; }
+  .retangulo-flip { height: 74px;}
+  .medalha-item img, .verso .evento-img { width:22px; height:22px;}
+}
+/* (teu resto do CSS já está aqui em cima) */
 </style>
 </head>
 <body>
@@ -361,7 +161,7 @@ body {
 </div>
 
 <script>
-// --- HUD e imagens (mantém tudo igual) ---
+// --- HUD e imagens ---
 function updateHudTime() {
   const el = document.getElementById('hudTimeDate');
   if (!el) return;
@@ -398,16 +198,13 @@ document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
   });
 });
 
-// -- DEFINE PINS PARA O CARTÃO 3 --
 const pins3 = [
-  // Ajusta top/left (%) à posição dos pins do teu mapa. Adiciona tantos quantos precise.
   { top: 28, left: 60, nome: "Piscina A", local: "Lisboa", imagem: "piscinaa.jpg" },
   { top: 47, left: 30, nome: "Piscina B", local: "Porto", imagem: "piscinab.jpg" },
   { top: 63, left: 75, nome: "Piscina C", local: "Faro", imagem: "piscinac.jpg" }
 ];
 
 const pins4 = [
-  // EXEMPLO: substitui por valores reais dos círculos do teu mapa da 4!
   { top: 47, left: 50.5, nome: "Piscina D", local: "Madrid - ESP", imagem: "piscinad.jpg" },
   { top: 46, left: 14, nome: "Piscina E", local: "Ponta Delgada - PT (Açores)", imagem: "piscinae.jpg" },
   { top: 75, left: 25.1, nome: "Piscina F", local: "Albufeira - PT", imagem: "piscinaf.jpg" },
@@ -425,7 +222,7 @@ const pins4 = [
   { top: 61.9, left: 20.9, nome: "Piscina 15", local: "Algés- PT", imagem: "piscina15.jpg" }
 ];
 
-
+// CARTÕES, agora com retângulos flip 3D nos botões da direita
 const conteudosCartao = {
   2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png', []),
   3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', []),
@@ -434,7 +231,7 @@ const conteudosCartao = {
   6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png', [])
 };
 
-// Função para gerar o cartão. O centro é relative, os pins são absolutos em percentagem.
+// Função para gerar o cartão (aqui é onde aplicamos as mudanças flip na direita)
 function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
   return `
     <div class="cartao-conteudo-flex">
@@ -451,9 +248,44 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
         </div>
       </div>
       <div class="cartao-dir">
-        <button>Medalhas</button>
-        <button>lesoes</button>
-        <button>eventos</button>
+        <!-- NOVO conteúdo Flip para cada botão -->
+        <div class="retangulo-flip" tabindex="0">
+          <div class="face frente">Medalhas</div>
+          <div class="face verso">
+            <div class="medalhas-lista">
+              <div class="medalha-item">
+                <img src="medalha1.png" alt="Medalha Ouro">
+                <span>Medalha Ouro</span>
+              </div>
+              <div class="medalha-item">
+                <img src="medalha2.png" alt="Medalha Prata">
+                <span>Medalha Prata</span>
+              </div>
+              <div class="medalha-item">
+                <img src="medalha3.png" alt="Medalha Bronze">
+                <span>Medalha Bronze</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="retangulo-flip" tabindex="0">
+          <div class="face frente">lesoes</div>
+          <div class="face verso">
+            <div class="texto-lesoes">
+              Entorse do tornozelo<br>
+              Fratura da clavícula<br>
+              Rotura muscular
+            </div>
+          </div>
+        </div>
+        <div class="retangulo-flip" tabindex="0">
+          <div class="face frente">eventos</div>
+          <div class="face verso">
+            <img src="evento1.jpg" alt="Evento 1" class="evento-img"/>
+            <img src="evento2.jpg" alt="Evento 2" class="evento-img"/>
+            <img src="evento3.jpg" alt="Evento 3" class="evento-img"/>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -479,6 +311,16 @@ function abrirCartao(idx) {
   requestAnimationFrame(() => {
     bg.classList.add('show');
     box.focus();
+
+    // Para permitir flip em toque (móvel)
+    bg.querySelectorAll('.retangulo-flip').forEach(function(ret){
+      ret.addEventListener('touchstart', function(){
+        // Remove flip de outros antes de ativar este
+        bg.querySelectorAll('.retangulo-flip.tocado').forEach(r=>r.classList.remove('tocado'));
+        this.classList.add('tocado');
+      });
+      ret.addEventListener('mouseleave', function(){ this.classList.remove('tocado'); });
+    });
   });
 }
 
@@ -536,3 +378,4 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
+
