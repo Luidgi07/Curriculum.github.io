@@ -320,6 +320,91 @@ body {
   background: #428cff33;
   color: #b02;
 }
+  .cartao-dir button {
+  background:#1a2e45;
+  border:none;
+  color:#e4f3ff;
+  font-size:1.11em;
+  font-family: 'Fira Mono', monospace;
+  border-radius:10px;
+  padding: 0;
+  margin: 0 22px;
+  letter-spacing: 1.2px;
+  cursor:pointer;
+  transition: background .15s, color .15s;
+  /* FLIP CONTROL */
+  perspective: 600px;
+  overflow: hidden;
+}
+.cartao-dir button:hover {
+  background: transparent; /* o fundo será na face front/back */
+  color: inherit;
+}
+
+/* wrapper interior para permitir flip */
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+  border-radius:10px;
+}
+.cartao-dir button:hover .flip-inner {
+  transform: rotateX(90deg);
+}
+
+/* face frontal e traseira */
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left:0; top:0;
+  backface-visibility: hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+}
+
+.flip-front {
+  background:#1a2e45;
+  color:#e4f3ff;
+  font-size:1.11em;
+  padding:28px 0;
+}
+.cartao-dir button:hover .flip-front {
+  background:#368df8;
+  color:#fff;
+}
+
+.flip-back {
+  background:#184080;
+  color:#fff;
+  transform: rotateX(-90deg);
+  font-size:0.95em;
+  padding:10px;
+  text-align:left;
+  box-sizing:border-box;
+  flex-direction:column;
+  gap:6px;
+  justify-content:center;
+}
+
+/* estilos para conteúdos específicos */
+.flip-back img {
+  width:28px; height:28px;
+  border-radius:5px;
+  margin-right:6px;
+  object-fit:cover;
+}
+.flip-back .linha {
+  display:flex;
+  align-items:center;
+}
+.flip-back .evento-img {
+  width:40px; height:40px;
+}
 </style>
 </head>
 <body>
@@ -451,10 +536,38 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
         </div>
       </div>
       <div class="cartao-dir">
-        <button>Medalhas</button>
-        <button>lesoes</button>
-        <button>eventos</button>
+  <button>
+    <div class="flip-inner">
+      <div class="flip-front">Medalhas</div>
+      <div class="flip-back">
+        <div class="linha"><img src="med1.jpg"><span>Ouro Natação</span></div>
+        <div class="linha"><img src="med2.jpg"><span>Prata Atletismo</span></div>
+        <div class="linha"><img src="med3.jpg"><span>Bronze Basquetebol</span></div>
       </div>
+    </div>
+  </button>
+  <button>
+    <div class="flip-inner">
+      <div class="flip-front">lesoes</div>
+      <div class="flip-back">
+        <div>Tornozelo torcido em 2022</div>
+        <div>Luxação no ombro em 2023</div>
+        <div>Lesão lombar ligeira</div>
+      </div>
+    </div>
+  </button>
+  <button>
+    <div class="flip-inner">
+      <div class="flip-front">eventos</div>
+      <div class="flip-back">
+        <img class="evento-img" src="evento1.jpg">
+        <img class="evento-img" src="evento2.jpg">
+        <img class="evento-img" src="evento3.jpg">
+      </div>
+    </div>
+  </button>
+</div>
+
     </div>
   `;
 }
