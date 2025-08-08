@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <title>Imagens Coladas com Retângulos e HUD</title>
 <style>
-/* ... MANTÉM TODO O TEU CSS NORMAL ... */
 html, body {
   margin: 0; padding: 0;
   width: 100vw; height: 100vh;
@@ -19,21 +18,265 @@ body {
   height: 100vh;
   width: 100vw;
 }
-/* ... restante do teu CSS ... */
-.cartao-dir {
-  width:270px;
-  background: #101e30;
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
+.top-hud {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 58px;
+  background: rgba(18,26,36,0.93);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  z-index: 9999;
+  border-bottom: 2.5px solid #42aaff;
+  box-shadow: 0 2px 18px #12244477;
+  user-select: none;
+}
+.hud-left { display: flex; align-items: center; gap: 18px; }
+.hud-time-date {
+  color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
+  font-family: 'Segoe UI Mono', monospace;
+  min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
+  user-select: text;
+}
+.left-decor-btn {
+  width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
+  border: 2.5px solid #42aaff;
+  box-shadow: 0 2px 10px #45baff88;
+  background: none;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.left-decor-btn svg { width: 20px; height: 20px; }
+.left-decor-btn:hover {
+  background: #428cff22;
+}
+.hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
+.profile-area {
+  display: flex; align-items: center; gap: 11px;
+  background: rgba(42,62,94,0.82); border-radius: 9px;
+  padding: 5px 55px 5px 55px;
+  box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
+  cursor: pointer; border: 1.5px solid #42aaff60;
+  min-width: 0; max-width: 260px;
+  user-select: none;
+}
+.profile-img {
+  width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
+  border: 2.5px solid #42aaff;
+  box-shadow: 0 2px 12px #0a79e058; background: #202a41;
+}
+.profile-name {
+  color: #f3f8fc; font-weight: 600; font-size: 1em;
+  max-width: 120px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  user-select: text;
+}
+.conteudo-wrapper {
+  position: relative;
+  flex: 1 1 auto;
+  margin-top: 58px;
+  width: 100vw;
+  height: calc(100vh - 58px);
+  display: flex;
+  overflow: hidden;
+}
+.sala-imagens {
+  display: flex;
+  flex-direction: row;
   align-items: stretch;
-  gap: 27px;
-  padding: 20px 0;
+  width: 100%;
+  height: 100%;
+  font-size: 0;
+  position: relative;
 }
-.cartao-dir button {
-  display:none; /* Hide the original buttons - we'll use our flipped ones! */
+.sala-imagens img {
+  flex: 1 1 0;
+  width: 0;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0; border: none; padding: 0;
+  box-shadow: none;
+  min-width: 0; min-height: 0;
 }
-/* ==== FLIP BUTTON 3D ANIMAÇÃO ==== */
+.separador {
+  width: 3mm;
+  min-width: 3mm;
+  height: 100%;
+  background: #878677;
+  display: block;
+  border: none;
+  margin: 0; padding: 0;
+  flex: 0 0 3mm;
+}
+@media (max-width:900px) {
+  .sala-imagens { flex-direction: column; height: 100%; width: 100%; }
+  .sala-imagens img, .separador {
+    width: 100vw !important; max-width: 100vw;
+    height: auto;
+  }
+  .separador {
+    height: 3mm; max-height: 3mm; min-height: 3mm; width: 100vw;
+  }
+}
+.sala-imagens img[onclick] {
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.sala-imagens img[onclick]:hover {
+  box-shadow: 0 0 20px #ffd70088, 0 0 0 2.5px #ffd700dd;
+  transform: translateY(-4px) scale(1.035);
+  outline: 0;
+}
+.dica-msg {
+  position: absolute;
+  left: 50%; top: 28px;
+  background: #fff8ce;
+  color: #473c08;
+  font-weight: bold;
+  padding: 8px 17px;
+  border-radius: 13px;
+  font-size: 1.05em;
+  box-shadow: 0 2px 10px #0003;
+  opacity: 0.96;
+  pointer-events: none;
+  z-index: 30;
+  transform: translateX(-50%);
+  transition: opacity 0.17s, top 0.17s;
+  animation: piscarDica 1.6s infinite alternate;
+  white-space: nowrap;
+}
+@keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
+
+#screen-fade {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: black;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.8s ease-out;
+  z-index: 10000;
+}
+/* Modal */
+.cartao-modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(12,13,20,0.67);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.cartao-modal-bg.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cartao-modal {
+  width: 1100px;
+  height: 520px;
+  background: linear-gradient(135deg, #2346a5 60%, #0b101c 100%);
+  border: 2.5px solid #2efaff60;
+  box-shadow: 0 7px 32px #0008, 0 2px 0 #ccecff44 inset, 0 0 22px #227aff77;
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+}
+.cartao-conteudo-flex {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+.cartao-esq {
+  width: 240px;
+  background: #101c33;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cartao-esq img {
+  width: 95%;
+  margin-left: 3px;
+}
+.cartao-centro {
+  flex:1;
+  background: #7ed5fc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#13394e;
+  font-size:1.35em;
+  font-family: monospace;
+  text-align: center;
+  padding: 0 !important;
+}
+/* Centro do mapa, posição relativa para os pins */
+.mapa-centro-rel {
+  position: relative;
+  width: 98%;
+  height: 96%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mapa-centro-rel img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 7px;
+}
+/* PIN vermelhos sobre o mapa */
+.pin-mapa {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #ff2222;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 9px 2px #a00d;
+  transform: translate(-50%,-50%);
+  z-index: 2;
+  transition: box-shadow 0.12s;
+}
+.pin-mapa:hover {
+  box-shadow: 0 0 15px 4px #ff5252bb;
+  background: #ff5252;
+}
+/* Popup de info dos pins */
+#pin-popup {
+  position: absolute;
+  min-width: 180px;
+  background: #fff;
+  color: #222f;
+  border-radius: 12px;
+  border: 2.5px solid #289affbb;
+  box-shadow: 0 6px 24px #2238;
+  padding: 12px 15px 14px 15px;
+  font-size: 1.07em;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  display: none;
+  pointer-events: none;
+}
+#pin-popup img {
+  display: block;
+  margin: 6px auto 2px auto;
+  max-width: 115px;
+  max-height: 62px;
+  border-radius: 7px;
+}
+
+/* ========== FLIP BUTTONS 3D: só nesta secção!! ========== */
 .flip-btn {
   background: none;
   border: none;
@@ -43,23 +286,20 @@ body {
   width: auto;
   font: inherit;
   position: relative;
-  perspective: 770px;
+  perspective: 650px;
   height: 70px; min-width: 0;
   outline: none;
   display:block;
 }
-
 .flip-btn-inner {
   width: 100%;
   height: 70px;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(.4,1.7,.5,1), box-shadow 0.15s;
+  transition: transform 0.5s cubic-bezier(.4,1.7,.5,1), box-shadow 0.15s;
   border-radius: 10px;
 }
-
-.flip-btn:focus .flip-btn-inner,
-.flip-btn:hover .flip-btn-inner {
+.flip-btn:hover .flip-btn-inner, .flip-btn:focus .flip-btn-inner {
   transform: rotateX(90deg);
   box-shadow: 0 6px 22px #0c58ff33;
 }
@@ -85,12 +325,12 @@ body {
   letter-spacing: 1.2px;
   width: 100%;
   font-weight: normal;
-  z-index: 2;
+  z-index: 1;
   user-select:none;
   pointer-events: none;
+  transition: background 0.15s, color 0.15s;
 }
-.flip-btn:hover .flip-btn-front,
-.flip-btn:focus .flip-btn-front { color:#fff; background:#368df8; }
+.flip-btn:hover .flip-btn-front, .flip-btn:focus .flip-btn-front { color:#fff; background:#368df8; }
 .flip-btn-back {
   background: #184080;
   color: #e3f2ff;
@@ -106,7 +346,6 @@ body {
   white-space: pre-line;
   text-align: left;
 }
-
 .flip-btn-back ul, .flip-btn-back li {margin:0;padding:0;list-style:none;}
 .flip-btn-back ul {display:flex; flex-direction: column; gap:8px; margin-left:0;}
 .flip-btn-back .medalha-img { width: 33px; height: 33px; border-radius:6px; margin-right:10px; object-fit:cover;}
@@ -114,14 +353,11 @@ body {
 .flip-btn-back .lesoes-list {margin:0; padding-left:0;}
 .flip-btn-back .lesoes-list li {margin-bottom:4px;}
 .flip-btn-back .evento-img { width:45px;height:45px; margin-right:7px; border-radius:7px; object-fit:cover;box-shadow:0 2px 7px #0005;}
-/* Responsivo */
 @media (max-width:500px){
   .flip-btn, .flip-btn-inner {height:56px;}
   .flip-btn-front, .flip-btn-back {font-size:.98em;}
   .flip-btn-back .evento-img{width:33px;height:33px;}
 }
-
-/* Botão Fechar Modal como inicial! */
 .cartao-fechar {
   position: absolute;
   top: 11px; right: 15px;
@@ -217,11 +453,14 @@ document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
     }
   });
 });
+
+// -- DEFINE PINS PARA O CARTÃO 3 --
 const pins3 = [
   { top: 28, left: 60, nome: "Piscina A", local: "Lisboa", imagem: "piscinaa.jpg" },
   { top: 47, left: 30, nome: "Piscina B", local: "Porto", imagem: "piscinab.jpg" },
   { top: 63, left: 75, nome: "Piscina C", local: "Faro", imagem: "piscinac.jpg" }
 ];
+
 const pins4 = [
   { top: 47, left: 50.5, nome: "Piscina D", local: "Madrid - ESP", imagem: "piscinad.jpg" },
   { top: 46, left: 14, nome: "Piscina E", local: "Ponta Delgada - PT (Açores)", imagem: "piscinae.jpg" },
@@ -239,6 +478,8 @@ const pins4 = [
   { top: 61.9, left: 19.2, nome: "Piscina 14", local: "Oeiras(jamor) - PT", imagem: "piscina14.jpg" },
   { top: 61.9, left: 20.9, nome: "Piscina 15", local: "Algés- PT", imagem: "piscina15.jpg" }
 ];
+
+
 const conteudosCartao = {
   2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png', []),
   3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', []),
@@ -247,6 +488,7 @@ const conteudosCartao = {
   6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png', [])
 };
 
+// Função para gerar o cartão. O centro é relative, os pins são absolutos em percentagem.
 function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
   return `
     <div class="cartao-conteudo-flex">
@@ -262,7 +504,8 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
           <div id="pin-popup"></div>
         </div>
       </div>
-      <div class="cartao-dir" id="cartaoDirEscolhe">
+      <div class="cartao-dir">
+        <!-- Flip botão medalhas -->
         <button class="flip-btn" tabindex="0">
           <span class="flip-btn-inner">
             <span class="flip-btn-front">Medalhas</span>
@@ -275,6 +518,7 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
             </span>
           </span>
         </button>
+        <!-- Flip botão lesoes -->
         <button class="flip-btn" tabindex="0">
           <span class="flip-btn-inner">
             <span class="flip-btn-front">lesoes</span>
@@ -287,6 +531,7 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
             </span>
           </span>
         </button>
+        <!-- Flip botão eventos -->
         <button class="flip-btn" tabindex="0">
           <span class="flip-btn-inner">
             <span class="flip-btn-front">eventos</span>
@@ -301,8 +546,6 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
     </div>
   `;
 }
-
-
 
 // -- Modal aberto --
 function abrirCartao(idx) {
@@ -320,11 +563,14 @@ function abrirCartao(idx) {
     `<button class="cartao-fechar" title="Fechar" aria-label="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
   bg.appendChild(box);
   document.body.appendChild(bg);
+
   requestAnimationFrame(() => {
     bg.classList.add('show');
     box.focus();
   });
 }
+
+// -- Fechar modal --
 function fecharCartao(bg) {
   if (!bg) return;
   bg.classList.remove('show');
@@ -338,11 +584,14 @@ function fecharCartaoModal(e) {
   const modalBg = e.target.closest('.cartao-modal-bg');
   fecharCartao(modalBg);
 }
+
+// Popup info dos pins: mostra nome, local, imagem
 window.mostrarInfoPin = function (e, nome, local, imagem) {
   e.stopPropagation();
   const popup = document.querySelector("#pin-popup");
   popup.innerHTML = `<strong>${nome}</strong><br>${local}<br>${imagem ? `<img src="${imagem}" alt="${nome}">` : ''}`;
   popup.style.display = "block";
+  // Posição relativa ao pin
   const parent = e.target.parentElement;
   const parentRect = parent.getBoundingClientRect();
   const pinRect = e.target.getBoundingClientRect();
@@ -351,6 +600,7 @@ window.mostrarInfoPin = function (e, nome, local, imagem) {
   popup.style.top = y + "px";
   popup.style.left = x + "px";
   popup.style.pointerEvents = 'auto';
+  // Esconde popup ao clicar fora
   setTimeout(() => {
     window.addEventListener('mousedown', esconderPopup, { once: true });
   }, 0);
@@ -359,6 +609,8 @@ function esconderPopup(e) {
   const popup = document.querySelector("#pin-popup");
   if (popup) popup.style.display = "none";
 }
+
+// -- Fade inicial --
 window.addEventListener('load', () => {
   const screenFade = document.getElementById('screen-fade');
   if (!screenFade) return;
