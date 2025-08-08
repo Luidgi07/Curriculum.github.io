@@ -275,78 +275,146 @@ body {
   max-height: 62px;
   border-radius: 7px;
 }
+
+/* NOVO: Cartao-dir com paralelepípedo rotativo para cima ao hover */
 .cartao-dir {
   perspective: 1200px;
-  overflow: visible;
   position: relative;
-  display: flex; justify-content: center; align-items: center; /* centra o cubo */
+  width: 270px; /* largura fixa */
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: default;
 }
-.flip-cube {
-  width: 220px;
+.paralelepipedo {
+  width: 270px;
   height: 210px;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Inicialmente a face frontal está visível */
+  transform-origin: center bottom;
 }
-.face {
+/* Ao passar o rato, roda para trás (eixo x para cima, -90deg) */
+.cartao-dir:hover .paralelepipedo {
+  transform: rotateX(-90deg);
+}
+
+/* Faces do paralelepípedo, faces horizontais */
+.face-paral {
   position: absolute;
-  width: 100%; height: 100%;
-  backface-visibility: hidden;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 100%;
+  height: 100%;
   background: #101e30;
   color: #e4f3ff;
   border-radius: 13px;
   box-shadow: 0 3px 16px #1237;
-  padding: 17px 12px 5px 12px;
-  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+  backface-visibility: hidden;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
-.front  { transform: rotateY(0deg); z-index: 2; }
-.back   { transform: rotateY(180deg); }
-.right  { transform: rotateY(90deg); }
-.left   { transform: rotateY(-90deg); }
 
-.flip-cube .voltar-btn {
-  align-self: flex-start;
-  margin-bottom: 13px;
+/* Face frontal (botões) */
+.face-frontal {
+  z-index: 2;
+  /* posicao normal */
+}
+
+/* Face de cima (conteudos) */
+.face-cima {
+  transform: rotateX(90deg);
+  transform-origin: center bottom;
+  top: 0;
+  left: 0;
   background: #184080;
-  color: #fff;
+  box-shadow: 0 8px 20px #12224499 inset;
+}
+
+/* Botões frontais estilo retangulo como estava antes */
+.face-frontal button {
+  background: #1a2e45;
   border: none;
-  border-radius: 7px;
-  padding: 5px 15px;
+  color: #e4f3ff;
+  font-size: 1.2em;
+  font-family: 'Fira Mono', monospace;
+  border-radius: 10px;
+  padding: 16px 0;
+  margin-bottom: 24px;
+  letter-spacing: 1.2px;
+  width: 100%;
   cursor: pointer;
-  font-size: 1em;
-  margin-left: -5px;
+  transition: background 0.15s, color 0.15s;
 }
-.flip-cube .voltar-btn:hover { background: #00abff; color: #101e30; }
-
-.flip-content img {
-  width: 38px;
-  height: 38px;
-  border-radius: 7px;
-  margin-right: 12px;
-  margin-bottom: 7px;
-  box-shadow: 0 2px 8px #0005;
-  object-fit: cover;
-}
-.premio {
-  display: flex; align-items: center; margin-bottom: 8px; gap: 7px;
-}
-.flip-content span, .flip-content p {
+.face-frontal button:hover {
+  background: #368df8;
   color: #fff;
-  font-size: 1em;
-  margin: 0;
 }
-.flip-content { margin-top: 5px; }
-.flip-content p { margin-bottom: 8px; }
-.flip-content img:not(:last-child) { margin-right: 10px; }
-.face.left .flip-content { flex-direction: row; gap: 10px; }
-.face.left .flip-content img { margin: 0 7px 0 0; }
 
-@media (max-width: 600px) {
-  .flip-cube { width: 98vw; }
+/* Conteudo medalhas: 3 imagens pequenas com textos ao lado */
+.medalhas-conteudo {
+  width: 100%;
 }
-</style>
+.medalhas-conteudo .item-medalha {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.medalhas-conteudo img {
+  width: 54px;
+  height: 54px;
+  border-radius: 7px;
+  object-fit: cover;
+  margin-right: 15px;
+  box-shadow: 0 2px 8px #0005;
+}
+.medalhas-conteudo span {
+  font-size: 1.1em;
+  color: #e4f3ff;
+  user-select: text;
+}
+
+/* Conteudo lesoes: apenas texto */
+.lesoes-conteudo p {
+  margin-bottom: 16px;
+  font-size: 1.1em;
+  color: #e4f3ff;
+  user-select: text;
+}
+
+/* Conteudo eventos: apenas imagens lado a lado */
+.eventos-conteudo {
+  display: flex;
+  gap: 15px;
+}
+.eventos-conteudo img {
+  width: 70px;
+  height: 70px;
+  border-radius: 9px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px #0005;
+  cursor: default;
+  user-select: none;
+}
+
+/* Escolhe qual conteúdo mostrar no hover, controlado via JS e CSS combinados */
+.cartao-dir:hover .paralelepipedo .face-cima {
+  /* visibilidade geral do topo */
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* Controla qual conteúdo mostrar conforme o botão em hover */
+/* Usamos :has() para detectar qual botão está em hover no front */
+/* Por compatibilidade, vamos fazer via JS para trocar conteúdo no topo */
+
+/</style>
 </head>
 <body>
 <div id="screen-fade"></div>
@@ -459,6 +527,7 @@ const conteudosCartao = {
 };
 
 // Função para gerar o cartão. O centro é relative, os pins são absolutos em percentagem.
+// Troque a secção .cartao-dir pela implementação do paralelepípedo com hover
 function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
   return `
     <div class="cartao-conteudo-flex">
@@ -474,39 +543,19 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
           <div id="pin-popup"></div>
         </div>
       </div>
-      <div class="cartao-dir">
-        <div class="flip-cube" id="flipCube">
-          <!-- FACE INICIAL (front) -->
-          <div class="face front">
-            <button onclick="flipCube('medalhas')">Medalhas</button>
-            <button onclick="flipCube('lesoes')">Lesões</button>
-            <button onclick="flipCube('eventos')">Eventos</button>
+      <div class="cartao-dir" id="cartaoDir">
+        <div class="paralelepipedo" id="paralelepipedo">
+          <!-- Face frontal com botões -->
+          <div class="face-paral face-frontal">
+            <button data-face="medalhas">Medalhas</button>
+            <button data-face="lesoes">Lesões</button>
+            <button data-face="eventos">Eventos</button>
           </div>
-          <!-- FACE Medalhas -->
-          <div class="face back medalhas-face">
-            <button class="voltar-btn" onclick="flipCube('menu')">⟵ Voltar</button>
-            <div class="flip-content">
-              <div class="premio"><img src="med1.jpg" alt="Ouro"><span>Ouro Natação</span></div>
-              <div class="premio"><img src="med2.jpg" alt="Prata"><span>Prata Atletismo</span></div>
-              <div class="premio"><img src="med3.jpg" alt="Bronze"><span>Bronze Basquetebol</span></div>
-            </div>
-          </div>
-          <!-- FACE Lesões -->
-          <div class="face right lesoes-face">
-            <button class="voltar-btn" onclick="flipCube('menu')">⟵ Voltar</button>
-            <div class="flip-content">
-              <p>Tornozelo torcido em 2022</p>
-              <p>Luxação no ombro em 2023</p>
-              <p>Lesão lombar ligeira</p>
-            </div>
-          </div>
-          <!-- FACE Eventos -->
-          <div class="face left eventos-face">
-            <button class="voltar-btn" onclick="flipCube('menu')">⟵ Voltar</button>
-            <div class="flip-content">
-              <img src="evento1.jpg" alt="Evento1">
-              <img src="evento2.jpg" alt="Evento2">
-              <img src="evento3.jpg" alt="Evento3">
+          <!-- Face de cima, onde o conteúdo muda -->
+          <div class="face-paral face-cima">
+            <div id="conteudoFace">
+              <!-- Conteúdo inicial vazio -->
+              <p style="color:#e4f3ff; font-size:1.3em;">Passe o rato sobre um retângulo para ver o conteúdo</p>
             </div>
           </div>
         </div>
@@ -535,6 +584,7 @@ function abrirCartao(idx) {
   requestAnimationFrame(() => {
     bg.classList.add('show');
     box.focus();
+    setupParalelepipedoContent(); // ativa o hover dinâmico dos retângulos no cartão aberto
   });
 }
 
@@ -590,13 +640,60 @@ window.addEventListener('load', () => {
   });
 });
 
-// JS para animação do cubo
-function flipCube(tipo) {
-  const fcube = document.getElementById('flipCube');
-  if (tipo === 'medalhas') fcube.style.transform = 'rotateY(180deg)';
-  else if (tipo === 'lesoes') fcube.style.transform = 'rotateY(-90deg)';
-  else if (tipo === 'eventos') fcube.style.transform = 'rotateY(90deg)';
-  else fcube.style.transform = 'rotateY(0deg)'; // menu/front
+// Função que controla a troca de conteúdo na face de cima do paralelepípedo, baseada no botão em hover.
+function setupParalelepipedoContent() {
+  const cartaoDir = document.getElementById('cartaoDir');
+  if (!cartaoDir) return;
+  const conteudoFace = cartaoDir.querySelector('#conteudoFace');
+  const botoes = cartaoDir.querySelectorAll('.face-frontal button[data-face]');
+  if (!conteudoFace || !botoes.length) return;
+
+  // Conteúdos predefinidos para cada face
+  const conteudos = {
+    medalhas: `
+      <div class="medalhas-conteudo">
+        <div class="item-medalha"><img src="med1.jpg" alt="Ouro"><span>Ouro Natação</span></div>
+        <div class="item-medalha"><img src="med2.jpg" alt="Prata"><span>Prata Atletismo</span></div>
+        <div class="item-medalha"><img src="med3.jpg" alt="Bronze"><span>Bronze Basquetebol</span></div>
+      </div>
+    `,
+    lesoes: `
+      <div class="lesoes-conteudo">
+        <p>Tornozelo torcido em 2022</p>
+        <p>Luxação no ombro em 2023</p>
+        <p>Lesão lombar ligeira</p>
+      </div>
+    `,
+    eventos: `
+      <div class="eventos-conteudo">
+        <img src="evento1.jpg" alt="Evento1">
+        <img src="evento2.jpg" alt="Evento2">
+        <img src="evento3.jpg" alt="Evento3">
+      </div>
+    `
+  };
+
+  // Limpa conteúdo inicial
+  conteudoFace.innerHTML = '<p style="color:#e4f3ff; font-size:1.3em;">Passe o rato sobre um retângulo para ver o conteúdo</p>';
+
+  // Quando o mouse entra num botão, atualiza o conteúdo da face de cima
+  botoes.forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      const face = btn.getAttribute('data-face');
+      if (face && conteudos[face]) {
+        conteudoFace.innerHTML = conteudos[face];
+      }
+    });
+    btn.addEventListener('mouseleave', () => {
+      // Volta ao texto inicial se o mouse não estiver sobre outro botão
+      // Pequeno delay para evitar flicker ao trocar rapidamente
+      setTimeout(() => {
+        if (![...botoes].some(b => b.matches(':hover'))) {
+          conteudoFace.innerHTML = '<p style="color:#e4f3ff; font-size:1.3em;">Passe o rato sobre um retângulo para ver o conteúdo</p>';
+        }
+      }, 100);
+    });
+  });
 }
 </script>
 </body>
