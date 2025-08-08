@@ -208,7 +208,7 @@ body {
 }
 .cartao-centro {
   flex:1;
-  background: #7ed5fc;
+  background:#7ed5fc;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -276,49 +276,75 @@ body {
   border-radius: 7px;
 }
 .cartao-dir {
-  width:270px;
-  background: #101e30;
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
-  align-items: stretch;
-  gap: 27px;
-  padding: 20px 0;
+  perspective: 1200px;
+  overflow: visible;
+  position: relative;
+  display: flex; justify-content: center; align-items: center; /* centra o cubo */
+  padding: 0;
 }
-.cartao-dir button {
-  background:#1a2e45;
-  border:none;
-  color:#e4f3ff;
-  font-size:1.11em;
-  font-family: 'Fira Mono', monospace;
-  border-radius:10px;
-  padding: 28px 0;
-  margin: 0 22px;
-  letter-spacing: 1.2px;
-  cursor:pointer;
-  transition: background .15s, color .15s;
+.flip-cube {
+  width: 220px;
+  height: 210px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.4,2,.3,1);
 }
-.cartao-dir button:hover {
-  background: #368df8;
-  color: #fff;
-}
-.cartao-fechar {
+.face {
   position: absolute;
-  top: 11px; right: 15px;
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  color: #e9f8ff;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background .15s;
-  line-height: 1;
-  z-index: 2;
+  width: 100%; height: 100%;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: #101e30;
+  color: #e4f3ff;
+  border-radius: 13px;
+  box-shadow: 0 3px 16px #1237;
+  padding: 17px 12px 5px 12px;
+  transition: box-shadow 0.2s;
 }
-.cartao-fechar:hover {
-  background: #428cff33;
-  color: #b02;
+.front  { transform: rotateY(0deg); z-index: 2; }
+.back   { transform: rotateY(180deg); }
+.right  { transform: rotateY(90deg); }
+.left   { transform: rotateY(-90deg); }
+
+.flip-cube .voltar-btn {
+  align-self: flex-start;
+  margin-bottom: 13px;
+  background: #184080;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: -5px;
+}
+.flip-cube .voltar-btn:hover { background: #00abff; color: #101e30; }
+
+.flip-content img {
+  width: 38px;
+  height: 38px;
+  border-radius: 7px;
+  margin-right: 12px;
+  margin-bottom: 7px;
+  box-shadow: 0 2px 8px #0005;
+  object-fit: cover;
+}
+.premio {
+  display: flex; align-items: center; margin-bottom: 8px; gap: 7px;
+}
+.flip-content span, .flip-content p {
+  color: #fff;
+  font-size: 1em;
+  margin: 0;
+}
+.flip-content { margin-top: 5px; }
+.flip-content p { margin-bottom: 8px; }
+.flip-content img:not(:last-child) { margin-right: 10px; }
+.face.left .flip-content { flex-direction: row; gap: 10px; }
+.face.left .flip-content img { margin: 0 7px 0 0; }
+
+@media (max-width: 600px) {
+  .flip-cube { width: 98vw; }
 }
 </style>
 </head>
@@ -400,14 +426,12 @@ document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
 
 // -- DEFINE PINS PARA O CARTÃO 3 --
 const pins3 = [
-  // Ajusta top/left (%) à posição dos pins do teu mapa. Adiciona tantos quantos precise.
   { top: 28, left: 60, nome: "Piscina A", local: "Lisboa", imagem: "piscinaa.jpg" },
   { top: 47, left: 30, nome: "Piscina B", local: "Porto", imagem: "piscinab.jpg" },
   { top: 63, left: 75, nome: "Piscina C", local: "Faro", imagem: "piscinac.jpg" }
 ];
 
 const pins4 = [
-  // EXEMPLO: substitui por valores reais dos círculos do teu mapa da 4!
   { top: 47, left: 50.5, nome: "Piscina D", local: "Madrid - ESP", imagem: "piscinad.jpg" },
   { top: 46, left: 14, nome: "Piscina E", local: "Ponta Delgada - PT (Açores)", imagem: "piscinae.jpg" },
   { top: 75, left: 25.1, nome: "Piscina F", local: "Albufeira - PT", imagem: "piscinaf.jpg" },
@@ -451,9 +475,41 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
         </div>
       </div>
       <div class="cartao-dir">
-        <button>Medalhas</button>
-        <button>lesoes</button>
-        <button>eventos</button>
+        <div class="flip-cube" id="flipCube">
+          <!-- FACE INICIAL (front) -->
+          <div class="face front">
+            <button onclick="flipCube('medalhas')">Medalhas</button>
+            <button onclick="flipCube('lesoes')">Lesões</button>
+            <button onclick="flipCube('eventos')">Eventos</button>
+          </div>
+          <!-- FACE Medalhas -->
+          <div class="face back medalhas-face">
+            <button class="voltar-btn" onclick="flipCube('menu')">⟵ Voltar</button>
+            <div class="flip-content">
+              <div class="premio"><img src="med1.jpg" alt="Ouro"><span>Ouro Natação</span></div>
+              <div class="premio"><img src="med2.jpg" alt="Prata"><span>Prata Atletismo</span></div>
+              <div class="premio"><img src="med3.jpg" alt="Bronze"><span>Bronze Basquetebol</span></div>
+            </div>
+          </div>
+          <!-- FACE Lesões -->
+          <div class="face right lesoes-face">
+            <button class="voltar-btn" onclick="flipCube('menu')">⟵ Voltar</button>
+            <div class="flip-content">
+              <p>Tornozelo torcido em 2022</p>
+              <p>Luxação no ombro em 2023</p>
+              <p>Lesão lombar ligeira</p>
+            </div>
+          </div>
+          <!-- FACE Eventos -->
+          <div class="face left eventos-face">
+            <button class="voltar-btn" onclick="flipCube('menu')">⟵ Voltar</button>
+            <div class="flip-content">
+              <img src="evento1.jpg" alt="Evento1">
+              <img src="evento2.jpg" alt="Evento2">
+              <img src="evento3.jpg" alt="Evento3">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -533,6 +589,15 @@ window.addEventListener('load', () => {
     screenFade.remove();
   });
 });
+
+// JS para animação do cubo
+function flipCube(tipo) {
+  const fcube = document.getElementById('flipCube');
+  if (tipo === 'medalhas') fcube.style.transform = 'rotateY(180deg)';
+  else if (tipo === 'lesoes') fcube.style.transform = 'rotateY(-90deg)';
+  else if (tipo === 'eventos') fcube.style.transform = 'rotateY(90deg)';
+  else fcube.style.transform = 'rotateY(0deg)'; // menu/front
+}
 </script>
 </body>
 </html>
