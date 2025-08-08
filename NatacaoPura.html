@@ -285,9 +285,8 @@ body {
   gap: 27px;
   padding: 20px 0;
 }
-.cartao-dir button {
+.cartao-dir .info-rect {
   background:#1a2e45;
-  border:none;
   color:#e4f3ff;
   font-size:1.11em;
   font-family: 'Fira Mono', monospace;
@@ -295,12 +294,9 @@ body {
   padding: 28px 0;
   margin: 0 22px;
   letter-spacing: 1.2px;
-  cursor:pointer;
-  transition: background .15s, color .15s;
-}
-.cartao-dir button:hover {
-  background: #368df8;
-  color: #fff;
+  text-align: center;
+  user-select: none;
+  box-shadow: inset 0 0 6px #2d83ff55;
 }
 .cartao-fechar {
   position: absolute;
@@ -451,9 +447,9 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
         </div>
       </div>
       <div class="cartao-dir">
-        <button>Medalhas</button>
-        <button>lesoes</button>
-        <button>eventos</button>
+        <div class="info-rect">Medalhas</div>
+        <div class="info-rect">Lesões</div>
+        <div class="info-rect">Eventos</div>
       </div>
     </div>
   `;
