@@ -366,6 +366,31 @@ body {
   line-height: 1;
   z-index: 2;
 }
+  .eventos-info {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+  overflow-x: auto; /* permite scroll horizontal se necessário */
+}
+
+.evento-img {
+  height: 60px;
+  width: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #2a9df480;
+  cursor: default;
+  user-select: none;
+  flex-shrink: 0; /* evita encolher */
+  transition: transform 0.2s ease;
+}
+.evento-img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 14px #3fa9ffcc;
+}
+
 .cartao-fechar:hover {
   background: #428cff33;
   color: #b02;
@@ -477,15 +502,62 @@ const pins4 = [
 
 
 const conteudosCartao = {
-  2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png', []),
-  3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', []),
-  4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png', pins4),
-  5: getCartaoModal('cirlcart-removebg-preview.png', 'mapacirl.png', []),
-  6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png', [])
+  2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png', [], dadosCartoes[2].medalhas, dadosCartoes[2].lesoes, dadosCartoes[2].eventos),
+  3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', [], dadosCartoes[3].medalhas, dadosCartoes[3].lesoes, dadosCartoes[3].eventos),
+  4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png', pins4, dadosCartoes[4].medalhas, dadosCartoes[4].lesoes, dadosCartoes[4].eventos),
+  5: getCartaoModal('cirlcart-removebg-preview.png', 'mapacirl.png', [], dadosCartoes[5].medalhas, dadosCartoes[5].lesoes, dadosCartoes[5].eventos),
+  6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png', [], dadosCartoes[6].medalhas, dadosCartoes[6].lesoes, dadosCartoes[6].eventos)
+};
+  
+const dadosCartoes = {
+  2: {
+    medalhas: { ouro: 1, prata: 2, bronze: 4 },
+    lesoes: "Sem lesões até agora.",
+    eventos: [
+      { src: "evento1.png", alt: "Evento 1" },
+      { src: "evento2.png", alt: "Evento 2" },
+      { src: "evento3.png", alt: "Evento 3" }
+    ]
+  },
+  3: {
+    medalhas: { ouro: 0, prata: 1, bronze: 3 },
+    lesoes: "Lesão no joelho direito.",
+    eventos: [
+      { src: "eventoA.png", alt: "Evento A" },
+      { src: "eventoB.png", alt: "Evento B" }
+    ]
+  },
+  4: {
+    medalhas: { ouro: 2, prata: 0, bronze: 1 },
+    lesoes: "Recuperado de tendinite.",
+    eventos: [
+      { src: "eventoX.png", alt: "Evento X" }
+    ]
+  },
+  5: {
+    medalhas: { ouro: 3, prata: 3, bronze: 2 },
+    lesoes: "Sem lesões.",
+    eventos: [
+      { src: "eventoY.png", alt: "Evento Y" },
+      { src: "eventoZ.png", alt: "Evento Z" }
+    ]
+  },
+  6: {
+    medalhas: { ouro: 0, prata: 0, bronze: 0 },
+    lesoes: "Nenhuma lesão registada.",
+    eventos: [
+      { src: "eventoM.png", alt: "Evento M" }
+    ]
+  }
 };
 
-// Função para gerar o cartão. O centro é relative, os pins são absolutos em percentagem.
-function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
+
+  
+function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas = {ouro:0, prata:0, bronze:0}, lesoes = "", eventos = []) {
+  const eventosHtml = eventos.map(evt => 
+    `<img src="${evt.src}" alt="${evt.alt}" class="evento-img" />`
+  ).join("");
+
   return `
     <div class="cartao-conteudo-flex">
       <div class="cartao-esq">
@@ -504,21 +576,23 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
         <div class="info-rect medalhas-info-horizontal">
           <div class="medalha-col">
             <img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img">
-            <span class="qtd-medalha">1</span>
+            <span class="qtd-medalha">${medalhas.ouro}</span>
           </div>
           <div class="medalha-col">
             <img src="med2-removebg-preview.png" alt="Prata" class="medalha-img">
-            <span class="qtd-medalha prata">2</span>
+            <span class="qtd-medalha prata">${medalhas.prata}</span>
           </div>
           <div class="medalha-col">
             <img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img">
-            <span class="qtd-medalha bronze">4</span>
+            <span class="qtd-medalha bronze">${medalhas.bronze}</span>
           </div>
         </div>
-        <div class="info-rect">Lesões</div>
-        <div class="info-rect">Eventos</div>
+        <div class="info-rect lesoes-info">${lesoes}</div>
+        <div class="info-rect eventos-info">
+          ${eventosHtml}
+        </div>
       </div>
-
+    </div>
   `;
 }
 
