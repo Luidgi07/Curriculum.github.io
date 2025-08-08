@@ -298,6 +298,42 @@ body {
   user-select: none;
   box-shadow: inset 0 0 6px #2d83ff55;
 }
+  .medalhas-info {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+  background: #1a2e45;
+  border-radius: 10px;
+  padding: 22px 18px;
+  margin: 0 22px;
+  color: #e4f3ff;
+  font-size: 1.15em;
+  box-shadow: inset 0 0 6px #2d83ff55;
+}
+.linha-medalha {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+}
+.medalha-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 7px;
+  background: #fff2;
+  border: 1.5px solid #eee6;
+}
+.qtd-medalha {
+  font-family: 'Fira Mono', monospace;
+  font-size: 1.15em;
+  font-weight: bold;
+  color: #ffd700;
+}
+.linha-medalha:nth-child(2) .qtd-medalha { color: #d0d8e6; } /* prata */
+.linha-medalha:nth-child(3) .qtd-medalha { color: #fca430; } /* bronze */
+
 .cartao-fechar {
   position: absolute;
   top: 11px; right: 15px;
@@ -447,10 +483,22 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
         </div>
       </div>
       <div class="cartao-dir">
-        <div class="info-rect">Medalhas</div>
-        <div class="info-rect">Lesões</div>
-        <div class="info-rect">Eventos</div>
+      <div class="info-rect medalhas-info">
+        <div class="linha-medalha">
+          <img src="medalha_ouro.png" alt="Ouro" class="medalha-img">
+          <span class="qtd-medalha">3</span>
+        </div>
+        <div class="linha-medalha">
+          <img src="medalha_prata.png" alt="Prata" class="medalha-img">
+          <span class="qtd-medalha">1</span>
+        </div>
+        <div class="linha-medalha">
+          <img src="medalha_bronze.png" alt="Bronze" class="medalha-img">
+          <span class="qtd-medalha">2</span>
+        </div>
       </div>
+      <div class="info-rect">Lesões</div>
+      <div class="info-rect">Eventos</div>
     </div>
   `;
 }
