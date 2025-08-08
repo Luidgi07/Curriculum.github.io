@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <title>Imagens Coladas com Retângulos e HUD</title>
 <style>
+/* ... mantêm-se TODOS os teus estilos existentes até .cartao-dir button ... */
+
 html, body {
   margin: 0; padding: 0;
   width: 100vw; height: 100vh;
@@ -208,7 +210,7 @@ body {
 }
 .cartao-centro {
   flex:1;
-  background:#7ed5fc;
+  background: #7ed5fc;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -218,7 +220,6 @@ body {
   text-align: center;
   padding: 0 !important;
 }
-/* Centro do mapa, posição relativa para os pins */
 .mapa-centro-rel {
   position: relative;
   width: 98%;
@@ -233,7 +234,6 @@ body {
   object-fit: contain;
   border-radius: 7px;
 }
-/* PIN vermelhos sobre o mapa */
 .pin-mapa {
   position: absolute;
   width: 4px;
@@ -251,7 +251,6 @@ body {
   box-shadow: 0 0 15px 4px #ff5252bb;
   background: #ff5252;
 }
-/* Popup de info dos pins */
 #pin-popup {
   position: absolute;
   min-width: 180px;
@@ -275,155 +274,108 @@ body {
   max-height: 62px;
   border-radius: 7px;
 }
-
-/* Cartao-dir e botões originais, mantidos */
 .cartao-dir {
-  width: 270px;
+  width:270px;
   background: #101e30;
-  display: flex;
-  flex-direction: column;
+  display:flex;
+  flex-direction:column;
   justify-content: center;
   align-items: stretch;
   gap: 27px;
   padding: 20px 0;
-  perspective: 1200px; /* perspectiva para 3D */
-  position: relative;
-  user-select: none;
-}
-.cartao-dir button {
-  background: #1a2e45;
-  border: none;
-  color: #e4f3ff;
-  font-size: 1.11em;
-  font-family: 'Fira Mono', monospace;
-  border-radius: 10px;
-  padding: 28px 0;
-  margin: 0 22px;
-  letter-spacing: 1.2px;
-  cursor: pointer;
-  transition: background .15s, color .15s;
-  position: relative;
-  z-index: 2;
-}
-.cartao-dir button:hover {
-  background: #368df8;
-  color: #fff;
 }
 
-/* Container do paralelepípedo para animação de rotação para cima ao hover */
-.paralelepipedo {
+/* === FLIP BUTTONS BOOSTRAP === */
+.flip-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 22px;
+  cursor: pointer;
+  width: auto;
+  font: inherit;
+  position: relative;
+  perspective: 850px;
+  height: 70px; /* igual ao do botão original */
+  min-width: 0;
+}
+.flip-btn-inner {
+  transition: transform 0.55s cubic-bezier(.4,1.7,.5,1), box-shadow 0.15s;
+  transform-style: preserve-3d;
+  position: relative;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: stretch;
+  border-radius: 10px;
+  box-shadow: 0 0 0 transparent;
+}
+.flip-btn:focus .flip-btn-inner,
+.flip-btn:hover .flip-btn-inner {
+  transform: rotateX(90deg);
+  box-shadow: 0 6px 22px #0c58ff33;
+}
+.flip-btn-front, .flip-btn-back {
+  position: absolute;
   width: 100%;
   height: 100%;
-  position: absolute;
-  top: 0; left: 0;
-  transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: center bottom;
-  pointer-events: none; /* Para não interferir com os botões */
-  z-index: 1;
-}
-
-/* Ao passar o rato sobre a cartao-dir, roda o paralelepípedo para cima -90deg no eixo X */
-.cartao-dir:hover .paralelepipedo {
-  transform: rotateX(-90deg);
-}
-
-/* Faces do paralelepípedo */
-.paralelepipedo .face-front,
-.paralelepipedo .face-top {
-  background: #184080;
-  border-radius: 10px;
-  box-shadow: inset 0 0 12px #0a2c66, 0 4px 10px #0b306fcc;
-  position: absolute;
-  width: calc(100% - 40px);
-  height: calc(100% - 40px);
-  left: 20px;
-  top: 20px;
-  color: #e4f3ff;
-  font-family: 'Fira Mono', monospace;
-  padding: 16px 20px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  user-select: text;
-}
-
-/* Face frontal está paralela ao plano normal */
-.paralelepipedo .face-front {
-  transform: translateZ(10px);
-  pointer-events: none; /* invisível para interação */
-}
-
-/* Face superior é a que aparece na rotação para cima */
-.paralelepipedo .face-top {
-  transform-origin: bottom center;
-  transform: rotateX(90deg) translateZ(105px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #428cff44 transparent;
-  pointer-events: auto;
-}
-
-/* Estilo para scrollbar simples */
-.paralelepipedo .face-top::-webkit-scrollbar {
-  width: 8px;
-}
-.paralelepipedo .face-top::-webkit-scrollbar-thumb {
-  background-color: #428cff44;
-  border-radius: 10px;
-}
-
-/* Conteúdos internos das faces superiores (medalhas, lesoes, eventos) */
-.conteudo-medalhas .item-medalha {
+  left: 0; top: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-.conteudo-medalhas img {
-  width: 48px;
-  height: 48px;
-  border-radius: 7px;
-  object-fit: cover;
-  box-shadow: 0 2px 8px #0006;
-}
-.conteudo-medalhas span {
-  font-size: 1.1em;
-  color: #fff;
-}
-
-.conteudo-lesoes p {
-  margin: 6px 0;
-  font-size: 1.1em;
-  color: #fff;
-  user-select: text;
-}
-
-.conteudo-eventos {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  justify-content: start;
-}
-.conteudo-eventos img {
-  width: 70px;
-  height: 70px;
-  border-radius: 9px;
-  object-fit: cover;
-  box-shadow: 0 2px 8px #0006;
-  user-select: none;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 1.11em;
+  font-family: 'Fira Mono', monospace;
+  box-sizing: border-box;
+  z-index: 1;
+  backface-visibility: hidden;
   pointer-events: none;
 }
-
-/* Texto inicial da face topo */
-.texto-inicial {
-  color: #c6dcffaa;
-  font-size: 1.25em;
-  text-align: center;
-  margin-top: 40%;
-  user-select: none;
+.flip-btn-front {
+  background: #1a2e45;
+  color: #e4f3ff;
+  padding: 28px 0;
+  letter-spacing: 1.2px;
+  width: 100%;
+  font-weight: normal;
+  z-index: 2;
+}
+.flip-btn:hover .flip-btn-front,
+.flip-btn:focus .flip-btn-front {
+  color: #fff;
+  background: #368df8;
+}
+.flip-btn-back {
+  background: #184080;
+  color: #e3f2ff;
+  transform: rotateX(90deg);
+  padding: 9px 0 9px 19px;
+  overflow: hidden;
+  z-index: 3;
+  font-size: 1em;
+  box-shadow: 0 8px 25px #3758cc29 inset;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  white-space: pre-line;
+}
+.flip-btn-back .medalha-img { width: 33px; height: 33px; border-radius:6px; margin-right:10px; object-fit:cover;}
+.flip-btn-back .evento-img { width:45px;height:45px; margin-right:7px; border-radius:7px; object-fit:cover;box-shadow:0 2px 7px #0005;}
+.flip-btn-back .medalha-label { font-weight:500; color:#fff;}
+.flip-btn-back ul, .flip-btn-back li {margin:0;padding:0;list-style:none;}
+.flip-btn-back ul {display:flex; flex-direction: column; gap:8px;}
+.flip-btn-back .lesoes-list {margin:0; padding-left:0;}
+.flip-btn-back .lesoes-list li {margin-bottom:4px;}
+@media (max-width:500px){
+  .flip-btn, .flip-btn-inner {height:56px;}
+  .flip-btn-front, .flip-btn-back {font-size:.98em;}
+  .flip-btn-back .evento-img{width:33px;height:33px;}
 }
 
+/* Oculta decor botão antigo */
+.cartao-dir button:not(.flip-btn) {
+  display:none !important;
+}
 </style>
 </head>
 <body>
@@ -502,13 +454,11 @@ document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
   });
 });
 
-// -- DEFINE PINS PARA O CARTÃO 3 --
 const pins3 = [
   { top: 28, left: 60, nome: "Piscina A", local: "Lisboa", imagem: "piscinaa.jpg" },
   { top: 47, left: 30, nome: "Piscina B", local: "Porto", imagem: "piscinab.jpg" },
   { top: 63, left: 75, nome: "Piscina C", local: "Faro", imagem: "piscinac.jpg" }
 ];
-
 const pins4 = [
   { top: 47, left: 50.5, nome: "Piscina D", local: "Madrid - ESP", imagem: "piscinad.jpg" },
   { top: 46, left: 14, nome: "Piscina E", local: "Ponta Delgada - PT (Açores)", imagem: "piscinae.jpg" },
@@ -527,7 +477,6 @@ const pins4 = [
   { top: 61.9, left: 20.9, nome: "Piscina 15", local: "Algés- PT", imagem: "piscina15.jpg" }
 ];
 
-
 const conteudosCartao = {
   2: getCartaoModal('cmbcart-removebg-preview.png', 'mapacmb.png', []),
   3: getCartaoModal('anacart-removebg-preview.png', 'mapaanac.png', []),
@@ -536,7 +485,6 @@ const conteudosCartao = {
   6: getCartaoModal('anycart-removebg-preview.png', 'mapaany.png', [])
 };
 
-// Função para gerar o cartão original, com a nova estrutura animada na cartao-dir
 function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
   return `
     <div class="cartao-conteudo-flex">
@@ -552,16 +500,41 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = []) {
           <div id="pin-popup"></div>
         </div>
       </div>
-      <div class="cartao-dir" id="cartaoDir">
-        <button>Medalhas</button>
-        <button>lesoes</button>
-        <button>eventos</button>
-        <div class="paralelepipedo" id="paralelepipedo">
-          <div class="face-front"></div>
-          <div class="face-top" id="faceTopConteudo">
-            <p class="texto-inicial">Passe o rato sobre um retângulo para ver o conteúdo</p>
-          </div>
-        </div>
+      <div class="cartao-dir" id="cartaoDirEscolhe">
+        <button class="flip-btn" tabindex="0">
+          <span class="flip-btn-inner">
+            <span class="flip-btn-front">Medalhas</span>
+            <span class="flip-btn-back">
+              <ul>
+                <li><img src="med1.jpg" class="medalha-img" alt="Ouro"><span class="medalha-label">Ouro Natação</span></li>
+                <li><img src="med2.jpg" class="medalha-img" alt="Prata"><span class="medalha-label">Prata Atletismo</span></li>
+                <li><img src="med3.jpg" class="medalha-img" alt="Bronze"><span class="medalha-label">Bronze Basquetebol</span></li>
+              </ul>
+            </span>
+          </span>
+        </button>
+        <button class="flip-btn" tabindex="0">
+          <span class="flip-btn-inner">
+            <span class="flip-btn-front">lesoes</span>
+            <span class="flip-btn-back">
+              <ul class="lesoes-list">
+                <li>Tornozelo torcido em 2022</li>
+                <li>Luxação no ombro em 2023</li>
+                <li>Lesão lombar ligeira</li>
+              </ul>
+            </span>
+          </span>
+        </button>
+        <button class="flip-btn" tabindex="0">
+          <span class="flip-btn-inner">
+            <span class="flip-btn-front">eventos</span>
+            <span class="flip-btn-back">
+              <img src="evento1.jpg" class="evento-img" alt="Evento1">
+              <img src="evento2.jpg" class="evento-img" alt="Evento2">
+              <img src="evento3.jpg" class="evento-img" alt="Evento3">
+            </span>
+          </span>
+        </button>
       </div>
     </div>
   `;
@@ -587,11 +560,9 @@ function abrirCartao(idx) {
   requestAnimationFrame(() => {
     bg.classList.add('show');
     box.focus();
-    setupAnimationHover(); // Ativa a troca de conteúdos no hover dos botões
   });
 }
 
-// -- Fechar modal --
 function fecharCartao(bg) {
   if (!bg) return;
   bg.classList.remove('show');
@@ -612,7 +583,6 @@ window.mostrarInfoPin = function (e, nome, local, imagem) {
   const popup = document.querySelector("#pin-popup");
   popup.innerHTML = `<strong>${nome}</strong><br>${local}<br>${imagem ? `<img src="${imagem}" alt="${nome}">` : ''}`;
   popup.style.display = "block";
-  // Posição relativa ao pin
   const parent = e.target.parentElement;
   const parentRect = parent.getBoundingClientRect();
   const pinRect = e.target.getBoundingClientRect();
@@ -621,7 +591,6 @@ window.mostrarInfoPin = function (e, nome, local, imagem) {
   popup.style.top = y + "px";
   popup.style.left = x + "px";
   popup.style.pointerEvents = 'auto';
-  // Esconde popup ao clicar fora
   setTimeout(() => {
     window.addEventListener('mousedown', esconderPopup, { once: true });
   }, 0);
@@ -630,8 +599,6 @@ function esconderPopup(e) {
   const popup = document.querySelector("#pin-popup");
   if (popup) popup.style.display = "none";
 }
-
-// -- Fade inicial --
 window.addEventListener('load', () => {
   const screenFade = document.getElementById('screen-fade');
   if (!screenFade) return;
@@ -642,59 +609,6 @@ window.addEventListener('load', () => {
     screenFade.remove();
   });
 });
-
-// Função que ativa o comportamento hover para mostrar conteúdo no paralelepípedo superior
-function setupAnimationHover() {
-  const cartaoDir = document.getElementById('cartaoDir');
-  if (!cartaoDir) return;
-  const faceTop = document.getElementById('faceTopConteudo');
-  if (!faceTop) return;
-  const botoes = cartaoDir.querySelectorAll('button');
-
-  // Conteúdos para cada botão, conforme seu pedido
-  const conteudos = {
-    'Medalhas': `
-      <div class="conteudo-medalhas">
-        <div class="item-medalha"><img src="med1.jpg" alt="Medalha Ouro"><span>Ouro Natação</span></div>
-        <div class="item-medalha"><img src="med2.jpg" alt="Medalha Prata"><span>Prata Atletismo</span></div>
-        <div class="item-medalha"><img src="med3.jpg" alt="Medalha Bronze"><span>Bronze Basquetebol</span></div>
-      </div>
-    `,
-    'lesoes': `
-      <div class="conteudo-lesoes">
-        <p>Tornozelo torcido em 2022</p>
-        <p>Luxação no ombro em 2023</p>
-        <p>Lesão lombar ligeira</p>
-      </div>
-    `,
-    'eventos': `
-      <div class="conteudo-eventos">
-        <img src="evento1.jpg" alt="Evento 1">
-        <img src="evento2.jpg" alt="Evento 2">
-        <img src="evento3.jpg" alt="Evento 3">
-      </div>
-    `
-  };
-
-  // Função para mostrar conteúdo ao passar o rato por cima
-  botoes.forEach(botao => {
-    botao.addEventListener('mouseenter', () => {
-      const txt = botao.textContent.trim();
-      if (conteudos[txt]) {
-        faceTop.innerHTML = conteudos[txt];
-      }
-    });
-    botao.addEventListener('mouseleave', () => {
-      // Quando sair de todos os botões, retorna texto inicial
-      setTimeout(() => {
-        // Verifica se o mouse não está em nenhum botão
-        if (![...botoes].some(b => b.matches(':hover'))) {
-          faceTop.innerHTML = `<p class="texto-inicial">Passe o rato sobre um retângulo para ver o conteúdo</p>`;
-        }
-      }, 100);
-    });
-  });
-}
 </script>
 </body>
 </html>
