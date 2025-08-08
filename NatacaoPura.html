@@ -666,10 +666,13 @@ window.addEventListener('load', () => {
   setTimeout(() => {
     screenFade.style.opacity = '0';
   }, 100);
-  screenFade.addEventListener('transitionend', () => {
-    screenFade.remove();
+  screenFade.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'opacity') {
+      screenFade.remove();
+    }
   });
 });
+
 </script>
 </body>
 </html>
