@@ -552,10 +552,13 @@ const conteudosCartao = {
 };
   
   
-function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas = {ouro:0, prata:0, bronze:0}, lesoes = "", eventos = []) {
-  const eventosHtml = eventos.map(evt => 
+function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas = {ouro:0, prata:0, bronze:0}, lesoes = [], eventos = []) {
+  const eventosHtml = eventos.map(evt =>
     `<img src="${evt.src}" alt="${evt.alt}" class="evento-img" />`
   ).join("");
+  const lesoesHtml = lesoes && lesoes.length > 0
+    ? lesoes.map(lesao => `<img src="${lesao.src}" alt="${lesao.alt}" class="evento-img" />`).join("")
+    : '<span style="color:#bbb">Sem lesões registadas.</span>';
 
   return `
     <div class="cartao-conteudo-flex">
@@ -586,7 +589,7 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas = {ouro:0, pr
             <span class="qtd-medalha bronze">${medalhas.bronze}</span>
           </div>
         </div>
-        <div class="info-rect lesoes-info">${lesoes}</div>
+        <div class="info-rect lesoes-info">${lesoesHtml}</div>
         <div class="info-rect eventos-info">
           ${eventosHtml}
         </div>
