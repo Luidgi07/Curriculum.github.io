@@ -562,7 +562,8 @@ const conteudosCartao = {
   3: getCartaoModal('anacart-removebg-preview.png', 'mapato-removebg-preview.png', pins3, dadosCartoes[3].medalhas, dadosCartoes[3].lesoes, dadosCartoes[3].eventos),
   4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png', pins4, dadosCartoes[4].medalhas, dadosCartoes[4].lesoes, dadosCartoes[4].eventos),
   5: getCartaoModal('cirlcart-removebg-preview.png', 'mapato-removebg-preview.png', pins5, dadosCartoes[5].medalhas, dadosCartoes[5].lesoes, dadosCartoes[5].eventos),
-  6: getCartaoModal('anycart-removebg-preview.png', dadosCartoes[6].medalhas, dadosCartoes[6].lesoes, dadosCartoes[6].eventos)
+  6: getCartaoSemMapa('anycart-removebg-preview.png', dadosCartoes[6].medalhas, dadosCartoes[6].lesoes, dadosCartoes[6].eventos)
+
 };
   
   
@@ -589,6 +590,43 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas = {ouro:0, pr
         </div>
       </div>
       <div class="cartao-dir">
+        <div class="info-rect medalhas-info-horizontal">
+          <div class="medalha-col">
+            <img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img">
+            <span class="qtd-medalha">${medalhas.ouro}</span>
+          </div>
+          <div class="medalha-col">
+            <img src="med2-removebg-preview.png" alt="Prata" class="medalha-img">
+            <span class="qtd-medalha prata">${medalhas.prata}</span>
+          </div>
+          <div class="medalha-col">
+            <img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img">
+            <span class="qtd-medalha bronze">${medalhas.bronze}</span>
+          </div>
+        </div>
+        <div class="info-rect lesoes-info">${lesoesHtml}</div>
+        <div class="info-rect eventos-info">
+          ${eventosHtml}
+        </div>
+      </div>
+    </div>
+  `;
+}
+  
+function getCartaoSemMapa(imagemEsq, medalhas = {ouro:0, prata:0, bronze:0}, lesoes = [], eventos = []) {
+  const eventosHtml = eventos.map(evt =>
+    `<img src="${evt.src}" alt="${evt.alt}" class="evento-img" />`
+  ).join("");
+  const lesoesHtml = lesoes && lesoes.length > 0
+    ? lesoes.map(lesao => `<img src="${lesao.src}" alt="${lesao.alt}" class="evento-img" />`).join("")
+    : '<span style="color:#bbb">Sem Conquistas Importantes Registadas.</span>';
+
+  return `
+    <div class="cartao-conteudo-flex">
+      <div class="cartao-esq">
+        <img src="${imagemEsq}" alt="Cartão">
+      </div>
+      <div class="cartao-dir" style="flex:1; align-items:center; justify-content:center;">
         <div class="info-rect medalhas-info-horizontal">
           <div class="medalha-col">
             <img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img">
