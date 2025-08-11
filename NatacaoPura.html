@@ -395,6 +395,30 @@ body {
   background: #428cff33;
   color: #b02;
 }
+  .cartao-modal.pequeno {
+  width: 420px;
+  height: 410px;
+  min-width: unset;
+  max-width: 98vw;
+}
+
+.cartao-modal.pequeno .cartao-esq {
+  width: 95px;
+}
+
+.cartao-modal.pequeno .cartao-esq img {
+  width: 90%;
+}
+
+.cartao-modal.pequeno .cartao-dir {
+  width: 195px;
+  padding: 10px 0;
+  gap: 14px;
+}
+
+.cartao-modal.pequeno .info-rect { padding: 15px 0; font-size: 1em; }
+.cartao-modal.pequeno .medalha-img { width: 27px; height: 27px; }
+
 </style>
 </head>
 <body>
@@ -660,7 +684,8 @@ function abrirCartao(idx) {
     if (e.target === bg) fecharCartao(bg);
   };
   const box = document.createElement('div');
-  box.className = 'cartao-modal';
+  // Só adiciona a classe 'pequeno' para o cartão 6
+  box.className = 'cartao-modal' + (idx === 6 ? ' pequeno' : '');
   box.tabIndex = 0;
   box.innerHTML = conteudo +
     `<button class="cartao-fechar" title="Fechar" aria-label="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
@@ -672,6 +697,7 @@ function abrirCartao(idx) {
     box.focus();
   });
 }
+
 
 // -- Fechar modal --
 function fecharCartao(bg) {
