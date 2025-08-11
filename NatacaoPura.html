@@ -422,9 +422,14 @@ body {
   width: 240px;
   padding: 20px 0;
   gap: 18px;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
   align-items: stretch;
+  justify-content: flex-start;
+  height: 100%;
+  margin-top: 40px; /* BAIXA a coluna direita toda */
 }
+
 
 .cartao-modal.pequeno .info-rect {
   height: 90px;
@@ -434,6 +439,11 @@ body {
   align-items: center;
   justify-content: center;
 }
+  .cartao-modal.pequeno .medalhas-info-horizontal {
+  padding: 28px 0 28px 0;  /* aumenta o padding top e bottom */
+  gap: 22px;               /* espaço maior entre medalhas, opcional */
+}
+
 
 
 </style>
