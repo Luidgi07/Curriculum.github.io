@@ -442,6 +442,48 @@ body {
 .cartao-modal.pequeno .qtd-medalha {
   font-size: 1.22em !important;
 }
+.cartao-modal.pequeno .info-rect {
+  min-height: 82px !important;   /* retângulo maior/alto */
+  padding: 21px 0 !important;    /* mais espaço interno */
+  font-size: 1.22em !important;
+}
+
+.cartao-modal.pequeno .medalhas-info-horizontal {
+  padding: 18px 0 !important;
+  gap: 14px !important;
+  margin: 0 14px !important;
+}
+
+.cartao-modal.pequeno .evento-img,
+.cartao-modal.pequeno .lesoes-info .evento-img {
+  height: 70px !important;      /* eventos/lesões grandes */
+  max-width: 110px !important;
+  margin: 0 7px !important;
+  padding: 0;
+}
+
+/* Medalhas também em destaque */
+.cartao-modal.pequeno .medalha-img {
+  width: 48px !important;
+  height: 48px !important;
+  margin-bottom: 6px !important;
+}
+.cartao-modal.pequeno .qtd-medalha {
+  font-size: 1.22em !important;
+}
+
+/* Fundo escurecido */
+.zoom-img-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,32,54,0.88);
+  z-index: 15000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  animation: zoomFadeInBg 0.28s cubic-bezier(.59,1.7,.7,.81) 1;
+}
 
 
 /* Fundo escurecido */
