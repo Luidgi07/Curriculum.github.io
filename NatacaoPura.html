@@ -282,7 +282,7 @@ body {
   flex-direction:column;
   justify-content: center;
   align-items: stretch;
-  gap: 27px;
+  gap: 37px;
   padding: 20px 0;
 }
 .cartao-dir .info-rect {
@@ -446,10 +446,30 @@ body {
   padding: 28px 0 28px 0;  /* aumenta o padding top e bottom */
   gap: 22px;               /* espaço maior entre medalhas, opcional */
 }
-.cartao-modal.pequeno .lesoes-info {
+.cartao-modal.pequeno {
   padding-top: 30px;
   padding-bottom: 30px;
 }
+.lesoes-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 26px 0;
+  margin-top: 18px;
+  margin-bottom: 14px;
+  min-height: 86px;    /* ou outro valor, se queres um bloco mais alto */
+  background: #172540;
+}
+.lesoes-info .evento-img {
+  margin: 0 12px;
+  padding: 8px;
+  background: #142946;
+  border-radius: 11px;
+  box-shadow: 0 2px 8px #12294488;
+  max-height: 44px;    /* ajusta se necessário para as moedas/imagens não ficarem muito grandes */
+}
+  
 </style>
 </head>
 <body>
