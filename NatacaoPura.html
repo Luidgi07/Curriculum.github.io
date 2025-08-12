@@ -454,6 +454,49 @@ body {
   padding-bottom: 30px;
 }
 
+
+/* Fundo escurecido */
+.zoom-img-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,32,54,0.88);
+  z-index: 15000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  animation: zoomFadeInBg 0.28s cubic-bezier(.59,1.7,.7,.81) 1;
+}
+
+/* Imagem animada e central */
+.zoom-img-animada {
+  max-width: 62vw;
+  max-height: 62vh;
+  border-radius: 18px;
+  box-shadow: 0 2px 64px #226cff88, 0 3px 32px #151524cc;
+  background: #182a3f;
+  opacity: 0;
+  transform: scale(0.25) rotate(-17deg);
+  transition: opacity 0.27s, transform 0.39s cubic-bezier(.54,1.56,.75,1.04);
+  outline: 0;
+}
+.zoom-img-animada.show {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  animation: zoomBounceImg 0.36s cubic-bezier(.49,1.76,.49,1.01) 1;
+}
+
+/* Keyframes para animações suaves */
+@keyframes zoomFadeInBg {
+  from { background: rgba(20,32,54,0); }
+  to { background: rgba(20,32,54,0.88); }
+}
+@keyframes zoomBounceImg {
+  0% { transform: scale(0.25) rotate(-17deg);}
+  70% { transform: scale(1.07) rotate(1deg);}
+  100% { transform: scale(1) rotate(0deg);}
+}
+
   
 </style>
 </head>
@@ -790,6 +833,40 @@ window.addEventListener('load', () => {
     }
   });
 });
+// Handler para expandir qualquer imagem das medalhas, eventos ou lesões
+document.body.addEventListener('click', function(e) {
+  const target = e.target;
+  // Só imagens que queremos animar
+  if (target.classList.contains('medalha-img') || target.classList.contains('evento-img')) {
+    abrirZoomImagem(target.src, target.alt);
+  }
+});
+
+function abrirZoomImagem(src, alt) {
+  // Remove se já houver
+  document.querySelectorAll('.zoom-img-bg').forEach(e => e.remove());
+
+  // Criação dos elementos
+  const bg = document.createElement('div');
+  bg.className = 'zoom-img-bg';
+
+  const img = document.createElement('img');
+  img.className = 'zoom-img-animada';
+  img.src = src;
+  img.alt = alt || 'Zoom da imagem';
+  img.tabIndex = 0;
+
+  // Fechar ao clicar fora ou no ESC
+  bg.onclick = e => { if (e.target === bg) bg.remove(); }
+  img.onclick = e => e.stopPropagation();
+  document.onkeydown = function(e) { if (e.key === "Escape") bg.remove(); }
+
+  bg.appendChild(img);
+  document.body.appendChild(bg);
+
+  // Triggar a animação
+  setTimeout(() => img.classList.add('show'), 15);
+}
 
 </script>
 </body>
