@@ -400,58 +400,56 @@ body {
 }
 /* ====== CARTÃO 6 - MODAL PEQUENO ====== */
 .cartao-modal.pequeno {
-  width: 360px !important;  
-  height: 220px !important;
+  width: 410px !important;   /* largura geral do modal */
+  height: 260px !important;  /* altura mais usável */
 }
 
-/* ====== PAINEL DIREITO ====== */
+/* Painel direito – mais largo */
 .cartao-modal.pequeno .cartao-dir {
-  width: 140px !important;
-  padding: 12px 0 16px 0 !important;
-  gap: 12px !important;
-  margin-top: 10px;
+  width: 180px !important;
+  padding: 18px 0 18px 0 !important;
+  gap: 15px !important;
+  margin-top: 8px;
   background: #101e30;
 }
 
-/* ====== RETÂNGULOS DE INFO (Genérico) ====== */
+/* Retângulo de info – mais confortável */
 .cartao-modal.pequeno .info-rect {
-  min-height: 82px !important;    /* altura maior/regulada */
-  padding: 21px 0 !important;     /* espaço interno */
-  font-size: 1.22em !important;   /* tamanho do texto */
+  min-height: 55px !important;    /* altura visível para imagens + números */
+  padding: 13px 10px !important;  /* espaço interno equilibrado */
+  font-size: 1.04em !important;
   box-sizing: border-box;
-  margin: 0 4px;
+  margin: 0 6px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* ====== RETÂNGULO DAS MEDALHAS ====== */
+/* Retângulo medalhas */
 .cartao-modal.pequeno .medalhas-info-horizontal {
-  padding: 18px 0 !important;
-  gap: 14px !important;
-  margin: 0 14px !important;
+  padding: 12px 0 !important;
+  gap: 12px !important;
+  margin: 0 10px !important;
 }
 
-/* ====== IMAGENS DE MEDALHAS ====== */
+/* Medalhas visíveis, mas não exageradas */
 .cartao-modal.pequeno .medalha-img {
-  width: 48px !important;
-  height: 48px !important;
-  margin-bottom: 6px !important;
+  width: 36px !important;
+  height: 36px !important;
+  margin-bottom: 4px !important;
 }
-
-/* ====== NÚMEROS DAS MEDALHAS ====== */
 .cartao-modal.pequeno .qtd-medalha {
-  font-size: 1.22em !important;
+  font-size: 1.08em !important;
 }
 
-/* ====== IMAGENS DE EVENTOS E LESÕES ====== */
+/* Evento/lesão com presença, mas cabem no retângulo */
 .cartao-modal.pequeno .evento-img,
 .cartao-modal.pequeno .lesoes-info .evento-img {
-  height: 70px !important;
-  max-width: 110px !important;
-  margin: 0 7px !important;
+  height: 38px !important;
+  max-width: 70px !important;
+  margin: 0 6px !important;
   padding: 0;
 }
 
