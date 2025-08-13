@@ -398,62 +398,66 @@ body {
   background: #428cff33;
   color: #b02;
 }
+
+
+  
 /* ====== CARTÃO 6 - MODAL PEQUENO ====== */
 .cartao-modal.pequeno {
-  width: 410px !important;   /* largura geral do modal */
-  height: 260px !important;  /* altura mais usável */
+  width: 540px !important;     /* Modal mais largo */
+  height: 320px !important;    /* Modal mais alto */
 }
 
-/* Painel direito – mais largo */
+/* Painel direito mais largo/visível */
 .cartao-modal.pequeno .cartao-dir {
-  width: 180px !important;
-  padding: 18px 0 18px 0 !important;
-  gap: 15px !important;
-  margin-top: 8px;
+  width: 230px !important;
+  padding: 28px 0 28px 0 !important;
+  gap: 22px !important;
+  margin-top: 10px;
   background: #101e30;
 }
 
-/* Retângulo de info – mais confortável */
+/* Retângulos info maiores */
 .cartao-modal.pequeno .info-rect {
-  min-height: 55px !important;    /* altura visível para imagens + números */
-  padding: 13px 10px !important;  /* espaço interno equilibrado */
-  font-size: 1.04em !important;
+  min-height: 75px !important;      /* retângulo bem visível */
+  padding: 22px 18px !important;    /* espaço confortável */
+  font-size: 1.15em !important;
   box-sizing: border-box;
-  margin: 0 6px;
+  margin: 0 10px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 16px;
 }
 
 /* Retângulo medalhas */
 .cartao-modal.pequeno .medalhas-info-horizontal {
-  padding: 12px 0 !important;
-  gap: 12px !important;
-  margin: 0 10px !important;
+  padding: 18px 0 !important;
+  gap: 18px !important;
+  margin: 0 18px !important;
 }
 
-/* Medalhas visíveis, mas não exageradas */
+/* Medalhas confortáveis */
 .cartao-modal.pequeno .medalha-img {
-  width: 36px !important;
-  height: 36px !important;
-  margin-bottom: 4px !important;
+  width: 48px !important;
+  height: 48px !important;
+  margin-bottom: 7px !important;
 }
 .cartao-modal.pequeno .qtd-medalha {
-  font-size: 1.08em !important;
+  font-size: 1.22em !important;
 }
 
-/* Evento/lesão com presença, mas cabem no retângulo */
+/* Imagens de eventos/lesões grandes, mas encaixam bem */
 .cartao-modal.pequeno .evento-img,
 .cartao-modal.pequeno .lesoes-info .evento-img {
-  height: 38px !important;
-  max-width: 70px !important;
-  margin: 0 6px !important;
+  height: 56px !important;
+  max-width: 100px !important;
+  margin: 0 12px !important;
   padding: 0;
 }
 
 
+  
 /* Fundo escurecido */
 .zoom-img-bg {
   position: fixed;
@@ -671,7 +675,6 @@ const dadosCartoes = {
     lesoes: [{ src: "ChatGPT_Image_10_08_2025__21_19_11-removebg-preview.png", alt: "3º Lugar Nacional" },
              { src: "ChatGPT_Image_10_08_2025__20_42_26-removebg-preview.png", alt: "Nadador Completo 2018" }
             ],
-    eventos: []
   }
 };
 
