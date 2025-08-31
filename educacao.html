@@ -50,25 +50,20 @@
   </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
-    // Cena
+    // Cena e Luz
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe8e3d1);
-
-    // Câmera para uma perspetiva clássica central
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
     camera.position.set(0, 8, 20);
-
     const renderer = new THREE.WebGLRenderer({antialias:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-
-    // Luz ambiente e direcional (simula luzes cálidas)
     scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
     const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
     dirLight.position.set(12,22,18);
     scene.add(dirLight);
 
-    // Chão madeira escura arredondado (mesa central)
+    // Mesa central
     const mesaGeo = new THREE.CylinderGeometry(7.5,7.5,1,32);
     const mesaMat = new THREE.MeshLambertMaterial({color: 0x8d5d35 });
     const mesa = new THREE.Mesh(mesaGeo, mesaMat);
@@ -76,7 +71,7 @@
     mesa.userData.solido = true;
     scene.add(mesa);
 
-    // Plataforma/chão de biblioteca
+    // Piso base
     const pisoGeo = new THREE.CylinderGeometry(10,10,0.45,40);
     const pisoMat = new THREE.MeshLambertMaterial({color: 0xc9ad7c });
     const piso = new THREE.Mesh(pisoGeo, pisoMat);
@@ -84,85 +79,63 @@
     piso.userData.solido = true;
     scene.add(piso);
 
-    // Função para criar estantes clássicas
-    function criaEstanteClassica(x, z, y=2.2, largura=0.8, altura=4.1, profundidade=8.1){
+    // Estantes (traseira, laterais completas)
+    function criaEstante(x, z, largura, altura, profundidade){
       const geo = new THREE.BoxGeometry(largura, altura, profundidade);
       const mat = new THREE.MeshLambertMaterial({color:0x7a4a21});
       const estante = new THREE.Mesh(geo, mat);
-      estante.position.set(x, y, z);
+      estante.position.set(x, altura/2, z);
       estante.userData.solido = true;
       scene.add(estante);
-
-      // Livros decorativos (coloridos)
-      for(let i=-3.5;i<=3.5;i+=1.4){
-        const gbook = new THREE.BoxGeometry(0.2, Math.random()*2.9+0.7, 1);
-        const mbook = new THREE.MeshLambertMaterial({color:Math.floor(Math.random()*0xffffff)});
-        const book = new THREE.Mesh(gbook, mbook);
-        book.position.set(x, y-1.3+Math.random()*2.3, z+i);
-        scene.add(book);
+      // Livros decorativos (coloridos, em camadas)
+      for(let i=-profundidade/2+1.2;i<=profundidade/2-1.2;i+=1.1){
+        for(let j=0.5;j<altura-0.6;j+=1){
+          const gbook = new THREE.BoxGeometry(0.18, 0.7+Math.random()*0.7, 0.7);
+          const mbook = new THREE.MeshLambertMaterial({color:Math.floor(Math.random()*0xffffff)});
+          const book = new THREE.Mesh(gbook, mbook);
+          book.position.set(x, j, z+i);
+          scene.add(book);
+        }
       }
     }
+    // Traseira
+    criaEstante(0, -9.2, 16, 4.2, 0.7);
+    // Laterais
+    criaEstante(-8.8, 0, 0.7, 4.2, 16);
+    criaEstante(8.8, 0, 0.7, 4.2, 16);
 
-    // Estantes nas paredes laterais e traseira
-    criaEstanteClassica(-9, 0, 2.2); // esquerda
-    criaEstanteClassica(9, 0, 2.2);  // direita
-    criaEstanteClassica(0, -8.7, 2.2, 16, 4.1, 0.8); // traseira
+    // Piso superior central pequeno
+    const plataformaGeo = new THREE.CylinderGeometry(3,3,0.4,32);
+    const plataformaMat = new THREE.MeshLambertMaterial({color:0xe5d7b7});
+    const plataforma = new THREE.Mesh(plataformaGeo, plataformaMat);
+    plataforma.position.set(0, 4.3, 0);
+    plataforma.userData.solido = true;
+    scene.add(plataforma);
 
-    // Grades/painéis decorativos no andar superior
-    function criaGrades(y=4.3, profundidade=8.1){
-      for(let x=-8.7; x<=8.7; x+=1.2){
-        const vGeo = new THREE.BoxGeometry(0.16, 1.1, 0.13);
+    // Gradeamento circular à volta do piso superior
+    function criaGradesCirculares(raio=3.2, y=4.6){
+      for(let i=0; i<32; i++){
+        const ang = i * (Math.PI*2/32);
+        const x = Math.cos(ang) * raio;
+        const z = Math.sin(ang) * raio;
+        // barra vertical
+        const vGeo = new THREE.BoxGeometry(0.13, 1, 0.13);
         const vMat = new THREE.MeshLambertMaterial({color:0x403021});
         const vBar = new THREE.Mesh(vGeo, vMat);
-        vBar.position.set(x, y, profundidade);
+        vBar.position.set(x, y, z);
         scene.add(vBar);
       }
-      const hGeo = new THREE.BoxGeometry(17.9, 0.14, 0.18);
+      // barra horizontal
+      const hGeo = new THREE.TorusGeometry(raio, 0.07, 12, 32);
       const hMat = new THREE.MeshLambertMaterial({color:0x403021});
       const hBar = new THREE.Mesh(hGeo, hMat);
-      hBar.position.set(0, y+0.56, profundidade);
+      hBar.position.set(0,y+0.41,0);
       scene.add(hBar);
     }
-    criaGrades(4.6,8.1); // traseira
-    criaGrades(4.6,-8.1); // frente
-    // Grades nas laterais
-    function criaGradesLaterais(y=4.6){
-      for(let z=-8.1;z<=8.1;z+=1.3){
-        const vGeo = new THREE.BoxGeometry(0.16, 1.1, 0.13);
-        const vMat = new THREE.MeshLambertMaterial({color:0x403021});
-        const vBar = new THREE.Mesh(vGeo, vMat);
-        vBar.position.set(9, y, z);
-        scene.add(vBar);
-        const vBar2 = vBar.clone();
-        vBar2.position.x = -9;
-        scene.add(vBar2);
-      }
-      const hGeo = new THREE.BoxGeometry(0.12, 0.17, 16.5);
-      const hMat = new THREE.MeshLambertMaterial({color:0x403021});
-      const hBar = new THREE.Mesh(hGeo, hMat);
-      hBar.position.set(9, y+0.5, 0);
-      scene.add(hBar);
-      const hBar2 = hBar.clone();
-      hBar2.position.x = -9;
-      scene.add(hBar2);
-    }
-    criaGradesLaterais();
-
-    // Escada para acesso ao piso/deck superior
-    function criaEscada(x, z, passos=8, hInicio=0.07){
-      for(let i=0; i<passos; i++){
-        const degrauGeo = new THREE.BoxGeometry(2.1, 0.14, 1.2);
-        const degrauMat = new THREE.MeshLambertMaterial({color:0xe6cfa7});
-        const degrau = new THREE.Mesh(degrauGeo, degrauMat);
-        degrau.position.set(x, hInicio + i*0.33, z + i*0.9);
-        degrau.userData.solido = true;
-        scene.add(degrau);
-      }
-    }
-    criaEscada(6,2,-1);
+    criaGradesCirculares();
 
     // Prateleiras educativas/interativas
-    function criaPrat(x, z, y=1.7, texto){
+    function criaPrat(x, z, y, texto){
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
       const mat = new THREE.MeshLambertMaterial({color:0xffc107});
       const shelf = new THREE.Mesh(geo, mat);
@@ -174,13 +147,25 @@
       return shelf;
     }
     const prateleiras = [
-      criaPrat(-4.9, -5, 1.7, "Licenciatura em Engenharia Biomédica<br><i>IPS/ISEL (2023- )</i><br>Projetos IA Médica, tese segmentação de tumores."),
-      criaPrat(4.9, -5, 1.7, "Ensino Secundário<br><i>Escola Secundária de Setúbal (2019-2022)</i><br>Distinção, competição natação."),
-      criaPrat(0, -2, 1.7, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>"),
-      criaPrat(0, 6.9, 4.15, "Projetos científicos avançados<br><i>Explora o segundo piso da tua formação!</i>")
+      criaPrat(-5, -5, 1.6, "Licenciatura em Engenharia Biomédica<br><i>IPS/ISEL (2023- )</i><br>Projetos IA Médica, tese segmentação de tumores."),
+      criaPrat(5, -5, 1.6, "Ensino Secundário<br><i>Escola Secundária de Setúbal (2019-2022)</i><br>Distinção, competição natação."),
+      criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>"),
+      criaPrat(0, 0, 4.7, "Projetos científicos avançados<br><i>Piso superior.</i>")
     ];
+    // Escada para o piso superior
+    function criaEscada(x, z, passos=9, hInicio=0.07){
+      for(let i=0; i<passos; i++){
+        const degrauGeo = new THREE.BoxGeometry(1.2, 0.14, 0.7);
+        const degrauMat = new THREE.MeshLambertMaterial({color:0xe6cfa7});
+        const degrau = new THREE.Mesh(degrauGeo, degrauMat);
+        degrau.position.set(x, hInicio + i*0.47, z + i*0.57);
+        degrau.userData.solido = true;
+        scene.add(degrau);
+      }
+    }
+    criaEscada(2.3, 0);
 
-    // Boneco (avatar simples)
+    // Boneco (avatar simples) com movimento e posição inicial centrada
     function criaBoneco() {
       const grupo = new THREE.Group();
       const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
@@ -193,21 +178,21 @@
       const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
       cabeca.position.y = 2;
       grupo.add(cabeca);
-      grupo.position.set(0, 0.25, 7);
+      grupo.position.set(0, 0.25, 6);
       return grupo;
     }
     const boneco = criaBoneco();
     scene.add(boneco);
 
-    // Movimento WASD e colisões
+    // Movimento com WASD + colisão dura
     const keys = {};
     document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
     document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
 
     let prateleiraPerto = null;
     const speed = 0.13;
-
     const objetosSolidos = [];
+
     function atualizaColisoes() {
       objetosSolidos.length = 0;
       scene.traverse(obj => {
@@ -224,15 +209,13 @@
         const sx = obj.geometry.parameters.x || 1;
         const sy = obj.geometry.parameters.y || 1;
         const sz = obj.geometry.parameters.z || 1;
-
         if (
           nx > ox - sx / 2 &&
           nx < ox + sx / 2 &&
           ny > oy - sy / 2 &&
           ny < oy + sy / 2 &&
           nz > oz - sz / 2 &&
-          nz < oz + sz / 2
-        ) {
+          nz < oz + sz / 2 ) {
           return true;
         }
       }
@@ -241,30 +224,26 @@
 
     function animate() {
       let nx = boneco.position.x, ny = boneco.position.y, nz = boneco.position.z;
-
       if (keys["w"]) nz -= speed;
       if (keys["s"]) nz += speed;
       if (keys["a"]) nx -= speed;
       if (keys["d"]) nx += speed;
-
+      // Subida escada (atualiza y se degrau presente)
       if (keys["w"] || keys["s"]) {
-        for (let alturaStep = 0.25; alturaStep <= 4.4; alturaStep += 0.33) {
+        for (let alturaStep = 0.25; alturaStep <= 4.7; alturaStep += 0.47) {
           if (colisao(nx, alturaStep, nz)) {
             ny = alturaStep;
           }
         }
       }
-
-      nx = Math.max(-8.8, Math.min(8.8, nx));
-      nz = Math.max(-8, Math.min(8, nz));
-      ny = Math.max(0.25, Math.min(4.2, ny));
-
+      nx = Math.max(-8.5, Math.min(8.5, nx));
+      nz = Math.max(-8.5, Math.min(8.5, nz));
+      ny = Math.max(0.25, Math.min(4.6, ny));
       if (!colisao(nx, ny, nz)) {
         boneco.position.x = nx;
         boneco.position.z = nz;
         boneco.position.y = ny;
       }
-
       camera.position.x = boneco.position.x;
       camera.position.z = boneco.position.z + 12;
       camera.position.y = 6 + boneco.position.y / 1.7;
@@ -299,7 +278,7 @@
         '<br><span style="font-size:0.8em;color:#222;">(Mexe-te com WASD para explorar e sobe as escadas!)</span>';
       setTimeout(() => {
         div.innerHTML = 'Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.';
-      }, 4200);
+      }, 4000);
     }
   </script>
 </body>
