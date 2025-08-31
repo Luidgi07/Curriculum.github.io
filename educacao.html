@@ -1,220 +1,140 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Educação Gamificada Interativa</title>
+  <meta charset="UTF-8">
+  <title>Mini Biblioteca 3D - Three.js</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #e0f7fa;
-      margin: 0; padding: 0;
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    #gameArea {
-      position: relative;
-      width: 700px;
-      height: 450px;
-      background: #a2d5f2 url('https://i.imgur.com/ypxK24R.png') no-repeat center bottom;
-      background-size: contain;
-      border: 3px solid #0288d1;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-    #player {
-      position: absolute;
-      width: 50px;
-      height: 58px;
-      background: url('https://i.imgur.com/w7GCRPb.png') no-repeat;
-      background-size: contain;
-      top: 350px;
-      left: 50px;
-      transition: top 0.2s, left 0.2s;
-      cursor: pointer;
-    }
-    .location {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #ffeb3bcc;
-      border: 3px solid #fbc02d;
-      box-shadow: 0 0 10px #fbc02d;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      user-select: none;
-    }
-    .location:hover {
-      transform: scale(1.2);
-      box-shadow: 0 0 20px #f57f17;
-    }
-    #edu1 {
-      top: 300px;
-      left: 250px;
-    }
-    #edu2 {
-      top: 200px;
-      left: 500px;
-    }
-    #popUp {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 320px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      padding: 20px;
-      display: none;
-      z-index: 10;
-    }
-    #popUp h3 {
-      margin-top: 0;
-      color: #0277bd;
-    }
-    #closeBtn {
-      background: #0277bd;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 15px;
-      float: right;
-    }
-    #overlay {
-      position: fixed;
-      top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      z-index: 5;
-    }
-    #instructions {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: #01579b;
-      font-weight: 600;
-      font-size: 0.9rem;
-      background: #b3e5fccc;
-      padding: 6px 10px;
-      border-radius: 8px;
-      user-select: none;
-      z-index: 5;
+    body { margin: 0; overflow: hidden; }
+    #info {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(255,255,255,0.85); padding: 10px 18px;
+      border-radius: 8px; font-family: 'Segoe UI'; font-size: 1.1rem;
+      color: #0066bb; z-index: 4;
     }
   </style>
 </head>
 <body>
-  <div id="gameArea">
-    <div id="instructions">Usa as setas para mover o boneco. Clica nos círculos para ver info.</div>
-    <div id="player" tabindex="0" aria-label="Boneco jogador"></div>
-    <div class="location" id="edu1" tabindex="0" aria-label="Licenciatura em Engenharia Biomédica">🎓</div>
-    <div class="location" id="edu2" tabindex="0" aria-label="Ensino Secundário">📚</div>
-  </div>
-
-  <div id="overlay"></div>
-  <div id="popUp" role="dialog" aria-modal="true" aria-labelledby="popUpTitle">
-    <h3 id="popUpTitle"></h3>
-    <p id="popUpDesc"></p>
-    <button id="closeBtn">Fechar</button>
-  </div>
-
+  <div id="info">Usa WASD para mover. Clica num bloco para ver info.</div>
+  <script src="js/three.min.js"></script>
   <script>
-    const player = document.getElementById('player');
-    const gameArea = document.getElementById('gameArea');
-    const popup = document.getElementById('popUp');
-    const overlay = document.getElementById('overlay');
-    const title = document.getElementById('popUpTitle');
-    const desc = document.getElementById('popUpDesc');
-    const closeBtn = document.getElementById('closeBtn');
-    const step = 20;
+    // CENA, CÂMERA E RENDERER
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xe2f1e9);
 
-    // Limites dentro da área do jogo
-    const maxX = gameArea.clientWidth - player.clientWidth;
-    const maxY = gameArea.clientHeight - player.clientHeight;
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 8, 18);
 
-    // Estado do jogador
-    let posX = 50;
-    let posY = 350;
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-    // Mover o jogador com as setas
-    document.addEventListener('keydown', (e) => {
-      switch(e.key) {
-        case 'ArrowUp':
-          posY -= step;
-          if (posY < 0) posY = 0;
-          break;
-        case 'ArrowDown':
-          posY += step;
-          if (posY > maxY) posY = maxY;
-          break;
-        case 'ArrowLeft':
-          posX -= step;
-          if (posX < 0) posX = 0;
-          break;
-        case 'ArrowRight':
-          posX += step;
-          if (posX > maxX) posX = maxX;
-          break;
-        default: return;
+    // LUZ SUAVE
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffecb3, 0.8);
+    dirLight.position.set(10,20,10);
+    scene.add(dirLight);
+
+    // CHÃO
+    const floorGeo = new THREE.BoxGeometry(20, 0.5, 20);
+    const floorMat = new THREE.MeshLambertMaterial({color:0x85bca8});
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.position.y = -0.25;
+    scene.add(floor);
+
+    // PAREDES
+    const wallGeo = new THREE.BoxGeometry(20, 8, 0.5);
+    const wallMat = new THREE.MeshLambertMaterial({color:0xffffff});
+    const wallBack = new THREE.Mesh(wallGeo, wallMat);
+    wallBack.position.z = -9.75;
+    wallBack.position.y = 3.75;
+    scene.add(wallBack);
+
+    // PRATELEIRAS LIVROS
+    function createShelf(x,z,label) {
+      const shelfGeo = new THREE.BoxGeometry(2, 2, 0.5);
+      const shelfMat = new THREE.MeshLambertMaterial({color:0xffc107});
+      const shelf = new THREE.Mesh(shelfGeo, shelfMat);
+      shelf.position.set(x, 1, z);
+      shelf.userData.label = label;
+      scene.add(shelf);
+      return shelf;
+    }
+    const shelves = [
+      createShelf(-4, -5, "Licenciatura em Engenharia Biomédica"),
+      createShelf(4, -5, "Ensino Secundário"),
+      createShelf(0, -2, "Projetos"),
+    ];
+
+    // PERSONAGEM "LEGO"
+    function createCharacter() {
+      const group = new THREE.Group();
+      // Corpo
+      const bodyGeo = new THREE.BoxGeometry(1.1,1.2,0.7);
+      const bodyMat = new THREE.MeshLambertMaterial({color:0x2196f3});
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      body.position.y=1;
+      group.add(body);
+      // Cabeça
+      const headGeo = new THREE.BoxGeometry(0.8,0.7,0.7);
+      const headMat = new THREE.MeshLambertMaterial({color:0xfff176});
+      const head = new THREE.Mesh(headGeo, headMat);
+      head.position.y=2;
+      group.add(head);
+      // Pernas
+      const legsGeo = new THREE.BoxGeometry(0.95,0.5,0.65);
+      const legsMat = new THREE.MeshLambertMaterial({color:0x8d6e63});
+      const legs = new THREE.Mesh(legsGeo, legsMat);
+      legs.position.y=0.25;
+      group.add(legs);
+      group.position.set(0,0.25,7);
+      return group;
+    }
+    const player = createCharacter();
+    scene.add(player);
+
+    // CONTROLOS WASD
+    const keys = {};
+    document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+    document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+    function animate() {
+      // Movimento do jogador
+      if(keys["w"]) player.position.z -= 0.1;
+      if(keys["s"]) player.position.z += 0.1;
+      if(keys["a"]) player.position.x -= 0.1;
+      if(keys["d"]) player.position.x += 0.1;
+      camera.position.x = player.position.x;
+      camera.position.z = player.position.z + 11;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // DETEÇÃO DE CLIQUE NOS BLOCO/PRATELEIRA
+    window.addEventListener('mousedown', function(e){
+      // Normaliza coordenadas
+      const mouse = new THREE.Vector2(
+        (e.clientX / window.innerWidth) * 2 - 1,
+        -(e.clientY / window.innerHeight) * 2 + 1
+      );
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(shelves);
+      if(intersects.length > 0){
+        const info = intersects.object.userData.label;
+        showInfo(info);
       }
-      player.style.top = posY + 'px';
-      player.style.left = posX + 'px';
     });
 
-    // Dados das localizações
-    const locationsInfo = {
-      edu1: {
-        title: 'Licenciatura em Engenharia Biomédica',
-        desc: 'Instituto Politécnico de Setúbal & Lisboa (2023 - Presente). Conclusão de projetos de IA Médica e tese sobre segmentação de tumores.'
-      },
-      edu2: {
-        title: 'Ensino Secundário',
-        desc: 'Escola Secundária de Setúbal (2019 - 2022). Diploma com distinção e participação em competições de natação.'
-      }
-    };
-
-    // Mostrar popup ao clicar numa localização
-    document.querySelectorAll('.location').forEach(loc => {
-      loc.addEventListener('click', () => {
-        const info = locationsInfo[loc.id];
-        if(info) {
-          title.textContent = info.title;
-          desc.textContent = info.desc;
-          popup.style.display = 'block';
-          overlay.style.display = 'block';
-          popup.focus();
-        }
-      });
-      // Permite abrir popup com Enter ou Space para acessibilidade
-      loc.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          loc.click();
-        }
-      });
-    });
-
-    // Fechar popup
-    closeBtn.addEventListener('click', () => {
-      popup.style.display = 'none';
-      overlay.style.display = 'none';
-      player.focus();
-    });
-    overlay.addEventListener('click', () => {
-      closeBtn.click();
-    });
+    // POPUP para info educativa
+    function showInfo(text){
+      const div = document.getElementById('info');
+      div.innerHTML = text + '<br><span style="font-size:0.8em;color:#222;">(Pressiona WASD para voltar a andar)</span>';
+      setTimeout(()=>{div.innerHTML='Usa WASD para mover. Clica num bloco para ver info.'}, 2800);
+    }
   </script>
 </body>
 </html>
+
 
