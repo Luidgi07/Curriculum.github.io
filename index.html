@@ -652,44 +652,6 @@ btnEducacaoStartDetail.addEventListener('click', function(e) {
   }, 3000);
 });
 
-const hudEducacaoStartBtn = document.getElementById('hud-educacao-start');
-const screenFade = document.getElementById('screen-fade');
-hudEducacaoStartBtn?.addEventListener('click', function(e) {
-  e.preventDefault();
-  if (this.disabled) return;
-  this.disabled = true;
-  const hudStartDiv = this.closest('.hud-start');
-  hudStartDiv.classList.add('loading');
-  hudStartDiv.innerHTML = '';
-  const loadingBar = document.createElement('div');
-  loadingBar.classList.add('loading-bar-simple');
-  const fill = document.createElement('div');
-  fill.classList.add('fill');
-  loadingBar.appendChild(fill);
-  hudStartDiv.appendChild(loadingBar);
-  let widthPercent = 0;
-  const totalDuration = 3000;
-  const frameCount = 60;
-  const increment = 100 / frameCount;
-  const frameDuration = totalDuration / frameCount;
-  let frame = 0;
-  const interval = setInterval(() => {
-    frame++;
-    widthPercent += increment;
-    if (widthPercent > 100) widthPercent = 100;
-    fill.style.width = widthPercent + '%';
-    if (frame >= frameCount) {
-      clearInterval(interval);
-      setTimeout(() => {
-        screenFade.style.opacity = '1';
-        setTimeout(() => {
-          window.location.href = 'educacao.html';
-        }, 700);
-      }, 400);
-    }
-  }, frameDuration);
-});
-
 
   
 </script>
