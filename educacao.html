@@ -7,7 +7,7 @@
     body { margin: 0; overflow: hidden; }
     #info {
       position: absolute; top: 12px; left: 12px;
-      background: rgba(255,255,255,0.90); padding: 10px 18px;
+      background: rgba(255,255,255,0.92); padding: 10px 18px;
       border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 1.1rem;
       color: #0066bb; z-index: 4;
       box-shadow: 2px 3px 8px rgba(0,0,0,0.10);
@@ -74,23 +74,83 @@
     const floorMat = new THREE.MeshLambertMaterial({color:0xa1d6b6});
     const floor = new THREE.Mesh(floorGeo, floorMat);
     floor.position.y = -0.25;
+    floor.userData.solido = true; // collision
     scene.add(floor);
 
-    // PRATELEIRAS
-    function criaPrateleira(x,z,label) {
+    // PLATAFORMA SUPERIOR
+    const plataformaGeo = new THREE.BoxGeometry(8, 0.5, 8);
+    const plataformaMat = new THREE.MeshLambertMaterial({color:0xdcedc8});
+    const plataforma = new THREE.Mesh(plataformaGeo, plataformaMat);
+    plataforma.position.set(0, 2.2, 7);
+    plataforma.userData.solido = true;
+    scene.add(plataforma);
+
+    // ESTANTES FUNÇÃO
+    function criaEstante(x, z, y=1.1, vertical=false) {
+      const geo = vertical 
+        ? new THREE.BoxGeometry(0.7, 2.2, 17)
+        : new THREE.BoxGeometry(16, 2.2, 0.7);
+      const mat = new THREE.MeshLambertMaterial({color:0x8d5524});
+      const estante = new THREE.Mesh(geo, mat);
+      estante.position.set(x, y, z);
+      estante.userData.solido = true;
+      scene.add(estante);
+
+      // Livros decorativos
+      for(let i=-7;i<=7;i+=2){
+        const gbook = vertical
+          ? new THREE.BoxGeometry(0.3, 1.5 + Math.random() * 0.6, 0.6)
+          : new THREE.BoxGeometry(0.6, 1.5 + Math.random() * 0.6, 0.3);
+        const mbook = new THREE.MeshLambertMaterial({color : Math.floor(Math.random()*0xffffff)});
+        const book = new THREE.Mesh(gbook, mbook);
+        if (vertical)
+          book.position.set(x+0.52, y+0.5, z+i);
+        else
+          book.position.set(x+i, y+0.5, z+0.52);
+        scene.add(book);
+      }
+    }
+
+    // ESTANTES LATERAIS
+    criaEstante(-8.5, 0, 1.1, true); // esquerda
+    criaEstante(8.5, 0, 1.1, true);  // direita
+    criaEstante(0, -8.5, 1.1, false); // traseira
+    // Estante no superior
+    criaEstante(0, 7, 2.85, false);
+
+    // ESCADA
+    function criaEscada(x, z, steps=7, hInicio=0.3) {
+      for(let i=0;i<steps;i++){
+        const degrauGeo = new THREE.BoxGeometry(1.2, 0.18, 2);
+        const degrauMat = new THREE.MeshLambertMaterial({color:0xe6cfa7});
+        const degrau = new THREE.Mesh(degrauGeo, degrauMat);
+        degrau.position.set(x, hInicio + i*0.3, z + i*0.7);
+        degrau.userData.solido = true;
+        scene.add(degrau);
+      }
+    }
+    criaEscada(6, 2); // Escada perto do canto direito
+
+    // PRATELEIRAS DE INFOS (interação)
+    function criaPrateleira(x, z, y=1.0, texto) {
       const shelfGeo = new THREE.BoxGeometry(2, 2, 0.65);
-      const shelfMat = new THREE.MeshLambertMaterial({color:0xfac614});
+      const shelfMat = new THREE.MeshLambertMaterial({color:0xffc107});
       const shelf = new THREE.Mesh(shelfGeo, shelfMat);
-      shelf.position.set(x, 1, z);
-      shelf.userData.label = label;
+      shelf.position.set(x, y, z);
+      shelf.userData.label = texto;
+      shelf.userData.interacao = true;
+      shelf.userData.solido = true;
       scene.add(shelf);
       return shelf;
     }
+    // Piso: prateleiras info
     const prateleiras = [
-      criaPrateleira(-4, -5, "Licenciatura em Engenharia Biomédica<br><i>IPS/ISEL (2023- )</i><br>Projetos IA Médica, tese segmentação de tumores."),
-      criaPrateleira(4, -5, "Ensino Secundário<br><i>Escola Secundária de Setúbal (2019-2022)</i><br>Distinção, competição natação."),
-      criaPrateleira(0, -2, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
+      criaPrateleira(-4, -5, 1, "Licenciatura em Engenharia Biomédica<br><i>IPS/ISEL (2023- )</i><br>Projetos IA Médica, tese segmentação de tumores."),
+      criaPrateleira(4, -5, 1, "Ensino Secundário<br><i>Escola Secundária de Setúbal (2019-2022)</i><br>Distinção, competição natação."),
+      criaPrateleira(0, -2, 1, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
     ];
+    // Piso superior: mais uma info!
+    prateleiras.push( criaPrateleira(0, 7, 2.8, "Projetos científicos avançados<br><i>Explora o segundo piso da tua formação!</i>") );
 
     // BONECO
     function criaBoneco() {
@@ -114,22 +174,42 @@
     // MOVIMENTO COM WASD + COLISÃO DURA
     const keys = {};
     document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
-    document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+    document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false;
 
     let prateleiraPerto = null;
     const speed = 0.13; // velocidade do boneco
+    let alturaBoneco = 0.25; // para atualização plataforma
 
-    function colisao(nx, nz) {
-      // Testa colisão com cada prateleira
-      for(const shelf of prateleiras) {
-        // Dimensões do boneco e prateleira
-        const px = shelf.position.x;
-        const pz = shelf.position.z;
+    // Lista de objetos sólidos para colisão (todos menos livros)
+    const objetosSolidos = [];
+    scene.traverse(obj => {
+      if(obj.userData && obj.userData.solido) objetosSolidos.push(obj);
+    });
+
+    function atualizaColisoes() {
+      // Atualizar lista caso haja objetos novos criados
+      objetosSolidos.length = 0;
+      scene.traverse(obj => {
+        if(obj.userData && obj.userData.solido) objetosSolidos.push(obj);
+      });
+    }
+
+    function colisao(nx, ny, nz) {
+      // Testa colisão com cada objeto sólido
+      for(const obj of objetosSolidos) {
+        // Tolerância especial para degraus e plataforma
+        const ox = obj.position.x;
+        const oy = obj.position.y;
+        const oz = obj.position.z;
+        const sz = obj.geometry.parameters.z || 1;
+        const sx = obj.geometry.parameters.x || 1;
+        const sy = obj.geometry.parameters.y || 1;
+
         if(
-          nx > px-1.3 && nx < px+1.3 &&
-          nz > pz-1.1 && nz < pz+1.1
+          nx > ox - sx/2 && nx < ox + sx/2 &&
+          nz > oz - sz/2 && nz < oz + sz/2 &&
+          ny > oy - sy/2 && ny < oy + sy/2
         ) {
-          // Dentro do bloco: COLISÃO! Não avança.
           return true;
         }
       }
@@ -137,31 +217,45 @@
     }
 
     function animate() {
-      let nx = boneco.position.x, nz = boneco.position.z;
+      let nx = boneco.position.x, ny = boneco.position.y, nz = boneco.position.z;
 
       if(keys["w"])  nz -= speed;
       if(keys["s"])  nz += speed;
       if(keys["a"])  nx -= speed;
       if(keys["d"])  nx += speed;
 
-      // Limites do cenário
+      // saltar para degraus/nível superior
+      // verifica degraus na escada: se está perto, aumenta y
+      if(keys["w"] || keys["s"]) {
+        // verifica degrau à frente ou atrás
+        for(let alturaStep=0.25;alturaStep<=3;alturaStep+=0.3){
+          if(colisao(nx, alturaStep, nz)) {
+            ny = alturaStep;
+          }
+        }
+      }
+
+      // Limites globais do cenário e níveis
       nx = Math.max(-8.7, Math.min(8.7, nx));
       nz = Math.max(-8.5, Math.min(8.7, nz));
+      ny = Math.max(0.25, Math.min(2.8, ny));
 
-      // Testa colisão dura
-      if(!colisao(nx, nz)) {
+      if(!colisao(nx, ny, nz)) {
         boneco.position.x = nx;
         boneco.position.z = nz;
+        boneco.position.y = ny;
       }
-      // Camera segue boneco
+
       camera.position.x = boneco.position.x;
       camera.position.z = boneco.position.z + 12;
+      camera.position.y = 6 + boneco.position.y/2;
 
-      // Detecta proximidade para interação
+      // Detectar proximidade para interação
       prateleiraPerto = null;
       for (const shelf of prateleiras) {
         const dist = Math.sqrt(
           Math.pow(boneco.position.x - shelf.position.x,2) +
+          Math.pow(boneco.position.y - shelf.position.y,2) +
           Math.pow(boneco.position.z - shelf.position.z,2)
         );
         if(dist < 2.2) {
@@ -172,6 +266,7 @@
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
+    atualizaColisoes();
     animate();
 
     // Interação tecla "O"
@@ -183,9 +278,10 @@
 
     function mostrarInfo(texto){
       const div = document.getElementById('info');
-      div.innerHTML = texto + '<br><span style="font-size:0.8em;color:#222;">(Mexe-te com WASD para explorar)</span>';
-      setTimeout(()=>{div.innerHTML='Usa as teclas para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.'}, 3400);
+      div.innerHTML = texto + '<br><span style="font-size:0.8em;color:#222;">(Mexe-te com WASD para explorar e sobe as escadas!)</span>';
+      setTimeout(()=>{div.innerHTML='Usa as teclas para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.'}, 4200);
     }
   </script>
 </body>
 </html>
+
