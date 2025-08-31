@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Mini Biblioteca 3D - Three.js</title>
+  <title>Biblioteca 3D Interativa - Three.js</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
@@ -14,7 +14,9 @@
   </style>
 </head>
 <body>
-  <div id="info">Usa WASD para mover. Clica numa prateleira para ver info.</div>
+  <div id="info">
+    Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona "O" para ver info.
+  </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
     // SETUP DA CENA
@@ -34,14 +36,14 @@
     dirLight.position.set(10,20,10);
     scene.add(dirLight);
 
-    // CRIA O CHÃO
+    // CHÃO
     const floorGeo = new THREE.BoxGeometry(20, 0.5, 20);
     const floorMat = new THREE.MeshLambertMaterial({color:0xa1d6b6});
     const floor = new THREE.Mesh(floorGeo, floorMat);
     floor.position.y = -0.25;
     scene.add(floor);
 
-    // PRATELEIRAS DE LIVROS CLICÁVEIS
+    // PRATELEIRAS
     function criaPrateleira(x,z,label) {
       const shelfGeo = new THREE.BoxGeometry(2, 2, 0.5);
       const shelfMat = new THREE.MeshLambertMaterial({color:0xffc107});
@@ -57,7 +59,7 @@
       criaPrateleira(0, -2, "Side Quests & Clubes<br>Clubes científicos, voluntariado, projetos extracurriculares.")
     ];
 
-    // CRIA "BONECO" SIMPLES
+    // BONECO
     function criaBoneco() {
       const grupo = new THREE.Group();
       const corpoGeo = new THREE.BoxGeometry(1,1.6,0.7);
@@ -76,47 +78,57 @@
     const boneco = criaBoneco();
     scene.add(boneco);
 
-    // CONTROLAR MOVIMENTO COM WASD
+    // MOVIMENTO COM WASD
     const keys = {};
     document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
     document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 
+    let prateleiraPerto = null;
+
     function animate() {
-      // Movimento do boneco
-      if(keys["w"]) boneco.position.z -= 0.1;
-      if(keys["s"]) boneco.position.z += 0.1;
-      if(keys["a"]) boneco.position.x -= 0.1;
-      if(keys["d"]) boneco.position.x += 0.1;
+      // Movimento
+      if(keys["w"]) boneco.position.z -= 0.12;
+      if(keys["s"]) boneco.position.z += 0.12;
+      if(keys["a"]) boneco.position.x -= 0.12;
+      if(keys["d"]) boneco.position.x += 0.12;
+
       // Limites do cenário
       boneco.position.x = Math.max(-9, Math.min(9, boneco.position.x));
       boneco.position.z = Math.max(-9, Math.min(9, boneco.position.z));
+
+      // Câmera segue boneco
       camera.position.x = boneco.position.x;
       camera.position.z = boneco.position.z + 11;
+
+      // Detectar proximidade (colisão simples)
+      prateleiraPerto = null;
+      for (const shelf of prateleiras) {
+        const dist = Math.sqrt(
+          Math.pow(boneco.position.x - shelf.position.x,2) +
+          Math.pow(boneco.position.z - shelf.position.z,2)
+        );
+        if(dist < 2.2) {
+          prateleiraPerto = shelf;
+          break;
+        }
+      }
+
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
     animate();
 
-    // CLIQUE NAS PRATELEIRAS PARA INFO
-    window.addEventListener('mousedown', function(e){
-      // Coordenadas do rato
-      const mouse = new THREE.Vector2(
-        (e.clientX / window.innerWidth) * 2 - 1,
-        -(e.clientY / window.innerHeight) * 2 + 1
-      );
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(prateleiras);
-      if(intersects.length > 0){
-        const info = intersects[0].object.userData.label;
-        mostrarInfo(info);
+    // Interação tecla "O"
+    document.addEventListener('keydown', function(e){
+      if(e.key.toLowerCase() === "o" && prateleiraPerto) {
+        mostrarInfo(prateleiraPerto.userData.label);
       }
     });
 
     function mostrarInfo(texto){
       const div = document.getElementById('info');
-      div.innerHTML = texto + '<br><span style="font-size:0.8em;color:#222;">(Pressiona WASD para voltar a andar)</span>';
-      setTimeout(()=>{div.innerHTML='Usa WASD para mover. Clica numa prateleira para ver info.'}, 3200);
+      div.innerHTML = texto + '<br><span style="font-size:0.8em;color:#222;">(Mexe-te com WASD para explorar)</span>';
+      setTimeout(()=>{div.innerHTML='Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona "O" para ver info.'}, 3200);
     }
   </script>
 </body>
