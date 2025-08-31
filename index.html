@@ -423,11 +423,11 @@ Para ver mais informação sobre as minhas experiências profissionais e estági
 
 <script>
 function updateHudTime() {
-const el = document.getElementById('hudTimeDate');
-if (!el) return;
-const now = new Date();
-el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
-' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+  const el = document.getElementById('hudTimeDate');
+  if (!el) return;
+  const now = new Date();
+  el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
+    ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 }
 setInterval(updateHudTime, 1000);
 updateHudTime();
@@ -442,103 +442,101 @@ const hudRows = document.querySelectorAll('.hud-row');
 const hudTitles = carousel.querySelectorAll('.hud-title');
 const dashboardsContainer = document.getElementById('dashCont');
 const gameDetailsPanels = [
-    null,
-    document.getElementById('gameDetails-1'),
-    document.getElementById('gameDetails-2'),
-    document.getElementById('gameDetails-3'),
-    document.getElementById('gameDetails-4'),
+  null,
+  document.getElementById('gameDetails-1'),
+  document.getElementById('gameDetails-2'),
+  document.getElementById('gameDetails-3'),
+  document.getElementById('gameDetails-4'),
 ];
 
 let selected = 0, expanded = false;
 const quadW = 160, gap = 38;
 
 function moveCarousel(idx) {
-carousel.style.transform = `translateX(calc(50vw - 90px - ${(quadW + gap) * idx + quadW / 2}px))`;
+  carousel.style.transform = `translateX(calc(50vw - 90px - ${(quadW + gap) * idx + quadW / 2}px))`;
 }
 
 function updateHUD(idx) {
-if (expanded || idx === selected) return;
-allItems[selected].classList.remove('selected');
-selected = idx;
-allItems[selected].classList.add('selected');
-allItems[selected].focus();
-hudRows.forEach((row, i) => { row.style.display = (i === selected) ? 'flex' : 'none'; });
-moveCarousel(idx);
-
-document.body.classList.remove('bg-dynamic-1', 'bg-dynamic-2', 'bg-dynamic-3', 'bg-dynamic-4', 'bg-dynamic');
-if (selected > 0) {
-document.body.classList.add('bg-dynamic-' + selected);
-document.body.classList.add('bg-dynamic');
-}
-if (selected === 0) document.body.classList.remove('gradient-fade');
+  if (expanded || idx === selected) return;
+  allItems[selected].classList.remove('selected');
+  selected = idx;
+  allItems[selected].classList.add('selected');
+  allItems[selected].focus();
+  hudRows.forEach((row, i) => { row.style.display = (i === selected) ? 'flex' : 'none'; });
+  moveCarousel(idx);
+  document.body.classList.remove('bg-dynamic-1', 'bg-dynamic-2', 'bg-dynamic-3', 'bg-dynamic-4', 'bg-dynamic');
+  if (selected > 0) {
+    document.body.classList.add('bg-dynamic-' + selected);
+    document.body.classList.add('bg-dynamic');
+  }
+  if (selected === 0) document.body.classList.remove('gradient-fade');
 }
 
 function expandDetails() {
-if (![1, 2, 3, 4].includes(selected) || expanded) return;
-expanded = true;
-dashboardsContainer.classList.add('expanded');
-for (let i = 1; i <= 4; i++) {
+  if (![1, 2, 3, 4].includes(selected) || expanded) return;
+  expanded = true;
+  dashboardsContainer.classList.add('expanded');
+  for (let i = 1; i <= 4; i++) {
     if (gameDetailsPanels[i]) gameDetailsPanels[i].classList.remove('visible');
-}
-if (gameDetailsPanels[selected]) gameDetailsPanels[selected].classList.add('visible');
-hudTitles.forEach((t, i) => t.classList.toggle('exp-arrow', i === selected));
-document.body.classList.add('gradient-fade');
+  }
+  if (gameDetailsPanels[selected]) gameDetailsPanels[selected].classList.add('visible');
+  hudTitles.forEach((t, i) => t.classList.toggle('exp-arrow', i === selected));
+  document.body.classList.add('gradient-fade');
 }
 
 function collapseDetails() {
-expanded = false;
-dashboardsContainer.classList.remove('expanded');
-for (let i = 1; i <= 4; i++) {
+  expanded = false;
+  dashboardsContainer.classList.remove('expanded');
+  for (let i = 1; i <= 4; i++) {
     if (gameDetailsPanels[i]) gameDetailsPanels[i].classList.remove('visible');
-}
-hudTitles.forEach(t => t.classList.remove('exp-arrow'));
-document.body.classList.remove('gradient-fade');
+  }
+  hudTitles.forEach(t => t.classList.remove('exp-arrow'));
+  document.body.classList.remove('gradient-fade');
 }
 
 hudTitles.forEach((t, i) => {
-t.addEventListener('click', () => { if (selected === i && !expanded) expandDetails(); });
+  t.addEventListener('click', () => { if (selected === i && !expanded) expandDetails(); });
 });
+
 document.addEventListener('keydown', e => {
-if (!expanded && selected > 0 && (e.key === 'ArrowDown' || e.key === 'PageDown')) expandDetails();
-if (expanded && (e.key === 'Escape' || e.key === 'ArrowUp')) collapseDetails();
-if (expanded) return;
-if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
-if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
+  if (!expanded && selected > 0 && (e.key === 'ArrowDown' || e.key === 'PageDown')) expandDetails();
+  if (expanded && (e.key === 'Escape' || e.key === 'ArrowUp')) collapseDetails();
+  if (expanded) return;
+  if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
+  if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
 });
+
 allItems.forEach((item, idx) => {
-item.addEventListener('focus', () => { if (!expanded) updateHUD(idx); });
-item.addEventListener('click', () => { if (!expanded) updateHUD(idx); });
-item.addEventListener('mouseover', () => { if (!expanded) updateHUD(idx); });
+  item.addEventListener('focus', () => { if (!expanded) updateHUD(idx); });
+  item.addEventListener('click', () => { if (!expanded) updateHUD(idx); });
+  item.addEventListener('mouseover', () => { if (!expanded) updateHUD(idx); });
 });
+
 moveCarousel(selected);
 hudRows.forEach((row, i) => { row.style.display = (i === selected) ? 'flex' : 'none'; });
+
 document.querySelector('.hud-icon.trophies')?.addEventListener('click', function() {
-window.location.href = "trofeus.html";
+  window.location.href = "trofeus.html";
 });
+
 function scrollToCarousel() {
-collapseDetails();
-document.querySelector(".carousel-inner").scrollIntoView({behavior: 'smooth', block: 'start'});
+  collapseDetails();
+  document.querySelector(".carousel-inner").scrollIntoView({behavior: 'smooth', block: 'start'});
 }
 
-  const hudDesportoStartBtn = document.getElementById('hud-desporto-start');
 const screenFade = document.getElementById('screen-fade');
 
+// HUD Desporto START button logic
+const hudDesportoStartBtn = document.getElementById('hud-desporto-start');
 hudDesportoStartBtn?.addEventListener('click', function(e) {
   e.preventDefault();
-
   if (this.disabled) return;
   this.disabled = true;
 
-  // Pai do botão START (div hud-start)
   const hudStartDiv = this.closest('.hud-start');
-
-  // Liga o estado loading (coloca o fundo azul escuro)
   hudStartDiv.classList.add('loading');
-
-  // Limpa conteúdo (remove botão)
   hudStartDiv.innerHTML = '';
 
-  // Cria barra loading e adiciona
   const loadingBar = document.createElement('div');
   loadingBar.classList.add('loading-bar-simple');
   const fill = document.createElement('div');
@@ -546,25 +544,23 @@ hudDesportoStartBtn?.addEventListener('click', function(e) {
   loadingBar.appendChild(fill);
   hudStartDiv.appendChild(loadingBar);
 
-  // Animação da barra
   let widthPercent = 0;
   const totalDuration = 3000;
   const frameCount = 60;
   const increment = 100 / frameCount;
   const frameDuration = totalDuration / frameCount;
-
   let frame = 0;
+
   const interval = setInterval(() => {
     frame++;
     widthPercent += increment;
     if (widthPercent > 100) widthPercent = 100;
     fill.style.width = widthPercent + '%';
-
     if (frame >= frameCount) {
       clearInterval(interval);
-
       setTimeout(() => {
         screenFade.style.opacity = '1';
+        screenFade.style.pointerEvents = 'none';
         setTimeout(() => {
           window.location.href = 'desporto.html';
         }, 700);
@@ -573,19 +569,17 @@ hudDesportoStartBtn?.addEventListener('click', function(e) {
   }, frameDuration);
 });
 
-
-
+// Desporto detailed panel START button logic
 function animateLoadingBarWithFade(callback, duration = 3000) {
   const barWrapper = document.getElementById('desporto-loading-bar-wrapper');
   const bar = document.getElementById('desporto-loading-bar');
   const barLabel = document.getElementById('desporto-loading-label');
-  const screenFade = document.getElementById('screen-fade');
 
   barWrapper.style.display = 'flex';
   bar.style.width = '0%';
   barLabel.textContent = '0%';
-
   let widthPercent = 0;
+
   const frameCount = 60;
   const increment = 100 / frameCount;
   const frameDuration = duration / frameCount;
@@ -597,38 +591,41 @@ function animateLoadingBarWithFade(callback, duration = 3000) {
     if (widthPercent > 100) widthPercent = 100;
     bar.style.width = widthPercent + '%';
     barLabel.textContent = Math.floor(widthPercent) + '%';
-
     if(frame >= frameCount) {
       clearInterval(interval);
       setTimeout(() => {
         screenFade.style.opacity = '1';
+        screenFade.style.pointerEvents = 'none';
         setTimeout(callback, 700);
       }, 400);
     }
   }, frameDuration);
 }
+
 const btnStartDetail = document.getElementById('hud-desporto-start-detail');
 btnStartDetail.addEventListener('click', function(e) {
   e.preventDefault();
-  // Chama a função de animação, e ao final redireciona
   animateLoadingBarWithFade(() => {
     window.location.href = 'desporto.html';
   }, 3000);
 });
 
+// Educação detailed panel START button logic
 function animateEducacaoLoadingBarWithFade(callback, duration = 3000) {
   const barWrapper = document.getElementById('educacao-loading-bar-wrapper');
   const bar = document.getElementById('educacao-loading-bar');
   const barLabel = document.getElementById('educacao-loading-label');
-  const screenFade = document.getElementById('screen-fade');
+
   barWrapper.style.display = 'flex';
   bar.style.width = '0%';
   barLabel.textContent = '0%';
   let widthPercent = 0;
+
   const frameCount = 60;
   const increment = 100 / frameCount;
   const frameDuration = duration / frameCount;
   let frame = 0;
+
   const interval = setInterval(() => {
     frame++;
     widthPercent += increment;
@@ -639,11 +636,13 @@ function animateEducacaoLoadingBarWithFade(callback, duration = 3000) {
       clearInterval(interval);
       setTimeout(() => {
         screenFade.style.opacity = '1';
+        screenFade.style.pointerEvents = 'none';
         setTimeout(callback, 700);
       }, 400);
     }
   }, frameDuration);
 }
+
 const btnEducacaoStartDetail = document.getElementById('hud-educacao-start-detail');
 btnEducacaoStartDetail.addEventListener('click', function(e) {
   e.preventDefault();
@@ -652,9 +651,50 @@ btnEducacaoStartDetail.addEventListener('click', function(e) {
   }, 3000);
 });
 
+// HUD Educação START button logic (novo para botão da HUD)
+const hudEducacaoStartBtn = document.getElementById('hud-educacao-start');
+hudEducacaoStartBtn?.addEventListener('click', function(e) {
+  e.preventDefault();
+  if (this.disabled) return;
+  this.disabled = true;
 
-  
+  const hudStartDiv = this.closest('.hud-start');
+  hudStartDiv.classList.add('loading');
+  hudStartDiv.innerHTML = '';
+
+  const loadingBar = document.createElement('div');
+  loadingBar.classList.add('loading-bar-simple');
+  const fill = document.createElement('div');
+  fill.classList.add('fill');
+  loadingBar.appendChild(fill);
+  hudStartDiv.appendChild(loadingBar);
+
+  let widthPercent = 0;
+  const totalDuration = 3000;
+  const frameCount = 60;
+  const increment = 100 / frameCount;
+  const frameDuration = totalDuration / frameCount;
+  let frame = 0;
+
+  const interval = setInterval(() => {
+    frame++;
+    widthPercent += increment;
+    if (widthPercent > 100) widthPercent = 100;
+    fill.style.width = widthPercent + '%';
+    if (frame >= frameCount) {
+      clearInterval(interval);
+      setTimeout(() => {
+        screenFade.style.opacity = '1';
+        screenFade.style.pointerEvents = 'none';
+        setTimeout(() => {
+          window.location.href = 'educacao.html';
+        }, 700);
+      }, 400);
+    }
+  }, frameDuration);
+});
 </script>
+
 
 </body>
 </html>
