@@ -3,131 +3,218 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Educação Gamificada - Currículo</title>
+  <title>Educação Gamificada Interativa</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f2f2f7;
-      color: #222;
-      margin: 20px;
-      padding: 0;
-    }
-    section.education {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      border-radius: 10px;
-      padding: 20px 30px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    }
-    section.education h2 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      border-bottom: 3px solid #4caf50;
-      padding-bottom: 10px;
-      color: #4caf50;
-      text-align: center;
-    }
-    .edu-level {
-      background: #e9f5e9;
-      padding: 15px 20px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-      box-shadow: inset 0 0 10px #b3d4b3;
-    }
-    .edu-level h3 {
-      margin: 0 0 5px;
-      color: #2e7d32;
-    }
-    .school, .years {
-      font-weight: 600;
-      color: #555;
-      display: block;
-      margin-bottom: 10px;
-    }
-    .xp-bar {
-      background: #c8e6c9;
-      border-radius: 25px;
+      background: #e0f7fa;
+      margin: 0; padding: 0;
       overflow: hidden;
-      height: 20px;
-      margin-bottom: 15px;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-    }
-    .xp-bar > div {
-      height: 100%;
-      background: #4caf50;
-      width: 75%; /* Mudar este valor para refletir o progresso real */
-      transition: width 1s ease-in-out;
-    }
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-      margin-top: 0;
-      color: #333;
-    }
-    ul li {
-      padding: 7px 0;
-      font-size: 1rem;
-      border-bottom: 1px solid #c8e6c9;
-    }
-    ul li:last-child {
-      border-bottom: none;
-    }
-    .badges {
-      margin-top: 10px;
-      font-size: 1.8rem;
+      height: 100vh;
       display: flex;
-      gap: 15px;
+      justify-content: center;
+      align-items: center;
     }
-    .badges span {
-      cursor: default;
-      user-select: none;
+    #gameArea {
+      position: relative;
+      width: 700px;
+      height: 450px;
+      background: #a2d5f2 url('https://i.imgur.com/ypxK24R.png') no-repeat center bottom;
+      background-size: contain;
+      border: 3px solid #0288d1;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    #player {
+      position: absolute;
+      width: 50px;
+      height: 58px;
+      background: url('https://i.imgur.com/w7GCRPb.png') no-repeat;
+      background-size: contain;
+      top: 350px;
+      left: 50px;
+      transition: top 0.2s, left 0.2s;
+      cursor: pointer;
+    }
+    .location {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #ffeb3bcc;
+      border: 3px solid #fbc02d;
+      box-shadow: 0 0 10px #fbc02d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      cursor: pointer;
       transition: transform 0.3s ease;
+      user-select: none;
     }
-    .badges span:hover {
-      transform: scale(1.3);
+    .location:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 20px #f57f17;
+    }
+    #edu1 {
+      top: 300px;
+      left: 250px;
+    }
+    #edu2 {
+      top: 200px;
+      left: 500px;
+    }
+    #popUp {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      padding: 20px;
+      display: none;
+      z-index: 10;
+    }
+    #popUp h3 {
+      margin-top: 0;
+      color: #0277bd;
+    }
+    #closeBtn {
+      background: #0277bd;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+      float: right;
+    }
+    #overlay {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 5;
+    }
+    #instructions {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #01579b;
+      font-weight: 600;
+      font-size: 0.9rem;
+      background: #b3e5fccc;
+      padding: 6px 10px;
+      border-radius: 8px;
+      user-select: none;
+      z-index: 5;
     }
   </style>
 </head>
 <body>
-  <section class="education">
-    <h2>🎓 Educação & “XP” Académica</h2>
+  <div id="gameArea">
+    <div id="instructions">Usa as setas para mover o boneco. Clica nos círculos para ver info.</div>
+    <div id="player" tabindex="0" aria-label="Boneco jogador"></div>
+    <div class="location" id="edu1" tabindex="0" aria-label="Licenciatura em Engenharia Biomédica">🎓</div>
+    <div class="location" id="edu2" tabindex="0" aria-label="Ensino Secundário">📚</div>
+  </div>
 
-    <div class="edu-level">
-      <h3>Nível 2: Licenciatura em Engenharia Biomédica</h3>
-      <span class="school">Instituto Politécnico de Setúbal & Lisboa</span>
-      <span class="years">2023 - Presente</span>
-      <div class="xp-bar"><div style="width:75%"></div></div>
-      <ul>
-        <li>Missão: Projeto de IA Médica [Concluída]</li>
-        <li>Missão: Tese sobre Segmentação de Tumores [Em progresso]</li>
-        <li>Side Quest: Participação em Clubes Científicos</li>
-        <li>Achievement: Bolsa de Mérito</li>
-      </ul>
-      <div class="badges">
-        <span title="Bolsa de Mérito">🏅</span>
-        <span title="Projeto IA">🤖</span>
-      </div>
-    </div>
+  <div id="overlay"></div>
+  <div id="popUp" role="dialog" aria-modal="true" aria-labelledby="popUpTitle">
+    <h3 id="popUpTitle"></h3>
+    <p id="popUpDesc"></p>
+    <button id="closeBtn">Fechar</button>
+  </div>
 
-    <div class="edu-level">
-      <h3>Nível 1: Ensino Secundário</h3>
-      <span class="school">Escola Secundária de Setúbal</span>
-      <span class="years">2019 - 2022</span>
-      <div class="xp-bar"><div style="width:100%"></div></div>
-      <ul>
-        <li>Missão: Conclusão do Ensino Secundário [Concluída]</li>
-        <li>Side Quest: Participação em Competições de Natação</li>
-        <li>Achievement: Diploma com Distinção</li>
-      </ul>
-      <div class="badges">
-        <span title="Diploma com Distinção">🎖️</span>
-        <span title="Competidor de Natação">🏊</span>
-      </div>
-    </div>
+  <script>
+    const player = document.getElementById('player');
+    const gameArea = document.getElementById('gameArea');
+    const popup = document.getElementById('popUp');
+    const overlay = document.getElementById('overlay');
+    const title = document.getElementById('popUpTitle');
+    const desc = document.getElementById('popUpDesc');
+    const closeBtn = document.getElementById('closeBtn');
+    const step = 20;
 
-    <!-- Adicionar mais níveis ou formações conforme necessário -->
+    // Limites dentro da área do jogo
+    const maxX = gameArea.clientWidth - player.clientWidth;
+    const maxY = gameArea.clientHeight - player.clientHeight;
 
-  </section>
+    // Estado do jogador
+    let posX = 50;
+    let posY = 350;
+
+    // Mover o jogador com as setas
+    document.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowUp':
+          posY -= step;
+          if (posY < 0) posY = 0;
+          break;
+        case 'ArrowDown':
+          posY += step;
+          if (posY > maxY) posY = maxY;
+          break;
+        case 'ArrowLeft':
+          posX -= step;
+          if (posX < 0) posX = 0;
+          break;
+        case 'ArrowRight':
+          posX += step;
+          if (posX > maxX) posX = maxX;
+          break;
+        default: return;
+      }
+      player.style.top = posY + 'px';
+      player.style.left = posX + 'px';
+    });
+
+    // Dados das localizações
+    const locationsInfo = {
+      edu1: {
+        title: 'Licenciatura em Engenharia Biomédica',
+        desc: 'Instituto Politécnico de Setúbal & Lisboa (2023 - Presente). Conclusão de projetos de IA Médica e tese sobre segmentação de tumores.'
+      },
+      edu2: {
+        title: 'Ensino Secundário',
+        desc: 'Escola Secundária de Setúbal (2019 - 2022). Diploma com distinção e participação em competições de natação.'
+      }
+    };
+
+    // Mostrar popup ao clicar numa localização
+    document.querySelectorAll('.location').forEach(loc => {
+      loc.addEventListener('click', () => {
+        const info = locationsInfo[loc.id];
+        if(info) {
+          title.textContent = info.title;
+          desc.textContent = info.desc;
+          popup.style.display = 'block';
+          overlay.style.display = 'block';
+          popup.focus();
+        }
+      });
+      // Permite abrir popup com Enter ou Space para acessibilidade
+      loc.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          loc.click();
+        }
+      });
+    });
+
+    // Fechar popup
+    closeBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+      player.focus();
+    });
+    overlay.addEventListener('click', () => {
+      closeBtn.click();
+    });
+  </script>
 </body>
 </html>
+
