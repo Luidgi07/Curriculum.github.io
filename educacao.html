@@ -8,50 +8,41 @@
     #info {
       position: absolute; top: 10px; left: 10px;
       background: rgba(255,255,255,0.85); padding: 10px 18px;
-      border-radius: 8px; font-family: 'Segoe UI'; font-size: 1.1rem;
+      border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 1.1rem;
       color: #0066bb; z-index: 4;
     }
   </style>
 </head>
 <body>
-  <div id="info">Usa WASD para mover. Clica num bloco para ver info.</div>
-  <script src="js/three.min.js"></script>
+  <div id="info">Usa WASD para mover. Clica numa prateleira para ver info.</div>
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
-    // CENA, CÂMERA E RENDERER
+    // SETUP DA CENA
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe2f1e9);
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
     camera.position.set(0, 8, 18);
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // LUZ SUAVE
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    scene.add(ambientLight);
+    // ILUMINAÇÃO
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
     const dirLight = new THREE.DirectionalLight(0xffecb3, 0.8);
     dirLight.position.set(10,20,10);
     scene.add(dirLight);
 
-    // CHÃO
+    // CRIA O CHÃO
     const floorGeo = new THREE.BoxGeometry(20, 0.5, 20);
-    const floorMat = new THREE.MeshLambertMaterial({color:0x85bca8});
+    const floorMat = new THREE.MeshLambertMaterial({color:0xa1d6b6});
     const floor = new THREE.Mesh(floorGeo, floorMat);
     floor.position.y = -0.25;
     scene.add(floor);
 
-    // PAREDES
-    const wallGeo = new THREE.BoxGeometry(20, 8, 0.5);
-    const wallMat = new THREE.MeshLambertMaterial({color:0xffffff});
-    const wallBack = new THREE.Mesh(wallGeo, wallMat);
-    wallBack.position.z = -9.75;
-    wallBack.position.y = 3.75;
-    scene.add(wallBack);
-
-    // PRATELEIRAS LIVROS
-    function createShelf(x,z,label) {
+    // PRATELEIRAS DE LIVROS CLICÁVEIS
+    function criaPrateleira(x,z,label) {
       const shelfGeo = new THREE.BoxGeometry(2, 2, 0.5);
       const shelfMat = new THREE.MeshLambertMaterial({color:0xffc107});
       const shelf = new THREE.Mesh(shelfGeo, shelfMat);
@@ -60,81 +51,73 @@
       scene.add(shelf);
       return shelf;
     }
-    const shelves = [
-      createShelf(-4, -5, "Licenciatura em Engenharia Biomédica"),
-      createShelf(4, -5, "Ensino Secundário"),
-      createShelf(0, -2, "Projetos"),
+    const prateleiras = [
+      criaPrateleira(-4, -5, "Licenciatura em Engenharia Biomédica<br>IPS/ISEL (2023- )<br>Projetos IA Médica, tese segmentação de tumores."),
+      criaPrateleira(4, -5, "Ensino Secundário<br>Escola Secundária de Setúbal (2019-2022)<br>Distinção, competição natação."),
+      criaPrateleira(0, -2, "Side Quests & Clubes<br>Clubes científicos, voluntariado, projetos extracurriculares.")
     ];
 
-    // PERSONAGEM "LEGO"
-    function createCharacter() {
-      const group = new THREE.Group();
-      // Corpo
-      const bodyGeo = new THREE.BoxGeometry(1.1,1.2,0.7);
-      const bodyMat = new THREE.MeshLambertMaterial({color:0x2196f3});
-      const body = new THREE.Mesh(bodyGeo, bodyMat);
-      body.position.y=1;
-      group.add(body);
-      // Cabeça
-      const headGeo = new THREE.BoxGeometry(0.8,0.7,0.7);
-      const headMat = new THREE.MeshLambertMaterial({color:0xfff176});
-      const head = new THREE.Mesh(headGeo, headMat);
-      head.position.y=2;
-      group.add(head);
-      // Pernas
-      const legsGeo = new THREE.BoxGeometry(0.95,0.5,0.65);
-      const legsMat = new THREE.MeshLambertMaterial({color:0x8d6e63});
-      const legs = new THREE.Mesh(legsGeo, legsMat);
-      legs.position.y=0.25;
-      group.add(legs);
-      group.position.set(0,0.25,7);
-      return group;
+    // CRIA "BONECO" SIMPLES
+    function criaBoneco() {
+      const grupo = new THREE.Group();
+      const corpoGeo = new THREE.BoxGeometry(1,1.6,0.7);
+      const corpoMat = new THREE.MeshLambertMaterial({color:0x2196f3});
+      const corpo = new THREE.Mesh(corpoGeo, corpoMat);
+      corpo.position.y=1;
+      grupo.add(corpo);
+      const cabecaGeo = new THREE.BoxGeometry(0.8,0.7,0.7);
+      const cabecaMat = new THREE.MeshLambertMaterial({color:0xfff176});
+      const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
+      cabeca.position.y=2;
+      grupo.add(cabeca);
+      grupo.position.set(0,0.25,7);
+      return grupo;
     }
-    const player = createCharacter();
-    scene.add(player);
+    const boneco = criaBoneco();
+    scene.add(boneco);
 
-    // CONTROLOS WASD
+    // CONTROLAR MOVIMENTO COM WASD
     const keys = {};
     document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
     document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 
     function animate() {
-      // Movimento do jogador
-      if(keys["w"]) player.position.z -= 0.1;
-      if(keys["s"]) player.position.z += 0.1;
-      if(keys["a"]) player.position.x -= 0.1;
-      if(keys["d"]) player.position.x += 0.1;
-      camera.position.x = player.position.x;
-      camera.position.z = player.position.z + 11;
+      // Movimento do boneco
+      if(keys["w"]) boneco.position.z -= 0.1;
+      if(keys["s"]) boneco.position.z += 0.1;
+      if(keys["a"]) boneco.position.x -= 0.1;
+      if(keys["d"]) boneco.position.x += 0.1;
+      // Limites do cenário
+      boneco.position.x = Math.max(-9, Math.min(9, boneco.position.x));
+      boneco.position.z = Math.max(-9, Math.min(9, boneco.position.z));
+      camera.position.x = boneco.position.x;
+      camera.position.z = boneco.position.z + 11;
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
     animate();
 
-    // DETEÇÃO DE CLIQUE NOS BLOCO/PRATELEIRA
+    // CLIQUE NAS PRATELEIRAS PARA INFO
     window.addEventListener('mousedown', function(e){
-      // Normaliza coordenadas
+      // Coordenadas do rato
       const mouse = new THREE.Vector2(
         (e.clientX / window.innerWidth) * 2 - 1,
         -(e.clientY / window.innerHeight) * 2 + 1
       );
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(shelves);
+      const intersects = raycaster.intersectObjects(prateleiras);
       if(intersects.length > 0){
-        const info = intersects.object.userData.label;
-        showInfo(info);
+        const info = intersects[0].object.userData.label;
+        mostrarInfo(info);
       }
     });
 
-    // POPUP para info educativa
-    function showInfo(text){
+    function mostrarInfo(texto){
       const div = document.getElementById('info');
-      div.innerHTML = text + '<br><span style="font-size:0.8em;color:#222;">(Pressiona WASD para voltar a andar)</span>';
-      setTimeout(()=>{div.innerHTML='Usa WASD para mover. Clica num bloco para ver info.'}, 2800);
+      div.innerHTML = texto + '<br><span style="font-size:0.8em;color:#222;">(Pressiona WASD para voltar a andar)</span>';
+      setTimeout(()=>{div.innerHTML='Usa WASD para mover. Clica numa prateleira para ver info.'}, 3200);
     }
   </script>
 </body>
 </html>
-
-
