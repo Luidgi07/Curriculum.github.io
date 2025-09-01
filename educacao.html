@@ -2,30 +2,39 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Biblioteca 3D - Chão e Paredes</title>
+  <title>Biblioteca 3D – Estante GLB</title>
   <style>
     body { margin: 0; overflow: hidden; }
   </style>
 </head>
 <body>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/jsm/loaders/GLTFLoader.js"></script>
   <script>
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe8e3d1);
-    const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 8, 20);
+
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
-    scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
+    // Iluminação
+    const ambientLight = new THREE.AmbientLight(0xfad7a0, 0.7);
+    scene.add(ambientLight);
+
     const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
     dirLight.position.set(12, 22, 18);
     dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
     scene.add(dirLight);
 
-    // Criar o chão
+    // Chão
     const chaoGeo = new THREE.BoxGeometry(20, 0.3, 20);
     const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
     const chao = new THREE.Mesh(chaoGeo, chaoMat);
@@ -33,41 +42,60 @@
     chao.receiveShadow = true;
     scene.add(chao);
 
-    // Paredes (3): esquerda, direita e trás
+    // Paredes (traseira, esquerda e direita)
     const larguraParede = 20;
     const alturaParede = 7.8;
     const profundidadeParede = 0.15;
 
-    // Parede traseira
     const paredeTrasGeo = new THREE.BoxGeometry(larguraParede, alturaParede, profundidadeParede);
-    const paredeTrasMat = new THREE.MeshLambertMaterial({color: 0x7a4a21});
+    const paredeTrasMat = new THREE.MeshLambertMaterial({ color: 0x7a4a21 });
     const paredeTras = new THREE.Mesh(paredeTrasGeo, paredeTrasMat);
-    paredeTras.position.set(0, alturaParede/2, -10);
+    paredeTras.position.set(0, alturaParede / 2, -10);
     paredeTras.receiveShadow = true;
     scene.add(paredeTras);
 
-    // Parede esquerda
     const paredeLatGeo = new THREE.BoxGeometry(20, alturaParede, profundidadeParede);
     const paredeLatMat = paredeTrasMat.clone();
     const paredeEsq = new THREE.Mesh(paredeLatGeo, paredeLatMat);
     paredeEsq.rotation.y = Math.PI / 2;
-    paredeEsq.position.set(-10, alturaParede/2, 0);
+    paredeEsq.position.set(-10, alturaParede / 2, 0);
     paredeEsq.receiveShadow = true;
     scene.add(paredeEsq);
 
-    // Parede direita
     const paredeDir = paredeEsq.clone();
     paredeDir.position.x = 10;
     scene.add(paredeDir);
 
-    // Animação simples
+    // Carregar modelo GLB da estante
+    const loader = new THREE.GLTFLoader();
+    loader.load(
+      'low_poly_bookshelf.glb', // nome do ficheiro .glb
+      function(gltf) {
+        const estante = gltf.scene;
+        estante.position.set(0, 0, 0); // ajuste conforme deseja
+        estante.scale.set(1, 1, 1); // ajuste o tamanho se precisar
+        estante.traverse(node => {
+          if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+          }
+        });
+        scene.add(estante);
+      },
+      undefined,
+      function(error) {
+        console.error('Erro ao carregar o modelo GLB:', error);
+      }
+    );
+
+    // Animação
     function animate() {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     }
     animate();
 
-    // Ajuste para redimensionar janela
+    // Redimensionamento responsivo
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
