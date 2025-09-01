@@ -40,7 +40,7 @@
   <script src="https://unpkg.com/three@0.153.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
-    // SETUP da cena, câmara e renderizador
+    // Criação da cena, câmara e renderizador
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe8e3d1);
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -50,7 +50,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Luz ambiental e direcional
+    // Luz ambiente e direcional
     scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
     const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
     dirLight.position.set(12, 22, 18);
@@ -64,7 +64,7 @@
     chao.userData.solido = true;
     scene.add(chao);
 
-    // Funções para criar estantes e livros (mesmas do seu código)
+    // Estantes e livros
     function criaEstanteTraseiraLivros(x, z, largura, altura, profundidade, cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
       const estMat = new THREE.MeshLambertMaterial({ color: cor });
@@ -112,7 +112,6 @@
       }
     }
 
-    // Criar estantes
     criaEstanteTraseiraLivros(0, -9.2, 16, 4.2, 0.65);
     criaEstanteLateralLivros(-8.8, 0.65, 4.2, 16, 'esquerda');
     criaEstanteLateralLivros(8.8, 0.65, 4.2, 16, 'direita');
@@ -136,40 +135,33 @@
       criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
     ];
 
-    // Importar o GLTFLoader
-    const loader = new THREE.GLTFLoader();
-
-    // Variável para armazenar o boneco carregado
+    // Carregar o boneco GLB usando a versão correta da GLTFLoader
     let bonecoGLB;
 
-    // Carregar o modelo .glb
+    // ATENÇÃO: GLTFLoader está disponível como GLTFLoader, não THREE.GLTFLoader!
+    const loader = new GLTFLoader();
+
     loader.load(
-      'Lego-Jack-Sparrow-Pirates-of-the-Caribbean-Minifig.glb',  // caminho do seu arquivo .glb no repositório
+      'modelos/meuBoneco.glb', // ajusta caminho conforme o teu projeto Github
       function(gltf) {
         bonecoGLB = gltf.scene;
-
-        // Ajustar posição, escala e rotação se necessário
         bonecoGLB.position.set(0, 0.25, 6);
         bonecoGLB.scale.set(1, 1, 1);
-
         scene.add(bonecoGLB);
       },
       undefined,
       function(error) {
-        console.error('Erro ao carregar o modelo .glb:', error);
+        console.error('Erro ao carregar o .glb:', error);
       }
     );
 
     // Controlo de teclado
     const keys = {};
-
     document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
     document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
 
     let prateleiraPerto = null;
     const speed = 0.13;
-
-    // Objetos sólidos para colisão
     const objetosSolidos = [];
     function atualizaColisoes() {
       objetosSolidos.length = 0;
@@ -179,7 +171,6 @@
     }
     atualizaColisoes();
 
-    // Função que verifica colisão
     function colisao(nx, ny, nz) {
       for (const obj of objetosSolidos) {
         const ox = obj.position.x, oy = obj.position.y, oz = obj.position.z;
@@ -193,7 +184,6 @@
       return false;
     }
 
-    // Função de animação e de movimentação do boneco .glb
     function animate() {
       if (bonecoGLB) {
         let nx = bonecoGLB.position.x;
@@ -239,14 +229,12 @@
 
     animate();
 
-    // Lidar com tecla "O" para ver info perto
     document.addEventListener("keydown", function(e) {
       if (e.key.toLowerCase() === "o" && prateleiraPerto) {
         mostrarInfo(prateleiraPerto.userData.label);
       }
     });
 
-    // Função para mostrar info
     function mostrarInfo(texto) {
       const div = document.getElementById("info");
       div.innerHTML = texto + '<br><span style="font-size:0.8em;color:#222;">(Mexe-te com WASD para explorar!)</span>';
@@ -257,4 +245,3 @@
   </script>
 </body>
 </html>
-
