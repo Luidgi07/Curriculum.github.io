@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Biblioteca 3D – Livros todos para dentro</title>
   <style>
     body { margin: 0; overflow: hidden; }
@@ -53,7 +53,7 @@
     const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
     const chao = new THREE.Mesh(chaoGeo, chaoMat);
     chao.position.y = -0.25; chao.userData.solido = true; scene.add(chao);
-    // ESTANTE TRASEIRA
+    // ESTANTE TRASEIRA (com 54 livros por fila, triplo do original)
     function criaEstanteTraseiraLivros(x, z, largura, altura, profundidade, cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
       const estMat = new THREE.MeshLambertMaterial({ color: cor });
@@ -61,8 +61,8 @@
       estante.position.set(x, altura / 2, z);
       estante.userData.solido = true;
       scene.add(estante);
-      // Três filas horizontais, 18 livros por fila (estreitos)
-      const nFilas = 3, livrosPorFila = 18;
+      // Três filas horizontais, 54 livros por fila (triplo de 18)
+      const nFilas = 3, livrosPorFila = 54;
       const livroWidth = largura / livrosPorFila;
       const profundidadeLivros = profundidade / 2 + 0.13;
       for (let f = 0; f < nFilas; f++) {
@@ -78,7 +78,7 @@
       }
     }
     criaEstanteTraseiraLivros(0, -9.2, 16, 4.2, 0.65);
-    // ESTANTES LATERAIS (com sinal diferenciado no x para os livros ficarem para Dentro)
+    // ESTANTES LATERAIS (altura aumentada para 8.5 até ao topo)
     function criaEstanteLateralLivros(x, largura, altura, profundidade, lado = 'esquerda', cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
       const estMat = new THREE.MeshLambertMaterial({ color: cor });
@@ -86,7 +86,7 @@
       estante.position.set(x, altura / 2, 0);
       estante.userData.solido = true;
       scene.add(estante);
-      // Três filas horizontais, 18 livros por fila ao longo do eixo z (profundidade)
+      // Três filas horizontais, 40 livros por fila ao longo do eixo z (profundidade)
       const nFilas = 3, livrosPorFila = 40;
       const livroWidth = profundidade / livrosPorFila;
       for (let f = 0; f < nFilas; f++) {
@@ -96,7 +96,6 @@
           const livroGeo = new THREE.BoxGeometry(0.15, 0.5 + Math.random() * 0.1, livroWidth - 0.03);
           const livroMat = new THREE.MeshLambertMaterial({ color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7 });
           let lx = x + (lado === 'esquerda' ? (largura / 2 + 0.09) : -(largura / 2 + 0.09));
-          // Se for direita, "x" é positivo, então calcula lx para dentro
           if (lado === 'direita') lx = x - (largura / 2 + 0.09);
           const livro = new THREE.Mesh(livroGeo, livroMat);
           livro.position.set(lx, py, lz);
@@ -104,10 +103,10 @@
         }
       }
     }
-    // Estante esquerda (para dentro)
-    criaEstanteLateralLivros(-8.8, 0.65, 4.2, 16, 'esquerda');
-    // Estante direita (corrigida para dentro)
-    criaEstanteLateralLivros(8.8, 0.65, 4.2, 16, 'direita');
+    // Estante esquerda com altura 8.5
+    criaEstanteLateralLivros(-8.8, 0.65, 8.5, 16, 'esquerda');
+    // Estante direita com altura 8.5
+    criaEstanteLateralLivros(8.8, 0.65, 8.5, 16, 'direita');
     // PRATELEIRAS EDUCATIVAS
     function criaPrat(x, z, y, texto) {
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
@@ -140,6 +139,35 @@
       return grupo;
     }
     const boneco = criaBoneco(); scene.add(boneco);
+    // JANELA COM TOPO ARREDONDADO NA PAREDE DA FRENTE
+    function criaJanela() {
+      const curvaTopo = new THREE.Shape();
+      const larguraJanela = 4;
+      const alturaJanela = 4;
+      const raioArco = larguraJanela / 2;
+      curvaTopo.moveTo(-larguraJanela/2, 0);
+      curvaTopo.lineTo(-larguraJanela/2, alturaJanela - raioArco);
+      curvaTopo.absarc(0, alturaJanela - raioArco, raioArco, Math.PI, 0, false);
+      curvaTopo.lineTo(larguraJanela/2, 0);
+      curvaTopo.lineTo(-larguraJanela/2, 0);
+      const extrudeSettings = {
+        depth: 0.3,
+        bevelEnabled: false
+      };
+      const geoJanela = new THREE.ExtrudeGeometry(curvaTopo, extrudeSettings);
+      const matJanela = new THREE.MeshLambertMaterial({ color: 0x99ccff, transparent: true, opacity: 0.7 });
+      const janela = new THREE.Mesh(geoJanela, matJanela);
+      janela.position.set(0, 2, 9.5);
+      scene.add(janela);
+      // Parede frontal atrás da janela (cor castanha)
+      const paredeGeo = new THREE.BoxGeometry(20, 8.5, 0.65);
+      const paredeMat = new THREE.MeshLambertMaterial({ color: 0x7a4a21 });
+      const parede = new THREE.Mesh(paredeGeo, paredeMat);
+      parede.position.set(0, 8.5/2, 10);
+      parede.userData.solido = true;
+      scene.add(parede);
+    }
+    criaJanela();
     // MOVIMENTO, COLISÕES & INTERAÇÃO
     const keys = {};
     document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
@@ -171,7 +199,7 @@
       if (keys["d"]) nx += speed;
       nx = Math.max(-8.5, Math.min(8.5, nx));
       nz = Math.max(-8.5, Math.min(8.5, nz));
-      ny = Math.max(0.25, Math.min(4.6, ny));
+      ny = Math.max(0.25, Math.min(8.5, ny)); // Atualizado para limite superior 8.5 (altura da estante lateral)
       if (!colisao(nx, ny, nz)) {
         boneco.position.x = nx; boneco.position.z = nz; boneco.position.y = ny;
       }
