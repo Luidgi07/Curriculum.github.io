@@ -2,307 +2,127 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Biblioteca 3D – Estantes Clássicas</title>
+  <title>Biblioteca 3D Realista Estilizada</title>
   <style>
     body { margin: 0; overflow: hidden; }
-    #info {
-      position: fixed;
-      top: 12px; left: 12px;
-      background: rgba(255,255,255,0.95);
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 1.1rem;
-      color: #0066bb;
-      max-width: 360px;
-      z-index: 20;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      display: none;
-    }
-    #hud {
-      position: fixed;
-      left: 24px; bottom: 24px;
-      background: rgba(240,247,255,0.95);
-      padding: 13px 22px 11px 18px;
-      border-radius: 14px;
-      font-family: 'Segoe UI';
-      color: #083c6a;
-      min-width: 210px;
-      font-size: 1.1rem;
-      z-index: 10;
-      border: 2px solid #a5c7e6;
-      user-select: none;
-    }
-    #hud .title { font-weight: bold; font-size: 1.05rem; margin-bottom: 8px; }
-    #hud .keys { margin-top: 0; margin-bottom: 0; }
-    #hud .key {
-      background: #dbeafe; border-radius: 5px;
-      padding: 3px 8px; margin: 0 4px;
-      border: 1px solid #a5c7e6;
-      font-weight: 500;
-      display: inline-block;
-      font-size: 1.0rem; color: #2a68b2;
-    }
-    #hud .desc { margin-top: 10px; font-size: 0.97rem; color: #1e3d59; }
-    #closeInfo {
-      margin-top: 12px;
-      cursor: pointer;
-      padding: 6px 12px;
-      background-color: #2a68b2;
-      color: white;
-      border-radius: 5px;
-      font-weight: 600;
-      display: inline-block;
-    }
+    #info { display: none; } #hud { display: none; }
   </style>
 </head>
 <body>
-  <div id="info"></div>
-  <div id="hud">
-    <div class="title">Comandos:</div>
-    <div class="keys">
-      <span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span>
-      <span class="desc">Mover personagem</span>
-    </div>
-    <div class="keys" style="margin-top:7px;">
-      <span class="key">O</span>
-      <span class="desc">Mostrar informação próxima</span>
-    </div>
-  </div>
-  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
-  <script>
-    // ----------- SETUP ----------- //
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xe8e3d1);
-    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 8, 20);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    document.body.appendChild(renderer.domElement);
+<script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xfcf9ed);
 
-    // ----------- ILUMINAÇÃO ----------- //
-    scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
-    const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
-    dirLight.position.set(12, 22, 18);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 2048;
-    dirLight.shadow.mapSize.height = 2048;
-    dirLight.shadow.camera.near = 1;
-    dirLight.shadow.camera.far = 50;
-    dirLight.shadow.camera.left = -20;
-    dirLight.shadow.camera.right = 20;
-    dirLight.shadow.camera.top = 20;
-    dirLight.shadow.camera.bottom = -20;
-    scene.add(dirLight);
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 14, 46);
 
-    // ----------- CHÃO ----------- //
-    const chaoGeo = new THREE.BoxGeometry(20, 0.3, 20);
-    const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
-    const chao = new THREE.Mesh(chaoGeo, chaoMat);
-    chao.position.y = -0.25;
-    chao.receiveShadow = true;
-    chao.userData.solido = true;
-    scene.add(chao);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-    // ----------- DIMENSÕES ----------- //
-    const larguraFundo = 17.8, alturaFundo = 7.8, profundidadeFundo = 0.15;
-    const larguraLateral = 7.8, alturaLateral = alturaFundo, profundidadeLateral = profundidadeFundo;
-    const profundidadePrat = 0.7;
-    const nPrateleiras = 6;
-    const espessuraPrat = 0.14;
-    const margemBase = 0.6;
-    const margemTopo = 0.5;
-    const alturaUtil = alturaFundo - margemBase - margemTopo;
-    const espacamento = alturaUtil / (nPrateleiras - 1);
+// --- Luz Ambiente e Direcional ---
+scene.add(new THREE.AmbientLight(0xf7eddc, 0.89));
+const sun = new THREE.DirectionalLight(0xffffff, 0.68);
+sun.position.set(12,32,20);
+scene.add(sun);
 
-    // ----------- PAREDE DE FUNDO (PAINEL + PRATELEIRAS) ----------- //
-    const fundoCompleto = new THREE.Mesh(
-      new THREE.BoxGeometry(larguraFundo, alturaFundo, profundidadeFundo),
-      new THREE.MeshLambertMaterial({color: 0x7a4a21})
-    );
-    fundoCompleto.position.set(0, alturaFundo / 2, -9.23);
-    fundoCompleto.userData.solido = true;
-    scene.add(fundoCompleto);
-
-    for (let i = 0; i < nPrateleiras; i++) {
-      const y = margemBase + i * espacamento;
-      const prateleira = new THREE.Mesh(
-        new THREE.BoxGeometry(larguraFundo - 0.28, espessuraPrat, profundidadePrat),
-        new THREE.MeshLambertMaterial({color: 0x87531b})
-      );
-      prateleira.position.set(0, y, -9.18);
-      prateleira.userData.solido = true;
-      scene.add(prateleira);
-    }
-
-    // ----------- PAREDE LATERAL ESQUERDA ----------- //
-    const fundoEsq = new THREE.Mesh(
-      new THREE.BoxGeometry(larguraLateral, alturaLateral, profundidadeLateral),
-      new THREE.MeshLambertMaterial({color: 0x7a4a21})
-    );
-    fundoEsq.position.set(-9.22, alturaLateral/2, 0);
-    fundoEsq.rotation.y = Math.PI/2;
-    fundoEsq.userData.solido = true;
-    scene.add(fundoEsq);
-
-    for(let i=0;i<nPrateleiras;i++){
-      const y = margemBase + i * espacamento;
+// --- FUNÇÕES AUXILIARES ---
+// Cria prateleiras num painel base vertical
+function criarPrateleiras(x, y, z, largura, altura, nAndares, nPratPorAndar, lateral=false, rotY=0) {
+  const profundidadePainel = 0.16;
+  const profundidadePrat = 0.7;
+  // Painel de fundo
+  const painel = new THREE.Mesh(
+    new THREE.BoxGeometry(largura, altura, profundidadePainel),
+    new THREE.MeshLambertMaterial({color: 0x6c3b16})
+  );
+  painel.position.set(0, altura/2, 0);
+  // Prateleiras empilhadas em "andares"
+  const alturaUtil = altura*0.93;
+  const alturaAndar = alturaUtil / nAndares;
+  for(let a=0;a<nAndares;a++){
+    for(let p=1;p<=nPratPorAndar;p++){
+      const yPrat = 0.22 + a*alturaAndar + p*(alturaAndar/(nPratPorAndar+1));
       const prat = new THREE.Mesh(
-        new THREE.BoxGeometry(larguraLateral - 0.28, espessuraPrat, profundidadePrat),
-        new THREE.MeshLambertMaterial({color: 0x87531b})
+        new THREE.BoxGeometry(largura * 0.98, 0.12, profundidadePrat),
+        new THREE.MeshLambertMaterial({color: 0x9d6132})
       );
-      prat.position.set(-9.22, y, 0.05);
-      prat.rotation.y = Math.PI/2;
-      prat.userData.solido = true;
-      scene.add(prat);
+      prat.position.set(0, yPrat, profundidadePrat/3.2);
+      painel.add(prat);
     }
-
-    // ----------- PAREDE LATERAL DIREITA ----------- //
-    const fundoDir = fundoEsq.clone();
-    fundoDir.position.x = 9.22;
-    scene.add(fundoDir);
-
-    for(let i=0;i<nPrateleiras;i++){
-      const y = margemBase + i * espacamento;
-      const prat = new THREE.Mesh(
-        new THREE.BoxGeometry(larguraLateral - 0.28, espessuraPrat, profundidadePrat),
-        new THREE.MeshLambertMaterial({color: 0x87531b})
+  }
+  // Laterais/molduras escuras verticais opcionais
+  if(lateral){
+    for(const sign of [-1,1]){
+      const lat = new THREE.Mesh(
+        new THREE.BoxGeometry(0.19, altura, profundidadePainel + profundidadePrat - 0.06),
+        new THREE.MeshLambertMaterial({color: 0x3e2313})
       );
-      prat.position.set(9.22, y, 0.05);
-      prat.rotation.y = Math.PI/2;
-      prat.userData.solido = true;
-      scene.add(prat);
+      lat.position.set( sign*(largura/2-0.11), altura/2, profundidadePrat/6 );
+      painel.add(lat);
     }
+  }
+  // Grupo global (para rodar e posicionar ao estilo Three.js)
+  const grupo = new THREE.Group();
+  grupo.add(painel);
+  grupo.position.set(x,y,z);
+  grupo.rotation.y = rotY;
+  scene.add(grupo);
+  return grupo;
+}
 
-    // ----------- PRATELEIRAS EDUCATIVAS (MANTÉM) ----------- //
-    function criaPrat(x, z, y, texto) {
-      const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
-      const mat = new THREE.MeshLambertMaterial({ color: 0xffc107 });
-      const shelf = new THREE.Mesh(geo, mat);
-      shelf.position.set(x, y, z);
-      shelf.userData.label = texto;
-      shelf.userData.interacao = true;
-      shelf.userData.solido = true;
-      shelf.castShadow = true;
-      shelf.receiveShadow = true;
-      scene.add(shelf);
-      return shelf;
-    }
-    const prateleiras = [
-      criaPrat(-5, -5, 1.6, "Licenciatura em Engenharia Biomédica<br><i>IPS/ISEL (2023- )</i><br>Projetos IA Médica, tese segmentação de tumores."),
-      criaPrat(5, -5, 1.6, "Ensino Secundário<br><i>Escola Secundária de Setúbal (2019-2022)</i><br>Distinção, competição natação."),
-      criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
-    ];
+// --- Paredes e prateleiras envolventes ---
+// Fundo (grande)
+criarPrateleiras(0, 0, -9.18, 17.6, 14.5, 3, 5, true, 0);
+// Lateral esquerda
+criarPrateleiras(-9.10, 0, 0, 8.3, 14.5, 3, 5, true, Math.PI/2);
+// Lateral direita
+criarPrateleiras(9.10, 0, 0, 8.3, 14.5, 3, 5, true, -Math.PI/2);
 
-    // ----------- BONECO ----------- //
-    function criaBoneco() {
-      const grupo = new THREE.Group();
-      const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
-      const corpoMat = new THREE.MeshLambertMaterial({ color: 0x2196f3 });
-      const corpo = new THREE.Mesh(corpoGeo, corpoMat);
-      corpo.position.y = 1;
-      corpo.castShadow = true;
-      corpo.receiveShadow = false;
-      grupo.add(corpo);
-      const cabecaGeo = new THREE.BoxGeometry(0.8, 0.7, 0.7);
-      const cabecaMat = new THREE.MeshLambertMaterial({ color: 0xfff176 });
-      const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
-      cabeca.position.y = 2;
-      cabeca.castShadow = true;
-      grupo.add(cabeca);
-      grupo.position.set(0, 0.25, 6);
-      return grupo;
-    }
-    const boneco = criaBoneco();
-    scene.add(boneco);
+// --- Colunas/pilares altos entre segmentos (fundo) ---
+for(const x of [-7.65, -3.8, 0, 3.8, 7.65]){
+  const pil = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.23, 0.25, 15, 18),
+    new THREE.MeshLambertMaterial({color:0x3e2214})
+  );
+  pil.position.set(x, 7.2, -9.00);
+  scene.add(pil);
+}
 
-    // ----------- MOVIMENTO/BLOQUEIOS ----------- //
-    const keys = {};
-    document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
-    document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
+// Mesma ideia (laterais, cada 3.9m, menos colunas pois espaço menor)
+for(const sideX of [-9.10,9.10]){
+  for(const z of [-3.7,0,3.7]){
+    const pil = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.2,0.23,15,16),
+      new THREE.MeshLambertMaterial({color:0x342113})
+    );
+    pil.position.set(sideX,7.2,z);
+    scene.add(pil);
+  }
+}
 
-    let objetosSolidos = [];
-    const caixaBoneco = new THREE.Box3();
-    function atualizaColisoes() {
-      objetosSolidos = [];
-      scene.traverse(obj => {
-        if (obj.userData && obj.userData.solido && obj.geometry) {
-          const box = new THREE.Box3().setFromObject(obj);
-          objetosSolidos.push({obj, box});
-        }
-      });
-    }
-    atualizaColisoes();
-    function colisao(nx, ny, nz) {
-      const tamanhoBoneco = new THREE.Vector3(1, 1.6, 0.7);
-      caixaBoneco.min.set(nx - tamanhoBoneco.x / 2, ny, nz - tamanhoBoneco.z / 2);
-      caixaBoneco.max.set(nx + tamanhoBoneco.x / 2, ny + tamanhoBoneco.y, nz + tamanhoBoneco.z / 2);
-      for (const {obj, box} of objetosSolidos) {
-        if (caixaBoneco.intersectsBox(box)) return true;
-      }
-      return false;
-    }
+// --- Chão claro ---
+const chao = new THREE.Mesh(
+  new THREE.BoxGeometry(22,0.2,22),
+  new THREE.MeshLambertMaterial({color:0xe8e8df})
+);
+chao.position.y = -0.1;
+scene.add(chao);
 
-    let posAtual = boneco.position.clone();
-    let velocidade = new THREE.Vector3(0, 0, 0);
-    const acel = 0.02;
-    const friccao = 0.88;
-    const maxVel = 0.15;
-    let prateleiraPerto = null;
-    const infoDiv = document.getElementById("info");
-    function mostrarInfo(texto) {
-      infoDiv.innerHTML = texto + '<br><br><span id="closeInfo">Fechar</span>';
-      infoDiv.style.display = "block";
-      document.getElementById("closeInfo").onclick = () => {
-        infoDiv.style.display = "none";
-      };
-    }
-    function animate() {
-      if (keys["w"]) velocidade.z -= acel;
-      if (keys["s"]) velocidade.z += acel;
-      if (keys["a"]) velocidade.x -= acel;
-      if (keys["d"]) velocidade.x += acel;
-      velocidade.multiplyScalar(friccao);
-      velocidade.x = Math.max(-maxVel, Math.min(maxVel, velocidade.x));
-      velocidade.z = Math.max(-maxVel, Math.min(maxVel, velocidade.z));
-      let nx = posAtual.x + velocidade.x;
-      let ny = 0.25;
-      let nz = posAtual.z + velocidade.z;
-      nx = Math.max(-9, Math.min(9, nx));
-      nz = Math.max(-9, Math.min(9, nz));
-      if (!colisao(nx, ny, nz)) {
-        posAtual.set(nx, ny, nz);
-        boneco.position.copy(posAtual);
-      } else {
-        velocidade.set(0, 0, 0);
-      }
-      camera.position.lerp(new THREE.Vector3(posAtual.x, 6 + posAtual.y / 1.7, posAtual.z + 12), 0.1);
-      camera.lookAt(posAtual.x, posAtual.y + 1.5, posAtual.z);
-      prateleiraPerto = null;
-      for(const shelf of prateleiras) {
-        const dist = shelf.position.distanceTo(posAtual);
-        if(dist < 2.4) {
-          prateleiraPerto = shelf;
-          break;
-        }
-      }
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    document.addEventListener("keydown", e => {
-      if (e.key.toLowerCase() === "o" && prateleiraPerto) {
-        mostrarInfo(prateleiraPerto.userData.label);
-      }
-    });
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
+// --- Câmara e render loop ---
+camera.lookAt(0,7,-9.2);
+function animate(){
+  renderer.render(scene,camera);
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+</script>
 </body>
 </html>
+
