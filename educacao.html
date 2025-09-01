@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Biblioteca 3D – Livros nas Estantes</title>
+  <title>Biblioteca 3D – Livros todos para dentro</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info { position: absolute; top: 12px; left: 12px;
@@ -83,8 +83,8 @@
     }
     criaEstanteTraseiraLivros(0, -9.2, 16, 4.2, 0.65);
 
-    // ESTANTES LATERAIS
-    function criaEstanteLateralLivros(x, largura, altura, profundidade, cor = 0x7a4a21) {
+    // ESTANTES LATERAIS (com sinal diferenciado no x para os livros ficarem para Dentro)
+    function criaEstanteLateralLivros(x, largura, altura, profundidade, lado = 'esquerda', cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
       const estMat = new THREE.MeshLambertMaterial({ color: cor });
       const estante = new THREE.Mesh(estGeo, estMat);
@@ -101,16 +101,21 @@
           let lz = -profundidade / 2 + (l + 0.5) * livroWidth;
           const livroGeo = new THREE.BoxGeometry(0.15, 0.5 + Math.random() * 0.1, livroWidth - 0.03);
           const livroMat = new THREE.MeshLambertMaterial({ color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7 });
+          let lx = x + (lado === 'esquerda' ? (largura / 2 + 0.09) : -(largura / 2 + 0.09));
+          // Se for direita, "x" é positivo, então calcula lx para dentro
+          if (lado === 'direita') lx = x - (largura / 2 + 0.09);
           const livro = new THREE.Mesh(livroGeo, livroMat);
-          livro.position.set(x + largura / 2 + 0.09, py, lz);
+          livro.position.set(lx, py, lz);
           scene.add(livro);
         }
       }
     }
-    criaEstanteLateralLivros(-8.8, 0.65, 4.2, 16);
-    criaEstanteLateralLivros(8.8, 0.65, 4.2, 16);
+    // Estante esquerda (para dentro)
+    criaEstanteLateralLivros(-8.8, 0.65, 4.2, 16, 'esquerda');
+    // Estante direita (corrigida para dentro)
+    criaEstanteLateralLivros(8.8, 0.65, 4.2, 16, 'direita');
 
-    // PRATELEIRAS EDUCATIVAS/INTERATIVAS
+    // PRATELEIRAS EDUCATIVAS
     function criaPrat(x, z, y, texto) {
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
       const mat = new THREE.MeshLambertMaterial({ color: 0xffc107 });
@@ -128,7 +133,7 @@
       criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
     ];
 
-    // BONECO MOVIMENTÁVEL
+    // BONECO
     function criaBoneco() {
       const grupo = new THREE.Group();
       const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
