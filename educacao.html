@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Biblioteca 3D - Inclinação recorte perfeito</title>
   <style>
     html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; }
@@ -35,22 +35,20 @@
     </div>
   </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/loaders/GLTFLoader.js"></script>
   <script>
-    // Variáveis globais
+    // Variáveis globais do cenário e câmara
     let larguraSala, alturaSala, profundidadeSala;
     let camera, scene, renderer;
-    let boneco = null, chao;
+    let boneco, chao;
     let prateleiras = [];
     let objetosSolidos = [];
     let keys = {};
-
     function criaCena() {
+      // Dimensões dependentes do ecrã
       alturaSala = 9.5;
       const aspect = window.innerWidth / window.innerHeight;
       larguraSala = alturaSala * aspect;
       profundidadeSala = alturaSala;
-
       document.body.innerHTML =
         `<div id="info">Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.</div>
         <div id="hud">
@@ -59,55 +57,38 @@
           <span class="desc">Mover personagem</span></div>
           <div class="keys" style="margin-top:7px;"><span class="key">O</span>
           <span class="desc">Abrir informação próxima</span></div></div>`;
-
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xe8e3d1);
-
+      // Perspectiva: inclinação à la "isométrico", bem recortado
       camera = new THREE.PerspectiveCamera(70, aspect, 0.1, 1000);
       camera.position.set(0, alturaSala * 0.85, larguraSala * 0.65);
       camera.lookAt(0, alturaSala * 0.36, -profundidadeSala * 0.23);
-
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
-
       scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
       const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
-      dirLight.position.set(12, alturaSala, 18);
-      scene.add(dirLight);
-
+      dirLight.position.set(12, alturaSala, 18); scene.add(dirLight);
+      // Chão justo ao ecrã
       const chaoGeo = new THREE.BoxGeometry(larguraSala, 0.25, profundidadeSala);
       const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
       chao = new THREE.Mesh(chaoGeo, chaoMat);
-      chao.position.y = -0.17;
-      chao.userData.solido = true;
-      scene.add(chao);
-
+      chao.position.y = -0.17; chao.userData.solido = true; scene.add(chao);
+      // Estante traseira central
       criaEstanteTraseiraLivros(0, -profundidadeSala / 2 + 0.37, larguraSala - 2.2, alturaSala - 4.2, 0.65);
+      // Estantes laterais (recorte à sala visível)
       criaEstanteLateralLivros(-larguraSala / 2 + 0.36, 0.65, alturaSala - 4.2, profundidadeSala - 2.2, 'esquerda');
       criaEstanteLateralLivros(larguraSala / 2 - 0.36, 0.65, alturaSala - 4.2, profundidadeSala - 2.2, 'direita');
-
+      // Prateleiras educativas/interativas (blocos amarelos)
       prateleiras = [];
       prateleiras.push(criaPrat(-2, -3, 1.3, "Licenciatura em Engenharia Biomédica<br><i>IPS/ISEL (2023- )</i><br>Projetos IA Médica, tese segmentação de tumores."));
       prateleiras.push(criaPrat(2, -3, 1.3, "Ensino Secundário<br><i>Escola Secundária de Setúbal (2019-2022)</i><br>Distinção, competição natação."));
       prateleiras.push(criaPrat(0, 0, 1.3, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>"));
-
-      // Carregar modelo GLB
-      const loader = new THREE.GLTFLoader();
-      loader.load('Lego-Jack-Sparrow-Pirates-of-the-Caribbean-Minifig.glb', function(gltf) {
-        boneco = gltf.scene;
-        boneco.position.set(0, 0.25, 2.5);
-        boneco.scale.set(1.2, 1.2, 1.2); // Ajusta se necessário!
-        scene.add(boneco);
-        console.log('Modelo carregado com sucesso!');
-        atualizaColisoes();
-      }, undefined, function(error){
-        console.error('Erro ao carregar modelo GLB:', error);
-      });
-
+      // Boneco centrado
+      boneco = criaBoneco();
+      scene.add(boneco);
       atualizaColisoes();
     }
-
     function criaEstanteTraseiraLivros(x, z, largura, altura, profundidade, cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
       const estMat = new THREE.MeshLambertMaterial({ color: cor });
@@ -115,8 +96,23 @@
       estante.position.set(x, altura / 2 + 0.03, z);
       estante.userData.solido = true;
       scene.add(estante);
+      const nFilas = 3, livrosPorFila = Math.floor(largura / 0.65);
+      const livroWidth = largura / livrosPorFila;
+      const profundidadeLivros = profundidade / 2 + 0.12;
+      for (let f = 0; f < nFilas; f++) {
+        let py = 0.54 + f * ((altura - 0.9) / (nFilas - 1));
+        for (let l = 0; l < livrosPorFila; l++) {
+          let lx = x - largura / 2 + (l + 0.5) * livroWidth;
+          const livroGeo = new THREE.BoxGeometry(livroWidth - 0.08, 0.43 + Math.random() * 0.11, 0.15);
+          const livroMat = new THREE.MeshLambertMaterial({
+            color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7
+          });
+          const livro = new THREE.Mesh(livroGeo, livroMat);
+          livro.position.set(lx, py, z + profundidadeLivros);
+          scene.add(livro);
+        }
+      }
     }
-
     function criaEstanteLateralLivros(x, largura, altura, profundidade, lado = 'esquerda', cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
       const estMat = new THREE.MeshLambertMaterial({ color: cor });
@@ -124,8 +120,24 @@
       estante.position.set(x, altura / 2 + 0.03, 0);
       estante.userData.solido = true;
       scene.add(estante);
+      const nFilas = 3, livrosPorFila = Math.floor(profundidade / 0.65);
+      const livroWidth = profundidade / livrosPorFila;
+      for (let f = 0; f < nFilas; f++) {
+        let py = 0.54 + f * ((altura - 0.9) / (nFilas - 1));
+        for (let l = 0; l < livrosPorFila; l++) {
+          let lz = -profundidade / 2 + (l + 0.5) * livroWidth;
+          const livroGeo = new THREE.BoxGeometry(0.15, 0.43 + Math.random() * 0.11, livroWidth - 0.08);
+          const livroMat = new THREE.MeshLambertMaterial({
+            color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7
+          });
+          let lx = x + (lado === 'esquerda' ? (largura / 2 + 0.058) : -(largura / 2 + 0.058));
+          if (lado === 'direita') lx = x - (largura / 2 + 0.058);
+          const livro = new THREE.Mesh(livroGeo, livroMat);
+          livro.position.set(lx, py, lz);
+          scene.add(livro);
+        }
+      }
     }
-
     function criaPrat(x, z, y, texto) {
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
       const mat = new THREE.MeshLambertMaterial({ color: 0xffc107 });
@@ -137,12 +149,24 @@
       scene.add(shelf);
       return shelf;
     }
-
+    function criaBoneco() {
+      const grupo = new THREE.Group();
+      const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
+      const corpoMat = new THREE.MeshLambertMaterial({ color: 0x2196f3 });
+      const corpo = new THREE.Mesh(corpoGeo, corpoMat); corpo.position.y = 1;
+      grupo.add(corpo);
+      const cabecaGeo = new THREE.BoxGeometry(0.8, 0.7, 0.7);
+      const cabecaMat = new THREE.MeshLambertMaterial({ color: 0xfff176 });
+      const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat); cabeca.position.y = 2;
+      grupo.add(cabeca);
+      grupo.position.set(0, 0.25, 2.5);
+      return grupo;
+    }
+    // COLISÕES E CONTROLOS
     function atualizaColisoes() {
       objetosSolidos.length = 0;
       scene.traverse(obj => { if (obj.userData && obj.userData.solido) objetosSolidos.push(obj); });
     }
-
     function colisao(nx, ny, nz) {
       for (const obj of objetosSolidos) {
         const ox = obj.position.x, oy = obj.position.y, oz = obj.position.z;
@@ -154,42 +178,32 @@
       }
       return false;
     }
-
     let prateleiraPerto = null;
     const speed = 0.13;
-
     function animate() {
-      // Só calcula movimento se boneco já está carregado
-      if (boneco) {
-        let nx = boneco.position.x, ny = boneco.position.y, nz = boneco.position.z;
-        if (keys["w"]) nz -= speed;
-        if (keys["s"]) nz += speed;
-        if (keys["a"]) nx -= speed;
-        if (keys["d"]) nx += speed;
-
-        nx = Math.max(-larguraSala / 2 + 1, Math.min(larguraSala / 2 - 1, nx));
-        nz = Math.max(-profundidadeSala / 2 + 1, Math.min(profundidadeSala / 2 - 1, nz));
-        ny = Math.max(0.25, Math.min(alturaSala - 1, ny));
-
-        if (!colisao(nx, ny, nz)) {
-          boneco.position.x = nx;
-          boneco.position.z = nz;
-          boneco.position.y = ny;
-        }
-
-        prateleiraPerto = null;
-        for (const shelf of prateleiras) {
-          const dist = Math.sqrt(
-            Math.pow(boneco.position.x - shelf.position.x, 2) +
-            Math.pow(boneco.position.y - shelf.position.y, 2) +
-            Math.pow(boneco.position.z - shelf.position.z, 2));
-          if (dist < 2.4) { prateleiraPerto = shelf; break; }
-        }
+      let nx = boneco.position.x, ny = boneco.position.y, nz = boneco.position.z;
+      if (keys["w"]) nz -= speed;
+      if (keys["s"]) nz += speed;
+      if (keys["a"]) nx -= speed;
+      if (keys["d"]) nx += speed;
+      nx = Math.max(-larguraSala / 2 + 1, Math.min(larguraSala / 2 - 1, nx));
+      nz = Math.max(-profundidadeSala / 2 + 1, Math.min(profundidadeSala / 2 - 1, nz));
+      ny = Math.max(0.25, Math.min(alturaSala - 1, ny));
+      if (!colisao(nx, ny, nz)) {
+        boneco.position.x = nx; boneco.position.z = nz; boneco.position.y = ny;
+      }
+      prateleiraPerto = null;
+      for (const shelf of prateleiras) {
+        const dist = Math.sqrt(
+          Math.pow(boneco.position.x - shelf.position.x, 2) +
+          Math.pow(boneco.position.y - shelf.position.y, 2) +
+          Math.pow(boneco.position.z - shelf.position.z, 2));
+        if (dist < 2.4) { prateleiraPerto = shelf; break; }
       }
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
-
+    // CONTROLOS E INIT
     document.addEventListener("keydown", e => { keys[e.key.toLowerCase()] = true; });
     document.addEventListener("keyup", e => { keys[e.key.toLowerCase()] = false; });
     document.addEventListener("keydown", function (e) {
@@ -197,7 +211,6 @@
         mostrarInfo(prateleiraPerto.userData.label);
       }
     });
-
     function mostrarInfo(texto) {
       const div = document.getElementById("info");
       div.innerHTML = texto +
@@ -206,12 +219,12 @@
         div.innerHTML = 'Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.';
       }, 4000);
     }
-
+    // Dinamismo ao redimensionar
     window.addEventListener('resize', () => {
       criaCena();
       atualizaColisoes();
     });
-
+    // START
     criaCena();
     animate();
   </script>
