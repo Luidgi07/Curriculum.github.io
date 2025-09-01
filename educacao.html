@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Biblioteca 3D - Livros nas Estantes Laterais e Traseira</title>
+  <meta charset="UTF-8">
+  <title>Biblioteca 3D – Livros nas Estantes</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info { position: absolute; top: 12px; left: 12px;
@@ -37,91 +37,83 @@
   </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
+    // SETUP
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe8e3d1);
-    const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 8, 20);
-    const renderer = new THREE.WebGLRenderer({antialias:true});
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
     scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
     const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
-    dirLight.position.set(12,22,18);
-    scene.add(dirLight);
+    dirLight.position.set(12, 22, 18); scene.add(dirLight);
 
-    // Chão plano
+    // CHÃO
     const chaoGeo = new THREE.BoxGeometry(20, 0.3, 20);
-    const chaoMat = new THREE.MeshLambertMaterial({color:0xc9ad7c});
+    const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
     const chao = new THREE.Mesh(chaoGeo, chaoMat);
     chao.position.y = -0.25; chao.userData.solido = true; scene.add(chao);
 
-    // Estante traseira com livros bem estreitos
-    function criaEstanteTraseiraLivros(x, z, largura, altura, profundidade, cor=0x7a4a21) {
-      // Fundo castanho da estante
+    // ESTANTE TRASEIRA
+    function criaEstanteTraseiraLivros(x, z, largura, altura, profundidade, cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
-      const estMat = new THREE.MeshLambertMaterial({color: cor});
+      const estMat = new THREE.MeshLambertMaterial({ color: cor });
       const estante = new THREE.Mesh(estGeo, estMat);
-      estante.position.set(x, altura/2, z);
+      estante.position.set(x, altura / 2, z);
       estante.userData.solido = true;
       scene.add(estante);
 
-      // Três filas horizontais de livros finos
-      const nFilas = 3;
-      const livroWidth = largura / 32; // muitos livros, bem estreitos
-      const livrosPorFila = Math.floor(largura / livroWidth);
-      const profundidadeLivros = profundidade/2 + 0.14;
-      for(let f=0; f<nFilas; f++) {
-        let py = 0.7 + f*((altura-1.7)/(nFilas-1));
-        for(let l=0; l<livrosPorFila; l++) {
-          let lx = x - largura/2 + (l+0.5)*(largura/livrosPorFila);
-          const livroGeo = new THREE.BoxGeometry(livroWidth-0.04, 0.5+Math.random()*0.13, 0.17);
-          const livroMat = new THREE.MeshLambertMaterial({
-            color: (Math.random() > 0.3 ? Math.floor(Math.random()*0xffffff) : 0xdacaa7)
-          });
+      // Três filas horizontais, 18 livros por fila (estreitos)
+      const nFilas = 3, livrosPorFila = 18;
+      const livroWidth = largura / livrosPorFila;
+      const profundidadeLivros = profundidade / 2 + 0.13;
+      for (let f = 0; f < nFilas; f++) {
+        let py = 0.7 + f * ((altura - 1.7) / (nFilas - 1));
+        for (let l = 0; l < livrosPorFila; l++) {
+          let lx = x - largura / 2 + (l + 0.5) * livroWidth;
+          const livroGeo = new THREE.BoxGeometry(livroWidth - 0.03, 0.5 + Math.random() * 0.1, 0.15);
+          const livroMat = new THREE.MeshLambertMaterial({ color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7 });
           const livro = new THREE.Mesh(livroGeo, livroMat);
-          livro.position.set(lx, py, z + profundidadeLivros); // frente da estante
+          livro.position.set(lx, py, z + profundidadeLivros);
           scene.add(livro);
         }
       }
     }
-    criaEstanteTraseiraLivros(0,-9.2,16,4.2,0.65);
+    criaEstanteTraseiraLivros(0, -9.2, 16, 4.2, 0.65);
 
-    // Estantes laterais com filas de livros ao longo da profundidade -> eixo z
-    function criaEstanteLateralLivros(x, largura, altura, profundidade, cor=0x7a4a21) {
+    // ESTANTES LATERAIS
+    function criaEstanteLateralLivros(x, largura, altura, profundidade, cor = 0x7a4a21) {
       const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
-      const estMat = new THREE.MeshLambertMaterial({color: cor});
+      const estMat = new THREE.MeshLambertMaterial({ color: cor });
       const estante = new THREE.Mesh(estGeo, estMat);
-      estante.position.set(x, altura/2, 0);
+      estante.position.set(x, altura / 2, 0);
       estante.userData.solido = true;
       scene.add(estante);
 
-      // Três filas horizontais ao longo do comprimento da parede (z)
-      const nFilas = 3;
-      const livroWidth = profundidade / 32;
-      const livrosPorFila = Math.floor(profundidade / livroWidth);
-      for(let f=0; f<nFilas; f++) {
-        let py = 0.7 + f*((altura-1.7)/(nFilas-1));
-        for(let l=0; l<livrosPorFila; l++) {
-          let lz = -profundidade/2 + (l+0.5)*(profundidade/livrosPorFila);
-          const livroGeo = new THREE.BoxGeometry(0.17, 0.5+Math.random()*0.13, livroWidth-0.04);
-          const livroMat = new THREE.MeshLambertMaterial({
-            color: (Math.random() > 0.3 ? Math.floor(Math.random()*0xffffff) : 0xdacaa7)
-          });
+      // Três filas horizontais, 18 livros por fila ao longo do eixo z (profundidade)
+      const nFilas = 3, livrosPorFila = 18;
+      const livroWidth = profundidade / livrosPorFila;
+      for (let f = 0; f < nFilas; f++) {
+        let py = 0.7 + f * ((altura - 1.7) / (nFilas - 1));
+        for (let l = 0; l < livrosPorFila; l++) {
+          let lz = -profundidade / 2 + (l + 0.5) * livroWidth;
+          const livroGeo = new THREE.BoxGeometry(0.15, 0.5 + Math.random() * 0.1, livroWidth - 0.03);
+          const livroMat = new THREE.MeshLambertMaterial({ color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7 });
           const livro = new THREE.Mesh(livroGeo, livroMat);
-          livro.position.set(x + largura/2 + 0.09, py, lz);
+          livro.position.set(x + largura / 2 + 0.09, py, lz);
           scene.add(livro);
         }
       }
     }
-    // Estantes laterais esquerda e direita
     criaEstanteLateralLivros(-8.8, 0.65, 4.2, 16);
     criaEstanteLateralLivros(8.8, 0.65, 4.2, 16);
 
-    // Prateleiras educativas/interativas (os blocos amarelos)
-    function criaPrat(x, z, y, texto){
+    // PRATELEIRAS EDUCATIVAS/INTERATIVAS
+    function criaPrat(x, z, y, texto) {
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
-      const mat = new THREE.MeshLambertMaterial({color:0xffc107});
+      const mat = new THREE.MeshLambertMaterial({ color: 0xffc107 });
       const shelf = new THREE.Mesh(geo, mat);
       shelf.position.set(x, y, z);
       shelf.userData.label = texto;
@@ -136,15 +128,15 @@
       criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
     ];
 
-    // Boneco movimentável
+    // BONECO MOVIMENTÁVEL
     function criaBoneco() {
       const grupo = new THREE.Group();
       const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
-      const corpoMat = new THREE.MeshLambertMaterial({color:0x2196f3});
+      const corpoMat = new THREE.MeshLambertMaterial({ color: 0x2196f3 });
       const corpo = new THREE.Mesh(corpoGeo, corpoMat); corpo.position.y = 1;
       grupo.add(corpo);
       const cabecaGeo = new THREE.BoxGeometry(0.8, 0.7, 0.7);
-      const cabecaMat = new THREE.MeshLambertMaterial({color:0xfff176});
+      const cabecaMat = new THREE.MeshLambertMaterial({ color: 0xfff176 });
       const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat); cabeca.position.y = 2;
       grupo.add(cabeca);
       grupo.position.set(0, 0.25, 6);
@@ -152,7 +144,7 @@
     }
     const boneco = criaBoneco(); scene.add(boneco);
 
-    // Movimento com WASD + colisão dura
+    // MOVIMENTO, COLISÕES & INTERAÇÃO
     const keys = {};
     document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
     document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
@@ -162,9 +154,7 @@
     const objetosSolidos = [];
     function atualizaColisoes() {
       objetosSolidos.length = 0;
-      scene.traverse(obj => {
-        if (obj.userData && obj.userData.solido) objetosSolidos.push(obj);
-      });
+      scene.traverse(obj => { if (obj.userData && obj.userData.solido) objetosSolidos.push(obj); });
     }
     atualizaColisoes();
 
@@ -190,9 +180,7 @@
       nz = Math.max(-8.5, Math.min(8.5, nz));
       ny = Math.max(0.25, Math.min(4.6, ny));
       if (!colisao(nx, ny, nz)) {
-        boneco.position.x = nx;
-        boneco.position.z = nz;
-        boneco.position.y = ny;
+        boneco.position.x = nx; boneco.position.z = nz; boneco.position.y = ny;
       }
       camera.position.x = boneco.position.x;
       camera.position.z = boneco.position.z + 12;
