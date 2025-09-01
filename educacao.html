@@ -1,29 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Biblioteca 3D – Livros todos para dentro</title>
+  <meta charset="UTF-8" />
+  <title>Biblioteca 3D – Estante com Nichos e Melhorias</title>
   <style>
     body { margin: 0; overflow: hidden; }
-    #info { position: absolute; top: 12px; left: 12px;
-      background: rgba(255,255,255,0.92); padding: 10px 18px;
-      border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 1.1rem;
-      color: #0066bb; z-index: 4; }
-    #hud { position: fixed; left: 24px; bottom: 24px;
-      background: rgba(240,247,255,0.95); padding: 13px 22px 11px 18px;
-      border-radius: 14px; font-family: 'Segoe UI'; color: #083c6a;
-      min-width: 210px; font-size: 1.1rem; z-index: 10;
-      border: 2px solid #a5c7e6;}
+    #info {
+      position: fixed;
+      top: 12px; left: 12px;
+      background: rgba(255,255,255,0.95);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 1.1rem;
+      color: #0066bb;
+      max-width: 360px;
+      z-index: 20;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
+    }
+    #hud {
+      position: fixed;
+      left: 24px; bottom: 24px;
+      background: rgba(240,247,255,0.95);
+      padding: 13px 22px 11px 18px;
+      border-radius: 14px;
+      font-family: 'Segoe UI';
+      color: #083c6a;
+      min-width: 210px;
+      font-size: 1.1rem;
+      z-index: 10;
+      border: 2px solid #a5c7e6;
+      user-select: none;
+    }
     #hud .title { font-weight: bold; font-size: 1.05rem; margin-bottom: 8px; }
     #hud .keys { margin-top: 0; margin-bottom: 0; }
-    #hud .key { background: #dbeafe; border-radius: 5px; padding: 3px 8px;
-      margin: 0 4px; border: 1px solid #a5c7e6; font-weight: 500;
-      display: inline-block; font-size: 1.0rem; color: #2a68b2; }
+    #hud .key {
+      background: #dbeafe; border-radius: 5px;
+      padding: 3px 8px; margin: 0 4px;
+      border: 1px solid #a5c7e6;
+      font-weight: 500;
+      display: inline-block;
+      font-size: 1.0rem; color: #2a68b2;
+    }
     #hud .desc { margin-top: 10px; font-size: 0.97rem; color: #1e3d59; }
+    #closeInfo {
+      margin-top: 12px;
+      cursor: pointer;
+      padding: 6px 12px;
+      background-color: #2a68b2;
+      color: white;
+      border-radius: 5px;
+      font-weight: 600;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
-  <div id="info">Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.</div>
+  <div id="info"></div>
   <div id="hud">
     <div class="title">Comandos:</div>
     <div class="keys">
@@ -32,83 +66,129 @@
     </div>
     <div class="keys" style="margin-top:7px;">
       <span class="key">O</span>
-      <span class="desc">Abrir informação próxima</span>
+      <span class="desc">Mostrar informação próxima</span>
     </div>
   </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
-    // SETUP
+    // SETUP básico
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe8e3d1);
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 8, 20);
+
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
+
+    // Iluminação
     scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
+
     const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
-    dirLight.position.set(12, 22, 18); scene.add(dirLight);
+    dirLight.position.set(12, 22, 18);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
+    dirLight.shadow.camera.near = 1;
+    dirLight.shadow.camera.far = 50;
+    dirLight.shadow.camera.left = -20;
+    dirLight.shadow.camera.right = 20;
+    dirLight.shadow.camera.top = 20;
+    dirLight.shadow.camera.bottom = -20;
+    scene.add(dirLight);
+
     // CHÃO
     const chaoGeo = new THREE.BoxGeometry(20, 0.3, 20);
     const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
     const chao = new THREE.Mesh(chaoGeo, chaoMat);
-    chao.position.y = -0.25; chao.userData.solido = true; scene.add(chao);
-    // ESTANTE TRASEIRA
-    function criaEstanteTraseiraLivros(x, z, largura, altura, profundidade, cor = 0x7a4a21) {
-      const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
-      const estMat = new THREE.MeshLambertMaterial({ color: cor });
-      const estante = new THREE.Mesh(estGeo, estMat);
-      estante.position.set(x, altura / 2, z);
-      estante.userData.solido = true;
+    chao.position.y = -0.25;
+    chao.receiveShadow = true;
+    chao.userData.solido = true;
+    scene.add(chao);
+
+    // Função para criar nicho (buraco) na estante
+    function criaNichoEstante(x, y, z, largura, altura, profundidade, cor = 0x7a4a21) {
+      // Corpo da estante - parede grossa ao redor do nicho
+      const espessura = 0.6;
+      const estante = new THREE.Group();
+
+      // Base inferior do nicho
+      const baseGeo = new THREE.BoxGeometry(largura, espessura, profundidade);
+      const baseMat = new THREE.MeshLambertMaterial({ color: cor });
+      const base = new THREE.Mesh(baseGeo, baseMat);
+      base.position.set(0, espessura / 2, 0);
+      base.castShadow = true;
+      base.receiveShadow = true;
+      estante.add(base);
+      base.userData.solido = true;
+
+      // Laterais
+      const ladoGeo = new THREE.BoxGeometry(espessura, altura, profundidade);
+      const ladoEsq = new THREE.Mesh(ladoGeo, baseMat);
+      ladoEsq.position.set(-largura/2 + espessura/2, altura/2 + espessura, 0);
+      ladoEsq.castShadow = true; ladoEsq.receiveShadow = true;
+      ladoEsq.userData.solido = true;
+      estante.add(ladoEsq);
+
+      const ladoDir = ladoEsq.clone();
+      ladoDir.position.x = largura/2 - espessura/2;
+      estante.add(ladoDir);
+
+      // Fundo da estante (profundidade fina)
+      const fundoGeo = new THREE.BoxGeometry(largura - espessura*2, altura, espessura);
+      const fundo = new THREE.Mesh(fundoGeo, baseMat);
+      fundo.position.set(0, altura/2 + espessura, -profundidade/2 + espessura/2);
+      fundo.castShadow = true;
+      fundo.receiveShadow = true;
+      fundo.userData.solido = true;
+      estante.add(fundo);
+
+      estante.position.set(x, y, z);
       scene.add(estante);
-      // Três filas horizontais, 18 livros por fila (estreitos)
-      const nFilas = 3, livrosPorFila = 18;
-      const livroWidth = largura / livrosPorFila;
-      const profundidadeLivros = profundidade / 2 + 0.13;
-      for (let f = 0; f < nFilas; f++) {
-        let py = 0.7 + f * ((altura - 1.7) / (nFilas - 1));
-        for (let l = 0; l < livrosPorFila; l++) {
-          let lx = x - largura / 2 + (l + 0.5) * livroWidth;
-          const livroGeo = new THREE.BoxGeometry(livroWidth - 0.03, 0.5 + Math.random() * 0.1, 0.15);
-          const livroMat = new THREE.MeshLambertMaterial({ color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7 });
-          const livro = new THREE.Mesh(livroGeo, livroMat);
-          livro.position.set(lx, py, z + profundidadeLivros);
-          scene.add(livro);
-        }
-      }
+
+      return estante;
     }
-    criaEstanteTraseiraLivros(0, -9.2, 16, 4.2, 0.65);
-    // ESTANTES LATERAIS (com sinal diferenciado no x para os livros ficarem para Dentro)
-    function criaEstanteLateralLivros(x, largura, altura, profundidade, lado = 'esquerda', cor = 0x7a4a21) {
-      const estGeo = new THREE.BoxGeometry(largura, altura, profundidade);
-      const estMat = new THREE.MeshLambertMaterial({ color: cor });
-      const estante = new THREE.Mesh(estGeo, estMat);
-      estante.position.set(x, altura / 2, 0);
-      estante.userData.solido = true;
-      scene.add(estante);
-      // Três filas horizontais, 18 livros por fila ao longo do eixo z (profundidade)
-      const nFilas = 3, livrosPorFila = 40;
-      const livroWidth = profundidade / livrosPorFila;
-      for (let f = 0; f < nFilas; f++) {
-        let py = 0.7 + f * ((altura - 1.7) / (nFilas - 1));
-        for (let l = 0; l < livrosPorFila; l++) {
-          let lz = -profundidade / 2 + (l + 0.5) * livroWidth;
-          const livroGeo = new THREE.BoxGeometry(0.15, 0.5 + Math.random() * 0.1, livroWidth - 0.03);
+
+    // Função para criar livros dentro do nicho (com posicionamento e geometria otimizados)
+    function criaLivrosNoNicho(estante, largura, altura, profundidade, nFilas = 3, livrosPorFila = 10) {
+      const livroWidth = (largura - 0.6*2) / livrosPorFila;
+      const livroDepth = 0.15;
+      const livroHeightBase = 0.5;
+
+      for(let f = 0; f < nFilas; f++) {
+        const py = 0.7 + f * ((altura - 1.7) / (nFilas - 1)) + 0.6; // repensa offset para nicho
+        for(let l = 0; l < livrosPorFila; l++) {
+          const lx = -largura/2 + 0.6 + (l + 0.5) * livroWidth;
+          const lz = livroDepth/2 + 0.1;
+          const livroGeo = new THREE.BoxGeometry(livroWidth - 0.03, livroHeightBase + Math.random() * 0.1, livroDepth);
           const livroMat = new THREE.MeshLambertMaterial({ color: Math.random() > 0.3 ? Math.floor(Math.random() * 0xffffff) : 0xdacaa7 });
-          let lx = x + (lado === 'esquerda' ? (largura / 2 + 0.09) : -(largura / 2 + 0.09));
-          // Se for direita, "x" é positivo, então calcula lx para dentro
-          if (lado === 'direita') lx = x - (largura / 2 + 0.09);
           const livro = new THREE.Mesh(livroGeo, livroMat);
           livro.position.set(lx, py, lz);
-          scene.add(livro);
+          livro.castShadow = true;
+          livro.receiveShadow = true;
+          estante.add(livro);
         }
       }
     }
-    // Estante esquerda (para dentro)
-    criaEstanteLateralLivros(-8.8, 0.65, 10, 16, 'esquerda');
-    // Estante direita (corrigida para dentro)
-    criaEstanteLateralLivros(8.8, 0.65, 10, 16, 'direita');
-    // PRATELEIRAS EDUCATIVAS
+
+    // Criar estantes com nichos (pode criar várias divididas)
+    const nichos = [];
+    const larguraNicho = 5.5;
+    const alturaNicho = 4;
+    const profundidadeNicho = 0.65;
+
+    // Criando 3 nichos na estante traseira como exemplo
+    for (let i = -1; i <= 1; i++) {
+      const nicho = criaNichoEstante(i * (larguraNicho + 0.2), alturaNicho / 2, -9.2, larguraNicho, alturaNicho, profundidadeNicho);
+      criaLivrosNoNicho(nicho, larguraNicho, alturaNicho, profundidadeNicho * 2, 3, 15);
+      nichos.push(nicho);
+    }
+
+    // Outras estantes laterais poderiam ser feitas semelhante com nichos, ou manter como blocos simples para testar
+
+    // PRATELEIRAS EDUCATIVAS (com interação)
     function criaPrat(x, z, y, texto) {
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
       const mat = new THREE.MeshLambertMaterial({ color: 0xffc107 });
@@ -117,6 +197,8 @@
       shelf.userData.label = texto;
       shelf.userData.interacao = true;
       shelf.userData.solido = true;
+      shelf.castShadow = true;
+      shelf.receiveShadow = true;
       scene.add(shelf);
       return shelf;
     }
@@ -125,84 +207,151 @@
       criaPrat(5, -5, 1.6, "Ensino Secundário<br><i>Escola Secundária de Setúbal (2019-2022)</i><br>Distinção, competição natação."),
       criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
     ];
-    // BONECO
+
+    // BONECO - Personagem com suavização de movimento via interpolação linear
     function criaBoneco() {
       const grupo = new THREE.Group();
       const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
       const corpoMat = new THREE.MeshLambertMaterial({ color: 0x2196f3 });
-      const corpo = new THREE.Mesh(corpoGeo, corpoMat); corpo.position.y = 1;
+      const corpo = new THREE.Mesh(corpoGeo, corpoMat);
+      corpo.position.y = 1;
+      corpo.castShadow = true;
+      corpo.receiveShadow = false;
       grupo.add(corpo);
+
       const cabecaGeo = new THREE.BoxGeometry(0.8, 0.7, 0.7);
       const cabecaMat = new THREE.MeshLambertMaterial({ color: 0xfff176 });
-      const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat); cabeca.position.y = 2;
+      const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
+      cabeca.position.y = 2;
+      cabeca.castShadow = true;
       grupo.add(cabeca);
+
       grupo.position.set(0, 0.25, 6);
       return grupo;
     }
-    const boneco = criaBoneco(); scene.add(boneco);
-    // MOVIMENTO, COLISÕES & INTERAÇÃO
+    const boneco = criaBoneco();
+    scene.add(boneco);
+
+    // Input
     const keys = {};
     document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
     document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
-    let prateleiraPerto = null;
-    const speed = 0.13;
-    const objetosSolidos = [];
+
+    // Colisões usando Box3 para cada objeto sólido
+    let objetosSolidos = [];
+    const caixaBoneco = new THREE.Box3();
+
     function atualizaColisoes() {
-      objetosSolidos.length = 0;
-      scene.traverse(obj => { if (obj.userData && obj.userData.solido) objetosSolidos.push(obj); });
+      objetosSolidos = [];
+      scene.traverse(obj => {
+        if (obj.userData && obj.userData.solido && obj.geometry) {
+          // Criar Box3 para colisão no espaço do mundo
+          const box = new THREE.Box3().setFromObject(obj);
+          objetosSolidos.push({obj, box});
+        }
+      });
     }
     atualizaColisoes();
+
     function colisao(nx, ny, nz) {
-      for (const obj of objetosSolidos) {
-        const ox = obj.position.x, oy = obj.position.y, oz = obj.position.z;
-        const sx = obj.geometry.parameters.x || 1, sy = obj.geometry.parameters.y || 1, sz = obj.geometry.parameters.z || 1;
-        if (
-          nx > ox-sx/2 && nx < ox+sx/2 &&
-          ny > oy-sy/2 && ny < oy+sy/2 &&
-          nz > oz-sz/2 && nz < oz+sz/2 ) return true;
+      // Definir nova caixa do boneco posicionada na nova posição nx, ny, nz
+      const tamanhoBoneco = new THREE.Vector3(1, 1.6, 0.7);
+      caixaBoneco.min.set(nx - tamanhoBoneco.x / 2, ny, nz - tamanhoBoneco.z / 2);
+      caixaBoneco.max.set(nx + tamanhoBoneco.x / 2, ny + tamanhoBoneco.y, nz + tamanhoBoneco.z / 2);
+
+      for (const {obj, box} of objetosSolidos) {
+        if (caixaBoneco.intersectsBox(box)) return true;
       }
       return false;
     }
+
+    // Movimento suavizado com interpolação do velocity
+    let posAtual = boneco.position.clone();
+    let velocidade = new THREE.Vector3(0, 0, 0);
+    const acel = 0.02;
+    const friccao = 0.88;
+    const maxVel = 0.15;
+
+    // Variável para controlar prateleira próxima
+    let prateleiraPerto = null;
+
+    // Mostrar/ocultar info
+    const infoDiv = document.getElementById("info");
+
+    function mostrarInfo(texto) {
+      infoDiv.innerHTML = texto + '<br><br><span id="closeInfo">Fechar</span>';
+      infoDiv.style.display = "block";
+
+      document.getElementById("closeInfo").onclick = () => {
+        infoDiv.style.display = "none";
+      };
+    }
+
+    // Animate loop
     function animate() {
-      let nx = boneco.position.x, ny = boneco.position.y, nz = boneco.position.z;
-      if (keys["w"]) nz -= speed;
-      if (keys["s"]) nz += speed;
-      if (keys["a"]) nx -= speed;
-      if (keys["d"]) nx += speed;
-      nx = Math.max(-8.5, Math.min(8.5, nx));
-      nz = Math.max(-8.5, Math.min(8.5, nz));
-      ny = Math.max(0.25, Math.min(4.6, ny));
+      // Atualizar velocidade baseado em inputs
+      if (keys["w"]) velocidade.z -= acel;
+      if (keys["s"]) velocidade.z += acel;
+      if (keys["a"]) velocidade.x -= acel;
+      if (keys["d"]) velocidade.x += acel;
+
+      // Aplicar fricção para suavizar paragem
+      velocidade.multiplyScalar(friccao);
+
+      // Limitar velocidade
+      velocidade.x = Math.max(-maxVel, Math.min(maxVel, velocidade.x));
+      velocidade.z = Math.max(-maxVel, Math.min(maxVel, velocidade.z));
+
+      // Propor nova posição tentativa
+      let nx = posAtual.x + velocidade.x;
+      let ny = 0.25; // fixo no chão nivelado
+      let nz = posAtual.z + velocidade.z;
+
+      // Limitar dentro dos limites da cena
+      nx = Math.max(-9, Math.min(9, nx));
+      nz = Math.max(-9, Math.min(9, nz));
+
+      // Teste colisão antes de mudar posição
       if (!colisao(nx, ny, nz)) {
-        boneco.position.x = nx; boneco.position.z = nz; boneco.position.y = ny;
+        posAtual.set(nx, ny, nz);
+        boneco.position.copy(posAtual);
+      } else {
+        // Se colidir, cancela o movimento
+        velocidade.set(0, 0, 0);
       }
-      camera.position.x = boneco.position.x;
-      camera.position.z = boneco.position.z + 12;
-      camera.position.y = 6 + boneco.position.y/1.7;
+
+      // Atualizar câmera suavemente para seguir boneco
+      camera.position.lerp(new THREE.Vector3(posAtual.x, 6 + posAtual.y / 1.7, posAtual.z + 12), 0.1);
+      camera.lookAt(posAtual.x, posAtual.y + 1.5, posAtual.z);
+
+      // Detectar prateleira/nicho mais próximo para interação
       prateleiraPerto = null;
-      for (const shelf of prateleiras) {
-        const dist = Math.sqrt(
-          Math.pow(boneco.position.x - shelf.position.x,2) +
-          Math.pow(boneco.position.y - shelf.position.y,2) +
-          Math.pow(boneco.position.z - shelf.position.z,2));
-        if (dist < 2.4) { prateleiraPerto = shelf; break; }
+      for(const shelf of prateleiras) {
+        const dist = shelf.position.distanceTo(posAtual);
+        if(dist < 2.4) {
+          prateleiraPerto = shelf;
+          break;
+        }
       }
+
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
     animate();
-    document.addEventListener("keydown", function (e) {
+
+    // Mostrar info ao pressionar "o"
+    document.addEventListener("keydown", e => {
       if (e.key.toLowerCase() === "o" && prateleiraPerto) {
         mostrarInfo(prateleiraPerto.userData.label);
       }
     });
-    function mostrarInfo(texto) {
-      const div = document.getElementById("info");
-      div.innerHTML = texto +
-        '<br><span style="font-size:0.8em;color:#222;">(Mexe-te com WASD para explorar!)</span>';
-      setTimeout(() => {
-        div.innerHTML = 'Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.';
-      }, 4000);
-    }
+
+    // Ajuste responsivo
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
 </html>
