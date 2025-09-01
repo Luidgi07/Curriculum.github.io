@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Biblioteca 3D - Inclinação recorte perfeito</title>
+  <title>Biblioteca 3D – Paredes preenchidas</title>
   <style>
     html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; }
     #info { position: absolute; top: 12px; left: 12px;
@@ -36,7 +36,7 @@
   </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
-    // Variáveis globais do cenário e câmara
+    // Variáveis do cenário
     let larguraSala, alturaSala, profundidadeSala;
     let camera, scene, renderer;
     let boneco, chao;
@@ -48,8 +48,9 @@
       // Dimensões dependentes do ecrã
       alturaSala = 9.5;
       const aspect = window.innerWidth / window.innerHeight;
-      larguraSala = alturaSala * aspect;
-      profundidadeSala = alturaSala;
+      // Para ocupar toda a tela, iguala largura à profundidade * proporção do ecrã
+      profundidadeSala = alturaSala; // de  cima a baixo do ecrã
+      larguraSala = profundidadeSala * aspect; // lateral do ecrã
 
       document.body.innerHTML =
         `<div id="info">Usa WASD para mover o boneco. Aproxima-te das prateleiras e pressiona <b>O</b> para ver info.</div>
@@ -63,10 +64,10 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xe8e3d1);
 
-      // Perspectiva: inclinação à la "isométrico", bem recortado
-      camera = new THREE.PerspectiveCamera(70, aspect, 0.1, 1000);
-      camera.position.set(0, alturaSala * 0.85, larguraSala * 0.65);
-      camera.lookAt(0, alturaSala * 0.36, -profundidadeSala * 0.23);
+      // Câmara perspectiva com inclinação "fixe" – centralizada
+      camera = new THREE.PerspectiveCamera(67, aspect, 0.1, 1000);
+      camera.position.set(0, alturaSala * 0.91, profundidadeSala * 1.07);
+      camera.lookAt(0, alturaSala * 0.35, 0);
 
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -76,18 +77,18 @@
       const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
       dirLight.position.set(12, alturaSala, 18); scene.add(dirLight);
 
-      // Chão justo ao ecrã
+      // Chão da largura do ecrã
       const chaoGeo = new THREE.BoxGeometry(larguraSala, 0.25, profundidadeSala);
       const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
       chao = new THREE.Mesh(chaoGeo, chaoMat);
       chao.position.y = -0.17; chao.userData.solido = true; scene.add(chao);
 
-      // Estante traseira central
-      criaEstanteTraseiraLivros(0, -profundidadeSala / 2 + 0.37, larguraSala - 2.2, alturaSala - 4.2, 0.65);
+      // Estante traseira (ocupa toda a largura)
+      criaEstanteTraseiraLivros(0, -profundidadeSala / 2 + 0.33, larguraSala, alturaSala - 4.2, 0.65);
 
-      // Estantes laterais (recorte à sala visível)
-      criaEstanteLateralLivros(-larguraSala / 2 + 0.36, 0.65, alturaSala - 4.2, profundidadeSala - 2.2, 'esquerda');
-      criaEstanteLateralLivros(larguraSala / 2 - 0.36, 0.65, alturaSala - 4.2, profundidadeSala - 2.2, 'direita');
+      // Estantes laterais (ocupa toda a profundidade)
+      criaEstanteLateralLivros(-larguraSala / 2 + 0.33, 0.65, alturaSala - 4.2, profundidadeSala, 'esquerda');
+      criaEstanteLateralLivros(larguraSala / 2 - 0.33, 0.65, alturaSala - 4.2, profundidadeSala, 'direita');
 
       // Prateleiras educativas/interativas (blocos amarelos)
       prateleiras = [];
@@ -110,7 +111,7 @@
       estante.userData.solido = true;
       scene.add(estante);
 
-      const nFilas = 3, livrosPorFila = Math.floor(largura / 0.65);
+      const nFilas = 3, livrosPorFila = Math.floor(largura / 0.7);
       const livroWidth = largura / livrosPorFila;
       const profundidadeLivros = profundidade / 2 + 0.12;
       for (let f = 0; f < nFilas; f++) {
@@ -136,7 +137,7 @@
       estante.userData.solido = true;
       scene.add(estante);
 
-      const nFilas = 3, livrosPorFila = Math.floor(profundidade / 0.65);
+      const nFilas = 3, livrosPorFila = Math.floor(profundidade / 0.7);
       const livroWidth = profundidade / livrosPorFila;
       for (let f = 0; f < nFilas; f++) {
         let py = 0.54 + f * ((altura - 0.9) / (nFilas - 1));
