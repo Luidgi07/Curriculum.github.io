@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Biblioteca 3D – Estantes à volta</title>
+  <title>Biblioteca 3D – Estantes Clássicas</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
@@ -71,7 +71,7 @@
   </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
-    //----------- SETUP -----------//
+    // ----------- SETUP ----------- //
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe8e3d1);
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -82,7 +82,7 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
-    //----------- ILUMINAÇÃO -----------//
+    // ----------- ILUMINAÇÃO ----------- //
     scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
     const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
     dirLight.position.set(12, 22, 18);
@@ -97,7 +97,7 @@
     dirLight.shadow.camera.bottom = -20;
     scene.add(dirLight);
 
-    //----------- CHÃO -----------//
+    // ----------- CHÃO ----------- //
     const chaoGeo = new THREE.BoxGeometry(20, 0.3, 20);
     const chaoMat = new THREE.MeshLambertMaterial({ color: 0xc9ad7c });
     const chao = new THREE.Mesh(chaoGeo, chaoMat);
@@ -106,66 +106,77 @@
     chao.userData.solido = true;
     scene.add(chao);
 
-    //----------- FUNÇÃO GERAL DE ESTANTE -----------//
-    function criaEstante3D(x, y, z, largura, altura, profundidade, nPrateleiras, rotacao=0) {
-      // Corpo/fundo (bloco grande)
-      const corpo = new THREE.Mesh(
-        new THREE.BoxGeometry(largura, altura, profundidade),
-        new THREE.MeshLambertMaterial({color: 0x7a4a21})
-      );
-      corpo.position.set(0, altura/2, 0);
+    // ----------- DIMENSÕES ----------- //
+    const larguraFundo = 17.8, alturaFundo = 7.8, profundidadeFundo = 0.15;
+    const larguraLateral = 7.8, alturaLateral = alturaFundo, profundidadeLateral = profundidadeFundo;
+    const profundidadePrat = 0.7;
+    const nPrateleiras = 6;
+    const espessuraPrat = 0.14;
+    const margemBase = 0.6;
+    const margemTopo = 0.5;
+    const alturaUtil = alturaFundo - margemBase - margemTopo;
+    const espacamento = alturaUtil / (nPrateleiras - 1);
 
-      // Prateleiras horizontais
-      const espessuraPrat = 0.14;
-      const margemBase = 0.6;
-      const margemTopo = 0.5;
-      const alturaUtil = altura - margemBase - margemTopo;
-      const espacamento = alturaUtil / (nPrateleiras - 1);
-      for (let i = 0; i < nPrateleiras; i++) {
-        const py = margemBase + i * espacamento;
-        const prateleira = new THREE.Mesh(
-          new THREE.BoxGeometry(largura - 0.28, espessuraPrat, profundidade + 0.03),
-          new THREE.MeshLambertMaterial({color: 0x87531b})
-        );
-        prateleira.position.set(0, py, 0);
-        corpo.add(prateleira);
-      }
-      // Laterais verticais (opcional, para robustez)
-      const montanteL = new THREE.Mesh(
-        new THREE.BoxGeometry(0.18, altura, profundidade + 0.04),
-        new THREE.MeshLambertMaterial({color: 0x62340d})
-      );
-      montanteL.position.set(-largura/2 + 0.09, altura/2, 0);
-      corpo.add(montanteL);
-      const montanteR = montanteL.clone();
-      montanteR.position.x = largura/2 - 0.09;
-      corpo.add(montanteR);
+    // ----------- PAREDE DE FUNDO (PAINEL + PRATELEIRAS) ----------- //
+    const fundoCompleto = new THREE.Mesh(
+      new THREE.BoxGeometry(larguraFundo, alturaFundo, profundidadeFundo),
+      new THREE.MeshLambertMaterial({color: 0x7a4a21})
+    );
+    fundoCompleto.position.set(0, alturaFundo / 2, -9.23);
+    fundoCompleto.userData.solido = true;
+    scene.add(fundoCompleto);
 
-      // Grupo para posicionar/rodar todo o móvel
-      const grupo = new THREE.Group();
-      grupo.add(corpo);
-      grupo.position.set(x, y, z);
-      grupo.rotation.y = rotacao;
-      scene.add(grupo);
-      return grupo;
+    for (let i = 0; i < nPrateleiras; i++) {
+      const y = margemBase + i * espacamento;
+      const prateleira = new THREE.Mesh(
+        new THREE.BoxGeometry(larguraFundo - 0.28, espessuraPrat, profundidadePrat),
+        new THREE.MeshLambertMaterial({color: 0x87531b})
+      );
+      prateleira.position.set(0, y, -9.18);
+      prateleira.userData.solido = true;
+      scene.add(prateleira);
     }
 
-    //----------- TRÊS ESTANTES EM VOLTA (fundo, esquerda, direita) -----------//
-    // DIMENSÕES
-    const fundoZ = -9.2;
-    const lateralX = 9.2;
-    const alturaEst = 7.8; // mesma altura para todas
+    // ----------- PAREDE LATERAL ESQUERDA ----------- //
+    const fundoEsq = new THREE.Mesh(
+      new THREE.BoxGeometry(larguraLateral, alturaLateral, profundidadeLateral),
+      new THREE.MeshLambertMaterial({color: 0x7a4a21})
+    );
+    fundoEsq.position.set(-9.22, alturaLateral/2, 0);
+    fundoEsq.rotation.y = Math.PI/2;
+    fundoEsq.userData.solido = true;
+    scene.add(fundoEsq);
 
-    // Fundo (maior)
-    criaEstante3D(0, 0, fundoZ, 17.8, alturaEst, 0.7, 6, 0);
+    for(let i=0;i<nPrateleiras;i++){
+      const y = margemBase + i * espacamento;
+      const prat = new THREE.Mesh(
+        new THREE.BoxGeometry(larguraLateral - 0.28, espessuraPrat, profundidadePrat),
+        new THREE.MeshLambertMaterial({color: 0x87531b})
+      );
+      prat.position.set(-9.22, y, 0.05);
+      prat.rotation.y = Math.PI/2;
+      prat.userData.solido = true;
+      scene.add(prat);
+    }
 
-    // Esquerda (roda 90 graus)
-    criaEstante3D(-lateralX, 0, 0, 7.8, alturaEst, 0.7, 6, Math.PI/2);
+    // ----------- PAREDE LATERAL DIREITA ----------- //
+    const fundoDir = fundoEsq.clone();
+    fundoDir.position.x = 9.22;
+    scene.add(fundoDir);
 
-    // Direita (roda -90 graus)
-    criaEstante3D(lateralX, 0, 0, 7.8, alturaEst, 0.7, 6, -Math.PI/2);
+    for(let i=0;i<nPrateleiras;i++){
+      const y = margemBase + i * espacamento;
+      const prat = new THREE.Mesh(
+        new THREE.BoxGeometry(larguraLateral - 0.28, espessuraPrat, profundidadePrat),
+        new THREE.MeshLambertMaterial({color: 0x87531b})
+      );
+      prat.position.set(9.22, y, 0.05);
+      prat.rotation.y = Math.PI/2;
+      prat.userData.solido = true;
+      scene.add(prat);
+    }
 
-    //----------- PRATELEIRAS EDUCATIVAS (mantém) -----------//
+    // ----------- PRATELEIRAS EDUCATIVAS (MANTÉM) ----------- //
     function criaPrat(x, z, y, texto) {
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
       const mat = new THREE.MeshLambertMaterial({ color: 0xffc107 });
@@ -185,7 +196,7 @@
       criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
     ];
 
-    //----------- BONECO -----------//
+    // ----------- BONECO ----------- //
     function criaBoneco() {
       const grupo = new THREE.Group();
       const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
@@ -207,7 +218,7 @@
     const boneco = criaBoneco();
     scene.add(boneco);
 
-    //----------- MOVIMENTO DO BONECO E CÂMARA -----------//
+    // ----------- MOVIMENTO/BLOQUEIOS ----------- //
     const keys = {};
     document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
     document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
@@ -233,6 +244,7 @@
       }
       return false;
     }
+
     let posAtual = boneco.position.clone();
     let velocidade = new THREE.Vector3(0, 0, 0);
     const acel = 0.02;
