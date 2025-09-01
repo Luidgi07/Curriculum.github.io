@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Biblioteca 3D – Estante com Nichos e Laterais em L</title>
+  <title>Biblioteca 3D – Estante com Nichos e Melhorias</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
@@ -71,7 +71,7 @@
   </div>
   <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
   <script>
-    // SETUP
+    // SETUP básico
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe8e3d1);
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -82,7 +82,7 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
-    // ILUMINAÇÃO
+    // Iluminação
     scene.add(new THREE.AmbientLight(0xfad7a0, 0.7));
     const dirLight = new THREE.DirectionalLight(0xffe1b7, 0.85);
     dirLight.position.set(12, 22, 18);
@@ -106,28 +106,20 @@
     chao.userData.solido = true;
     scene.add(chao);
 
-    // FUNÇÃO: Parede lateral genérica
-    function criaParedeLateral(x, largura, altura, comprimento, cor = 0x7a4a21) {
-      const geo = new THREE.BoxGeometry(largura, altura, comprimento);
+    // ------ NOVO: Estantes laterais robustas ------
+    function criaParedeLateral(x, largura, altura, profundidade, cor = 0x7a4a21) {
+      const geo = new THREE.BoxGeometry(largura, altura, profundidade);
       const mat = new THREE.MeshLambertMaterial({ color: cor });
       const parede = new THREE.Mesh(geo, mat);
-      parede.position.set(x, altura / 2, -(10 - comprimento/2));
+      parede.position.set(x, altura / 2, 0);
       parede.userData.solido = true;
       parede.castShadow = true;
       scene.add(parede);
-      return parede;
     }
+    criaParedeLateral(-9.4, 1.6, 10, 19, 0x7a4a21); // Esquerda
+    criaParedeLateral(9.4, 1.6, 10, 19, 0x7a4a21); // Direita
 
-    // LATERAIS EM "L":
-    // Esquerda: bloco da frente + recuo fundo
-    criaParedeLateral(-9.3, 1.7, 10, 8.2); // bloco frontal da esquerda (até meio)
-    criaParedeLateral(-9.3, 1.1, 10, 7.5).position.z = -10 + 7.5/2; // bloco recuado fundo esquerda
-
-    // Direita: bloco da frente + recuo fundo
-    criaParedeLateral(9.3, 1.7, 10, 8.2); // bloco frontal da direita (até meio)
-    criaParedeLateral(9.3, 1.1, 10, 7.5).position.z = -10 + 7.5/2; // bloco recuado fundo direita
-
-    // CANTOS: colunas grossas à frente
+    // ------ NOVO: Cantos frontais clássicos (colunas grossas) ------
     function criaColunaCanto(x, z, altura, raio, cor = 0x9a6a3a) {
       const colGeo = new THREE.CylinderGeometry(raio, raio, altura, 18);
       const colMat = new THREE.MeshLambertMaterial({ color: cor });
@@ -137,33 +129,40 @@
       coluna.castShadow = true;
       scene.add(coluna);
     }
-    criaColunaCanto(-8.1, 8.7, 10.4, 1.1);
-    criaColunaCanto(8.1, 8.7, 10.4, 1.1);
+    criaColunaCanto(-8.1, 8.6, 10.4, 1.1); // canto frente esq
+    criaColunaCanto(8.1, 8.6, 10.4, 1.1);  // canto frente dir
 
-    // NICHOS NO FUNDO (estante traseira)
+    // ------ Mantém os nichos traseiros ------
     function criaNichoEstante(x, y, z, largura, altura, profundidade, cor = 0x7a4a21) {
       const espessura = 0.6;
       const estante = new THREE.Group();
-      // Base inferior
+      // Base inferior do nicho
       const baseGeo = new THREE.BoxGeometry(largura, espessura, profundidade);
       const baseMat = new THREE.MeshLambertMaterial({ color: cor });
       const base = new THREE.Mesh(baseGeo, baseMat);
-      base.position.set(0, espessura / 2, 0); base.castShadow = true; base.receiveShadow = true;
-      base.userData.solido = true; estante.add(base);
+      base.position.set(0, espessura / 2, 0);
+      base.castShadow = true;
+      base.receiveShadow = true;
+      estante.add(base);
+      base.userData.solido = true;
       // Laterais
       const ladoGeo = new THREE.BoxGeometry(espessura, altura, profundidade);
       const ladoEsq = new THREE.Mesh(ladoGeo, baseMat);
-      ladoEsq.position.set(-largura/2 + espessura/2, altura/2 + espessura, 0); ladoEsq.castShadow = true; estante.add(ladoEsq);
+      ladoEsq.position.set(-largura/2 + espessura/2, altura/2 + espessura, 0);
+      ladoEsq.castShadow = true; ladoEsq.receiveShadow = true;
       ladoEsq.userData.solido = true;
+      estante.add(ladoEsq);
       const ladoDir = ladoEsq.clone();
       ladoDir.position.x = largura/2 - espessura/2;
       estante.add(ladoDir);
-      // Fundo (profundidade fina)
+      // Fundo da estante (profundidade fina)
       const fundoGeo = new THREE.BoxGeometry(largura - espessura*2, altura, espessura);
       const fundo = new THREE.Mesh(fundoGeo, baseMat);
-      fundo.position.set(0, altura/2 + espessura, -profundidade/2 + espessura/2); fundo.castShadow = true;
-      fundo.receiveShadow = true; fundo.userData.solido = true; estante.add(fundo);
-
+      fundo.position.set(0, altura/2 + espessura, -profundidade/2 + espessura/2);
+      fundo.castShadow = true;
+      fundo.receiveShadow = true;
+      fundo.userData.solido = true;
+      estante.add(fundo);
       estante.position.set(x, y, z);
       scene.add(estante);
       return estante;
@@ -187,17 +186,15 @@
         }
       }
     }
-    const nichos = [];
-    const larguraNicho = 5.5;
-    const alturaNicho = 4;
-    const profundidadeNicho = 0.65;
-    for (let i = -1; i <= 1; i++) {
-      const nicho = criaNichoEstante(i * (larguraNicho + 0.2), alturaNicho / 2, -9.2, larguraNicho, alturaNicho, profundidadeNicho);
-      criaLivrosNoNicho(nicho, larguraNicho, alturaNicho, profundidadeNicho * 2, 3, 15);
-      nichos.push(nicho);
-    }
+    const fundoEstanteGeo = new THREE.BoxGeometry(17, 4.2, 0.7);
+    const fundoEstanteMat = new THREE.MeshLambertMaterial({color: 0x7a4a21});
+    const fundoEstante = new THREE.Mesh(fundoEstanteGeo, fundoEstanteMat);
+    fundoEstante.position.set(0, 2.1, -9.2);
+    fundoEstante.userData.solido = true;
+    scene.add(fundoEstante);
 
-    // PRATELEIRAS EDUCATIVAS
+
+    // Prateleiras educativas (sem alterações)
     function criaPrat(x, z, y, texto) {
       const geo = new THREE.BoxGeometry(2.1, 2.1, 0.65);
       const mat = new THREE.MeshLambertMaterial({ color: 0xffc107 });
@@ -217,7 +214,7 @@
       criaPrat(0, -2, 1.6, "Side Quests & Clubes<br><i>Clubes científicos, voluntariado, projetos extracurriculares.</i>")
     ];
 
-    // BONECO
+    // Boneco e movimento (sem alterações)
     function criaBoneco() {
       const grupo = new THREE.Group();
       const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
@@ -239,12 +236,11 @@
     const boneco = criaBoneco();
     scene.add(boneco);
 
-    // INPUT
+    // Input e colisões (sem alterações)
     const keys = {};
     document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
     document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
 
-    // COLISÕES
     let objetosSolidos = [];
     const caixaBoneco = new THREE.Box3();
     function atualizaColisoes() {
@@ -266,8 +262,6 @@
       }
       return false;
     }
-
-    // MOVIMENTO
     let posAtual = boneco.position.clone();
     let velocidade = new THREE.Vector3(0, 0, 0);
     const acel = 0.02;
@@ -315,15 +309,11 @@
       requestAnimationFrame(animate);
     }
     animate();
-
-    // INFO
     document.addEventListener("keydown", e => {
       if (e.key.toLowerCase() === "o" && prateleiraPerto) {
         mostrarInfo(prateleiraPerto.userData.label);
       }
     });
-
-    // RESPONSIVO
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
