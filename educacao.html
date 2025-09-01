@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Escritório 3D com Boneco Andando</title>
+  <title>Escritório 3D com 3 Paredes e Boneco</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
@@ -20,29 +20,27 @@
 <div id="info">Use W/A/S/D para mover o boneco</div>
 <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
 <script>
-  // Cena
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xe0e0e0);
 
-  // Câmera
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-  camera.position.set(6, 10, 12);
+  // Câmera reposicionada para melhor vista com 3 paredes
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(10, 15, 18);
   camera.lookAt(0, 0, 0);
 
-  // Renderer
   const renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
   document.body.appendChild(renderer.domElement);
 
   // Luzes
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
   scene.add(ambientLight);
 
-  const spotLight = new THREE.SpotLight(0xffffff, 0.8);
-  spotLight.position.set(0, 15, 10);
-  spotLight.castShadow = true;
-  scene.add(spotLight);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  directionalLight.position.set(10, 20, 10);
+  directionalLight.castShadow = true;
+  scene.add(directionalLight);
 
   // Chão
   const floorGeo = new THREE.PlaneGeometry(20, 20);
@@ -52,24 +50,25 @@
   floor.receiveShadow = true;
   scene.add(floor);
 
-  // Paredes (4)
-  function criarParede(x, y, z, rotY) {
+  // Apenas 3 paredes: traseira e laterais
+  const walls = [];
+
+  function criaParede(x, y, z, rotY) {
     const geo = new THREE.BoxGeometry(20, 8, 0.3);
     const mat = new THREE.MeshStandardMaterial({color: 0xffffff});
     const parede = new THREE.Mesh(geo, mat);
-    parede.position.set(x,y,z);
-    if(rotY) parede.rotation.y = rotY;
+    parede.position.set(x, y, z);
+    if (rotY) parede.rotation.y = rotY;
     parede.receiveShadow = true;
     walls.push(parede);
     scene.add(parede);
   }
-  const walls = [];
-  criarParede(0, 4, -10);
-  criarParede(0, 4, 10);
-  criarParede(-10, 4, 0, Math.PI/2);
-  criarParede(10, 4, 0, Math.PI/2);
 
-  // Mesa
+  criaParede(0, 4, -10, 0);          // parede traseira
+  criaParede(-10, 4, 0, Math.PI/2); // parede esquerda
+  criaParede(10, 4, 0, Math.PI/2);  // parede direita
+
+  // Mesa simples
   const mesaGeo = new THREE.BoxGeometry(5, 0.3, 3);
   const mesaMat = new THREE.MeshStandardMaterial({color: 0x654321});
   const mesa = new THREE.Mesh(mesaGeo, mesaMat);
@@ -81,15 +80,20 @@
   // Pernas da mesa
   const pernaGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5);
   const pernaMat = new THREE.MeshStandardMaterial({color: 0x3e2723});
-  const posPernas = [[-2.3,0.75,-1.3],[2.3,0.75,-1.3],[-2.3,0.75,1.3],[2.3,0.75,1.3]];
-  posPernas.forEach(pos=>{
+  const posPernas = [
+    [-2.3, 0.75, -1.3],
+    [2.3, 0.75, -1.3],
+    [-2.3, 0.75, 1.3],
+    [2.3, 0.75, 1.3]
+  ];
+  posPernas.forEach(pos => {
     const perna = new THREE.Mesh(pernaGeo, pernaMat);
     perna.position.set(...pos);
     perna.castShadow = true;
     scene.add(perna);
   });
 
-  // Boneco (grupo)
+  // Boneco simples (grupo)
   function criaBoneco() {
     const grupo = new THREE.Group();
 
@@ -113,12 +117,12 @@
   const boneco = criaBoneco();
   scene.add(boneco);
 
-  // Controles de movimento
+  // Controles W/A/S/D
   const keys = {};
   window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
   window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 
-  // Função para colisão simplificada com paredes (caixas)
+  // Colisão simples com paredes (caixas)
   const bonecoBox = new THREE.Box3();
   const wallBoxes = [];
 
@@ -131,23 +135,20 @@
   }
   atualizaWallBoxes();
 
-  // Movimento
+  // Movimento do boneco com colisão
   const velocidade = 0.1;
   function moverBoneco() {
     let dx = 0, dz = 0;
-    if(keys['w']) dz -= velocidade;
-    if(keys['s']) dz += velocidade;
-    if(keys['a']) dx -= velocidade;
-    if(keys['d']) dx += velocidade;
+    if (keys['w']) dz -= velocidade;
+    if (keys['s']) dz += velocidade;
+    if (keys['a']) dx -= velocidade;
+    if (keys['d']) dx += velocidade;
 
     const posAtual = boneco.position.clone();
     const novaPos = posAtual.clone();
     novaPos.x += dx;
     novaPos.z += dz;
 
-    bonecoBox.setFromObject(boneco);
-
-    // Testa colisão na nova posição
     const tamanhoBoneco = new THREE.Vector3(1, 1.6, 0.7);
     const caixaTeste = new THREE.Box3(
       new THREE.Vector3(novaPos.x - tamanhoBoneco.x/2, 0, novaPos.z - tamanhoBoneco.z/2),
@@ -162,12 +163,12 @@
       }
     }
 
-    if(!colisao){
+    if(!colisao) {
       boneco.position.copy(novaPos);
     }
   }
 
-  // Loop animação
+  // Animação
   function animate() {
     requestAnimationFrame(animate);
     moverBoneco();
@@ -175,7 +176,7 @@
   }
   animate();
 
-  // Resize
+  // Ajuste responsivo
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
