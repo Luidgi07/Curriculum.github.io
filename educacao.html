@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Sala 2 Pisos — Escadas Esquerda</title>
+  <title>Sala — 2 Andares e Escadas à Esquerda</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
@@ -19,96 +19,52 @@
 <body>
 <div id="info">
   <b>W/A/S/D</b> mover boneco<br>
-  Escadas encostadas à parede esquerda<br>
-  Podes andar em toda a sala, subir e descer
+  Não consegues atravessar paredes<br>
+  Subirás as escadas se subires a rampa traseira à esquerda
 </div>
 <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
 <script>
 const roomW = 20, roomH = 8, roomL = 20, paredeEsp = 0.3;
-
-// Piso 2 igual ao inferior, exceto zona das escadas
-const piso2Y = 4.5;
-const escadaDegraus = 9;
-const escadaLargura = 2.4;
-const escadaProf = 5; // comprimento horizontal das escadas
-const escadaX = -roomW/2 + paredeEsp + escadaLargura/2;
-const escadaZstart = -roomL/2 + escadaProf/2 + 0.2;
-
-// Buraco no piso 2, alinhado por cima das escadas
-const buracoLarg = escadaLargura + 0.7;
-const buracoProf = escadaProf + 0.3;
-
+const piso2Y = 4.5;           // Altura do 2º andar
+const piso2L = 8;             // Comprimento da plataforma do 2º andar
+const piso2Prof = roomW - 2;  // Profundidade do 2º andar
+const escadaDegraus = 8;
+const escadaAltura = piso2Y;
+const escadaProf = piso2L - 1.2;
 // Cena
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf0f0f0);
-
+// Luz
 scene.add(new THREE.AmbientLight(0xffffff, 0.45));
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.75);
 dirLight.position.set(10, 20, 10);
 scene.add(dirLight);
-
-const pisoCor = 0xaab2bb;
-
+// Chão 1º andar
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(roomW, roomL),
-  new THREE.MeshStandardMaterial({color: pisoCor})
+  new THREE.MeshStandardMaterial({color: 0xaab2bb})
 );
 floor.rotation.x = -Math.PI / 2;
 scene.add(floor);
-
 // Paredes coloridas
-scene.add(new THREE.Mesh(
-  new THREE.BoxGeometry(roomW, roomH, paredeEsp), new THREE.MeshStandardMaterial({color: 0xffd37c})
-)).position.set(0, roomH/2, -roomL/2 + paredeEsp/2);
-scene.add(new THREE.Mesh(
-  new THREE.BoxGeometry(paredeEsp, roomH, roomL), new THREE.MeshStandardMaterial({color: 0x86eaff})
-)).position.set(roomW/2 - paredeEsp/2, roomH/2, 0);
-scene.add(new THREE.Mesh(
-  new THREE.BoxGeometry(paredeEsp, roomH, roomL), new THREE.MeshStandardMaterial({color: 0xe2a5ff})
-)).position.set(-roomW/2 + paredeEsp/2, roomH/2, 0);
-
-// Piso superior — 3 pedaços para criar abertura das escadas
-// Esquerda do buraco
-const piso2a = new THREE.Mesh(
-  new THREE.BoxGeometry(roomW/2 - buracoLarg/2, 0.18, roomL),
-  new THREE.MeshStandardMaterial({color: pisoCor})
+const paredeAtrasMat = new THREE.MeshStandardMaterial({color: 0xffd37c});
+const paredeDirMat   = new THREE.MeshStandardMaterial({color: 0x86eaff});
+const paredeEsqMat   = new THREE.MeshStandardMaterial({color: 0xe2a5ff});
+const paredeTraseira = new THREE.Mesh(
+  new THREE.BoxGeometry(roomW, roomH, paredeEsp), paredeAtrasMat
 );
-piso2a.position.set(-buracoLarg/2 - (roomW/4 - buracoLarg/4), piso2Y, 0);
-scene.add(piso2a);
-
-// Direita do buraco
-const piso2b = new THREE.Mesh(
-  new THREE.BoxGeometry(roomW/2 - buracoLarg/2, 0.18, roomL),
-  new THREE.MeshStandardMaterial({color: pisoCor})
+paredeTraseira.position.set(0, roomH/2, -roomL/2 + paredeEsp/2);
+scene.add(paredeTraseira);
+const paredeDireita = new THREE.Mesh(
+  new THREE.BoxGeometry(paredeEsp, roomH, roomL), paredeDirMat
 );
-piso2b.position.set( buracoLarg/2 + (roomW/4 - buracoLarg/4), piso2Y, 0 );
-scene.add(piso2b);
-
-// Frente ao buraco
-const piso2c = new THREE.Mesh(
-  new THREE.BoxGeometry(buracoLarg, 0.18, roomL - buracoProf),
-  new THREE.MeshStandardMaterial({color: pisoCor})
+paredeDireita.position.set(roomW/2 - paredeEsp/2, roomH/2, 0);
+scene.add(paredeDireita);
+const paredeEsquerda = new THREE.Mesh(
+  new THREE.BoxGeometry(paredeEsp, roomH, roomL), paredeEsqMat
 );
-piso2c.position.set( escadaX, piso2Y, (roomL - buracoProf)/2 - roomL/2 + buracoProf );
-scene.add(piso2c);
-
-// Escadas encostadas à parede esquerda, a subir do chão ao topo do piso 2
-const escadaMat = new THREE.MeshStandardMaterial({color: 0xb07a43});
-for(let i=0;i<escadaDegraus;++i){
-  const h = piso2Y / escadaDegraus;
-  const p = escadaProf / escadaDegraus;
-  const degrau = new THREE.Mesh(
-    new THREE.BoxGeometry(escadaLargura, h, p),
-    escadaMat
-  );
-  degrau.position.set(
-    escadaX,
-    h/2 + i*h,
-    -roomL/2 + (i+0.5)*p + 0.2
-  );
-  scene.add(degrau);
-}
-
+paredeEsquerda.position.set(-roomW/2 + paredeEsp/2, roomH/2, 0);
+scene.add(paredeEsquerda);
 // Boneco
 function criaBoneco() {
   const grupo = new THREE.Group();
@@ -127,12 +83,35 @@ function criaBoneco() {
 }
 const boneco = criaBoneco();
 scene.add(boneco);
+// Plataforma 2º andar
+const piso2 = new THREE.Mesh(
+  new THREE.BoxGeometry(piso2Prof, 0.19, piso2L),
+  new THREE.MeshStandardMaterial({color: 0xdfebad})
+);
+piso2.position.set(0, piso2Y, -roomL/2 + piso2L/2 + 0.5);
+scene.add(piso2);
+// Escadas (à esquerda, tipo degraus/rampa)
+const escadaMat = new THREE.MeshStandardMaterial({color: 0xb07a43});
+const escadaX = -roomW/2 + paredeEsp + 1.1; // Escada encostada à parede esquerda
 
+for(let i=0; i<escadaDegraus; ++i) {
+  const h = escadaAltura / escadaDegraus;
+  const p = escadaProf / escadaDegraus;
+  const degrau = new THREE.Mesh(
+    new THREE.BoxGeometry(2.2, h, p),
+    escadaMat
+  );
+  degrau.position.set(
+    escadaX,
+    h/2 + i*h,
+    -roomL/2 + (i+0.5)*p + 0.2
+  );
+  scene.add(degrau);
+}
 // Controlos
 const keys = {};
 window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
 window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
 function moverBoneco() {
   const speed = 0.14;
   let dx=0, dz=0;
@@ -140,67 +119,49 @@ function moverBoneco() {
   if (keys['s']) dz += speed;
   if (keys['a']) dx -= speed;
   if (keys['d']) dx += speed;
+  let novaPos = boneco.position.clone();
+  // Movimento horizontal
+  novaPos.x += dx; novaPos.z += dz;
+  // Limites sala geral
+  const limiteX = roomW/2 - paredeEsp - 0.35;
+  const limiteZ = roomL/2 - paredeEsp - 0.2;
+  novaPos.x = Math.max(-limiteX, Math.min(limiteX, novaPos.x));
+  novaPos.z = Math.max(-limiteZ, Math.min(limiteZ, novaPos.z));
 
-  let pos = boneco.position.clone();
-  pos.x += dx; pos.z += dz;
+  // Limites da escada (para subida)
+  const escadaXRangeMin = escadaX - 1.1;
+  const escadaXRangeMax = escadaX + 1.1;
 
-  // Limites da sala
-  const limiteX = roomW/2 - paredeEsp - 0.36;
-  const limiteZ = roomL/2 - paredeEsp - 0.23;
-  pos.x = Math.max(-limiteX, Math.min(limiteX, pos.x));
-  pos.z = Math.max(-limiteZ, Math.min(limiteZ, pos.z));
-
-  // Subir escadas só na zona de escada, encostada à parede esquerda
-  const escadaXmin = escadaX - escadaLargura/2;
-  const escadaXmax = escadaX + escadaLargura/2;
-  const escadaZmin = -roomL/2 + 0.2;
-  const escadaZmax = escadaZmin + escadaProf;
-
-  if (
-    pos.x > escadaXmin && pos.x < escadaXmax &&
-    pos.z > escadaZmin && pos.z < escadaZmax
-  ) {
-    // Calcular altura proporcional ao z nas escadas
-    const rel = (pos.z - escadaZmin)/escadaProf;
-    pos.y = rel * piso2Y;
-    // Chegando ao topo, passa para o piso acima
-    if (pos.y >= piso2Y - 0.12 && pos.z > escadaZmax - 0.2) {
-      pos.y = piso2Y;
-    }
+  // Subir/descer escadas para plataforma do 2º andar
+  if(novaPos.z < -roomL/2 + escadaProf + 1.4 && novaPos.x > escadaXRangeMin && novaPos.x < escadaXRangeMax) {
+    // A cada degrau aumenta altura do boneco proporcionalmente ao z (escada inclinada)
+    const posRelEscada = novaPos.z - (-roomL/2 + 0.2);
+    const ratio = Math.max(0, Math.min(escadaProf, posRelEscada))/escadaProf;
+    novaPos.y = ratio * escadaAltura;
+    // Em cima da plataforma mantém y elevado
+    if(novaPos.z < -roomL/2 + piso2L + 0.5 && novaPos.x > -piso2Prof/2 && novaPos.x < piso2Prof/2) novaPos.y = piso2Y;
+  } else if (novaPos.z < -roomL/2 + piso2L + 0.5 && novaPos.x > -piso2Prof/2 && novaPos.x < piso2Prof/2) {
+    // Piso do 2º andar (dentro da sua área)
+    novaPos.y = piso2Y;
+  } else {
+    // Está em baixo
+    novaPos.y = 0;
   }
-  // Permitir andar livremente no 2º piso, exceto dentro do buraco
-  if (
-    pos.y > 2 &&
-    (
-      pos.x < escadaX - buracoLarg/2 ||
-      pos.x > escadaX + buracoLarg/2 ||
-      pos.z > escadaZmin + escadaProf + 0.23
-    )
-  ) {
-    pos.y = piso2Y;
-  } else if (pos.y !== piso2Y) {
-    pos.y = 0;
-  }
-
-  boneco.position.copy(pos);
+  boneco.position.copy(novaPos);
 }
-
-// Câmara
-const camera = new THREE.PerspectiveCamera(65, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.set(0, 12, 19);
+// Câmara: recuada, elevada e inclinada para baixo para ver boneco e toda a sala
+const camera = new THREE.PerspectiveCamera(63, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.set(0, 11, 19); // x, y, z
 camera.lookAt(0, 2, 0);
-
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
 function animate() {
   requestAnimationFrame(animate);
   moverBoneco();
   renderer.render(scene, camera);
 }
 animate();
-
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
