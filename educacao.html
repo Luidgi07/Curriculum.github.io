@@ -12,6 +12,16 @@
       cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
       overflow: hidden;
     }
+    #fadeInPreVideo {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      z-index: 6000;
+      background: #000;
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 1.5s;
+    }
     #videoIntroContainer {
       position: fixed;
       z-index: 5000;
@@ -59,7 +69,6 @@
     #icon-pc {top: 97px;}
     #icon-trash {top: 180px;}
     #icon-docs {top: 263px;}
-
     #desktop {
       width: 100vw;
       height: 100vh;
@@ -297,8 +306,9 @@
   </style>
 </head>
 <body>
-
-<!-- Vídeo Intro: ocupa o ecrã TODO -->
+<!-- Fade-in preto antes do vídeo -->
+<div id="fadeInPreVideo"></div>
+<!-- Vídeo Intro -->
 <div id="videoIntroContainer">
   <video id="introVideo" autoplay muted playsinline>
     <source src="Hailuo_Video_Num fundo preto profundo com u_419356922821341193.mp4" type="video/mp4">
@@ -306,7 +316,6 @@
   </video>
 </div>
 <div id="introFade"></div>
-
 <div id="desktop" style="display:none;">
   <div id="icon-school" class="desktop-icon" title="Abrir Escola">
     <img src="https://img.icons8.com/fluency/48/school-building.png" alt="Icone Escola" />
@@ -347,6 +356,14 @@
   </div>
 </div>
 <script>
+  // Fade-in preto no início
+  const preFade = document.getElementById('fadeInPreVideo');
+  window.onload = () => {
+    setTimeout(() => {
+      preFade.style.opacity = "0";
+    }, 180);
+  };
+
   // Fade up vídeo->desktop
   const intro = document.getElementById('videoIntroContainer');
   const fade = document.getElementById('introFade');
