@@ -2,157 +2,132 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Escritório Interrogatório — Câmara Segue Boneco</title>
+  <title>Escritório Colorido e Funcional</title>
   <style>
     body { margin: 0; overflow: hidden; }
-    #info {
-      position: fixed;
-      top: 12px; left: 12px;
-      background: rgba(255,255,255,0.85);
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-family: Arial, sans-serif;
-      font-size: 1.1em;
-      z-index: 10;
-    }
+    #info { position: fixed; top: 12px; left: 12px; background: rgba(255,255,255,0.85); padding: 10px 18px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 1.05em; z-index: 10; }
   </style>
 </head>
 <body>
-<div id="info">Usa W/A/S/D para mexer o boneco. A porta abre ao aproximar!</div>
+<div id="info">W/A/S/D: mover boneco<br>Porta abre ao aproximar</div>
 <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
 <script>
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xe0e0e0);
+scene.background = new THREE.Color(0xf0f0f0);
 
-// Parâmetros de sala/estruturas
-const roomW = 20, roomH = 8, roomL = 20;
-const paredeEsp = 0.3;
-const paredeFalsaGap = 4;
+// Medidas e offsets
+const roomW = 20, roomH = 8, roomL = 20, paredeEsp = 0.3, gapFalsa = 4;
 
-// Câmera: começa atrás e acima do boneco
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
-
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-document.body.appendChild(renderer.domElement);
-
-// Luzes
-scene.add(new THREE.AmbientLight(0xffffff, 0.75));
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-dirLight.position.set(0, 30, 14);
+// Luz
+scene.add(new THREE.AmbientLight(0xffffff, 0.33));
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+dirLight.position.set(12, 19, 7);
 dirLight.castShadow = true;
 scene.add(dirLight);
 
-// Chão
+// Chão cinza claro
 const floorGeo = new THREE.PlaneGeometry(roomW, roomL);
-const floorMat = new THREE.MeshStandardMaterial({color: 0xaaaaaa});
+const floorMat = new THREE.MeshStandardMaterial({color: 0xaab2bb});
 const floor = new THREE.Mesh(floorGeo, floorMat);
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
 
-// Paredes
+// Paredes laterais e traseira bem visíveis
+const paredeMat = new THREE.MeshStandardMaterial({color: 0xf4ffff});
 const walls = [];
-function criaParede(x, y, z, sx, sy, sz) {
-  const geo = new THREE.BoxGeometry(sx, sy, sz);
-  const mat = new THREE.MeshStandardMaterial({color: 0xffffff});
-  const parede = new THREE.Mesh(geo, mat);
-  parede.position.set(x, y, z);
-  parede.receiveShadow = true;
-  walls.push(parede);
-  scene.add(parede);
+function parede(x, y, z, sx, sy, sz) {
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), paredeMat);
+  mesh.position.set(x, y, z);
+  mesh.receiveShadow = true;
+  scene.add(mesh);
+  walls.push(mesh);
 }
-criaParede(0, roomH/2, -roomL/2 + paredeEsp/2, roomW, roomH, paredeEsp);
-criaParede(-roomW/2 + paredeEsp/2, roomH/2, 0, paredeEsp, roomH, roomL);
-criaParede(roomW/2 - paredeEsp/2, roomH/2, 0, paredeEsp, roomH, roomL);
 
-// Parede falsa paralela à esquerda
-const paredeFalsaX = -roomW/2 + paredeEsp + paredeFalsaGap;
+// Traseira (branca)
+parede(0, roomH/2, -roomL/2 + paredeEsp/2, roomW, roomH, paredeEsp);
+// Esquerda (cinzenta)
+const paredeLatMat = new THREE.MeshStandardMaterial({color: 0xd8dee9});
+const esq = new THREE.Mesh(new THREE.BoxGeometry(paredeEsp, roomH, roomL), paredeLatMat);
+esq.position.set(-roomW/2 + paredeEsp/2, roomH/2, 0);
+esq.receiveShadow = true;
+scene.add(esq);
+walls.push(esq);
+// Direita (igual traseira)
+parede(roomW/2 - paredeEsp/2, roomH/2, 0, paredeEsp, roomH, roomL);
+
+// Parede falsa paralela à esquerda (azul claro)
+const paredeFalsaX = -roomW/2 + paredeEsp + gapFalsa;
 const paredeFalsaY = roomH/2;
 const paredeFalsaZ = 0;
-const paredeFalsaL = roomL;
+const paredeFalsaL = roomL-4; // Um pouco menor, para ver as pontas
 const paredeFalsaH = roomH;
 const paredeFalsaE = paredeEsp;
-const paredeFalsaGeo = new THREE.BoxGeometry(paredeFalsaE, paredeFalsaH, paredeFalsaL);
-const paredeFalsaMat = new THREE.MeshStandardMaterial({color: 0xf0f0f0});
-const paredeFalsa = new THREE.Mesh(paredeFalsaGeo, paredeFalsaMat);
-paredeFalsa.position.set(paredeFalsaX, paredeFalsaY, paredeFalsaZ);
+const paredeFalsaMat = new THREE.MeshStandardMaterial({color: 0xb0e0fe});
+const paredeFalsa = new THREE.Mesh(new THREE.BoxGeometry(paredeFalsaE, paredeFalsaH, paredeFalsaL), paredeFalsaMat);
+paredeFalsa.position.set(paredeFalsaX, paredeFalsaY, 0);
 paredeFalsa.castShadow = true;
-walls.push(paredeFalsa);
 scene.add(paredeFalsa);
+walls.push(paredeFalsa);
 
-// Espelho na parede falsa
-const espHeight = paredeFalsaH/2.1, espLength = paredeFalsaL/2;
-const espGeo = new THREE.BoxGeometry(paredeFalsaE+0.02, espHeight, espLength);
-const espMat = new THREE.MeshStandardMaterial({
-  color: 0xeeeeff, metalness:1, roughness:0, transparent:true, opacity:0.87
-});
-const espelho = new THREE.Mesh(espGeo, espMat);
-espelho.position.set(paredeFalsaX + paredeFalsaE/2 + 0.011, paredeFalsaY+1, 0);
+// Espelho no centro da parede falsa
+const espHeight = paredeFalsaH/2.2, espLength = paredeFalsaL/2.5;
+const espMat = new THREE.MeshStandardMaterial({color: 0x89a7ff, metalness:1, roughness:0, transparent:true, opacity:0.7});
+const espelho = new THREE.Mesh(new THREE.BoxGeometry(paredeFalsaE+0.04, espHeight, espLength), espMat);
+espelho.position.set(paredeFalsaX + paredeFalsaE/2 + 0.02, paredeFalsaY+1.2, 0);
 scene.add(espelho);
 
-// Porta animada
-const portaAltura = 2.5, portaLargura = 1.25;
-const portaGeo = new THREE.BoxGeometry(paredeFalsaE+0.01, portaAltura, portaLargura);
-const portaMat = new THREE.MeshStandardMaterial({color: 0x654321});
+// Porta castanha, no topo positivo z da parede falsa, do tamanho do boneco
+const portaAltura = 1.5, portaLargura = 0.8;
+const portaGeo = new THREE.BoxGeometry(paredeFalsaE+0.04, portaAltura, portaLargura);
+const portaMat = new THREE.MeshStandardMaterial({color: 0x764621});
 const porta = new THREE.Mesh(portaGeo, portaMat);
 const pivotPorta = new THREE.Object3D();
-const portaCentroY = portaAltura/2 + 0.8;
-const portaZ = roomL/2 - portaLargura/2 - 1.2;
-pivotPorta.position.set(paredeFalsaX + paredeFalsaE/2, portaCentroY, portaZ);
+const portaY = portaAltura/2 + 0.1;
+const portaZ = paredeFalsaL/2 - portaLargura/2 - 0.25;
+pivotPorta.position.set(paredeFalsaX + paredeFalsaE/2, portaY, portaZ);
 porta.position.set(0, 0, portaLargura/2);
 pivotPorta.add(porta);
 scene.add(pivotPorta);
 
-// Mesa ajustada
-const mesaGeo = new THREE.BoxGeometry(4, 0.3, 2.2);
-const mesaMat = new THREE.MeshStandardMaterial({color: 0x81603a});
+// Mesa marrom, recuada
+const mesaGeo = new THREE.BoxGeometry(3.4, 0.32, 1.5);
+const mesaMat = new THREE.MeshStandardMaterial({color: 0x7b4b22});
 const mesa = new THREE.Mesh(mesaGeo, mesaMat);
-mesa.position.set(paredeFalsaX + 3.6, 1.35, -2.2);
+mesa.position.set(paredeFalsaX + 4, 1.15, -1.4);
 mesa.castShadow = true;
-mesa.receiveShadow = true;
 scene.add(mesa);
-[
-  [-1.45, 0.75, -0.8],
-  [1.45, 0.75, -0.8],
-  [-1.45, 0.75, 0.8],
-  [1.45, 0.75, 0.8]
-].forEach(pos => {
-  const perna = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.3), mesaMat);
-  perna.position.set(mesa.position.x + pos[0], pos[1], mesa.position.z + pos[2]);
+// Pernas
+for(let dx of [-1.3,1.3]) for(let dz of [-0.5,0.5]){
+  const perna = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.1), new THREE.MeshStandardMaterial({color: 0x4d3319}));
+  perna.position.set(mesa.position.x + dx, 0.6, mesa.position.z + dz);
   scene.add(perna);
-});
+}
 
-// Boneco
+// Boneco azul/cabeça amarela do tamanho certo
 function criaBoneco() {
   const grupo = new THREE.Group();
-  const corpoGeo = new THREE.BoxGeometry(0.8, 1.4, 0.5);
-  const corpoMat = new THREE.MeshStandardMaterial({color: 0x2196f3});
-  const corpo = new THREE.Mesh(corpoGeo, corpoMat);
-  corpo.position.y = 0.7;
+  const corpo = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.1, 0.4), new THREE.MeshStandardMaterial({color: 0x389be5}));
+  corpo.position.y = 0.55;
   grupo.add(corpo);
-  const cabecaGeo = new THREE.BoxGeometry(0.5, 0.45, 0.5);
-  const cabecaMat = new THREE.MeshStandardMaterial({color: 0xfff176});
-  const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
-  cabeca.position.y = 1.28;
+  const cabeca = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.37, 0.4), new THREE.MeshStandardMaterial({color: 0xf6e44d}));
+  cabeca.position.y = 1.14;
   grupo.add(cabeca);
-  grupo.position.set(paredeFalsaX + 2.2, 0, -4);
+  grupo.position.set(paredeFalsaX + 2.3, 0, -3.2);
   return grupo;
 }
 const boneco = criaBoneco();
 scene.add(boneco);
 
-// CONTROL E COLISÃO
+// Controlos e colisão
 const keys = {};
 window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
 window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 
-const bonecoBox = new THREE.Box3();
 const wallBoxes = [];
 function atualizaWallBoxes() {
   wallBoxes.length = 0;
-  walls.forEach(wall => wallBoxes.push(new THREE.Box3().setFromObject(wall)));
+  [esq, paredeFalsa, ...walls.filter(w=>w!==esq && w!==paredeFalsa)].forEach(wall => wallBoxes.push(new THREE.Box3().setFromObject(wall)));
   if (!portaAberta) {
     const caixaPorta = new THREE.Box3().setFromObject(porta);
     porta.updateWorldMatrix(true, false);
@@ -162,48 +137,41 @@ function atualizaWallBoxes() {
 }
 atualizaWallBoxes();
 
+// Animação porta
 let portaAberta = false;
 function animarPorta(proximo) {
   const destino = proximo ? Math.PI/2 : 0;
-  const vel = 0.15;
-  if (Math.abs(pivotPorta.rotation.y - destino) > 0.01) {
-    pivotPorta.rotation.y += (destino - pivotPorta.rotation.y) * vel;
-  }
+  if (Math.abs(pivotPorta.rotation.y - destino) > 0.01)
+    pivotPorta.rotation.y += (destino - pivotPorta.rotation.y) * 0.23;
 }
 
-const velocidade = 0.11;
+// Movimento e câmara
 function moverBoneco() {
-  let dx = 0, dz = 0;
-  if (keys['w']) dz -= velocidade;
-  if (keys['s']) dz += velocidade;
-  if (keys['a']) dx -= velocidade;
-  if (keys['d']) dx += velocidade;
-  const posAtual = boneco.position.clone();
-  const novaPos = posAtual.clone();
+  const speed = 0.12; let dx=0,dz=0;
+  if (keys['w']) dz -= speed;
+  if (keys['s']) dz += speed;
+  if (keys['a']) dx -= speed;
+  if (keys['d']) dx += speed;
+  const posAtual = boneco.position.clone(), novaPos = posAtual.clone();
   novaPos.x += dx; novaPos.z += dz;
-  const tamanho = new THREE.Vector3(0.8, 1.4, 0.5);
-  const caixaTeste = new THREE.Box3(
-    new THREE.Vector3(novaPos.x - tamanho.x/2, 0, novaPos.z - tamanho.z/2),
-    new THREE.Vector3(novaPos.x + tamanho.x/2, tamanho.y, novaPos.z + tamanho.z/2)
+  const tam = new THREE.Vector3(0.6,1.1,0.4);
+  const caixa = new THREE.Box3(
+    new THREE.Vector3(novaPos.x-tam.x/2, 0, novaPos.z-tam.z/2),
+    new THREE.Vector3(novaPos.x+tam.x/2, tam.y, novaPos.z+tam.z/2)
   );
   atualizaWallBoxes();
   let colisao = false;
-  for(const box of wallBoxes) {
-    if(caixaTeste.intersectsBox(box)) { colisao = true; break; }
-  }
-  const distPorta = boneco.position.distanceTo(pivotPorta.position);
-  portaAberta = distPorta < 1.4;
+  for(const box of wallBoxes) if(caixa.intersectsBox(box)) {colisao=true;break;}
+  portaAberta = boneco.position.distanceTo(pivotPorta.position) < 1.2;
   if(!colisao) boneco.position.copy(novaPos);
 }
-
-// --- CÂMARA SEGUE O BONECO ---
 function atualizaCamera() {
-  // Offset relativo ao boneco: ligeiramente atrás, acima e à direita
-  const offset = new THREE.Vector3(5, 9, 12);
+  // Suave, sempre por trás e acima do boneco (3ª pessoa)
+  const offset = new THREE.Vector3(4, 7, 11);
   const alvo = boneco.position.clone();
-  const alvoCamera = alvo.clone().add(offset);
-  camera.position.lerp(alvoCamera, 0.17); // suavidade
-  camera.lookAt(alvo.x, alvo.y + 1, alvo.z);
+  const posCam = alvo.clone().add(offset);
+  camera.position.lerp(posCam, 0.17);
+  camera.lookAt(alvo.x, alvo.y+0.7, alvo.z);
 }
 
 function animate() {
@@ -223,4 +191,3 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
-
