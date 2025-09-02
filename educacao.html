@@ -1,300 +1,300 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8" />
-<title>Jurassic Desktop Escola</title>
-<style>
-  body {
-    margin: 0;
-    background: #004040;
-    font-family: 'Courier New', Courier, monospace;
-    color: #00ff00;
-    cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
-    overflow: hidden;
-  }
-  #videoIntroContainer {
-    position: fixed;
-    z-index: 5000;
-    left: 0; top: 0; width: 100vw; height: 100vh;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 1.6s;
-  }
-  #introFade {
-    position: fixed;
-    left: 0; top: 0;
-    width: 100vw; height: 100vh;
-    z-index: 5100;
-    background: #bfffdf;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1.6s;
-  }
-  .desktop-icon {
-    width: 95px;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    color: #00ff00;
-    margin-bottom: 28px;
-    position: absolute;
-    left: 15px;
-  }
-  .desktop-icon img {
-    width: 44px;
-    height: 44px;
-    filter: drop-shadow(0 0 4px #00ff00);
-    margin-bottom: 3px;
-  }
-  #icon-school {top: 14px;}
-  #icon-pc {top: 97px;}
-  #icon-trash {top: 180px;}
-  #icon-docs {top: 263px;}
+  <meta charset="UTF-8" />
+  <title>Jurassic Desktop Escola</title>
+  <style>
+    body {
+      margin: 0;
+      background: #004040;
+      font-family: 'Courier New', Courier, monospace;
+      color: #00ff00;
+      cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
+      overflow: hidden;
+    }
+    #videoIntroContainer {
+      position: fixed;
+      z-index: 5000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.6s;
+    }
+    #introFade {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      z-index: 5100;
+      background: #bfffdf;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.6s;
+    }
+    .desktop-icon {
+      width: 95px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      color: #00ff00;
+      margin-bottom: 28px;
+      position: absolute;
+      left: 15px;
+    }
+    .desktop-icon img {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 0 4px #00ff00);
+      margin-bottom: 3px;
+    }
+    #icon-school {top: 14px;}
+    #icon-pc {top: 97px;}
+    #icon-trash {top: 180px;}
+    #icon-docs {top: 263px;}
 
-  #desktop {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    background: linear-gradient(135deg, #003333 25%, #006666 75%);
-    overflow: hidden;
-  }
-  /* ... (resto do CSS igual ao exemplo anterior) ... */
-  /* <--- copia o resto do CSS da última resposta até ao fim ---> */
-  #programWindow {
-    display: none;
-    position: absolute;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 540px;
-    min-height: 370px;
-    background: #002222;
-    border: 2px solid #00ff00;
-    padding: 18px 22px;
-    box-sizing: border-box;
-    z-index: 10;
-    transition: opacity 0.3s;
-  }
-  #programWindow.closed {
-    opacity: 0.3;
-    pointer-events: none;
-  }
-  #programWindow header {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #00ff00;
-    padding-bottom: 8px;
-    position: relative;
-  }
-  .closeProgramBtn {
-    position: absolute;
-    top: -2px;
-    right: 8px;
-    background: #004422;
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0 12px;
-    width: 30px;
-    height: 28px;
-    text-align: center;
-    line-height: 28px;
-    font-family: inherit;
-  }
-  .closeProgramBtn:hover {
-    background: #005555;
-    color: #fff;
-  }
-  #startButton {
-    background: #004422;
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    font-size: 16px;
-    padding: 8px 24px;
-    cursor: pointer;
-    margin: 28px auto 12px auto;
-    display: block;
-  }
-  #infoBoxes {
-    display: none;
-    flex-wrap: wrap;
-    gap: 13px;
-    margin-bottom: 15px;
-    justify-content: center;
-  }
-  .box {
-    width: 140px;
-    height: 70px;
-    border: 2px solid #00ff00;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: #003333;
-    font-size: 16px;
-    user-select: none;
-    transition: background 0.2s;
-    flex-shrink: 0;
-    position: relative;
-  }
-  .box:hover {
-    background: #005555;
-  }
-  #infoContainer {
-    margin-top: 12px;
-    position: relative;
-  }
-  .download-bar {
-    width: 96%;
-    height: 20px;
-    background: #001a00;
-    border: 2px solid #00ff00;
-    margin: 12px auto;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-  }
-  .download-fill {
-    background: #00ff00;
-    height: 16px;
-    width: 0;
-    transition: width 1.5s linear;
-  }
-  .infoBoxWindow {
-    background: #002222;
-    border: 2px solid #00ff00;
-    margin-top: 13px;
-    padding: 12px;
-    font-size: 15px;
-    width: 95%;
-    animation: windowAppear 0.23s linear;
-    position: relative;
-    z-index: 3;
-  }
-  @keyframes windowAppear {
-    from { opacity: 0; transform: translateY(12px);}
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .verMaisBtn {
-    background: #004422;
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    font-family: inherit;
-    font-size: 14px;
-    padding: 6px 18px;
-    cursor: pointer;
-    margin-top: 11px;
-    display: block;
-    transition: background 0.2s;
-  }
-  .verMaisBtn:hover { background: #005555; }
-  .modalOverlay, .confirmOverlay {
-    position: fixed;
-    left: 0; top: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,32,30,0.87);
-    z-index: 2000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .modalPage, .confirmBox {
-    background: #002c26;
-    border: 2px solid #00ff00;
-    color: #00ff00;
-    font-family: 'Courier New', Courier, monospace;
-    min-width: 340px;
-    min-height: 110px;
-    padding: 27px 32px 20px 32px;
-    font-size: 16px;
-    box-shadow: 0 0 20px #003833;
-    text-align: left;
-    position: relative;
-    animation: windowAppear 0.18s ease;
-  }
-  .closeBtn {
-    position: absolute;
-    right: 10px;
-    top: 8px;
-    background: #004422;
-    color: #00ff00;
-    border: 1px solid #00ff00;
-    font-size: 15px;
-    cursor: pointer;
-    padding: 0 12px;
-    font-family: inherit;
-  }
-  .closeBtn:hover { background: #005555; }
-  .confirmBtn, .cancelBtn {
-    background: #004422;
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    font-family: inherit;
-    font-size: 15px;
-    padding: 9px 30px;
-    cursor: pointer;
-    margin-top: 15px;
-    margin-right: 15px;
-    transition: background 0.22s;
-  }
-  .cancelBtn:hover, .confirmBtn:hover { background: #005555; }
-  .loadingBar {
-    width: 92%;
-    height: 19px;
-    background: #001a00;
-    border: 2px solid #00ff00;
-    margin: 29px auto 3px auto;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-  }
-  .loadingFill {
-    background: #00ff00;
-    height: 15px;
-    width: 0;
-    transition: width 1.3s linear;
-  }
-  #sysBar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 36px;
-    background: #001f12;
-    border-top: 2px solid #00ff00;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 22px;
-    color: #00ff00;
-    font-family: inherit;
-    font-size: 15px;
-    z-index: 900;
-  }
-  .sysIcon {
-    margin-right: 16px;
-    vertical-align: middle;
-    width: 21px;
-    height: 21px;
-    filter: drop-shadow(0 0 3px #00ff001c);
-  }
-  #sysBar span {
-    margin-right: 23px;
-    font-size: 13px;
-  }
-</style>
+    #desktop {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background: linear-gradient(135deg, #003333 25%, #006666 75%);
+      overflow: hidden;
+    }
+    #programWindow {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 540px;
+      min-height: 370px;
+      background: #002222;
+      border: 2px solid #00ff00;
+      padding: 18px 22px;
+      box-sizing: border-box;
+      z-index: 10;
+      transition: opacity 0.3s;
+    }
+    #programWindow.closed {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    #programWindow header {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+      padding-bottom: 8px;
+      position: relative;
+    }
+    .closeProgramBtn {
+      position: absolute;
+      top: -2px;
+      right: 8px;
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 12px;
+      width: 30px;
+      height: 28px;
+      text-align: center;
+      line-height: 28px;
+      font-family: inherit;
+    }
+    .closeProgramBtn:hover {
+      background: #005555;
+      color: #fff;
+    }
+    #startButton {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-size: 16px;
+      padding: 8px 24px;
+      cursor: pointer;
+      margin: 28px auto 12px auto;
+      display: block;
+    }
+    #infoBoxes {
+      display: none;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-bottom: 15px;
+      justify-content: center;
+    }
+    .box {
+      width: 140px;
+      height: 70px;
+      border: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #003333;
+      font-size: 16px;
+      user-select: none;
+      transition: background 0.2s;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .box:hover {
+      background: #005555;
+    }
+    #infoContainer {
+      margin-top: 12px;
+      position: relative;
+    }
+    .download-bar {
+      width: 96%;
+      height: 20px;
+      background: #001a00;
+      border: 2px solid #00ff00;
+      margin: 12px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .download-fill {
+      background: #00ff00;
+      height: 16px;
+      width: 0;
+      transition: width 1.5s linear;
+    }
+    .infoBoxWindow {
+      background: #002222;
+      border: 2px solid #00ff00;
+      margin-top: 13px;
+      padding: 12px;
+      font-size: 15px;
+      width: 95%;
+      animation: windowAppear 0.23s linear;
+      position: relative;
+      z-index: 3;
+    }
+    @keyframes windowAppear {
+      from { opacity: 0; transform: translateY(12px);}
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .verMaisBtn {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 6px 18px;
+      cursor: pointer;
+      margin-top: 11px;
+      display: block;
+      transition: background 0.2s;
+    }
+    .verMaisBtn:hover { background: #005555; }
+    .modalOverlay, .confirmOverlay {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,32,30,0.87);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .modalPage, .confirmBox {
+      background: #002c26;
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      min-width: 340px;
+      min-height: 110px;
+      padding: 27px 32px 20px 32px;
+      font-size: 16px;
+      box-shadow: 0 0 20px #003833;
+      text-align: left;
+      position: relative;
+      animation: windowAppear 0.18s ease;
+    }
+    .closeBtn {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      background: #004422;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      font-size: 15px;
+      cursor: pointer;
+      padding: 0 12px;
+      font-family: inherit;
+    }
+    .closeBtn:hover { background: #005555; }
+    .confirmBtn, .cancelBtn {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 9px 30px;
+      cursor: pointer;
+      margin-top: 15px;
+      margin-right: 15px;
+      transition: background 0.22s;
+    }
+    .cancelBtn:hover, .confirmBtn:hover { background: #005555; }
+    .loadingBar {
+      width: 92%;
+      height: 19px;
+      background: #001a00;
+      border: 2px solid #00ff00;
+      margin: 29px auto 3px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .loadingFill {
+      background: #00ff00;
+      height: 15px;
+      width: 0;
+      transition: width 1.3s linear;
+    }
+    #sysBar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 36px;
+      background: #001f12;
+      border-top: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 22px;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 15px;
+      z-index: 900;
+    }
+    .sysIcon {
+      margin-right: 16px;
+      vertical-align: middle;
+      width: 21px;
+      height: 21px;
+      filter: drop-shadow(0 0 3px #00ff001c);
+    }
+    #sysBar span {
+      margin-right: 23px;
+      font-size: 13px;
+    }
+  </style>
 </head>
 <body>
+
+<!-- Vídeo Intro: usa o TUO vídeo -->
 <div id="videoIntroContainer">
   <video id="introVideo" width="100%" height="100%" autoplay muted>
-    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    <source src="Hailuo_Video_Num fundo preto profundo com u_419356922821341193.mp4" type="video/mp4">
     O teu browser não suporta vídeo HTML5.
   </video>
 </div>
@@ -317,7 +317,6 @@
     <img src="https://img.icons8.com/fluency/48/documents.png" alt="Icone Documentos" />
     <div>Documentos</div>
   </div>
-   
   <div id="programWindow">
     <header>
       Jurassic Park - Sistema
@@ -333,7 +332,6 @@
     </div>
     <div id="infoContainer"></div>
   </div>
-  
   <div id="sysBar">
     <img src="https://img.icons8.com/fluency/48/wifi.png" class="sysIcon" title="Wi-Fi" />
     <img src="https://img.icons8.com/fluency/48/high-volume.png" class="sysIcon" title="Volume" />
@@ -342,23 +340,19 @@
   </div>
 </div>
 <script>
-  // Intro video + Fade up
+  // Fade up vídeo->desktop
   const intro = document.getElementById('videoIntroContainer');
   const fade = document.getElementById('introFade');
   const desktop = document.getElementById('desktop');
   const introVideo = document.getElementById('introVideo');
-
-  // Quando o vídeo terminar, iniciar o fade-up antes do desktop
   introVideo.onended = () => {
     fade.style.opacity = "1";
     setTimeout(() => {
       fade.style.opacity = "0";
       intro.style.display = "none";
       desktop.style.display = "block";
-    }, 1500); // duração do fade
+    }, 1500);
   };
-
-  // Garantir que video desaparece se não tocar por algum motivo
   setTimeout(() => {
     if (intro.style.display !== "none") {
       fade.style.opacity = "1";
@@ -368,10 +362,7 @@
         desktop.style.display = "block";
       }, 1500);
     }
-  }, 17000); // 17s backup
-
-  // Resto do JS igual (ver resposta anterior)
-  // --- Coloca o JS igual à última resposta a partir daqui ---
+  }, 17000); // backup timeout para vídeos longos
 
   function updateHour() {
     const now = new Date();
@@ -411,7 +402,6 @@
   infoBoxes.addEventListener("click", function(e) {
     if (e.target.classList.contains("box")) {
       manageDownloadWindows();
-
       const downloadBar = document.createElement("div");
       downloadBar.className = "download-bar";
       const fill = document.createElement("div");
@@ -443,7 +433,6 @@
     }
   });
 
-  // Programa: fechar com confirmação
   closeProgramBtn.addEventListener('click', function() {
     showConfirmBox();
   });
