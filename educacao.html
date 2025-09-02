@@ -333,6 +333,11 @@
     <img src="https://img.icons8.com/fluency/48/documents.png" alt="Icone Documentos" />
     <div>Documentos</div>
   </div>
+
+  <!-- PDFs adicionados -->
+  <div id="pdf-folder" style="position: absolute; left: 15px; top: 350px;">
+  </div>
+
   <div id="programWindow">
     <header>
       School Park - Sistema
@@ -363,7 +368,6 @@
       preFade.style.opacity = "0";
     }, 180);
   };
-
   // Fade up vídeo->desktop
   const intro = document.getElementById('videoIntroContainer');
   const fade = document.getElementById('introFade');
@@ -387,7 +391,6 @@
       }, 1500);
     }
   }, 17000); // backup timeout para vídeos longos
-
   function updateHour() {
     const now = new Date();
     let hh = now.getHours().toString().padStart(2, '0');
@@ -397,24 +400,20 @@
   }
   setInterval(updateHour, 950);
   updateHour();
-
   const schoolIcon = document.getElementById("icon-school");
   const programWindow = document.getElementById("programWindow");
   const startButton = document.getElementById("startButton");
   const infoBoxes = document.getElementById("infoBoxes");
   const infoContainer = document.getElementById("infoContainer");
   const closeProgramBtn = document.querySelector('.closeProgramBtn');
-
   schoolIcon.addEventListener("click", () => {
     programWindow.style.display = "block";
   });
-
   startButton.addEventListener("click", () => {
     infoBoxes.style.display = "flex";
     startButton.style.display = "none";
     infoContainer.innerHTML = "";
   });
-
   function manageDownloadWindows() {
     const activeDownloads = infoContainer.querySelectorAll('.infoBoxWindow');
     if (activeDownloads.length >= 4) {
@@ -422,7 +421,6 @@
       activeDownloads[0].remove();
     }
   }
-
   infoBoxes.addEventListener("click", function(e) {
     if (e.target.classList.contains("box")) {
       manageDownloadWindows();
@@ -431,21 +429,16 @@
       const fill = document.createElement("div");
       fill.className = "download-fill";
       downloadBar.appendChild(fill);
-
       const infoBoxWindow = document.createElement("div");
       infoBoxWindow.className = "infoBoxWindow";
       infoBoxWindow.textContent = "Carregando módulo...";
-
       infoContainer.appendChild(downloadBar);
       infoContainer.appendChild(infoBoxWindow);
-
       setTimeout(() => { fill.style.width = "100%"; }, 40);
-
       setTimeout(() => {
         infoBoxWindow.innerHTML = `<div>${e.target.getAttribute("data-info")}</div>
         <button class="verMaisBtn">Ver mais</button>`;
         downloadBar.remove();
-
         const verMaisBtn = infoBoxWindow.querySelector(".verMaisBtn");
         verMaisBtn.addEventListener("click", function() {
           showModal(
@@ -456,11 +449,9 @@
       }, 1510);
     }
   });
-
   closeProgramBtn.addEventListener('click', function() {
     showConfirmBox();
   });
-
   function showConfirmBox() {
     const overlay = document.createElement("div");
     overlay.className = "confirmOverlay";
@@ -471,7 +462,6 @@
       <button class="cancelBtn">Não</button>`;
     overlay.appendChild(box);
     document.body.appendChild(overlay);
-
     box.querySelector('.confirmBtn').onclick = function() {
       box.innerHTML = '<div>A fechar programa...</div>' +
         '<div class="loadingBar"><div class="loadingFill"></div></div>';
@@ -489,7 +479,6 @@
       document.body.removeChild(overlay);
     };
   }
-
   function showModal(titulo, texto) {
     const overlay = document.createElement("div");
     overlay.className = "modalOverlay";
@@ -497,11 +486,40 @@
     modal.className = "modalPage";
     modal.innerHTML = `<button class="closeBtn">X</button><h2>${titulo}</h2><p>${texto}</p>`;
     overlay.appendChild(modal);
-
     document.body.appendChild(overlay);
-
     modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
   }
+
+  // PDFs a adicionar na "pasta" com ícones verdes e clique para abrir em nova aba
+  const pdfFiles = [
+    {name: "Documento 1", url: "pdfs/doc1.pdf"},
+    {name: "Documento 2", url: "pdfs/doc2.pdf"},
+    {name: "Documento 3", url: "pdfs/doc3.pdf"},
+    {name: "Documento 4", url: "pdfs/doc4.pdf"},
+    {name: "Documento 5", url: "pdfs/doc5.pdf"},
+    {name: "Documento 6", url: "pdfs/doc6.pdf"},
+    {name: "Documento 7", url: "pdfs/doc7.pdf"},
+  ];
+
+  const pdfFolder = document.getElementById("pdf-folder");
+
+  pdfFiles.forEach((pdf, index) => {
+    const pdfIcon = document.createElement("div");
+    pdfIcon.className = "desktop-icon";
+    pdfIcon.style.top = `${index * 83}px`; // espaçamento vertical
+
+    pdfIcon.innerHTML = `
+      <img src="https://img.icons8.com/fluency/48/pdf.png" 
+           style="filter: drop-shadow(0 0 4px #bfff00);" 
+           alt="Ícone PDF" />
+      <div>${pdf.name}</div>
+    `;
+    pdfIcon.addEventListener("click", () => {
+      window.open(pdf.url, "_blank");
+    });
+
+    pdfFolder.appendChild(pdfIcon);
+  });
 </script>
 </body>
 </html>
