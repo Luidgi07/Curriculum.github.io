@@ -69,6 +69,12 @@
     #icon-pc {top: 97px;}
     #icon-trash {top: 180px;}
     #icon-docs {top: 263px;}
+    /* Novo ícone casa - alinhado à direita */
+    #icon-home {
+      left: auto;
+      right: 15px;
+      top: 14px;
+    }
     #desktop {
       width: 100vw;
       height: 100vh;
@@ -312,36 +318,35 @@
       margin-top: 12px;
     }
     .pdfBox {
-  width: 175px;                /* aumenta a largura */
-  min-height: 120px;           /* caixa mais alta se necessário */
-  border: 2px solid #bfff00;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* para o texto começar em cima */
-  cursor: pointer;
-  background: #003333;
-  user-select: none;
-  transition: background 0.2s, border-color 0.2s;
-  color: #bfff00;
-  font-size: 14px;
-  text-align: center;
-  padding: 7px 5px 7px 5px;    /* padding extra para o texto não colar às bordas */
-  box-sizing: border-box;      /* garante que width inclui padding */
-  white-space: pre-line;       /* quebra de linha automática */
-  word-break: break-word;      /* quebra de linha automática sem cortar palavras */
-}
-.pdfBox:hover {
-  background: #004d00;
-  border-color: #fff803;
-}
-.pdfBox img {
-  filter: drop-shadow(0 0 7px #bfff00);
-  width: 40px;
-  height: 40px;
-  margin-bottom: 7px;
-} 
-
+      width: 175px;
+      min-height: 120px;
+      border: 2px solid #bfff00;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      background: #003333;
+      user-select: none;
+      transition: background 0.2s, border-color 0.2s;
+      color: #bfff00;
+      font-size: 14px;
+      text-align: center;
+      padding: 7px 5px 7px 5px;
+      box-sizing: border-box;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+    .pdfBox:hover {
+      background: #004d00;
+      border-color: #fff803;
+    }
+    .pdfBox img {
+      filter: drop-shadow(0 0 7px #bfff00);
+      width: 40px;
+      height: 40px;
+      margin-bottom: 7px;
+    } 
   </style>
 </head>
 <body>
@@ -371,6 +376,13 @@
     <img src="https://img.icons8.com/fluency/48/documents.png" alt="Icone Documentos" />
     <div>Documentos</div>
   </div>
+
+  <!-- Novo ícone casa -->
+  <div id="icon-home" class="desktop-icon" title="Página Inicial" style="right: 15px; left: auto; top: 14px;">
+    <img src="https://img.icons8.com/fluency/48/home.png" alt="Ícone Casa" />
+    <div>Início</div>
+  </div>
+
   <div id="programWindow">
     <header>
       School Park - Sistema
@@ -394,14 +406,12 @@
   </div>
 </div>
 <script>
-  // Fade-in preto no início
   const preFade = document.getElementById('fadeInPreVideo');
   window.onload = () => {
     setTimeout(() => {
       preFade.style.opacity = "0";
     }, 180);
   };
-  // Fade up vídeo->desktop
   const intro = document.getElementById('videoIntroContainer');
   const fade = document.getElementById('introFade');
   const desktop = document.getElementById('desktop');
@@ -423,7 +433,7 @@
         desktop.style.display = "block";
       }, 1500);
     }
-  }, 17000); // backup timeout para vídeos longos
+  }, 17000);
   function updateHour() {
     const now = new Date();
     let hh = now.getHours().toString().padStart(2, '0');
@@ -530,9 +540,8 @@
     modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
   }
 
-  // NOVO - Abrir a lista de PDFs ao clicar no ícone Documentos
+  // Abrir a lista de PDFs ao clicar no ícone Documentos
   const iconDocs = document.getElementById("icon-docs");
-
   const pdfFiles = [
     {name: "Seminário de Bioquímica sobre a Fosfatidilserina", url: "bioquimica.pdf"},
     {name: "Eletrotecnia e Monitores de Sinais de Vida", url: "relatorio_eletrotecnia.pdf"},
@@ -543,20 +552,16 @@
     {name: "Poster Científico - Nanotecnologias para o Tratamento do Cancro do Pulmão (Nanopartículas de Ouro)", url: "Poster_1.pdf"},
     {name: "Poster Científico - Nanotecnologias para a Prevenção do Cancro do Cérebro (Técnica CRISPR)", url: "Poster_2.pdf"},
   ];
-
   iconDocs.addEventListener("click", () => {
     // Mostrar a janela do programa
     programWindow.style.display = "block";
-
     // Limpar conteúdos anteriores
     infoBoxes.style.display = "none";
     startButton.style.display = "none";
     infoContainer.innerHTML = "";
-
     // Criar container para lista de PDFs
     const pdfListContainer = document.createElement("div");
     pdfListContainer.id = "pdfListContainer";
-
     // Criar um elemento para cada PDF com ícone verde lima
     pdfFiles.forEach(pdf => {
       const pdfBox = document.createElement("div");
@@ -571,8 +576,13 @@
       });
       pdfListContainer.appendChild(pdfBox);
     });
-
     infoContainer.appendChild(pdfListContainer);
+  });
+
+  // Novo ícone casa - ir para página inicial
+  const iconHome = document.getElementById("icon-home");
+  iconHome.addEventListener("click", () => {
+    window.open("https://luidgi07.github.io/Curriculum.github.io/index.html", "_blank");
   });
 </script>
 </body>
