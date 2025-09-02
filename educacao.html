@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Escritório 3D com 3 Paredes e Boneco</title>
+  <title>Escritório 3D com 3 Paredes, Boneco e Parede Falsa</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
@@ -23,7 +23,7 @@
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xe0e0e0);
 
-  // Câmera reposicionada para melhor vista com 3 paredes
+  // Câmera ajustada
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
   camera.position.set(10, 15, 18);
   camera.lookAt(0, 0, 0);
@@ -36,7 +36,6 @@
   // Luzes
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
   scene.add(ambientLight);
-
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
   directionalLight.position.set(10, 20, 10);
   directionalLight.castShadow = true;
@@ -50,9 +49,8 @@
   floor.receiveShadow = true;
   scene.add(floor);
 
-  // Apenas 3 paredes: traseira e laterais
+  // Apenas 3 paredes base: traseira e laterais
   const walls = [];
-
   function criaParede(x, y, z, rotY) {
     const geo = new THREE.BoxGeometry(20, 8, 0.3);
     const mat = new THREE.MeshStandardMaterial({color: 0xffffff});
@@ -63,10 +61,49 @@
     walls.push(parede);
     scene.add(parede);
   }
+  criaParede(0, 4, -10, 0);          // traseira
+  criaParede(-10, 4, 0, Math.PI/2);  // esquerda
+  criaParede(10, 4, 0, Math.PI/2);   // direita
 
-  criaParede(0, 4, -10, 0);          // parede traseira
-  criaParede(-10, 4, 0, Math.PI/2); // parede esquerda
-  criaParede(10, 4, 0, Math.PI/2);  // parede direita
+  // Parede Falsa - a 1/4 da esquerda (= -5, 4, 0)
+  // Estrutura da falsa parede:
+  // [ porta | vidro grande | parede ]
+  // Dimensões totais: altura=6, largura total=8, profundidade=0.3
+  // Porta à esquerda (1.4), vidro no centro (5.2), resto parede (1.4)
+  const yFalsa = 3;   // base no chão, altura vai de y=0 a y=6 
+  const xFalsa = -5;  // 1/4 da esquerda (-10 + (20/4) = -5)
+  const zFalsa = 0;
+  const alturaFalsa = 6;
+  const larguraFalsa = 8;
+  const espessuraFalsa = 0.3;
+
+  // Lado fixo fácil visualização (parte direita da falsa parede)
+  const paredeFalsaGeo = new THREE.BoxGeometry(1.2, alturaFalsa, espessuraFalsa);
+  const paredeFalsaMat = new THREE.MeshStandardMaterial({color: 0xe0e0e0});
+  const paredeFalsa = new THREE.Mesh(paredeFalsaGeo, paredeFalsaMat);
+  paredeFalsa.position.set(xFalsa + larguraFalsa/2 - 0.6, yFalsa, zFalsa);
+  paredeFalsa.castShadow = true;
+  walls.push(paredeFalsa);
+  scene.add(paredeFalsa);
+
+  // Porta (marrom) à esquerda
+  const portaGeo = new THREE.BoxGeometry(1.2, 3, espessuraFalsa/1.15);
+  const portaMat = new THREE.MeshStandardMaterial({color: 0x654321});
+  const porta = new THREE.Mesh(portaGeo, portaMat);
+  porta.position.set(xFalsa - larguraFalsa/2 + 0.6, 1.5, zFalsa);
+  porta.castShadow = true;
+  walls.push(porta);
+  scene.add(porta);
+
+  // Vidro grande (transparente) central
+  const vidroGeo = new THREE.BoxGeometry(5.6, 4, espessuraFalsa/2);
+  const vidroMat = new THREE.MeshStandardMaterial({
+    color: 0x88bbff, transparent: true, opacity: 0.41, roughness: 0.1, metalness: 0.2
+  });
+  const vidro = new THREE.Mesh(vidroGeo, vidroMat);
+  vidro.position.set(xFalsa, 3.2, zFalsa);
+  vidro.castShadow = false;
+  scene.add(vidro);
 
   // Mesa simples
   const mesaGeo = new THREE.BoxGeometry(5, 0.3, 3);
@@ -96,21 +133,18 @@
   // Boneco simples (grupo)
   function criaBoneco() {
     const grupo = new THREE.Group();
-
     const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
     const corpoMat = new THREE.MeshStandardMaterial({color: 0x2196f3});
     const corpo = new THREE.Mesh(corpoGeo, corpoMat);
     corpo.position.y = 0.8;
     corpo.castShadow = true;
     grupo.add(corpo);
-
     const cabecaGeo = new THREE.BoxGeometry(0.8, 0.7, 0.7);
     const cabecaMat = new THREE.MeshStandardMaterial({color: 0xfff176});
     const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
     cabeca.position.y = 2;
     cabeca.castShadow = true;
     grupo.add(cabeca);
-
     grupo.position.set(0, 0, 5);
     return grupo;
   }
@@ -125,7 +159,6 @@
   // Colisão simples com paredes (caixas)
   const bonecoBox = new THREE.Box3();
   const wallBoxes = [];
-
   function atualizaWallBoxes() {
     wallBoxes.length = 0;
     walls.forEach(wall => {
@@ -143,18 +176,15 @@
     if (keys['s']) dz += velocidade;
     if (keys['a']) dx -= velocidade;
     if (keys['d']) dx += velocidade;
-
     const posAtual = boneco.position.clone();
     const novaPos = posAtual.clone();
     novaPos.x += dx;
     novaPos.z += dz;
-
     const tamanhoBoneco = new THREE.Vector3(1, 1.6, 0.7);
     const caixaTeste = new THREE.Box3(
       new THREE.Vector3(novaPos.x - tamanhoBoneco.x/2, 0, novaPos.z - tamanhoBoneco.z/2),
       new THREE.Vector3(novaPos.x + tamanhoBoneco.x/2, tamanhoBoneco.y, novaPos.z + tamanhoBoneco.z/2)
     );
-
     let colisao = false;
     for(const box of wallBoxes) {
       if(caixaTeste.intersectsBox(box)) {
@@ -162,7 +192,6 @@
         break;
       }
     }
-
     if(!colisao) {
       boneco.position.copy(novaPos);
     }
