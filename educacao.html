@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Escritório Interrogatório Realista</title>
+  <title>Escritório Interrogatório — Câmara Segue Boneco</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
@@ -24,15 +24,13 @@
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xe0e0e0);
 
-// Dimensões principais para proporcionalidade
+// Parâmetros de sala/estruturas
 const roomW = 20, roomH = 8, roomL = 20;
 const paredeEsp = 0.3;
-const paredeFalsaGap = 4; // distância entre parede esquerda e falsa
+const paredeFalsaGap = 4;
 
-// CÂMERA: vista da frente, ligeiramente de cima
+// Câmera: começa atrás e acima do boneco
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.set(0, 11, 24);
-camera.lookAt(0, 3, 0);
 
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -54,7 +52,7 @@ floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
 
-// PAREDES da sala (traseira e laterais)
+// Paredes
 const walls = [];
 function criaParede(x, y, z, sx, sy, sz) {
   const geo = new THREE.BoxGeometry(sx, sy, sz);
@@ -65,16 +63,11 @@ function criaParede(x, y, z, sx, sy, sz) {
   walls.push(parede);
   scene.add(parede);
 }
-// Traseira
 criaParede(0, roomH/2, -roomL/2 + paredeEsp/2, roomW, roomH, paredeEsp);
-// Esquerda
 criaParede(-roomW/2 + paredeEsp/2, roomH/2, 0, paredeEsp, roomH, roomL);
-// Direita
 criaParede(roomW/2 - paredeEsp/2, roomH/2, 0, paredeEsp, roomH, roomL);
 
-// --- PAREDE FALSA ---
-// Igual em altura/espessura à parede lateral, comprimento igual à sala (roomL)
-// Posição: paralela à parede esquerda, ligeiramente afastada (gap)
+// Parede falsa paralela à esquerda
 const paredeFalsaX = -roomW/2 + paredeEsp + paredeFalsaGap;
 const paredeFalsaY = roomH/2;
 const paredeFalsaZ = 0;
@@ -89,22 +82,7 @@ paredeFalsa.castShadow = true;
 walls.push(paredeFalsa);
 scene.add(paredeFalsa);
 
-// --- PORTA --- (proporcional: altura ~2.4, larg ~1, abre ao aproximar do boneco)
-// Porta fica alinhada à parede falsa, no extremo do lado "frontal" (z+)
-const portaAltura = 2.5, portaLargura = 1.25;
-const portaGeo = new THREE.BoxGeometry(paredeFalsaE+0.01, portaAltura, portaLargura);
-const portaMat = new THREE.MeshStandardMaterial({color: 0x654321});
-const porta = new THREE.Mesh(portaGeo, portaMat);
-// Pivô alinhado topo z+
-const pivotPorta = new THREE.Object3D();
-const portaCentroY = portaAltura/2 + 0.8;
-const portaZ = roomL/2 - portaLargura/2 - 1.2; // afastamento do canto
-pivotPorta.position.set(paredeFalsaX + paredeFalsaE/2, portaCentroY, portaZ);
-porta.position.set(0, 0, portaLargura/2);
-pivotPorta.add(porta);
-scene.add(pivotPorta);
-
-// --- ESPELHO --- (retângulo central, metade altura, 50% largura parede falsa)
+// Espelho na parede falsa
 const espHeight = paredeFalsaH/2.1, espLength = paredeFalsaL/2;
 const espGeo = new THREE.BoxGeometry(paredeFalsaE+0.02, espHeight, espLength);
 const espMat = new THREE.MeshStandardMaterial({
@@ -114,7 +92,20 @@ const espelho = new THREE.Mesh(espGeo, espMat);
 espelho.position.set(paredeFalsaX + paredeFalsaE/2 + 0.011, paredeFalsaY+1, 0);
 scene.add(espelho);
 
-// --- MESA --- (recuada para não bater na parede falsa)
+// Porta animada
+const portaAltura = 2.5, portaLargura = 1.25;
+const portaGeo = new THREE.BoxGeometry(paredeFalsaE+0.01, portaAltura, portaLargura);
+const portaMat = new THREE.MeshStandardMaterial({color: 0x654321});
+const porta = new THREE.Mesh(portaGeo, portaMat);
+const pivotPorta = new THREE.Object3D();
+const portaCentroY = portaAltura/2 + 0.8;
+const portaZ = roomL/2 - portaLargura/2 - 1.2;
+pivotPorta.position.set(paredeFalsaX + paredeFalsaE/2, portaCentroY, portaZ);
+porta.position.set(0, 0, portaLargura/2);
+pivotPorta.add(porta);
+scene.add(pivotPorta);
+
+// Mesa ajustada
 const mesaGeo = new THREE.BoxGeometry(4, 0.3, 2.2);
 const mesaMat = new THREE.MeshStandardMaterial({color: 0x81603a});
 const mesa = new THREE.Mesh(mesaGeo, mesaMat);
@@ -133,7 +124,7 @@ scene.add(mesa);
   scene.add(perna);
 });
 
-// --- BONECO ---
+// Boneco
 function criaBoneco() {
   const grupo = new THREE.Group();
   const corpoGeo = new THREE.BoxGeometry(0.8, 1.4, 0.5);
@@ -146,13 +137,13 @@ function criaBoneco() {
   const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
   cabeca.position.y = 1.28;
   grupo.add(cabeca);
-  grupo.position.set(paredeFalsaX + 2.2, 0, -4); // inicial "em frente" à porta mas afastado
+  grupo.position.set(paredeFalsaX + 2.2, 0, -4);
   return grupo;
 }
 const boneco = criaBoneco();
 scene.add(boneco);
 
-// --- CONTROL E COLISÃO ---
+// CONTROL E COLISÃO
 const keys = {};
 window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
 window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
@@ -171,7 +162,6 @@ function atualizaWallBoxes() {
 }
 atualizaWallBoxes();
 
-// Porta
 let portaAberta = false;
 function animarPorta(proximo) {
   const destino = proximo ? Math.PI/2 : 0;
@@ -201,16 +191,26 @@ function moverBoneco() {
   for(const box of wallBoxes) {
     if(caixaTeste.intersectsBox(box)) { colisao = true; break; }
   }
-  // Porta abre se boneco estiver a menos de ~1.4 da porta
   const distPorta = boneco.position.distanceTo(pivotPorta.position);
   portaAberta = distPorta < 1.4;
   if(!colisao) boneco.position.copy(novaPos);
+}
+
+// --- CÂMARA SEGUE O BONECO ---
+function atualizaCamera() {
+  // Offset relativo ao boneco: ligeiramente atrás, acima e à direita
+  const offset = new THREE.Vector3(5, 9, 12);
+  const alvo = boneco.position.clone();
+  const alvoCamera = alvo.clone().add(offset);
+  camera.position.lerp(alvoCamera, 0.17); // suavidade
+  camera.lookAt(alvo.x, alvo.y + 1, alvo.z);
 }
 
 function animate() {
   requestAnimationFrame(animate);
   moverBoneco();
   animarPorta(portaAberta);
+  atualizaCamera();
   renderer.render(scene, camera);
 }
 animate();
@@ -223,3 +223,4 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
+
