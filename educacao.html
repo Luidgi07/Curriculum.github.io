@@ -303,6 +303,40 @@
       margin-right: 23px;
       font-size: 13px;
     }
+    /* Estilo para os ícones dos PDFs na lista */
+    #pdfListContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+    .pdfBox {
+      width: 95px;
+      height: 105px;
+      border: 2px solid #bfff00;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #003333;
+      user-select: none;
+      transition: background 0.2s;
+      color: #bfff00;
+      font-size: 14px;
+      text-align: center;
+      padding: 5px;
+    }
+    .pdfBox:hover {
+      background: #004d00;
+    }
+    .pdfBox img {
+      filter: drop-shadow(0 0 4px #bfff00);
+      width: 40px;
+      height: 40px;
+      margin-bottom: 6px;
+    }
   </style>
 </head>
 <body>
@@ -333,11 +367,6 @@
     <img src="https://img.icons8.com/fluency/48/documents.png" alt="Icone Documentos" />
     <div>Documentos</div>
   </div>
-
-  <!-- PDFs adicionados -->
-  <div id="pdf-folder" style="position: absolute; left: 15px; top: 350px;">
-  </div>
-
   <div id="programWindow">
     <header>
       School Park - Sistema
@@ -400,20 +429,24 @@
   }
   setInterval(updateHour, 950);
   updateHour();
+
   const schoolIcon = document.getElementById("icon-school");
   const programWindow = document.getElementById("programWindow");
   const startButton = document.getElementById("startButton");
   const infoBoxes = document.getElementById("infoBoxes");
   const infoContainer = document.getElementById("infoContainer");
   const closeProgramBtn = document.querySelector('.closeProgramBtn');
+
   schoolIcon.addEventListener("click", () => {
     programWindow.style.display = "block";
   });
+
   startButton.addEventListener("click", () => {
     infoBoxes.style.display = "flex";
     startButton.style.display = "none";
     infoContainer.innerHTML = "";
   });
+
   function manageDownloadWindows() {
     const activeDownloads = infoContainer.querySelectorAll('.infoBoxWindow');
     if (activeDownloads.length >= 4) {
@@ -449,9 +482,11 @@
       }, 1510);
     }
   });
+
   closeProgramBtn.addEventListener('click', function() {
     showConfirmBox();
   });
+
   function showConfirmBox() {
     const overlay = document.createElement("div");
     overlay.className = "confirmOverlay";
@@ -479,6 +514,7 @@
       document.body.removeChild(overlay);
     };
   }
+
   function showModal(titulo, texto) {
     const overlay = document.createElement("div");
     overlay.className = "modalOverlay";
@@ -490,7 +526,9 @@
     modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
   }
 
-  // PDFs a adicionar na "pasta" com ícones verdes e clique para abrir em nova aba
+  // NOVO - Abrir a lista de PDFs ao clicar no ícone Documentos
+  const iconDocs = document.getElementById("icon-docs");
+
   const pdfFiles = [
     {name: "Documento 1", url: "pdfs/doc1.pdf"},
     {name: "Documento 2", url: "pdfs/doc2.pdf"},
@@ -501,24 +539,35 @@
     {name: "Documento 7", url: "pdfs/doc7.pdf"},
   ];
 
-  const pdfFolder = document.getElementById("pdf-folder");
+  iconDocs.addEventListener("click", () => {
+    // Mostrar a janela do programa
+    programWindow.style.display = "block";
 
-  pdfFiles.forEach((pdf, index) => {
-    const pdfIcon = document.createElement("div");
-    pdfIcon.className = "desktop-icon";
-    pdfIcon.style.top = `${index * 83}px`; // espaçamento vertical
+    // Limpar conteúdos anteriores
+    infoBoxes.style.display = "none";
+    startButton.style.display = "none";
+    infoContainer.innerHTML = "";
 
-    pdfIcon.innerHTML = `
-      <img src="https://img.icons8.com/fluency/48/pdf.png" 
-           style="filter: drop-shadow(0 0 4px #bfff00);" 
-           alt="Ícone PDF" />
-      <div>${pdf.name}</div>
-    `;
-    pdfIcon.addEventListener("click", () => {
-      window.open(pdf.url, "_blank");
+    // Criar container para lista de PDFs
+    const pdfListContainer = document.createElement("div");
+    pdfListContainer.id = "pdfListContainer";
+
+    // Criar um elemento para cada PDF com ícone verde lima
+    pdfFiles.forEach(pdf => {
+      const pdfBox = document.createElement("div");
+      pdfBox.className = "pdfBox";
+      pdfBox.title = pdf.name;
+      pdfBox.innerHTML = `
+        <img src="https://img.icons8.com/fluency/48/pdf.png" alt="Ícone PDF" />
+        <div>${pdf.name}</div>
+      `;
+      pdfBox.addEventListener("click", () => {
+        window.open(pdf.url, "_blank");
+      });
+      pdfListContainer.appendChild(pdfBox);
     });
 
-    pdfFolder.appendChild(pdfIcon);
+    infoContainer.appendChild(pdfListContainer);
   });
 </script>
 </body>
