@@ -2,215 +2,228 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Escritório 3D com 3 Paredes, Boneco e Parede Falsa</title>
+  <title>Escritório com Parede Falsa à Esquerda</title>
   <style>
     body { margin: 0; overflow: hidden; }
     #info {
       position: fixed;
-      top: 10px; left: 10px;
+      top: 12px; left: 12px;
       background: rgba(255,255,255,0.8);
-      padding: 8px 12px;
-      font-family: Arial, sans-serif;
-      z-index: 10;
+      padding: 10px 18px;
       border-radius: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 1.1em;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
-<div id="info">Use W/A/S/D para mover o boneco</div>
+<div id="info">Use W/A/S/D para mover o boneco. A porta abre quando o boneco se aproxima!</div>
 <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
 <script>
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xe0e0e0);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xe0e0e0);
 
-  // Câmera ajustada
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
-  camera.position.set(10, 15, 18);
-  camera.lookAt(0, 0, 0);
+// Câmera
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.set(18, 15, 12);
+camera.lookAt(0, 3, 0);
 
-  const renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
-  document.body.appendChild(renderer.domElement);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
 
-  // Luzes
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(10, 20, 10);
-  directionalLight.castShadow = true;
-  scene.add(directionalLight);
+// Luzes
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight.position.set(13, 23, 14);
+dirLight.castShadow = true;
+scene.add(dirLight);
 
-  // Chão
-  const floorGeo = new THREE.PlaneGeometry(20, 20);
-  const floorMat = new THREE.MeshStandardMaterial({color: 0x999999});
-  const floor = new THREE.Mesh(floorGeo, floorMat);
-  floor.rotation.x = -Math.PI / 2;
-  floor.receiveShadow = true;
-  scene.add(floor);
+// Chão
+const floorGeo = new THREE.PlaneGeometry(20, 20);
+const floorMat = new THREE.MeshStandardMaterial({color: 0xaaaaaa});
+const floor = new THREE.Mesh(floorGeo, floorMat);
+floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
 
-  // Apenas 3 paredes base: traseira e laterais
-  const walls = [];
-  function criaParede(x, y, z, rotY) {
-    const geo = new THREE.BoxGeometry(20, 8, 0.3);
-    const mat = new THREE.MeshStandardMaterial({color: 0xffffff});
-    const parede = new THREE.Mesh(geo, mat);
-    parede.position.set(x, y, z);
-    if (rotY) parede.rotation.y = rotY;
-    parede.receiveShadow = true;
-    walls.push(parede);
-    scene.add(parede);
+// 3 paredes: traseira e laterais
+const walls = [];
+function criaParede(x, y, z, rotY) {
+  const geo = new THREE.BoxGeometry(20, 8, 0.3);
+  const mat = new THREE.MeshStandardMaterial({color: 0xffffff});
+  const parede = new THREE.Mesh(geo, mat);
+  parede.position.set(x, y, z);
+  if (rotY) parede.rotation.y = rotY;
+  parede.receiveShadow = true;
+  walls.push(parede);
+  scene.add(parede);
+}
+criaParede(0, 4, -10, 0);          // traseira
+criaParede(-10, 4, 0, Math.PI/2);  // esquerda
+criaParede(10, 4, 0, Math.PI/2);   // direita
+
+// --- Parede falsa paralela à parede esquerda ---
+// Vai de z = -6.5 até z = +6.5 (igual à parede, eixo x fixo)
+// Fica entre x = -7.5 e x = -7.5 + 0.25 (espessura)
+// Portanto, x = -7.5 (meio do meio da sala entre centro (0) e parede esquerda (-10))
+const paredeFalsa_X = -7.5; // Paralela à parede esquerda, mais “interior” (meio do meio da sala)
+const paredeFalsa_Y = 4;
+const paredeFalsa_L = 13; // ligeiramente menor que o comprimento total (para não colar à frente/trás)
+const paredeFalsa_A = 8;
+const paredeFalsa_E = 0.25;
+
+// Estrutura da parede falsa
+const paredeFalsaGeo = new THREE.BoxGeometry(paredeFalsa_E, paredeFalsa_A, paredeFalsa_L);
+const paredeFalsaMat = new THREE.MeshStandardMaterial({color: 0xf0f0f0});
+const paredeFalsa = new THREE.Mesh(paredeFalsaGeo, paredeFalsaMat);
+paredeFalsa.position.set(paredeFalsa_X, paredeFalsa_Y, 0);
+paredeFalsa.castShadow = true;
+walls.push(paredeFalsa);
+scene.add(paredeFalsa);
+
+// Espelho no centro da parede falsa
+const espGeo = new THREE.BoxGeometry(0.08, 2.8, 5);
+const espMat = new THREE.MeshStandardMaterial({
+  color: 0xbbd7ff, metalness:1, roughness:0, transparent:true, opacity:0.82
+});
+const espelho = new THREE.Mesh(espGeo, espMat);
+espelho.position.set(paredeFalsa_X + paredeFalsa_E/2 + 0.045, 4.5, 0);
+scene.add(espelho);
+
+// Porta animada (no lado de cima, conforme orientação sala: mais perto do z positivo)
+const portaAltura = 2.6, portaLargura = 1.2;
+const portaGeo = new THREE.BoxGeometry(0.08, portaAltura, portaLargura);
+const portaMat = new THREE.MeshStandardMaterial({color: 0x654321});
+const porta = new THREE.Mesh(portaGeo, portaMat);
+// Pivô para animação: encostado à parede falsa, eixo em um dos topos z
+const pivôPorta = new THREE.Object3D();
+const portaPivotZ = paredeFalsa_L/2 - portaLargura/2 - 0.25; // ligeiro afastamento topo
+pivôPorta.position.set(paredeFalsa_X + paredeFalsa_E/2 + 0.045, portaAltura/2 + 1.2, portaPivotZ);
+porta.position.set(0, 0, +portaLargura/2);
+pivôPorta.add(porta);
+scene.add(pivôPorta);
+
+// ANIMAÇÃO DA PORTA
+let portaAberta = false;
+function animarPorta(proximo) {
+  const destino = proximo ? Math.PI/2 : 0;
+  const vel = 0.12;
+  if (Math.abs(pivôPorta.rotation.y - destino) > 0.01) {
+    pivôPorta.rotation.y += (destino - pivôPorta.rotation.y) * vel;
   }
-  criaParede(0, 4, -10, 0);          // traseira
-  criaParede(-10, 4, 0, Math.PI/2);  // esquerda
-  criaParede(10, 4, 0, Math.PI/2);   // direita
+}
 
-  // Parede Falsa - a 1/4 da esquerda (= -5, 4, 0)
-  // Estrutura da falsa parede:
-  // [ porta | vidro grande | parede ]
-  // Dimensões totais: altura=6, largura total=8, profundidade=0.3
-  // Porta à esquerda (1.4), vidro no centro (5.2), resto parede (1.4)
-  const yFalsa = 3;   // base no chão, altura vai de y=0 a y=6 
-  const xFalsa = -5;  // 1/4 da esquerda (-10 + (20/4) = -5)
-  const zFalsa = 0;
-  const alturaFalsa = 6;
-  const larguraFalsa = 8;
-  const espessuraFalsa = 0.3;
+// MESA (posição recuada para não tapar espaço frente à parede falsa)
+const mesaGeo = new THREE.BoxGeometry(5, 0.3, 3);
+const mesaMat = new THREE.MeshStandardMaterial({color: 0x654321});
+const mesa = new THREE.Mesh(mesaGeo, mesaMat);
+mesa.position.set(-2, 1.5, 3.5);
+mesa.castShadow = true;
+mesa.receiveShadow = true;
+scene.add(mesa);
+// Pernas da mesa
+const pernaGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5);
+const pernaMat = new THREE.MeshStandardMaterial({color: 0x3e2723});
+[
+  [-2.3-2, 0.75, -1.3+3.5],
+  [2.3-2, 0.75, -1.3+3.5],
+  [-2.3-2, 0.75, 1.3+3.5],
+  [2.3-2, 0.75, 1.3+3.5]
+].forEach(pos => {
+  const perna = new THREE.Mesh(pernaGeo, pernaMat);
+  perna.position.set(...pos);
+  scene.add(perna);
+});
 
-  // Lado fixo fácil visualização (parte direita da falsa parede)
-  const paredeFalsaGeo = new THREE.BoxGeometry(1.2, alturaFalsa, espessuraFalsa);
-  const paredeFalsaMat = new THREE.MeshStandardMaterial({color: 0xe0e0e0});
-  const paredeFalsa = new THREE.Mesh(paredeFalsaGeo, paredeFalsaMat);
-  paredeFalsa.position.set(xFalsa + larguraFalsa/2 - 0.6, yFalsa, zFalsa);
-  paredeFalsa.castShadow = true;
-  walls.push(paredeFalsa);
-  scene.add(paredeFalsa);
+// BONECO
+function criaBoneco() {
+  const grupo = new THREE.Group();
+  const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
+  const corpoMat = new THREE.MeshStandardMaterial({color: 0x2196f3});
+  const corpo = new THREE.Mesh(corpoGeo, corpoMat);
+  corpo.position.y = 0.8;
+  grupo.add(corpo);
+  const cabecaGeo = new THREE.BoxGeometry(0.8, 0.7, 0.7);
+  const cabecaMat = new THREE.MeshStandardMaterial({color: 0xfff176});
+  const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
+  cabeca.position.y = 2;
+  grupo.add(cabeca);
+  grupo.position.set(2, 0, 5);
+  return grupo;
+}
+const boneco = criaBoneco();
+scene.add(boneco);
 
-  // Porta (marrom) à esquerda
-  const portaGeo = new THREE.BoxGeometry(1.2, 3, espessuraFalsa/1.15);
-  const portaMat = new THREE.MeshStandardMaterial({color: 0x654321});
-  const porta = new THREE.Mesh(portaGeo, portaMat);
-  porta.position.set(xFalsa - larguraFalsa/2 + 0.6, 1.5, zFalsa);
-  porta.castShadow = true;
-  walls.push(porta);
-  scene.add(porta);
+// CONTROLES E COLISÕES
+const keys = {};
+window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 
-  // Vidro grande (transparente) central
-  const vidroGeo = new THREE.BoxGeometry(5.6, 4, espessuraFalsa/2);
-  const vidroMat = new THREE.MeshStandardMaterial({
-    color: 0x88bbff, transparent: true, opacity: 0.41, roughness: 0.1, metalness: 0.2
+const bonecoBox = new THREE.Box3();
+const wallBoxes = [];
+function atualizaWallBoxes() {
+  wallBoxes.length = 0;
+  walls.forEach(wall => {
+    const box = new THREE.Box3().setFromObject(wall);
+    wallBoxes.push(box);
   });
-  const vidro = new THREE.Mesh(vidroGeo, vidroMat);
-  vidro.position.set(xFalsa, 3.2, zFalsa);
-  vidro.castShadow = false;
-  scene.add(vidro);
-
-  // Mesa simples
-  const mesaGeo = new THREE.BoxGeometry(5, 0.3, 3);
-  const mesaMat = new THREE.MeshStandardMaterial({color: 0x654321});
-  const mesa = new THREE.Mesh(mesaGeo, mesaMat);
-  mesa.position.set(0, 1.5, 0);
-  mesa.castShadow = true;
-  mesa.receiveShadow = true;
-  scene.add(mesa);
-
-  // Pernas da mesa
-  const pernaGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5);
-  const pernaMat = new THREE.MeshStandardMaterial({color: 0x3e2723});
-  const posPernas = [
-    [-2.3, 0.75, -1.3],
-    [2.3, 0.75, -1.3],
-    [-2.3, 0.75, 1.3],
-    [2.3, 0.75, 1.3]
-  ];
-  posPernas.forEach(pos => {
-    const perna = new THREE.Mesh(pernaGeo, pernaMat);
-    perna.position.set(...pos);
-    perna.castShadow = true;
-    scene.add(perna);
-  });
-
-  // Boneco simples (grupo)
-  function criaBoneco() {
-    const grupo = new THREE.Group();
-    const corpoGeo = new THREE.BoxGeometry(1, 1.6, 0.7);
-    const corpoMat = new THREE.MeshStandardMaterial({color: 0x2196f3});
-    const corpo = new THREE.Mesh(corpoGeo, corpoMat);
-    corpo.position.y = 0.8;
-    corpo.castShadow = true;
-    grupo.add(corpo);
-    const cabecaGeo = new THREE.BoxGeometry(0.8, 0.7, 0.7);
-    const cabecaMat = new THREE.MeshStandardMaterial({color: 0xfff176});
-    const cabeca = new THREE.Mesh(cabecaGeo, cabecaMat);
-    cabeca.position.y = 2;
-    cabeca.castShadow = true;
-    grupo.add(cabeca);
-    grupo.position.set(0, 0, 5);
-    return grupo;
+  if (!portaAberta) {
+    const caixaPorta = new THREE.Box3().setFromObject(porta);
+    porta.updateWorldMatrix(true, false);
+    caixaPorta.applyMatrix4(porta.matrixWorld);
+    wallBoxes.push(caixaPorta);
   }
-  const boneco = criaBoneco();
-  scene.add(boneco);
+}
+atualizaWallBoxes();
 
-  // Controles W/A/S/D
-  const keys = {};
-  window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
-  window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
-  // Colisão simples com paredes (caixas)
-  const bonecoBox = new THREE.Box3();
-  const wallBoxes = [];
-  function atualizaWallBoxes() {
-    wallBoxes.length = 0;
-    walls.forEach(wall => {
-      const box = new THREE.Box3().setFromObject(wall);
-      wallBoxes.push(box);
-    });
-  }
+const velocidade = 0.10;
+function moverBoneco() {
+  let dx = 0, dz = 0;
+  if (keys['w']) dz -= velocidade;
+  if (keys['s']) dz += velocidade;
+  if (keys['a']) dx -= velocidade;
+  if (keys['d']) dx += velocidade;
+  const posAtual = boneco.position.clone();
+  const novaPos = posAtual.clone();
+  novaPos.x += dx;
+  novaPos.z += dz;
+  const tamanhoBoneco = new THREE.Vector3(1, 1.6, 0.7);
+  const caixaTeste = new THREE.Box3(
+    new THREE.Vector3(novaPos.x - tamanhoBoneco.x/2, 0, novaPos.z - tamanhoBoneco.z/2),
+    new THREE.Vector3(novaPos.x + tamanhoBoneco.x/2, tamanhoBoneco.y, novaPos.z + tamanhoBoneco.z/2)
+  );
   atualizaWallBoxes();
-
-  // Movimento do boneco com colisão
-  const velocidade = 0.1;
-  function moverBoneco() {
-    let dx = 0, dz = 0;
-    if (keys['w']) dz -= velocidade;
-    if (keys['s']) dz += velocidade;
-    if (keys['a']) dx -= velocidade;
-    if (keys['d']) dx += velocidade;
-    const posAtual = boneco.position.clone();
-    const novaPos = posAtual.clone();
-    novaPos.x += dx;
-    novaPos.z += dz;
-    const tamanhoBoneco = new THREE.Vector3(1, 1.6, 0.7);
-    const caixaTeste = new THREE.Box3(
-      new THREE.Vector3(novaPos.x - tamanhoBoneco.x/2, 0, novaPos.z - tamanhoBoneco.z/2),
-      new THREE.Vector3(novaPos.x + tamanhoBoneco.x/2, tamanhoBoneco.y, novaPos.z + tamanhoBoneco.z/2)
-    );
-    let colisao = false;
-    for(const box of wallBoxes) {
-      if(caixaTeste.intersectsBox(box)) {
-        colisao = true;
-        break;
-      }
-    }
-    if(!colisao) {
-      boneco.position.copy(novaPos);
+  let colisao = false;
+  for(const box of wallBoxes) {
+    if(caixaTeste.intersectsBox(box)) {
+      colisao = true;
+      break;
     }
   }
-
-  // Animação
-  function animate() {
-    requestAnimationFrame(animate);
-    moverBoneco();
-    renderer.render(scene, camera);
+  // Porta abre se boneco estiver próximo do eixo da porta
+  const bonecoDistPorta = boneco.position.distanceTo(pivôPorta.position);
+  portaAberta = bonecoDistPorta < 1.6;
+  if(!colisao) {
+    boneco.position.copy(novaPos);
   }
-  animate();
+}
 
-  // Ajuste responsivo
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+function animate() {
+  requestAnimationFrame(animate);
+  moverBoneco();
+  animarPorta(portaAberta);
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 </script>
 </body>
 </html>
