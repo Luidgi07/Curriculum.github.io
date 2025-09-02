@@ -10,13 +10,27 @@
     font-family: 'Courier New', Courier, monospace;
     color: #00ff00;
     cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
-  }
-  #desktop {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    background: linear-gradient(135deg, #003333 25%, #006666 75%);
     overflow: hidden;
+  }
+  #videoIntroContainer {
+    position: fixed;
+    z-index: 5000;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1.6s;
+  }
+  #introFade {
+    position: fixed;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    z-index: 5100;
+    background: #bfffdf;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.6s;
   }
   .desktop-icon {
     width: 95px;
@@ -39,6 +53,15 @@
   #icon-trash {top: 180px;}
   #icon-docs {top: 263px;}
 
+  #desktop {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: linear-gradient(135deg, #003333 25%, #006666 75%);
+    overflow: hidden;
+  }
+  /* ... (resto do CSS igual ao exemplo anterior) ... */
+  /* <--- copia o resto do CSS da última resposta até ao fim ---> */
   #programWindow {
     display: none;
     position: absolute;
@@ -269,7 +292,15 @@
 </style>
 </head>
 <body>
-<div id="desktop">
+<div id="videoIntroContainer">
+  <video id="introVideo" width="100%" height="100%" autoplay muted>
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    O teu browser não suporta vídeo HTML5.
+  </video>
+</div>
+<div id="introFade"></div>
+
+<div id="desktop" style="display:none;">
   <div id="icon-school" class="desktop-icon" title="Abrir Escola">
     <img src="https://img.icons8.com/fluency/48/school-building.png" alt="Icone Escola" />
     <div>Escola</div>
@@ -311,7 +342,37 @@
   </div>
 </div>
 <script>
-  // Atualiza hora
+  // Intro video + Fade up
+  const intro = document.getElementById('videoIntroContainer');
+  const fade = document.getElementById('introFade');
+  const desktop = document.getElementById('desktop');
+  const introVideo = document.getElementById('introVideo');
+
+  // Quando o vídeo terminar, iniciar o fade-up antes do desktop
+  introVideo.onended = () => {
+    fade.style.opacity = "1";
+    setTimeout(() => {
+      fade.style.opacity = "0";
+      intro.style.display = "none";
+      desktop.style.display = "block";
+    }, 1500); // duração do fade
+  };
+
+  // Garantir que video desaparece se não tocar por algum motivo
+  setTimeout(() => {
+    if (intro.style.display !== "none") {
+      fade.style.opacity = "1";
+      setTimeout(() => {
+        fade.style.opacity = "0";
+        intro.style.display = "none";
+        desktop.style.display = "block";
+      }, 1500);
+    }
+  }, 17000); // 17s backup
+
+  // Resto do JS igual (ver resposta anterior)
+  // --- Coloca o JS igual à última resposta a partir daqui ---
+
   function updateHour() {
     const now = new Date();
     let hh = now.getHours().toString().padStart(2, '0');
