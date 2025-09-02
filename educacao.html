@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Sala com 3 Paredes</title>
+  <title>Sala 3 Paredes — Vista de Dentro</title>
   <style>
     body { margin: 0; overflow: hidden; }
   </style>
@@ -18,7 +18,7 @@ scene.background = new THREE.Color(0xf0f0f0);
 // Luz
 scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
-dirLight.position.set(10, 20, 18);
+dirLight.position.set(10, 20, 10);
 scene.add(dirLight);
 
 // Chão
@@ -31,32 +31,26 @@ scene.add(floor);
 
 // 3 Paredes
 const paredeMat = new THREE.MeshStandardMaterial({color: 0xffffff});
+scene.add(new THREE.Mesh(
+  new THREE.BoxGeometry(roomW, roomH, paredeEsp),
+  paredeMat
+)).position.set(0, roomH/2, -roomL/2 + paredeEsp/2); // Traseira
 
-// Traseira
-const paredeTraseira = new THREE.Mesh(
-  new THREE.BoxGeometry(roomW, roomH, paredeEsp), paredeMat
-);
-paredeTraseira.position.set(0, roomH/2, -roomL/2 + paredeEsp/2);
-scene.add(paredeTraseira);
+scene.add(new THREE.Mesh(
+  new THREE.BoxGeometry(paredeEsp, roomH, roomL),
+  paredeMat
+)).position.set(roomW/2 - paredeEsp/2, roomH/2, 0); // Direita
 
-// Direita
-const paredeDireita = new THREE.Mesh(
-  new THREE.BoxGeometry(paredeEsp, roomH, roomL), paredeMat
-);
-paredeDireita.position.set(roomW/2 - paredeEsp/2, roomH/2, 0);
-scene.add(paredeDireita);
+scene.add(new THREE.Mesh(
+  new THREE.BoxGeometry(paredeEsp, roomH, roomL),
+  paredeMat
+)).position.set(-roomW/2 + paredeEsp/2, roomH/2, 0); // Esquerda
 
-// Esquerda
-const paredeEsquerda = new THREE.Mesh(
-  new THREE.BoxGeometry(paredeEsp, roomH, roomL), paredeMat
-);
-paredeEsquerda.position.set(-roomW/2 + paredeEsp/2, roomH/2, 0);
-scene.add(paredeEsquerda);
-
-// Câmara na lateral aberta (na posição x = 0, fora da sala, um pouco acima do solo)
+// Câmara posicionada dentro da sala
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.set(0, roomH/2, roomL/2 + 14); // posição fora da sala, centrada
-camera.lookAt(0, roomH/2, 0);
+// Um pouco afastada do fundo, centrada à largura e altura dos olhos (~1.6m)
+camera.position.set(0, 1.6, -roomL/2 + 3);
+camera.lookAt(0, 1.6, 0); // Olhar para o centro da sala à altura dos olhos
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
