@@ -1,63 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Jurassic Park 3D Filesystem</title>
+  <meta charset="UTF-8">
+  <title>Portfólio Biomédica</title>
   <style>
-    body { margin:0; overflow:hidden; background:#051a14; }
-    #info {
-      position: absolute; top: 18px; left: 18px;
-      font-family: 'Courier New', monospace;
-      background: rgba(5,40,15,0.90); color: #00ff00;
-      padding: 13px 21px; border:2px solid #00ff00;
-      border-radius: 8px; font-size: 18px; z-index: 4;
+    body { margin: 0; background: #080c0e; }
+    #info, #conteudo, #confirm {
+      position: fixed;
+      left: 49px; top: 49px;
+      background: #111d17;
+      color: #a6ffae; z-index: 99;
+      font-family: Courier, monospace;
+      padding: 10px 31px 30px 31px;
+      border-radius: 13px;
+      font-size: 17px; display: none;
+      box-shadow: 2px 4px 18px #004d16b5;
+      min-width: 230px;
+      max-width: 330px;
+      max-height: 79vh;
+      overflow-y: auto;
     }
-    #confirm {
-      position: absolute; left:50%; top:51%;
-      transform:translate(-50%, -50%);
-      background:#002e0d; color:#00ff00;
-      font-family:inherit;font-size:20px;z-index:100;
-      border:3px solid #00ff00; border-radius:14px;
-      box-shadow: 0 0 33px #00ff005c;
-      padding:35px 40px; display:none;
+    #info {display:block;min-width:260px;max-width:450px;padding:14px 22px 13px 22px;}
+    #conteudo {background:#1b211e;color:#4effaa;z-index:101;margin-top:36px;}
+    #confirm {background:#152623;color:#fa9393;z-index:102;margin-top:12px;}
+    #voltar-edu {
+      position: fixed;
+      top: 26px;
+      right: 26px;
+      z-index: 104;
+      font-size: 18px;
+      padding: 7px 19px;
+      background: #11553d;
+      color: #fff;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 1px 2px 12px #00334ab7;
     }
-    #confirm button {
-      background:#004422; border:2px solid #00ff00;
-      color:#00ff00; font-family:inherit; font-size:18px;
-      padding:9px 32px; cursor:pointer; border-radius:9px;
-      margin:15px 16px 0 16px; transition:background 0.11s;
-    }
-    #confirm button:hover {background: #005555; color: #fff;}
-    #conteudo {
-      position: absolute; left:50%; top:54%;
-      transform:translate(-50%, -50%);
-      background:#001c19;color:#00ff00;
-      font-family:inherit;font-size:19px;z-index:200;
-      border:3px solid #00ff00;border-radius:13px;
-      box-shadow:0 0 25px #00ff0033;padding:33px 40px;display:none;
-    }
-    #conteudo button {
-      margin-top:18px;background:#004422; color:#00ff00;
-      border:2px solid #00ff00;padding:7px 24px;font-size:18px;
-      cursor:pointer;border-radius:9px;transition:background 0.11s;
-    }
-    #conteudo button:hover {background: #005555; color: #fff;}
   </style>
 </head>
 <body>
-<div id="info">Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!</div>
+<div id="info"></div>
 <div id="confirm"></div>
 <div id="conteudo"></div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<button id="voltar-edu">Voltar atrás</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
 <script>
 let scene = new THREE.Scene();
-scene.background = new THREE.Color(0x051a14);
-let camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1200);
-let camDist = 26, camRotY = 0, camRotX = 0.22;
+let camDist = 21, camRotX = 0.16, camRotY = -0.02;
+let camera = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
 function setCameraPos() {
-  camera.position.x = camDist * Math.cos(camRotX) * Math.cos(camRotY);
-  camera.position.z = camDist * Math.cos(camRotX) * Math.sin(camRotY);
-  camera.position.y = camDist * Math.sin(camRotX) + 7;
+  camera.position.x = Math.sin(camRotY) * Math.cos(camRotX) * camDist;
+  camera.position.y = Math.sin(camRotX) * camDist + 3.2;
+  camera.position.z = Math.cos(camRotY) * Math.cos(camRotX) * camDist;
   camera.lookAt(0,0,0);
 }
 setCameraPos();
@@ -89,7 +84,6 @@ let baseMat = new THREE.MeshPhongMaterial({color:0xff3333, transparent:true, opa
 let base = new THREE.Mesh(baseGeo, baseMat);
 base.position.set(0, 0.17, 0);
 scene.add(base);
-
 // Blocos: ficheiros estilo filme (preenche o meio das fileiras!)
 let arquivos = [
   {nome:"Bioquímica",descricao:"Seminário de Fosfatidilserina",conteudo:"Conteúdo PDF: Bioquímica"},
@@ -104,7 +98,6 @@ let arquivos = [
   {nome:"Fisiologia",descricao:"Resumo Fisiologia",conteudo:"Conteúdo PDF: Fisiologia"},
   {nome:"Histologia",descricao:"Resumo Histologia",conteudo:"Conteúdo PDF: Histologia"},
   {nome:"Farmacologia",descricao:"Resumo Farmacologia",conteudo:"Conteúdo PDF: Farmacologia"},
-  // blocos para o meio
   {nome:"Bioética",descricao:"Ficha Bioética",conteudo:"Conteúdo PDF: Bioética"},
   {nome:"Epidemiologia",descricao:"Resumo Epidemiologia",conteudo:"Conteúdo PDF: Epidemiologia"},
   {nome:"Imunologia",descricao:"Poster Imunologia",conteudo:"Conteúdo PDF: Imunologia"},
@@ -112,7 +105,6 @@ let arquivos = [
   {nome:"Anatomia",descricao:"Resumo Anatomia",conteudo:"Conteúdo PDF: Anatomia"},
   {nome:"Endocrinologia",descricao:"Resumo Endocrinologia",conteudo:"Conteúdo PDF: Endocrinologia"}
 ];
-
 let blocos=[], luzes=[];
 const nFileiras = 3;
 const blocosPorFileira = Math.ceil(arquivos.length / nFileiras);
@@ -122,7 +114,6 @@ const espacoX = larguraBase / blocosPorFileira;
 const xInit = -larguraBase / 2 + espacoX / 2;
 const espacoZ = profundBase / (nFileiras + 1);
 const zInit = -profundBase / 2 + espacoZ;
-
 for (let i=0;i<arquivos.length;i++) {
   let geometry = new THREE.BoxGeometry(2.6,0.75,1.7);
   let material = new THREE.MeshPhongMaterial({
@@ -130,9 +121,6 @@ for (let i=0;i<arquivos.length;i++) {
   });
   const linha = Math.floor(i / blocosPorFileira);
   let posNaLinha = i % blocosPorFileira;
-
-  // desloca fileira do meio meio bloco, padrão "tijolo"
-
   let bloco = new THREE.Mesh(geometry, material);
   bloco.position.set(
     xInit + posNaLinha * espacoX,
@@ -142,7 +130,6 @@ for (let i=0;i<arquivos.length;i++) {
   bloco.userData = arquivos[i];
   scene.add(bloco);
   blocos.push(bloco);
-
   // Nome sobre bloco
   let canvas = document.createElement('canvas');
   canvas.width=130;canvas.height=37;
@@ -258,9 +245,7 @@ renderer.domElement.addEventListener("click", function(e) {
           conteudo.style.display = "block";
           luz.visible = false;
         };
-        document.getElementById("nao").onclick = ()=>{
-          confirm.style.display="none"; luz.visible=false;
-        };
+        document.getElementById("nao").onclick = ()=>{confirm.style.display="none"; luz.visible=false;};
         setTimeout(()=>document.body.onclick=function(ev){
           if(!confirm.contains(ev.target) && !conteudo.contains(ev.target)){
             confirm.style.display="none";
@@ -277,6 +262,9 @@ window.addEventListener("resize",()=>{
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+document.getElementById("voltar-edu").onclick = function() {
+  window.location.href = "educacao.html";
+};
 function animate(){requestAnimationFrame(animate);renderer.render(scene,camera);}
 animate();
 </script>
