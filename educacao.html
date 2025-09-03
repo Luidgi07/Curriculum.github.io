@@ -69,7 +69,6 @@
     #icon-pc {top: 97px;}
     #icon-trash {top: 180px;}
     #icon-docs {top: 263px;}
-    /* Novo ícone casa - alinhado à direita */
     #icon-home {
       left: auto;
       right: 15px;
@@ -309,7 +308,6 @@
       margin-right: 23px;
       font-size: 13px;
     }
-    /* Estilo para os ícones dos PDFs na lista */
     #pdfListContainer {
       display: flex;
       flex-wrap: wrap;
@@ -350,9 +348,7 @@
   </style>
 </head>
 <body>
-<!-- Fade-in preto antes do vídeo -->
 <div id="fadeInPreVideo"></div>
-<!-- Vídeo Intro -->
 <div id="videoIntroContainer">
   <video id="introVideo" autoplay muted playsinline>
     <source src="Hailuo_Video_Num fundo preto profundo com u_419356922821341193.mp4" type="video/mp4">
@@ -376,13 +372,10 @@
     <img src="https://img.icons8.com/fluency/48/documents.png" alt="Icone Documentos" />
     <div>Documentos</div>
   </div>
-
-  <!-- Novo ícone casa -->
   <div id="icon-home" class="desktop-icon" title="Página Inicial" style="right: 15px; left: auto; top: 14px;">
     <img src="https://img.icons8.com/fluency/48/home.png" alt="Ícone Casa" />
     <div>Início</div>
   </div>
-
   <div id="programWindow">
     <header>
       School Park - Sistema
@@ -443,24 +436,20 @@
   }
   setInterval(updateHour, 950);
   updateHour();
-
   const schoolIcon = document.getElementById("icon-school");
   const programWindow = document.getElementById("programWindow");
   const startButton = document.getElementById("startButton");
   const infoBoxes = document.getElementById("infoBoxes");
   const infoContainer = document.getElementById("infoContainer");
   const closeProgramBtn = document.querySelector('.closeProgramBtn');
-
   schoolIcon.addEventListener("click", () => {
     programWindow.style.display = "block";
   });
-
   startButton.addEventListener("click", () => {
     infoBoxes.style.display = "flex";
     startButton.style.display = "none";
     infoContainer.innerHTML = "";
   });
-
   function manageDownloadWindows() {
     const activeDownloads = infoContainer.querySelectorAll('.infoBoxWindow');
     if (activeDownloads.length >= 4) {
@@ -496,11 +485,9 @@
       }, 1510);
     }
   });
-
   closeProgramBtn.addEventListener('click', function() {
     showConfirmBox();
   });
-
   function showConfirmBox() {
     const overlay = document.createElement("div");
     overlay.className = "confirmOverlay";
@@ -528,19 +515,27 @@
       document.body.removeChild(overlay);
     };
   }
-
+  // MODIFICADO: Adiciona botão "Documentos" ao modal que agora abre documentos.html
   function showModal(titulo, texto) {
     const overlay = document.createElement("div");
     overlay.className = "modalOverlay";
     const modal = document.createElement("div");
     modal.className = "modalPage";
-    modal.innerHTML = `<button class="closeBtn">X</button><h2>${titulo}</h2><p>${texto}</p>`;
+    modal.innerHTML = `
+      <button class="closeBtn">X</button>
+      <h2>${titulo}</h2>
+      <p>${texto}</p>
+      <button id="btnDocsModal" style="margin-top:18px;background:#004422;border:1px solid #00ff00;color:#00ff00;padding:8px 22px;cursor:pointer;font-size:15px;">Documentos</button>
+    `;
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
     modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
+    // AGORA: abrir nova página documentos.html ao clicar
+    modal.querySelector("#btnDocsModal").onclick = () => {
+      window.open("documentos.html", "_blank");
+      document.body.removeChild(overlay);
+    };
   }
-
-  // Abrir a lista de PDFs ao clicar no ícone Documentos
   const iconDocs = document.getElementById("icon-docs");
   const pdfFiles = [
     {name: "Seminário de Bioquímica sobre a Fosfatidilserina", url: "bioquimica.pdf"},
@@ -553,16 +548,12 @@
     {name: "Poster Científico - Nanotecnologias para a Prevenção do Cancro do Cérebro (Técnica CRISPR)", url: "Poster_2.pdf"},
   ];
   iconDocs.addEventListener("click", () => {
-    // Mostrar a janela do programa
     programWindow.style.display = "block";
-    // Limpar conteúdos anteriores
     infoBoxes.style.display = "none";
     startButton.style.display = "none";
     infoContainer.innerHTML = "";
-    // Criar container para lista de PDFs
     const pdfListContainer = document.createElement("div");
     pdfListContainer.id = "pdfListContainer";
-    // Criar um elemento para cada PDF com ícone verde lima
     pdfFiles.forEach(pdf => {
       const pdfBox = document.createElement("div");
       pdfBox.className = "pdfBox";
@@ -578,8 +569,6 @@
     });
     infoContainer.appendChild(pdfListContainer);
   });
-
-  // Novo ícone casa - ir para página inicial
   const iconHome = document.getElementById("icon-home");
   iconHome.addEventListener("click", () => {
     window.open("https://luidgi07.github.io/Curriculum.github.io/index.html", "_blank");
