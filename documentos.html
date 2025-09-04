@@ -518,10 +518,7 @@
   const confirmBox = document.getElementById("confirm");
   const conteudoBox = document.getElementById("conteudo");
 
-  // Configurações iniciais three.js
-  let scene, camera, renderer;
-  let camDist = 21, camRotX = 0.16, camRotY = -0.02;
-  let blocos = [], luzes = [];
+  // Dados arquivos para blocos 3D
   let arquivos = [
     {nome:"Bioquímica",descricao:"Seminário de Fosfatidilserina",conteudo:"Conteúdo PDF: Bioquímica"},
     {nome:"Sinais Vida",descricao:"Relatório Eletrotecnia",conteudo:"Conteúdo PDF: Sinais de Vida"},
@@ -543,6 +540,12 @@
     {nome:"Endocrinologia",descricao:"Resumo Endocrinologia",conteudo:"Conteúdo PDF: Endocrinologia"}
   ];
 
+  // Variáveis para three.js
+  let scene, camera, renderer;
+  let camDist = 21, camRotX = 0.16, camRotY = -0.02;
+  let blocos = [], luzes = [];
+
+  // Inicialização da cena 3D
   function init3D() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
@@ -552,7 +555,6 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    // Limpa container e adiciona canvas
     threeContainer.innerHTML = '';
     threeContainer.appendChild(infoText);
     threeContainer.appendChild(confirmBox);
@@ -565,7 +567,6 @@
     dirLight.position.set(50,70,45);
     scene.add(dirLight);
 
-    // GRID GRANDE cobrindo todo o ecrã
     const quadTam = 2.7, quadQtX = 28, quadQtZ = 18;
     for (let x=-quadQtX;x<=quadQtX;x++) {
       for (let z=-quadQtZ;z<=quadQtZ;z++) {
@@ -580,14 +581,12 @@
       }
     }
 
-    // BASE VERMELHA: retângulo sólido central
     let baseGeo = new THREE.BoxGeometry(15*quadTam,0.48,6.4*quadTam);
     let baseMat = new THREE.MeshPhongMaterial({color:0xff3333, transparent:true, opacity:0.90});
     let base = new THREE.Mesh(baseGeo, baseMat);
     base.position.set(0, 0.17, 0);
     scene.add(base);
 
-    // Blocos: ficheiros estilo filme (preenche o meio das fileiras!)
     const nFileiras = 3;
     const blocosPorFileira = Math.ceil(arquivos.length / nFileiras);
     const larguraBase = 15 * quadTam;
@@ -599,10 +598,11 @@
 
     blocos = [];
     luzes = [];
-    for (let i=0;i<arquivos.length;i++) {
+
+    for (let i=0; i<arquivos.length; i++) {
       let geometry = new THREE.BoxGeometry(2.6,0.75,1.7);
       let material = new THREE.MeshPhongMaterial({
-        color:0x00ffbb, emissive:0x00ff00,emissiveIntensity:0.18
+        color:0x00ffbb, emissive:0x00ff00, emissiveIntensity:0.18
       });
       const linha = Math.floor(i / blocosPorFileira);
       let posNaLinha = i % blocosPorFileira;
@@ -616,9 +616,8 @@
       scene.add(bloco);
       blocos.push(bloco);
 
-      // Nome sobre bloco
       let canvas = document.createElement('canvas');
-      canvas.width=130;canvas.height=37;
+      canvas.width=130; canvas.height=37;
       let ctx = canvas.getContext('2d');
       ctx.font = 'bold 20px Courier';
       ctx.fillStyle = '#00ff00';
@@ -632,7 +631,6 @@
       face.rotation.x = -0.54;
       scene.add(face);
 
-      // Luz: cilindro (hover highlight)
       let cylGeo = new THREE.CylinderGeometry(1.42,1.42,38,64,1,true);
       let cylMat = new THREE.MeshPhongMaterial({
         color:0xffffff, transparent:true, opacity:0.40, side:THREE.DoubleSide,
@@ -649,7 +647,6 @@
       luzes.push(spotlight);
     }
 
-    // Eventos para controlo de câmara (drag e zoom)
     let isDragging = false, prevX=0, prevY=0;
 
     threeContainer.addEventListener("mousedown", e=>{
@@ -672,7 +669,6 @@
       setCameraPos();
     }, { passive:false });
 
-    // Hover e clique para blocos
     threeContainer.addEventListener("mousemove", updateHoverHighlight);
     threeContainer.addEventListener("click", onClickBloco);
 
@@ -747,11 +743,23 @@
 
             document.getElementById("sim").onclick = () => {
               confirmBox.style.display = "none";
-              conteudoBox.innerHTML = `<b>${blocos[i].userData.nome}</b><hr>
+              // Criar novo retângulo infoBoxWindow tipo programa para mostrar conteúdo
+              const infoBoxWindow = document.createElement("div");
+              infoBoxWindow.className = "infoBoxWindow";
+              infoBoxWindow.innerHTML = `
+                <b>${blocos[i].userData.nome}</b><hr>
                 <div>${blocos[i].userData.conteudo}</div>
-                <button onclick="conteudo.style.display='none'">Fechar</button>`;
-              conteudoBox.style.display = "block";
+                <button class="verMaisBtn">Ver mais</button>
+              `;
+              infoContainer.appendChild(infoBoxWindow);
+              conteudoBox.style.display = "none";
               luz.visible = false;
+
+              // Adicionar evento ao botão "Ver mais"
+              const verMaisBtn = infoBoxWindow.querySelector(".verMaisBtn");
+              verMaisBtn.addEventListener("click", () => {
+                showModal(blocos[i].userData.nome, blocos[i].userData.conteudo);
+              });
             };
             document.getElementById("nao").onclick = () => {
               confirmBox.style.display = "none";
@@ -759,7 +767,7 @@
             };
 
             setTimeout(() => document.body.onclick = function(ev){
-              if(!confirmBox.contains(ev.target) && !conteudoBox.contains(ev.target)) {
+              if(!confirmBox.contains(ev.target) && !conteudoBox.contains(ev.target)){
                 confirmBox.style.display = "none";
                 conteudoBox.style.display = "none";
                 luz.visible = false;
@@ -771,45 +779,67 @@
       }
     }
 
-    // Render loop
     function animate() {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     }
     animate();
 
-    // Ajustar aspetos ao redimensionar janela
     window.addEventListener("resize", () => {
       camera.aspect = window.innerWidth/window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
-
   }
 
-  // Evento para mostrar o three.js quando clicar em Documentos
+  // Ao clicar no ícone Documentos abre o programa com lista PDFs
   iconDocs.addEventListener("click", () => {
-    // Esconder o desktop e programa clássico
-    desktop.style.display = "none";
-    programWindow.style.display = "none";
+    programWindow.style.display = "block";
+    infoBoxes.style.display = "none";
+    startButton.style.display = "none";
+    infoContainer.innerHTML = "";
+    const pdfFiles = [
+      {name: "Seminário de Bioquímica sobre a Fosfatidilserina", url: "bioquimica.pdf"},
+      {name: "Eletrotecnia e Monitores de Sinais de Vida", url: "relatorio_eletrotecnia.pdf"},
+      {name: "Projeto de Desenvolvimento de Produtos Médicos - Exoesqueleto de membros inferiores", url: "projeto_dpm_LTB.pdf"},
+      {name: "Projeto de Desenvolvimento de Produtos Médicos - Exoesqueleto de membros inferiores (PPT)", url: "DPM.pdf"},
+      {name: "Inovações em Dispositivos Médicos para o Tratamento da Diabetes: Bombas de Insulina e Monitores Contínuos de Glicose", url: "Dispositivos_Médicos.pdf"},
+      {name: "Sistema de Ressonância Magnética - projeto de investigação", url: "equipsaude.pdf"},
+      {name: "Poster Científico - Nanotecnologias para o Tratamento do Cancro do Pulmão (Nanopartículas de Ouro)", url: "Poster_1.pdf"},
+      {name: "Poster Científico - Nanotecnologias para a Prevenção do Cancro do Cérebro (Técnica CRISPR)", url: "Poster_2.pdf"},
+    ];
+    const pdfListContainer = document.createElement("div");
+    pdfListContainer.id = "pdfListContainer";
+    pdfFiles.forEach(pdf => {
+      const pdfBox = document.createElement("div");
+      pdfBox.className = "pdfBox";
+      pdfBox.title = pdf.name;
+      pdfBox.innerHTML = `
+        <img src="https://img.icons8.com/fluency/48/pdf.png" alt="Ícone PDF" />
+        <div>${pdf.name}</div>
+      `;
+      pdfListContainer.appendChild(pdfBox);
+    });
+    infoContainer.appendChild(pdfListContainer);
 
-    // Mostra o container 3D
-    threeContainer.style.display = "block";
-
-    // Adiciona classe para overflow e fundo
-    document.body.classList.add('three-active');
-
-    // Inicializa a cena 3D apenas uma vez
-    if (!scene) init3D();
+    // Evento clique para mostrar cena 3D ao clicar em qualquer documento
+    pdfListContainer.querySelectorAll(".pdfBox").forEach(pdfBox => {
+      pdfBox.addEventListener("click", () => {
+        desktop.style.display = "none";
+        programWindow.style.display = "none";
+        threeContainer.style.display = "block";
+        document.body.classList.add('three-active');
+        if (!scene) init3D();
+      });
+    });
   });
 
-  // Botão voltar atrás para voltar ao desktop normal
+  // Botão voltar atrás para retornar para interface desktop
   voltarEduBtn.addEventListener("click", () => {
     threeContainer.style.display = "none";
     desktop.style.display = "block";
     programWindow.style.display = "block";
     document.body.classList.remove('three-active');
-    // Fecha modais abertos se houver
     confirmBox.style.display = "none";
     conteudoBox.style.display = "none";
   });
