@@ -217,6 +217,225 @@
       position: absolute;
       bottom: 0;
       left: 0;
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jurassic Desktop Escola</title>
+  <style>
+    /* Estilos originais da página desktop - NÃO mexer */
+    body {
+      margin: 0;
+      background: #004040;
+      font-family: 'Courier New', Courier, monospace;
+      color: #00ff00;
+      cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
+      overflow: hidden;
+    }
+    #fadeInPreVideo { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 6000; background: #000; opacity: 1; pointer-events: none; transition: opacity 1.5s; }
+    #videoIntroContainer { position: fixed; z-index: 5000; left: 0; top: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity 1.6s; }
+    #videoIntroContainer video { width: 100vw; height: 100vh; object-fit: cover; display: block; background: #000; }
+    #introFade { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 5100; background: #000; opacity: 0; pointer-events: none; transition: opacity 1.6s; }
+    .desktop-icon { width: 95px; text-align: center; cursor: pointer; user-select: none; color: #00ff00; margin-bottom: 28px; position: absolute; left: 15px; }
+    .desktop-icon img { width: 44px; height: 44px; filter: drop-shadow(0 0 4px #00ff00); margin-bottom: 3px; }
+    #icon-school {top: 14px;}
+    #icon-pc {top: 97px;}
+    #icon-trash {top: 180px;}
+    #icon-docs {top: 263px;}
+    #icon-home { left: auto; right: 15px; top: 14px; }
+    #desktop { width: 100vw; height: 100vh; position: relative; background: linear-gradient(135deg, #003333 25%, #006666 75%); overflow: hidden; }
+    #programWindow {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 540px;
+      min-height: 370px;
+      background: #002222;
+      border: 2px solid #00ff00;
+      padding: 18px 22px;
+      box-sizing: border-box;
+      z-index: 10;
+      transition: opacity 0.3s;
+    }
+    #programWindow.closed { opacity: 0.3; pointer-events: none; }
+    #programWindow header {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+      padding-bottom: 8px;
+      position: relative;
+    }
+    .closeProgramBtn {
+      position: absolute;
+      top: -2px;
+      right: 8px;
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 12px;
+      width: 30px;
+      height: 28px;
+      text-align: center;
+      line-height: 28px;
+      font-family: inherit;
+    }
+    .closeProgramBtn:hover { background: #005555; color: #fff; }
+    #startButton {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-size: 16px;
+      padding: 8px 24px;
+      cursor: pointer;
+      margin: 28px auto 12px auto;
+      display: block;
+    }
+    #infoBoxes {
+      display: none;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-bottom: 15px;
+      justify-content: center;
+    }
+    .box {
+      width: 140px;
+      height: 70px;
+      border: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #003333;
+      font-size: 16px;
+      user-select: none;
+      transition: background 0.2s;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .box:hover { background: #005555; }
+    #infoContainer { margin-top: 12px; position: relative; }
+    .download-bar {
+      width: 96%;
+      height: 20px;
+      background: #001a00;
+      border: 2px solid #00ff00;
+      margin: 12px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .download-fill {
+      background: #00ff00;
+      height: 16px;
+      width: 0;
+      transition: width 1.5s linear;
+    }
+    .infoBoxWindow {
+      background: #002222;
+      border: 2px solid #00ff00;
+      margin-top: 13px;
+      padding: 12px;
+      font-size: 15px;
+      width: 95%;
+      animation: windowAppear 0.23s linear;
+      position: relative;
+      z-index: 3;
+    }
+    @keyframes windowAppear {
+      from { opacity: 0; transform: translateY(12px);}
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .verMaisBtn {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 6px 18px;
+      cursor: pointer;
+      margin-top: 11px;
+      display: block;
+      transition: background 0.2s;
+    }
+    .verMaisBtn:hover { background: #005555; }
+    .modalOverlay, .confirmOverlay {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,32,30,0.87);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .modalPage, .confirmBox {
+      background: #002c26;
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      min-width: 340px;
+      min-height: 110px;
+      padding: 27px 32px 20px 32px;
+      font-size: 16px;
+      box-shadow: 0 0 20px #003833;
+      text-align: left;
+      position: relative;
+      animation: windowAppear 0.18s ease;
+    }
+    .closeBtn {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      background: #004422;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      font-size: 15px;
+      cursor: pointer;
+      padding: 0 12px;
+      font-family: inherit;
+    }
+    .closeBtn:hover { background: #005555; }
+    .confirmBtn, .cancelBtn {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 9px 30px;
+      cursor: pointer;
+      margin-top: 15px;
+      margin-right: 15px;
+      transition: background 0.22s;
+    }
+    .cancelBtn:hover, .confirmBtn:hover { background: #005555; }
+    .loadingBar {
+      width: 92%;
+      height: 19px;
+      background: #001a00;
+      border: 2px solid #00ff00;
+      margin: 29px auto 3px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .loadingFill {
+      background: #00ff00;
+      height: 15px;
+      width: 0;
+      transition: width 1.3s linear;
+    }
+    #sysBar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
       width: 100vw;
       height: 36px;
       background: #001f12;
@@ -241,6 +460,7 @@
       margin-right: 23px;
       font-size: 13px;
     }
+
     /* INÍCIO - Estilos exclusivos e necessários para o three.js 3D - copiar exatamente */
     body.three-active { overflow: hidden; background: #080c0e; }
     #threeContainer {
@@ -370,7 +590,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
 
 <script>
-  // Scripts da página desktop e programa - INÍCIO
+  // Scripts originais da página desktop e programa - NÃO alterar aqui
   const preFade = document.getElementById('fadeInPreVideo');
   window.onload = () => {
     setTimeout(() => {
@@ -502,16 +722,12 @@
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
     modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
-    // Abre a cena 3D ao clicar em Documentos no modal
     modal.querySelector("#btnDocsModal").onclick = () => {
+      window.open("documentos.html", "_blank");
       document.body.removeChild(overlay);
-      desktop.style.display = "none";
-      programWindow.style.display = "none";
-      threeContainer.style.display = "block";
-      document.body.classList.add('three-active');
-      if (!scene) init3D();
     };
   }
+
   //--------- INÍCIO - CÓDIGO THREE.JS INTEGRADO PARA DOCUMENTOS ---------
   // Referências HTML
   const iconDocs = document.getElementById("icon-docs");
@@ -520,6 +736,7 @@
   const infoText = document.getElementById("info");
   const confirmBox = document.getElementById("confirm");
   const conteudoBox = document.getElementById("conteudo");
+
   // Dados arquivos para blocos 3D
   let arquivos = [
     {nome:"Bioquímica",descricao:"Seminário de Fosfatidilserina",conteudo:"Conteúdo PDF: Bioquímica"},
@@ -541,26 +758,34 @@
     {nome:"Anatomia",descricao:"Resumo Anatomia",conteudo:"Conteúdo PDF: Anatomia"},
     {nome:"Endocrinologia",descricao:"Resumo Endocrinologia",conteudo:"Conteúdo PDF: Endocrinologia"}
   ];
+
+  // Variáveis para three.js
   let scene, camera, renderer;
   let camDist = 21, camRotX = 0.16, camRotY = -0.02;
   let blocos = [], luzes = [];
+
+  // Inicialização da cena 3D
   function init3D() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
     setCameraPos();
+
     renderer = new THREE.WebGLRenderer({antialias:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
+
     threeContainer.innerHTML = '';
     threeContainer.appendChild(infoText);
     threeContainer.appendChild(confirmBox);
     threeContainer.appendChild(conteudoBox);
     threeContainer.appendChild(voltarEduBtn);
     threeContainer.appendChild(renderer.domElement);
+
     scene.add(new THREE.AmbientLight(0x88ffbb, 0.63));
     let dirLight = new THREE.DirectionalLight(0xffffff, 0.80);
     dirLight.position.set(50,70,45);
     scene.add(dirLight);
+
     const quadTam = 2.7, quadQtX = 28, quadQtZ = 18;
     for (let x=-quadQtX;x<=quadQtX;x++) {
       for (let z=-quadQtZ;z<=quadQtZ;z++) {
@@ -574,11 +799,13 @@
         scene.add(quad);
       }
     }
+
     let baseGeo = new THREE.BoxGeometry(15*quadTam,0.48,6.4*quadTam);
     let baseMat = new THREE.MeshPhongMaterial({color:0xff3333, transparent:true, opacity:0.90});
     let base = new THREE.Mesh(baseGeo, baseMat);
     base.position.set(0, 0.17, 0);
     scene.add(base);
+
     const nFileiras = 3;
     const blocosPorFileira = Math.ceil(arquivos.length / nFileiras);
     const larguraBase = 15 * quadTam;
@@ -587,12 +814,14 @@
     const xInit = -larguraBase / 2 + espacoX / 2;
     const espacoZ = profundBase / (nFileiras + 1);
     const zInit = -profundBase / 2 + espacoZ;
+
     blocos = [];
     luzes = [];
-    for (let i=0;i<arquivos.length;i++) {
+
+    for (let i=0; i<arquivos.length; i++) {
       let geometry = new THREE.BoxGeometry(2.6,0.75,1.7);
       let material = new THREE.MeshPhongMaterial({
-        color:0x00ffbb, emissive:0x00ff00,emissiveIntensity:0.18
+        color:0x00ffbb, emissive:0x00ff00, emissiveIntensity:0.18
       });
       const linha = Math.floor(i / blocosPorFileira);
       let posNaLinha = i % blocosPorFileira;
@@ -605,8 +834,9 @@
       bloco.userData = arquivos[i];
       scene.add(bloco);
       blocos.push(bloco);
+
       let canvas = document.createElement('canvas');
-      canvas.width=130;canvas.height=37;
+      canvas.width=130; canvas.height=37;
       let ctx = canvas.getContext('2d');
       ctx.font = 'bold 20px Courier';
       ctx.fillStyle = '#00ff00';
@@ -619,6 +849,7 @@
       face.position.set(bloco.position.x, bloco.position.y+0.5, bloco.position.z);
       face.rotation.x = -0.54;
       scene.add(face);
+
       let cylGeo = new THREE.CylinderGeometry(1.42,1.42,38,64,1,true);
       let cylMat = new THREE.MeshPhongMaterial({
         color:0xffffff, transparent:true, opacity:0.40, side:THREE.DoubleSide,
@@ -627,4 +858,210 @@
       let spotlight = new THREE.Mesh(cylGeo, cylMat);
       spotlight.position.set(
         bloco.position.x,
-        base
+        base.position.y + (baseGeo.parameters.height/2) + (38/2),
+        bloco.position.z
+      );
+      spotlight.visible = false;
+      scene.add(spotlight);
+      luzes.push(spotlight);
+    }
+
+    let isDragging = false, prevX=0, prevY=0;
+
+    threeContainer.addEventListener("mousedown", e=>{
+      isDragging=true; prevX=e.clientX; prevY=e.clientY;
+    });
+    window.addEventListener("mouseup", ()=> isDragging=false);
+    window.addEventListener("mousemove", e=>{
+      if(isDragging){
+        camRotY += (e.clientX-prevX)*0.012;
+        camRotX += (e.clientY-prevY)*0.006;
+        camRotX = Math.max(-0.5,Math.min(0.55, camRotX));
+        prevX = e.clientX; prevY = e.clientY;
+        setCameraPos();
+      }
+    });
+    threeContainer.addEventListener("wheel", e=>{
+      e.preventDefault();
+      camDist += e.deltaY<0 ? -2 : 2;
+      camDist = Math.max(16,Math.min(34,camDist));
+      setCameraPos();
+    }, { passive:false });
+
+    threeContainer.addEventListener("mousemove", updateHoverHighlight);
+    threeContainer.addEventListener("click", onClickBloco);
+
+    function setCameraPos() {
+      camera.position.x = Math.sin(camRotY) * Math.cos(camRotX) * camDist;
+      camera.position.y = Math.sin(camRotX) * camDist + 3.2;
+      camera.position.z = Math.cos(camRotY) * Math.cos(camRotX) * camDist;
+      camera.lookAt(0,0,0);
+    }
+    setCameraPos();
+
+    function updateHoverHighlight(e) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const mouse = {
+        x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+      };
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(blocos);
+      let found = false;
+      for (let i=0; i<blocos.length; i++) {
+        if (intersects.length > 0 && blocos[i] === intersects[0].object) {
+          luzes[i].visible = true;
+          found = true;
+          infoText.textContent = `Selecionado: ${blocos[i].userData.nome}`;
+        } else {
+          luzes[i].visible = false;
+        }
+      }
+      if (!found) infoText.textContent = "Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!";
+    }
+
+    function onClickBloco(e) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const mouse = {
+        x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+      };
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(blocos);
+
+      confirmBox.style.display = "none";
+      conteudoBox.style.display = "none";
+      clearTimeout(window.delayPopup);
+      luzes.forEach(luz => luz.visible = false);
+
+      if (intersects.length > 0) {
+        const i = blocos.indexOf(intersects[0].object);
+        if (i >= 0) {
+          let luz = luzes[i];
+          luz.visible = true;
+          luz.scale.set(1,0.18,1);
+          let grow = () => {
+            if(luz.scale.y < 1) {
+              luz.scale.y += 0.11;
+              requestAnimationFrame(grow);
+            }
+          };
+          grow();
+          infoText.textContent = `Selecionado: ${blocos[i].userData.nome}`;
+
+          window.delayPopup = setTimeout(() => {
+            confirmBox.innerHTML =
+              `<b>${blocos[i].userData.nome}</b><br>
+               <small>${blocos[i].userData.descricao}</small><br>
+               <div style="margin-top:13px;">Quero abrir esta pasta?</div>
+               <button id="sim">Sim</button>
+               <button id="nao">Não</button>`;
+            confirmBox.style.display = "block";
+
+            document.getElementById("sim").onclick = () => {
+              confirmBox.style.display = "none";
+              // Criar novo retângulo infoBoxWindow tipo programa para mostrar conteúdo
+              const infoBoxWindow = document.createElement("div");
+              infoBoxWindow.className = "infoBoxWindow";
+              infoBoxWindow.innerHTML = `
+                <b>${blocos[i].userData.nome}</b><hr>
+                <div>${blocos[i].userData.conteudo}</div>
+                <button class="verMaisBtn">Ver mais</button>
+              `;
+              infoContainer.appendChild(infoBoxWindow);
+              conteudoBox.style.display = "none";
+              luz.visible = false;
+
+              // Adicionar evento ao botão "Ver mais"
+              const verMaisBtn = infoBoxWindow.querySelector(".verMaisBtn");
+              verMaisBtn.addEventListener("click", () => {
+                showModal(blocos[i].userData.nome, blocos[i].userData.conteudo);
+              });
+            };
+            document.getElementById("nao").onclick = () => {
+              confirmBox.style.display = "none";
+              luz.visible = false;
+            };
+
+            setTimeout(() => document.body.onclick = function(ev){
+              if(!confirmBox.contains(ev.target) && !conteudoBox.contains(ev.target)){
+                confirmBox.style.display = "none";
+                conteudoBox.style.display = "none";
+                luz.visible = false;
+                document.body.onclick = null;
+              }
+            }, 120);
+          }, 500);
+        }
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+
+  // Ao clicar no ícone Documentos abre o programa com lista PDFs
+  iconDocs.addEventListener("click", () => {
+    programWindow.style.display = "block";
+    infoBoxes.style.display = "none";
+    startButton.style.display = "none";
+    infoContainer.innerHTML = "";
+    const pdfFiles = [
+      {name: "Seminário de Bioquímica sobre a Fosfatidilserina", url: "bioquimica.pdf"},
+      {name: "Eletrotecnia e Monitores de Sinais de Vida", url: "relatorio_eletrotecnia.pdf"},
+      {name: "Projeto de Desenvolvimento de Produtos Médicos - Exoesqueleto de membros inferiores", url: "projeto_dpm_LTB.pdf"},
+      {name: "Projeto de Desenvolvimento de Produtos Médicos - Exoesqueleto de membros inferiores (PPT)", url: "DPM.pdf"},
+      {name: "Inovações em Dispositivos Médicos para o Tratamento da Diabetes: Bombas de Insulina e Monitores Contínuos de Glicose", url: "Dispositivos_Médicos.pdf"},
+      {name: "Sistema de Ressonância Magnética - projeto de investigação", url: "equipsaude.pdf"},
+      {name: "Poster Científico - Nanotecnologias para o Tratamento do Cancro do Pulmão (Nanopartículas de Ouro)", url: "Poster_1.pdf"},
+      {name: "Poster Científico - Nanotecnologias para a Prevenção do Cancro do Cérebro (Técnica CRISPR)", url: "Poster_2.pdf"},
+    ];
+    const pdfListContainer = document.createElement("div");
+    pdfListContainer.id = "pdfListContainer";
+    pdfFiles.forEach(pdf => {
+      const pdfBox = document.createElement("div");
+      pdfBox.className = "pdfBox";
+      pdfBox.title = pdf.name;
+      pdfBox.innerHTML = `
+        <img src="https://img.icons8.com/fluency/48/pdf.png" alt="Ícone PDF" />
+        <div>${pdf.name}</div>
+      `;
+      pdfListContainer.appendChild(pdfBox);
+    });
+    infoContainer.appendChild(pdfListContainer);
+
+    // Evento clique para mostrar cena 3D ao clicar em qualquer documento
+    pdfListContainer.querySelectorAll(".pdfBox").forEach(pdfBox => {
+      pdfBox.addEventListener("click", () => {
+        desktop.style.display = "none";
+        programWindow.style.display = "none";
+        threeContainer.style.display = "block";
+        document.body.classList.add('three-active');
+        if (!scene) init3D();
+      });
+    });
+  });
+
+  // Botão voltar atrás para retornar para interface desktop
+  voltarEduBtn.addEventListener("click", () => {
+    threeContainer.style.display = "none";
+    desktop.style.display = "block";
+    programWindow.style.display = "block";
+    document.body.classList.remove('three-active');
+    confirmBox.style.display = "none";
+    conteudoBox.style.display = "none";
+  });
+</script>
+</body>
+</html>
