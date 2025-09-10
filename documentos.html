@@ -657,7 +657,7 @@
       if(isDragging){
         camRotY += (e.clientX-prevX)*0.012;
         camRotX += (e.clientY-prevY)*0.006;
-        camRotX = Math.max(-0.5,Math.min(0.55, camRotX));
+        camRotX = Math.max(0,Math.min(0.55, camRotX));
         prevX = e.clientX; prevY = e.clientY;
         setCameraPos();
       }
