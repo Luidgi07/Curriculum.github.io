@@ -799,40 +799,31 @@
     startButton.style.display = "none";
     infoContainer.innerHTML = "";
     const pdfFiles = [
-      {name: "Seminário de Bioquímica sobre a Fosfatidilserina", url: "bioquimica.pdf"},
-      {name: "Eletrotecnia e Monitores de Sinais de Vida", url: "relatorio_eletrotecnia.pdf"},
-      {name: "Projeto de Desenvolvimento de Produtos Médicos - Exoesqueleto de membros inferiores", url: "projeto_dpm_LTB.pdf"},
-      {name: "Projeto de Desenvolvimento de Produtos Médicos - Exoesqueleto de membros inferiores (PPT)", url: "DPM.pdf"},
-      {name: "Inovações em Dispositivos Médicos para o Tratamento da Diabetes: Bombas de Insulina e Monitores Contínuos de Glicose", url: "Dispositivos_Médicos.pdf"},
-      {name: "Sistema de Ressonância Magnética - projeto de investigação", url: "equipsaude.pdf"},
-      {name: "Poster Científico - Nanotecnologias para o Tratamento do Cancro do Pulmão (Nanopartículas de Ouro)", url: "Poster_1.pdf"},
-      {name: "Poster Científico - Nanotecnologias para a Prevenção do Cancro do Cérebro (Técnica CRISPR)", url: "Poster_2.pdf"},
+      
     ];
-    const pdfListContainer = document.createElement("div");
-    pdfListContainer.id = "pdfListContainer";
-    pdfFiles.forEach(pdf => {
-      const pdfBox = document.createElement("div");
-      pdfBox.className = "pdfBox";
-      pdfBox.title = pdf.name;
-      pdfBox.innerHTML = `
-        <img src="https://img.icons8.com/fluency/48/pdf.png" alt="Ícone PDF" />
-        <div>${pdf.name}</div>
-      `;
-      pdfListContainer.appendChild(pdfBox);
-    });
-    infoContainer.appendChild(pdfListContainer);
-
-    // Evento clique para mostrar cena 3D ao clicar em qualquer documento
-    pdfListContainer.querySelectorAll(".pdfBox").forEach(pdfBox => {
-      pdfBox.addEventListener("click", () => {
-        desktop.style.display = "none";
-        programWindow.style.display = "none";
-        threeContainer.style.display = "block";
-        document.body.classList.add('three-active');
-        if (!scene) init3D();
-      });
-    });
+   const infoContainer = document.getElementById("infoContainer"); // Ajuste para o teu layout
+pdfFiles.forEach(pdf => {
+  const pdfBox = document.createElement("div");
+  pdfBox.className = "pdfBox";
+  pdfBox.title = pdf.name;
+  pdfBox.innerHTML = `
+    <img src="https://img.icons8.com/fluency/48/pdf.png" alt="Ícone PDF" />
+    <div>${pdf.name}</div>
+  `;
+  pdfBox.addEventListener("click", () => {
+    // Esconda elementos irrelevantes
+    desktop.style.display = "none";
+    programWindow.style.display = "none";
+    // Mostre o 3D
+    threeContainer.style.display = "block";
+    document.body.classList.add('three-active');
+    if (!scene) init3D();
+    // Opcional: Remova o próprio pdfBox ou limpe o container se quiser
+    // pdfBox.remove(); // Se deseja que desapareça após o clique
+    // infoContainer.innerHTML = ""; // Remove tudo, só mostra 3D
   });
+  infoContainer.appendChild(pdfBox);
+});
 
   // Botão voltar atrás para retornar para interface desktop
   voltarEduBtn.addEventListener("click", () => {
