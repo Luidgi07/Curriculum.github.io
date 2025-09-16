@@ -504,9 +504,14 @@
     document.body.appendChild(overlay);
     modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
     modal.querySelector("#btnDocsModal").onclick = () => {
-      window.open("documentos.html", "_blank");
-      document.body.removeChild(overlay);
-    };
+    document.body.removeChild(overlay);
+    desktop.style.display = "none";
+    programWindow.style.display = "none";
+    threeContainer.style.display = "block";
+    document.body.classList.add('three-active');
+    if (!scene) init3D();
+  };
+
   }
 
   //--------- INÍCIO - CÓDIGO THREE.JS INTEGRADO PARA DOCUMENTOS ---------
