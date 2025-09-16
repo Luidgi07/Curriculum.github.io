@@ -749,50 +749,40 @@
             document.getElementById("sim").onclick = () => {
               confirmBox.style.display = "none";
               // Criar novo retângulo infoBoxWindow tipo programa para mostrar conteúdo.................................................
-              window.delayPopup = setTimeout(() => {
-    confirmBox.innerHTML = `
-      <b>${blocos[i].userData.nome}</b><br>
-      <small>${blocos[i].userData.descricao}</small><br>
-      <div style="margin-top:13px;">Quero abrir esta pasta?</div>
-      <button id="sim">Sim</button>
-      <button id="nao">Não</button>`;
-    confirmBox.style.display = "block";
+              const infoBoxWindow = document.createElement("div");
+              infoBoxWindow.className = "infoBoxWindow";
+              infoBoxWindow.innerHTML = `
+                <b>${blocos[i].userData.nome}</b><hr>
+                <div>${blocos[i].userData.conteudo}</div>
+                <button class="verMaisBtn">Ver mais</button>
+              `;
+              infoContainer.appendChild(infoBoxWindow);
+              conteudoBox.style.display = "none";
+              luz.visible = false;
 
-    // Aqui, capturar o índice em variável local para manter no clique do botão
-    const blocoIndex = i;
+              // Adicionar evento ao botão "Ver mais"
+              const verMaisBtn = infoBoxWindow.querySelector(".verMaisBtn");
+              verMaisBtn.addEventListener("click", () => {
+                showModal(blocos[i].userData.nome, blocos[i].userData.conteudo);
+              });
+            };
+            document.getElementById("nao").onclick = () => {
+              confirmBox.style.display = "none";
+              luz.visible = false;
+            };
 
-    document.getElementById("sim").onclick = () => {
-      confirmBox.style.display = "none";
-
-      const arquivo = blocos[blocoIndex].userData;
-
-      const infoBoxWindow = document.createElement("div");
-      infoBoxWindow.className = "infoBoxWindow";
-      infoBoxWindow.innerHTML = `
-        <h3>${arquivo.nome}</h3>
-        <p>${arquivo.conteudo}</p>
-        <img src="imagens/${arquivo.nome}.jpg" alt="${arquivo.nome}" style="max-width:100%; height:auto; margin: 10px 0;" />
-        <button class="openPdfBtn">Abrir PDF</button>
-      `;
-
-      infoContainer.appendChild(infoBoxWindow);
-
-      infoBoxWindow.querySelector('.openPdfBtn').onclick = () => {
-        window.open(`pdfs/${arquivo.nome}.pdf`, '_blank');
-      };
-
-      conteudoBox.style.display = "none";
-      luzes[blocoIndex].visible = false;
-    };
-
-    document.getElementById("nao").onclick = () => {
-      confirmBox.style.display = "none";
-      luzes[blocoIndex].visible = false;
-    };
-
-    // ...
-  }, 500);
-}
+            setTimeout(() => document.body.onclick = function(ev){
+              if(!confirmBox.contains(ev.target) && !conteudoBox.contains(ev.target)){
+                confirmBox.style.display = "none";
+                conteudoBox.style.display = "none";
+                luz.visible = false;
+                document.body.onclick = null;
+              }
+            }, 120);
+          }, 500);
+        }
+      }
+    }
 
     function animate() {
       requestAnimationFrame(animate);
