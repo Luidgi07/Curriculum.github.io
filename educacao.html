@@ -525,24 +525,24 @@
 
   // Dados arquivos para blocos 3D
   let arquivos = [
-    {nome:"Bioquímica",descricao:"Seminário de Fosfatidilserina",conteudo:"Conteúdo PDF: Bioquímica", pdf:"bioquimica.pdf"},
-    {nome:"Sinais Vida",descricao:"Relatório Eletrotecnia",conteudo:"Conteúdo PDF: Sinais de Vida", pdf:"relatorio_eletrotecnia.pdf"},
-    {nome:"Exoesqueleto",descricao:"Exoesqueleto Inferior",conteudo:"Conteúdo PDF: Exoesqueleto", pdf:"projeto_dpm_LTB.pdf"},
-    {nome:"Bombas Insulina",descricao:"Inovação em Insulina",conteudo:"Conteúdo PDF: Bombas Insulina", pdf:"Dispositivos_Médicos.pdf"},
-    {nome:"Ressonância",descricao:"Projeto RM",conteudo:"Conteúdo PDF: Ressonância",pdf:"equisaude.pdf"},
-    {nome:"Nanopartículas",descricao:"Poster Nanopartículas",conteudo:"Conteúdo PDF: Nanopartículas", pdf:"Poster_1.pdf"},
-    {nome:"CRISPR",descricao:"Poster CRISPR",conteudo:"Conteúdo PDF: CRISPR", pdf:"Poster_2.pdf"},
-    {nome:"Exoesqueleto",descricao:"Exoesqueleto Inferior",conteudo:"Conteúdo PDF: Exoesqueleto ppt",pdf:"DPM.pdf"},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "},
-    //{nome:"s/n",descricao:"s/n",conteudo:"Conteúdo PDF: "}
+    {nome:"Bioquímica",descricao:"Seminário de Fosfatidilserina",conteudo:"Conteúdo PDF: Bioquímica"},
+    {nome:"Sinais Vida",descricao:"Relatório Eletrotecnia",conteudo:"Conteúdo PDF: Sinais de Vida"},
+    {nome:"Exoesqueleto",descricao:"Exoesqueleto Inferior",conteudo:"Conteúdo PDF: Exoesqueleto"},
+    {nome:"Bombas Insulina",descricao:"Inovação em Insulina",conteudo:"Conteúdo PDF: Bombas Insulina"},
+    {nome:"Ressonância",descricao:"Projeto RM",conteudo:"Conteúdo PDF: Ressonância"},
+    {nome:"Nanopartículas",descricao:"Poster Nanopartículas",conteudo:"Conteúdo PDF: Nanopartículas"},
+    {nome:"CRISPR",descricao:"Poster CRISPR",conteudo:"Conteúdo PDF: CRISPR"},
+    {nome:"Genética",descricao:"Aula Genética",conteudo:"Conteúdo PDF: Genética"},
+    {nome:"Microbiologia",descricao:"Trabalho Microbiologia",conteudo:"Conteúdo PDF: Microbiologia"},
+    {nome:"Fisiologia",descricao:"Resumo Fisiologia",conteudo:"Conteúdo PDF: Fisiologia"},
+    {nome:"Histologia",descricao:"Resumo Histologia",conteudo:"Conteúdo PDF: Histologia"},
+    {nome:"Farmacologia",descricao:"Resumo Farmacologia",conteudo:"Conteúdo PDF: Farmacologia"},
+    {nome:"Bioética",descricao:"Ficha Bioética",conteudo:"Conteúdo PDF: Bioética"},
+    {nome:"Epidemiologia",descricao:"Resumo Epidemiologia",conteudo:"Conteúdo PDF: Epidemiologia"},
+    {nome:"Imunologia",descricao:"Poster Imunologia",conteudo:"Conteúdo PDF: Imunologia"},
+    {nome:"Metabolismo",descricao:"Seminário Metabolismo",conteudo:"Conteúdo PDF: Metabolismo"},
+    {nome:"Anatomia",descricao:"Resumo Anatomia",conteudo:"Conteúdo PDF: Anatomia"},
+    {nome:"Endocrinologia",descricao:"Resumo Endocrinologia",conteudo:"Conteúdo PDF: Endocrinologia"}
   ];
 
   // Variáveis para three.js
@@ -748,26 +748,14 @@
 
             document.getElementById("sim").onclick = () => {
               confirmBox.style.display = "none";
-              // Animação de loading
+              // Criar novo retângulo infoBoxWindow tipo programa para mostrar conteúdo.................................................
               const infoBoxWindow = document.createElement("div");
               infoBoxWindow.className = "infoBoxWindow";
               infoBoxWindow.innerHTML = `
-                <div class="download-bar">
-                  <div class="download-fill"></div>
-                </div>
-                <div>Carregando PDF...</div>
+                <b>${blocos[i].userData.nome}</b><hr>
+                <div>${blocos[i].userData.conteudo}</div>
+                <button class="verMaisBtn">Ver mais</button>
               `;
-              infoContainer.appendChild(infoBoxWindow);
-            
-              setTimeout(() => {
-                infoBoxWindow.querySelector('.download-fill').style.width = "100%";
-              }, 30);
-            
-              setTimeout(() => {
-                infoBoxWindow.remove();
-                window.open(blocos[i].userData.pdf, '_blank'); // Abre o PDF associado ao bloco
-              }, 1100);
-            };
               infoContainer.appendChild(infoBoxWindow);
               conteudoBox.style.display = "none";
               luz.visible = false;
