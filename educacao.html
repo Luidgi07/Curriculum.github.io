@@ -241,8 +241,6 @@
       margin-right: 23px;
       font-size: 13px;
     }
-
-    /* INÍCIO - Estilos exclusivos e necessários para o three.js 3D - copiar exatamente */
     body.three-active { overflow: hidden; background: #080c0e; }
     #threeContainer {
       position: fixed;
@@ -304,7 +302,6 @@
       cursor: pointer;
       box-shadow: 1px 2px 12px #00334ab7;
     }
-    /* FIM - estilos 3D exclusivos */
   </style>
 </head>
 <body>
@@ -344,11 +341,11 @@
     </header>
     <button id="startButton">Iniciar programa</button>
     <div id="infoBoxes">
-      <div class="box" data-info="Status: Ciências e Tecnologias." data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos" data-site="https://www.aed.edu.pt/"> <img src="casquilhos.png" alt="Escola Secundária dos Casquilhos" style="width:50%; display:block; margin:0 auto"> </div>
-      <div class="box" data-info="Status: Licenciatura em Tecnologia Biomédica." data-detail="IPS: 2022  - ..." data-site="https://www.ips.pt/"> <img src="POLISET.png" alt="Politécnico de Setúbal" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática" data-site="https://www.isel.pt/"> <img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: English A2." data-detail="TECMINHO: 2023." data-site="https://www.uminho.pt/"> <img src="TECMINHO.png" alt="Universidade do Minho" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: Processamento e Análise de Dados com Pyhon." data-detail="IPC: 2022." data-site="https://www.ipc.pt/"> <img src="IPC.png" alt="Instituto Politécnico de Coimbra" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Ciências e Tecnologias." data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos" data-site="https://www.aed.edu.pt/"><img src="casquilhos.png" alt="Escola Secundária dos Casquilhos" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Licenciatura em Tecnologia Biomédica." data-detail="IPS: 2022  - ..." data-site="https://www.ips.pt/"><img src="POLISET.png" alt="Politécnico de Setúbal" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática" data-site="https://www.isel.pt/"><img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: English A2." data-detail="TECMINHO: 2023." data-site="https://www.uminho.pt/"><img src="TECMINHO.png" alt="Universidade do Minho" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Processamento e Análise de Dados com Pyhon." data-detail="IPC: 2022." data-site="https://www.ipc.pt/"><img src="IPC.png" alt="Instituto Politécnico de Coimbra" style="width:50%; display:block; margin:0 auto"></div>
     </div>
     <div id="infoContainer"></div>
   </div>
@@ -360,7 +357,6 @@
   </div>
 </div>
 
-<!-- CONTAINER DO THREE.JS PARA A CENA 3D (OCULTO POR DEFEITO) -->
 <div id="threeContainer" style="display:none;">
   <div id="info">Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!</div>
   <div id="confirm"></div>
@@ -369,15 +365,10 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-
 <script>
-  // Scripts originais da página desktop e programa - NÃO alterar aqui
+// --- Desktop e Modal controles --
 const preFade = document.getElementById('fadeInPreVideo');
-window.onload = () => {
-  setTimeout(() => {
-    preFade.style.opacity = "0";
-  }, 180);
-};
+window.onload = () => { setTimeout(() => { preFade.style.opacity = "0"; }, 180); };
 const intro = document.getElementById('videoIntroContainer');
 const fade = document.getElementById('introFade');
 const desktop = document.getElementById('desktop');
@@ -451,9 +442,9 @@ infoBoxes.addEventListener("click", function(e) {
       const verMaisBtn = infoBoxWindow.querySelector(".verMaisBtn");
       verMaisBtn.addEventListener("click", function() {
         showModal(
-          e.target.textContent.trim(),
-          e.target.getAttribute('data-detail'),
-          e.target.getAttribute('data-site')
+          e.target.getAttribute("data-detail"),
+          e.target.getAttribute("data-detail"),
+          e.target.getAttribute("data-site")
         );
       });
     }, 1510);
@@ -500,10 +491,12 @@ function showModal(titulo, texto, site) {
     <h2>${titulo}</h2>
     <p>${texto}</p>
   `;
-  // Botão Documentos para IPS e ISEL
-  if (titulo.includes('IPS') || titulo.includes('ISEL')) {
+  // Botão Documentos para IPS e ISEL (case-insensitive)
+  const isIPS = titulo.toUpperCase().includes('IPS');
+  const isISEL = titulo.toUpperCase().includes('ISEL');
+  if (isIPS || isISEL) {
     modalHTML += `<button id="btnDocsModal" style="margin-top:18px;background:#004422;border:1px solid #00ff00;color:#00ff00;padding:8px 22px;cursor:pointer;font-size:15px;">Documentos</button>`;
-  } else { // Botão Planos de Estudos para os outros
+  } else {
     modalHTML += `<button id="btnPlanosEstudos" style="margin-top:18px;background:#004422;border:1px solid #00ff00;color:#00ff00;padding:8px 22px;cursor:pointer;font-size:15px;">Planos de Estudos</button>`;
   }
   modal.innerHTML = modalHTML;
@@ -511,8 +504,7 @@ function showModal(titulo, texto, site) {
   document.body.appendChild(overlay);
 
   modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
-
-  if (titulo.includes('IPS') || titulo.includes('ISEL')) {
+  if (isIPS || isISEL) {
     modal.querySelector("#btnDocsModal").onclick = () => {
       document.body.removeChild(overlay);
       desktop.style.display = "none";
@@ -540,7 +532,6 @@ const infoText = document.getElementById("info");
 const confirmBox = document.getElementById("confirm");
 const conteudoBox = document.getElementById("conteudo");
 
-// Dados arquivos para blocos 3D (aponte cada "link" para o PDF correspondente)
 let arquivos = [
   {nome:"Bioquímica", descricao:"Seminário de Fosfatidilserina", conteudo:"Conteúdo PDF: Bioquímica", link:"bioquimica.pdf"},
   {nome:"Sinais Vida", descricao:"Relatório Eletrotecnia", conteudo:"Conteúdo PDF: Sinais de Vida", link:"relatorio_eletrotecnia.pdf"},
@@ -552,12 +543,10 @@ let arquivos = [
   {nome:"CRISPR", descricao:"Poster CRISPR", conteudo:"Conteúdo PDF: CRISPR", link:"Poster_2.pdf"}
 ];
 
-// Variáveis para three.js
 let scene, camera, renderer;
 let camDist = 21, camRotX = 0.16, camRotY = -0.02;
 let blocos = [], luzes = [];
 
-// Inicialização da cena 3D
 function init3D() {
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
@@ -584,8 +573,7 @@ function init3D() {
     for (let z=-quadQtZ;z<=quadQtZ;z++) {
       let geo = new THREE.BoxGeometry(quadTam,0.14,quadTam);
       let mat = new THREE.MeshPhongMaterial({
-        color:0x61ff7c, emissive:0x19ff36,
-        emissiveIntensity:0.22, transparent:true, opacity:0.44
+        color:0x61ff7c, emissive:0x19ff36, emissiveIntensity:0.22, transparent:true, opacity:0.44
       });
       let quad = new THREE.Mesh(geo, mat);
       quad.position.set(x*quadTam,0, z*quadTam);
@@ -752,7 +740,6 @@ function init3D() {
           document.getElementById("sim").onclick = () => {
             confirmBox.style.display = "none";
             luz.visible = false;
-            // Abre o PDF específico deste bloco numa nova aba
             if (blocos[i].userData.link) {
               window.open(blocos[i].userData.link, "_blank");
             } else {
@@ -791,7 +778,6 @@ function init3D() {
   });
 }
 
-// Ao clicar no ícone Documentos, abre diretamente o programa 3D
 iconDocs.addEventListener("click", () => {
   desktop.style.display = "none";
   programWindow.style.display = "none";
@@ -800,7 +786,6 @@ iconDocs.addEventListener("click", () => {
   if (!scene) init3D();
 });
 
-// Botão voltar atrás para retornar para interface desktop
 voltarEduBtn.addEventListener("click", () => {
   threeContainer.style.display = "none";
   desktop.style.display = "block";
@@ -809,7 +794,6 @@ voltarEduBtn.addEventListener("click", () => {
   confirmBox.style.display = "none";
   conteudoBox.style.display = "none";
 });
-  
 document.getElementById("icon-home").addEventListener("click", function() {
   window.location.href = "index.html";
 });  
