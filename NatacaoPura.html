@@ -1,114 +1,185 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8" />
-<title>Cartões com Leaflet.js</title>
-<!-- Leaflet CSS e JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-<style>
-html, body {
-  margin: 0; padding: 0;
-  height: 100%; width: 100%;
-  background: #1a1817;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
-/* HUD simplificado */
-.top-hud { height: 54px; background: #182436; color: #fff; display: flex; align-items: center; padding: 0 28px; border-bottom: 2px solid #42aaff; user-select:none; }
-.hud-left { flex: 1; }
-.profile-area { display: flex; align-items: center; gap: 8px; }
-.profile-img { width: 36px; height: 36px; border-radius: 7px; border: 2px solid #42aaff; background: #222; }
-.profile-name { font-weight: 500; }
-.conteudo-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 54px);}
-.cartao-modal { width: 900px; background: #11253e; border-radius: 10px; display: flex; overflow: hidden; box-shadow: 0 5px 32px #0007; border: 2.5px solid #42aaff90;}
-.cartao-esq { width:220px; background:#101c33; display:flex;align-items:center;justify-content:center;}
-.cartao-esq img { width:85%; margin-left:2px;}
-.cartao-centro { flex:1; background:#f3f8fe; display:flex;align-items:center;justify-content:center; }
-/* Leaflet Map container */
-#leaflet-map { width:600px; height:370px; border-radius:7px; box-shadow:0 1px 13px #168afb42;}
-.cartao-dir { width:220px; background:#101e30; display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px 0;gap:20px;}
-.info-rect {background:#203858;color:#e4f3ff;font-size:1.11em;border-radius:10px;padding:24px 0;text-align:center;width:85%;margin:0 11px;box-shadow:inset 0 0 9px #42aaff55;}
-.medalhas-info-horizontal {display:flex;justify-content:center;align-items:center;gap:15px;}
-.medalha-col {display:flex;flex-direction:column;align-items:center;gap:6px;}
-.medalha-img {width:34px;height:34px;object-fit:contain;border-radius:7px;background:#fff2;border:1.2px solid #eee6;}
-.qtd-medalha {font-family:'Fira Mono', monospace;font-size:1.15em;font-weight:bold;color:#ffd700;}
-.qtd-medalha.prata { color: #d0d8e6; }
-.qtd-medalha.bronze { color: #fa9940; }
-</style>
+  <meta charset="UTF-8" />
+  <title>Cartões Leaflet.js Completo</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <style>
+    html, body {margin:0;padding:0;width:100vw;height:100vh;background:#1a1817;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif;}
+    body {display:flex;flex-direction:column;height:100vh;}
+    .top-hud {position:fixed;top:0;left:0;width:100vw;height:54px;background:rgba(18,26,36,.93);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:9999;border-bottom:2.5px solid #42aaff;box-shadow:0 2px 18px #12244477;}
+    .hud-left {display:flex;align-items:center;gap:18px;}
+    .hud-time-date {color:#e9f5fa;font-size:1.07em;}
+    .profile-area {display:flex;align-items:center;gap:11px;background:rgba(42,62,94,0.82);border-radius:9px;padding:5px 55px;box-shadow:0 1px 6px #006fff21,0 2px 8px #121a2412;cursor:pointer;border:1.5px solid #42aaff60;}
+    .profile-img {width:38px;height:38px;border-radius:7px;object-fit:cover;border:2.5px solid #42aaff;background:#202a41;}
+    .profile-name {color:#f3f8fc;font-weight:600;font-size:1em;}
+    .conteudo-wrapper {position:relative;flex:1 1 auto;margin-top:54px;width:100vw;height:calc(100vh - 54px);display:flex;overflow:hidden;}
+    .sala-imagens {display:flex;flex-direction:row;align-items:stretch;width:100%;height:100%;font-size:0;position:relative;}
+    .sala-imagens img {flex:1 1 0;width:0;height:100%;object-fit:cover;display:block;}
+    .separador {width:3mm;min-width:3mm;height:100%;background:#878677;display:block;flex:0 0 3mm;}
+    @media (max-width:900px) {.sala-imagens {flex-direction:column;height:100%;width:100%;}.sala-imagens img, .separador {width:100vw !important;max-width:100vw;height:auto;}.separador {height:3mm;max-height:3mm;min-height:3mm;width:100vw;}}
+    .cartao-modal-bg {position:fixed;inset:0;background:rgba(12,13,20,0.67);z-index:10000;display:flex;align-items:center;justify-content:center;}
+    .cartao-modal {width:1100px;height:520px;background:linear-gradient(135deg,#2346a5 60%,#0b101c 100%);border:2.5px solid #2efaff60;box-shadow:0 7px 32px #0008,0 2px 0 #ccecff44 inset,0 0 22px #227aff77;border-radius:0;overflow:hidden;display:flex;align-items:stretch;}
+    .cartao-conteudo-flex {display:flex;flex-direction:row;width:100%;height:100%;}
+    .cartao-esq {width:240px;background:#101c33;display:flex;align-items:center;justify-content:center;}
+    .cartao-esq img {width:95%;margin-left:3px;}
+    .cartao-centro {flex:1;background:#7ed5fc;display:flex;align-items:center;justify-content:center;min-width:600px;}
+    #leaflet-map {width:600px;height:370px;min-width:600px;min-height:370px;border-radius:7px;}
+    .cartao-dir {width:270px;background:#101e30;display:flex;flex-direction:column;justify-content:center;align-items:stretch;padding-top:42px;padding-bottom:20px;gap:22px;}
+    .info-rect {background:#1a2e45;color:#e4f3ff;font-size:1.11em;font-family:'Fira Mono',monospace;border-radius:10px;padding:28px 0;margin:0 22px;text-align:center;box-shadow:inset 0 0 6px #2d83ff55;}
+    .medalhas-info-horizontal {display:flex;flex-direction:row;justify-content:center;align-items:center;gap:10px;background:#1a2e45;border-radius:10px;color:#e4f3ff;box-shadow:inset 0 0 6px #2d83ff55;}
+    .medalha-col {display:flex;flex-direction:column;align-items:center;gap:4px;}
+    .medalha-img {width:36px;height:36px;object-fit:contain;border-radius:7px;background:#fff2;border:1.5px solid #eee6;}
+    .qtd-medalha {font-family:'Fira Mono',monospace;font-size:1.1em;font-weight:bold;color:#ffd700;}
+    .qtd-medalha.prata {color:#d0d8e6;}
+    .qtd-medalha.bronze {color:#fa9940;}
+    .cartao-fechar {position:absolute;top:11px;right:15px;background:none;border:none;font-size:1.5em;color:#e9f8ff;cursor:pointer;border-radius:5px;}
+    .cartao-fechar:hover {background:#428cff33;color:#b02;}
+  </style>
 </head>
 <body>
-<div class="top-hud">
-  <div class="hud-left">Cartão Atleta - Leaflet.js</div>
-  <div class="profile-area">
-    <img src="Áreas (6).png" alt="Perfil" class="profile-img" />
-    <span class="profile-name">Luís Correia</span>
-  </div>
-</div>
-<div class="conteudo-wrapper">
-  <div class="cartao-modal">
-    <div class="cartao-esq">
-      <img src="anacart-removebg-preview.png" alt="Cartão Atleta">
+  <div class="top-hud">
+    <div class="hud-left">
+      <span class="hud-time-date" id="hudTimeDate"></span>
     </div>
-    <div class="cartao-centro">
-      <!-- Leaflet Map substitui a antiga imagem do mapa -->
-      <div id="leaflet-map"></div>
-    </div>
-    <div class="cartao-dir">
-      <div class="info-rect medalhas-info-horizontal">
-        <div class="medalha-col">
-          <img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img"/>
-          <span class="qtd-medalha">10</span>
-        </div>
-        <div class="medalha-col">
-          <img src="med2-removebg-preview.png" alt="Prata" class="medalha-img"/>
-          <span class="qtd-medalha prata">0</span>
-        </div>
-        <div class="medalha-col">
-          <img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img"/>
-          <span class="qtd-medalha bronze">0</span>
-        </div>
-      </div>
-      <div class="info-rect">Lesão: Nadador Completo 2018</div>
-      <div class="info-rect">Evento: SWIM CAMP</div>
+    <div class="profile-area" title="Meu Perfil" tabindex="0">
+      <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
+      <span class="profile-name">Luís Correia</span>
     </div>
   </div>
-</div>
-<script>
-// ------ Pins do Cartão 3: usar latitude/longitude reais ---------
-const pins3 = [
-  { nome: "Piscina 15", local: "Algés-PT", lat: 38.7010, lng: -9.2279 },
-  { nome: "Piscina 12", local: "Sto. António dos Cavaleiros-PT", lat: 38.8252, lng: -9.1688 },
-  { nome: "Piscina 13", local: "Corroios-PT", lat: 38.6336, lng: -9.1497 },
-  { nome: "Piscina 14", local: "Alvito-PT", lat: 38.5637, lng: -8.0440 },
-  { nome: "Piscina 14", local: "INATEL-PT", lat: 38.7436, lng: -9.1432 },
-  { nome: "Piscina 14", local: "São Bento-PT", lat: 38.7126, lng: -9.1456 },
-  { nome: "Piscina 14", local: "Alvalade-PT", lat: 38.7582, lng: -9.1390 },
-  { nome: "Piscina 13", local: "Amora-PT", lat: 38.6391, lng: -9.1138 }
-];
+  <div class="conteudo-wrapper">
+    <div class="sala-imagens">
+      <img src="ab13e542-fc6d-4634-9cd1-8e8dd6b08065.png" alt="imagem 1">
+      <div class="separador"></div>
+      <img src="ANA.png" alt="imagem 2" onclick="abrirCartao(2)">
+      <div class="separador"></div>
+      <img src="SFUAP.png" alt="imagem 3" onclick="abrirCartao(3)">
+      <div class="separador"></div>
+      <img src="CIRL.png" alt="imagem 4" onclick="abrirCartao(4)">
+      <div class="separador"></div>
+      <img src="any.png" alt="imagem 5" onclick="abrirCartao(5)">
+    </div>
+  </div>
+  <script>
+    function updateHudTime() {
+      const el = document.getElementById('hudTimeDate');
+      if (!el) return;
+      const now = new Date();
+      el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
+        ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(updateHudTime, 1000);
+    updateHudTime();
 
-// Inicializa Leaflet Map
-function inicializarMapaLeaflet(pins) {
-  // Remove qualquer instância anterior
-  if(window.mapaLeaflet) window.mapaLeaflet.remove();
+    // Exemplo de pins para Leaflet (insere novos/corrige lat/lng conforme necessário)
+    const pins2 = [
+      { nome: "Piscina 15", local: "Algés-PT", lat: 38.7010, lng: -9.2279 },
+      { nome: "Piscina 12", local: "Sto. António dos Cavaleiros", lat: 38.8252, lng: -9.1688 }
+    ];
+    const pins3 = [
+      { nome: "Piscina CRL", local: "Corroios", lat: 38.6336, lng: -9.1497 }
+    ];
+    const pins4 = [
+      { nome: "Piscina CIRL", local: "Lisboa", lat: 38.7241, lng: -9.1393 }
+    ];
+    const pins5 = [];
 
-  // Centro em Portugal
-  window.mapaLeaflet = L.map('leaflet-map').setView([39.5, -8.0], 7);
+    // Dados completos dos cartões
+    const dadosCartoes = {
+      2: {
+        esqImg: "anacart-removebg-preview.png",
+        medalhas: { ouro: 10, prata: 0, bronze: 0 },
+        pins: pins2,
+        lesoes: ["Nadador Completo 2018"],
+        eventos: ["SWIM CAMP"]
+      },
+      3: {
+        esqImg: "sfuapcart-removebg-preview.png",
+        medalhas: { ouro: 1, prata: 2, bronze: 4 },
+        pins: pins3,
+        lesoes: [],
+        eventos: ["Nacional 3º Lugar"]
+      },
+      4: {
+        esqImg: "cirlcart-removebg-preview.png",
+        medalhas: { ouro: 0, prata: 1, bronze: 2 },
+        pins: pins4,
+        lesoes: [],
+        eventos: []
+      },
+      5: {
+        esqImg: "anycart-removebg-preview.png",
+        medalhas: { ouro: 68, prata: 19, bronze: 9 },
+        pins: pins5,
+        lesoes: [],
+        eventos: ["Open Setúbal"]
+      }
+    };
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution:'© OpenStreetMap contributors'
-  }).addTo(window.mapaLeaflet);
+    // --- Função de modal com mapa Leaflet
+    function abrirCartao(idx) {
+      const dados = dadosCartoes[idx];
+      if (!dados) return;
+      // Cria o fundo do modal + cartão
+      const bg = document.createElement('div');
+      bg.className = 'cartao-modal-bg';
+      bg.onclick = function (e) { if (e.target === bg) fecharCartao(bg); };
+      const box = document.createElement('div');
+      box.className = 'cartao-modal';
+      box.innerHTML = `
+        <div class="cartao-conteudo-flex">
+          <div class="cartao-esq">
+            <img src="${dados.esqImg}" alt="Cartão">
+          </div>
+          <div class="cartao-centro">
+            <div id="leaflet-map"></div>
+          </div>
+          <div class="cartao-dir">
+            <div class="info-rect medalhas-info-horizontal">
+              <div class="medalha-col">
+                <img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img">
+                <span class="qtd-medalha">${dados.medalhas.ouro}</span>
+              </div>
+              <div class="medalha-col">
+                <img src="med2-removebg-preview.png" alt="Prata" class="medalha-img">
+                <span class="qtd-medalha prata">${dados.medalhas.prata}</span>
+              </div>
+              <div class="medalha-col">
+                <img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img">
+                <span class="qtd-medalha bronze">${dados.medalhas.bronze}</span>
+              </div>
+            </div>
+            <div class="info-rect">${dados.lesoes.length ? dados.lesoes.join("<br>") : "<span style='color:#bbb'>Sem lesões registadas.</span>"}</div>
+            <div class="info-rect">${dados.eventos.length ? dados.eventos.join("<br>") : "<span style='color:#bbb'>Sem eventos registados.</span>"}</div>
+          </div>
+        </div>
+        <button class="cartao-fechar" onclick="fecharCartaoModal(event)">✕</button>
+      `;
+      bg.appendChild(box);
+      document.body.appendChild(bg);
 
-  // Adiciona pins
-  pins.forEach(pin => {
-    L.marker([pin.lat, pin.lng]).addTo(window.mapaLeaflet)
-      .bindPopup(`<strong>${pin.nome}</strong><br>${pin.local}`);
-  });
-}
+      // Inicializa o mapa, centra em Portugal, põe pins (garante tempo de carregamento do DOM)
+      setTimeout(() => {
+        if (window.mapaLeaflet) { window.mapaLeaflet.remove(); }
+        window.mapaLeaflet = L.map('leaflet-map').setView([39.5, -8.0], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(window.mapaLeaflet);
+        dados.pins.forEach(pin => {
+          L.marker([pin.lat, pin.lng]).addTo(window.mapaLeaflet).bindPopup(`<strong>${pin.nome}</strong><br>${pin.local}`);
+        });
+      }, 10);
+    }
 
-// Espera DOM pronto e inicializa o mapa no cartão modal principal
-window.addEventListener('DOMContentLoaded', () => {
-  inicializarMapaLeaflet(pins3);
-});
-</script>
+    // Fecha e remove modal/modal-bg
+    function fecharCartao(bg) {
+      if (!bg) return;
+      bg.remove();
+      if(window.mapaLeaflet) { window.mapaLeaflet.remove(); }
+    }
+    function fecharCartaoModal(e) {
+      e.stopPropagation();
+      fecharCartao(e.target.closest('.cartao-modal-bg'));
+    }
+  </script>
 </body>
 </html>
