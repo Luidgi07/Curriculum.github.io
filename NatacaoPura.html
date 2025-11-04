@@ -2,247 +2,150 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8" />
-<title>Imagens Coladas com Retângulos e HUD - Leaflet</title>
+<title>Vestuário, Equipas e Mapa Leaflet</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-sA+4gRnfmuDRHxyN+GV/2vlTAjdU+Zjko/gxAAjrPGo=" crossorigin=""/>
+  crossorigin=""/>
 <style>
   html, body {
     margin: 0; padding: 0;
     width: 100vw; height: 100vh;
     background: #1a1817;
-    overflow: hidden;
-    box-sizing: border-box;
     font-family: 'Segoe UI', Arial, sans-serif;
+    box-sizing: border-box;
   }
-  body {
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: #232946;
+    color: #fff;
+    height: 54px;
+    padding: 0 32px;
+    border-bottom: 2px solid #42aaff;
+  }
+
+  .perfil {
+    display: flex; align-items: center; gap: 12px;
+    background: #314565d8; border-radius: 8px;
+    padding: 6px 34px 6px 15px;
+    cursor: pointer;
+  }
+  .perfil img {
+    width: 38px; height: 38px; border-radius: 7px;
+    object-fit: cover; border: 2px solid #42aaff;
+    background: #202a41;
+  }
+  .perfil span { color: #f3f8fc; font-weight: bold; }
+
+  .vestuario-cacifos {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 350px;
+    background: #181814;
+    gap: 8px;
+    margin: 0 auto;
+    padding-bottom: 0;
+  }
+  .cacifo {
+    background: #3a240d;
+    border-radius: 5px;
+    box-shadow: 0 2px 22px #381a0366;
+    min-width: 180px; max-width: 245px;
+    min-height: 350px;
+    padding: 0 0 20px 0;
+    margin: 0 4px;
+    flex: 1 1 200px;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-  }
-  .top-hud {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 58px;
-    background: rgba(18,26,36,0.93);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 32px;
-    z-index: 9999;
-    border-bottom: 2.5px solid #42aaff;
-    box-shadow: 0 2px 18px #12244477;
-    user-select: none;
-  }
-  .hud-left { display: flex; align-items: center; gap: 18px; }
-  .hud-time-date {
-    color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
-    font-family: 'Segoe UI Mono', monospace;
-    min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
-    user-select: text;
-  }
-  .left-decor-btn {
-    width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
-    border: 2.5px solid #42aaff;
-    box-shadow: 0 2px 10px #45baff88;
-    background: none;
-    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  .left-decor-btn svg { width: 20px; height: 20px; }
-  .left-decor-btn:hover {
-    background: #428cff22;
-  }
-  .hud-center {
-    flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px;
-  }
-  .profile-area {
-    display: flex; align-items: center; gap: 11px;
-    background: rgba(42,62,94,0.82); border-radius: 9px;
-    padding: 5px 55px 5px 55px;
-    box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
-    cursor: pointer; border: 1.5px solid #42aaff60;
-    min-width: 0; max-width: 260px;
-    user-select: none;
-  }
-  .profile-img {
-    width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
-    border: 2.5px solid #42aaff;
-    box-shadow: 0 2px 12px #0a79e058; background: #202a41;
-  }
-  .profile-name {
-    color: #f3f8fc; font-weight: 600; font-size: 1em;
-    max-width: 120px; overflow: hidden;
-    text-overflow: ellipsis; white-space: nowrap;
-    user-select: text;
-  }
-  .conteudo-wrapper {
-    position: relative;
-    flex: 1 1 auto;
-    margin-top: 58px;
-    width: 100vw;
-    height: calc(100vh - 58px);
-    display: flex;
-    overflow: hidden;
-  }
-  .sala-imagens {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    width: 100%;
-    height: 100%;
-    font-size: 0;
+    align-items: center;
     position: relative;
   }
-  .sala-imagens img {
-    flex: 1 1 0;
-    width: 0;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    margin: 0; border: none; padding: 0;
-    box-shadow: none;
-    min-width: 0; min-height: 0;
+  .cacifo .periodo { font-family: monospace; font-size: 1.35em; color: #fffbe7; margin-top: 22px; margin-bottom: 8px;}
+  .cacifo img { max-width: 120px; max-height: 120px; margin: 16px 0 0 0;}
+  .cacifo .flippers {
+    display: flex; gap: 18px; margin: 9px 0 0 0;
   }
-  .separador {
-    width: 3mm;
-    min-width: 3mm;
-    height: 100%;
-    background: #878677;
-    display: block;
-    border: none;
-    margin: 0; padding: 0;
-    flex: 0 0 3mm;
+  .cacifo .flippers img {
+    width: 45px; height: 59px; object-fit: contain; border-radius: 7px; background: #eef; border: 2px solid #3332;
+  }
+  .cacifo .texto {
+    margin-top: 10px; color: #fff; text-align: center; font-size: 1.1em; font-family: 'Fira Mono', monospace;
+  }
+  /* Container do mapa na parte de baixo */
+  #mapid {
+    width: 100vw;
+    height: 330px;
+    margin: 0;
+    box-shadow: 0 0 40px #227aff44;
+    border-radius: 0;
+    z-index: 100;
   }
   @media (max-width:900px) {
-    .sala-imagens { flex-direction: column; height: 100%; width: 100%; }
-    .sala-imagens img, .separador {
-      width: 100vw !important; max-width: 100vw;
-      height: auto;
-    }
-    .separador {
-      height: 3mm; max-height: 3mm; min-height: 3mm; width: 100vw;
-    }
-  }
-  .sala-imagens img[onclick] {
-    cursor: pointer;
-    transition: box-shadow 0.15s, transform 0.15s;
-  }
-  .sala-imagens img[onclick]:hover {
-    box-shadow: 0 0 20px #ffd70088, 0 0 0 2.5px #ffd700dd;
-    transform: translateY(-4px) scale(1.035);
-    outline: 0;
-  }
-  .dica-msg {
-    position: absolute;
-    left: 50%; top: 28px;
-    background: #fff8ce;
-    color: #473c08;
-    font-weight: bold;
-    padding: 8px 17px;
-    border-radius: 13px;
-    font-size: 1.05em;
-    box-shadow: 0 2px 10px #0003;
-    opacity: 0.96;
-    pointer-events: none;
-    z-index: 30;
-    transform: translateX(-50%);
-    transition: opacity 0.17s, top 0.17s;
-    animation: piscarDica 1.6s infinite alternate;
-    white-space: nowrap;
-  }
-  @keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
-
-  /* Container do mapa Leaflet */
-  #mapid {
-    width: 600px;
-    height: 370px;
-    margin: 20px auto 0 auto;
-    border-radius: 7px;
-    box-shadow: 0 0 16px #227aff77;
-    z-index: 1000;
-  }
-
-  /* Pin popup estilo */
-  .leaflet-popup-content-wrapper {
-    font-family: 'Segoe UI Mono', monospace;
-    font-size: 1.07em;
-    color: #13394e;
+    .vestuario-cacifos { flex-direction: column; min-width: 90vw; }
+    .cacifo { min-width: 94vw; max-width: 98vw; margin: 7px auto; }
+    #mapid { height: 220px; }
   }
 </style>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-integrity="sha256-o9N1jZ4fYK8Y63f0Zo1s0kNiPsuuFtPqqkPQrtYriQQ=" crossorigin=""></script>
+crossorigin=""></script>
 </head>
 <body>
 
-<div class="top-hud">
-  <div class="hud-left">
-    <span class="hud-time-date" id="hudTimeDate"></span>
-    <button class="left-decor-btn" title="Voltar ao menu inicial" aria-label="Voltar ao menu inicial">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#42aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-        <path d="M3 11.5L12 4l9 7.5"/>
-        <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
-        <path d="M9 22V12h6v10"/>
-      </svg>
-    </button>
+<div class="top-bar">
+  <div class="perfil" title="Meu Perfil">
+    <img src="Áreas (6).png" alt="Perfil">
+    <span>Luís Correia</span>
   </div>
-  <div class="hud-center">
-    <div class="profile-area" title="Meu Perfil" tabindex="0">
-      <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
-      <span class="profile-name">Luís Correia</span>
+</div>
+
+<div class="vestuario-cacifos">
+  <!-- Cacifo 1 -->
+  <div class="cacifo">
+    <div class="periodo">2014 - 2017</div>
+    <img src="camisola1.png" alt="Camisola 1">
+  </div>
+  <!-- Cacifo 2 -->
+  <div class="cacifo">
+    <div class="periodo">2017 - 2019</div>
+    <img src="camisola2.png" alt="Camisola 2">
+    <div class="flippers">
+      <img src="flipper1.png" alt="Flipper">
+      <img src="flipper1.png" alt="Flipper">
     </div>
   </div>
-  <div class="hud-right"></div>
-</div>
-
-<div class="conteudo-wrapper">
-  <div class="sala-imagens" role="list">
-    <img src="ab13e542-fc6d-4634-9cd1-8e8dd6b08065.png" alt="imagem 1" role="listitem" tabindex="-1">
-    <div class="separador" aria-hidden="true"></div>
-    <img src="cmb.png" alt="imagem 2" onclick="abrirCartao(2)" role="listitem" tabindex="0">
-    <div class="separador" aria-hidden="true"></div>
-    <img src="ANA.png" alt="imagem 3" onclick="abrirCartao(3)" role="listitem" tabindex="0">
-    <div class="separador" aria-hidden="true"></div>
-    <img src="SFUAP.png" alt="imagem 4" onclick="abrirCartao(4)" role="listitem" tabindex="0">
-    <div class="separador" aria-hidden="true"></div>
-    <img src="CIRL.png" alt="imagem 5" onclick="abrirCartao(5)" role="listitem" tabindex="0">
-    <div class="separador" aria-hidden="true"></div>
-    <img src="any.png" alt="imagem 6" onclick="abrirCartao(6)" role="listitem" tabindex="0">
+  <!-- Cacifo 3 -->
+  <div class="cacifo">
+    <div class="periodo">2019 - 2023</div>
+    <img src="camisola3.png" alt="Camisola 3">
+    <div class="flippers">
+      <img src="flipper2.png" alt="Flipper">
+      <img src="flipper2.png" alt="Flipper">
+    </div>
+  </div>
+  <!-- Cacifo 4 -->
+  <div class="cacifo">
+    <div class="periodo">2023 - ...</div>
+    <img src="camisola4.png" alt="Camisola 4">
+    <div class="flippers">
+      <img src="flipper2.png" alt="Flipper">
+      <img src="flipper2.png" alt="Flipper">
+    </div>
+  </div>
+  <!-- Cacifo 5 -->
+  <div class="cacifo">
+    <div class="periodo">Só o<br>Futuro Saberá</div>
+    <img src="camisola5.png" alt="Camisola 5">
   </div>
 </div>
 
-<!-- Container do mapa Leaflet -->
+<!-- Mapa Leaflet na parte de baixo -->
 <div id="mapid" aria-label="Mapa interativo das piscinas"></div>
 
 <script>
-// Atualiza relógio da HUD
-function updateHudTime() {
-  const el = document.getElementById('hudTimeDate');
-  if (!el) return;
-  const now = new Date();
-  el.textContent = now.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit' }) +
-  ' ' + now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
-}
-setInterval(updateHudTime, 1000);
-updateHudTime();
-
-document.querySelector('.left-decor-btn').addEventListener('click', () => {
-  window.location.href = 'desporto.html';
-});
-
-// Dados pins com coordenadas aproximadas no mapa Leaflet
-const pins3 = [
-  { lat: 38.672, lng: -9.264, nome: "Piscina 15", local: "Algés- PT", imagem: "piscina15.jpg" },
-  { lat: 38.785, lng: -9.092, nome: "Piscina 12", local: "Sto. António dos Cavaleiros - PT", imagem: "piscina12.jpg" },
-  { lat: 38.679, lng: -9.146, nome: "Piscina 13", local: "Corroios - PT", imagem: "piscina13.jpg" },
-  { lat: 38.749, lng: -8.960, nome: "Piscina 14", local: "Alvito - PT", imagem: "piscina14.jpg" },
-  { lat: 38.721, lng: -9.304, nome: "Piscina 14", local: "INATEL - PT", imagem: "piscina14.jpg" },
-  { lat: 38.732, lng: -9.271, nome: "Piscina 14", local: "São Bento - PT", imagem: "piscina14.jpg" },
-  { lat: 38.715, lng: -9.121, nome: "Piscina 14", local: "Alvalade - PT", imagem: "piscina14.jpg" },
-  { lat: 38.703, lng: -9.109, nome: "Piscina 13", local: "Amora - PT", imagem: "piscina13.jpg" }
-];
-
-// Inicialização do mapa Leaflet no centro de Portugal e zoom aprox.
-const map = L.map('mapid').setView([38.7, -9.2], 11);
+// Inicialização do mapa Leaflet no centro de Portugal
+const map = L.map('mapid').setView([38.73, -9.19], 11);
 
 // Camada base OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -250,16 +153,19 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18
 }).addTo(map);
 
-// Adiciona os pins ao mapa com popups e imagens
-pins3.forEach(pin => {
+// Pins exemplo (adicione mais se quiser)
+const pinsPiscinas = [
+  { lat: 38.672, lng: -9.264, nome: "Piscina 15", local: "Algés- PT" },
+  { lat: 38.785, lng: -9.092, nome: "Piscina 12", local: "Sto. António dos Cavaleiros - PT" },
+  { lat: 38.679, lng: -9.146, nome: "Piscina 13", local: "Corroios - PT" },
+  { lat: 38.749, lng: -8.960, nome: "Piscina 14", local: "Alvito - PT" },
+  { lat: 38.715, lng: -9.121, nome: "Alvalade", local: "Lisboa - PT" },
+];
+
+pinsPiscinas.forEach(pin => {
   L.marker([pin.lat, pin.lng]).addTo(map)
-    .bindPopup(`<strong>${pin.nome}</strong><br>${pin.local}<br><img src="${pin.imagem}" alt="${pin.nome}" style="max-width:120px; border-radius: 6px;">`);
+    .bindPopup(`<strong>${pin.nome}</strong><br>${pin.local}`);
 });
-
-// Aqui podem ser adicionadas as funções abrirCartao(), fecharCartao() etc., se desejar.
-
 </script>
-
 </body>
 </html>
-
