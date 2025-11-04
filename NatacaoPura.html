@@ -278,11 +278,18 @@
           <div class="cartao-esq"><img src="${dados.esqImg}" alt="Cartão"></div>
           <div class="cartao-centro"><div id="${mapId}"></div></div>
           <div class="cartao-dir">
-            <div class="info-rect medalhas-info-horizontal">
-              <div class="medalha-col"><img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img" /><span class="qtd-medalha">59</span></div>
-              <div class="medalha-col"><img src="med2-removebg-preview.png" alt="Prata" class="medalha-img" /><span class="qtd-medalha prata">16</span></div>
-              <div class="medalha-col"><img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img" /><span class="qtd-medalha bronze">3</span></div>
+          const m = dados.medalhas;
+          box.innerHTML = `
+            <div class="cartao-conteudo-flex">
+              ...
+              <div class="info-rect medalhas-info-horizontal">
+                <div class="medalha-col"><img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img" /><span class="qtd-medalha">${m.ouro}</span></div>
+                <div class="medalha-col"><img src="med2-removebg-preview.png" alt="Prata" class="medalha-img" /><span class="qtd-medalha prata">${m.prata}</span></div>
+                <div class="medalha-col"><img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img" /><span class="qtd-medalha bronze">${m.bronze}</span></div>
+              </div>
+              ...
             </div>
+          `;
             <div class="info-rect lesoes-info">${
               dados.lesoes && dados.lesoes.length > 0 
                 ? dados.lesoes.map(lesao => `<img src="${lesao.src}" alt="${lesao.alt}" class="evento-img" />`).join("")
