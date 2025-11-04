@@ -152,23 +152,14 @@
   }
   @keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
 
-  #screen-fade {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: black;
-    opacity: 1;
-    pointer-events: none;
-    transition: opacity 0.8s ease-out;
-    z-index: 10000;
-  }
-
   /* Container do mapa Leaflet */
   #mapid {
     width: 600px;
     height: 370px;
-    margin: 0 auto;
+    margin: 20px auto 0 auto;
     border-radius: 7px;
     box-shadow: 0 0 16px #227aff77;
+    z-index: 1000;
   }
 
   /* Pin popup estilo */
@@ -182,7 +173,6 @@
 integrity="sha256-o9N1jZ4fYK8Y63f0Zo1s0kNiPsuuFtPqqkPQrtYriQQ=" crossorigin=""></script>
 </head>
 <body>
-<div id="screen-fade"></div>
 
 <div class="top-hud">
   <div class="hud-left">
@@ -220,10 +210,8 @@ integrity="sha256-o9N1jZ4fYK8Y63f0Zo1s0kNiPsuuFtPqqkPQrtYriQQ=" crossorigin=""><
   </div>
 </div>
 
-<!-- Substituição do mapa estático por container Leaflet -->
-<div style="text-align:center; margin-top: 20px;">
-  <div id="mapid" aria-label="Mapa interativo das piscinas"></div>
-</div>
+<!-- Container do mapa Leaflet -->
+<div id="mapid" aria-label="Mapa interativo das piscinas"></div>
 
 <script>
 // Atualiza relógio da HUD
@@ -236,11 +224,12 @@ function updateHudTime() {
 }
 setInterval(updateHudTime, 1000);
 updateHudTime();
+
 document.querySelector('.left-decor-btn').addEventListener('click', () => {
   window.location.href = 'desporto.html';
 });
 
-// Dados pins transformados para lat/lon aproximados (exemplo para Portugal)
+// Dados pins com coordenadas aproximadas no mapa Leaflet
 const pins3 = [
   { lat: 38.672, lng: -9.264, nome: "Piscina 15", local: "Algés- PT", imagem: "piscina15.jpg" },
   { lat: 38.785, lng: -9.092, nome: "Piscina 12", local: "Sto. António dos Cavaleiros - PT", imagem: "piscina12.jpg" },
@@ -252,22 +241,25 @@ const pins3 = [
   { lat: 38.703, lng: -9.109, nome: "Piscina 13", local: "Amora - PT", imagem: "piscina13.jpg" }
 ];
 
-// Inicialização do mapa Leaflet
+// Inicialização do mapa Leaflet no centro de Portugal e zoom aprox.
 const map = L.map('mapid').setView([38.7, -9.2], 11);
 
+// Camada base OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 18
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 18
 }).addTo(map);
 
-// Adicionar pins com popups
+// Adiciona os pins ao mapa com popups e imagens
 pins3.forEach(pin => {
   L.marker([pin.lat, pin.lng]).addTo(map)
     .bindPopup(`<strong>${pin.nome}</strong><br>${pin.local}<br><img src="${pin.imagem}" alt="${pin.nome}" style="max-width:120px; border-radius: 6px;">`);
 });
 
-// Funções abrirCartao, fecharCartao e outros dependem de seu código (não incluídos aqui para foco no mapa)
+// Aqui podem ser adicionadas as funções abrirCartao(), fecharCartao() etc., se desejar.
 
 </script>
+
 </body>
 </html>
+
