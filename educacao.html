@@ -344,11 +344,11 @@
     </header>
     <button id="startButton">Iniciar programa</button>
     <div id="infoBoxes">
-      <div class="box" data-info="Status: Ciências e Tecnologias." data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos"> <img src="casquilhos.png" alt="Escola Secundária dos Casquilhos" style="width:50%; display:block; margin:0 auto"> </div>
-      <div class="box" data-info="Status: Licenciatura em Tecnologia Biomédica." data-detail="IPS: 2022  - ..."> <img src="POLISET.png" alt="Politécnico de Setúbal" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática"><img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: English A2." data-detail="TECMINHO: 2023."><img src="TECMINHO.png" alt="Universidade do Minho" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: Processamento e Análise de Dados com Pyhon." data-detail="IPC: 2022."><img src="IPC.png" alt="Instituto Politécnico de Coimbra" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Ciências e Tecnologias." data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos" data-site="https://www.aed.edu.pt/"> <img src="casquilhos.png" alt="Escola Secundária dos Casquilhos" style="width:50%; display:block; margin:0 auto"> </div>
+      <div class="box" data-info="Status: Licenciatura em Tecnologia Biomédica." data-detail="IPS: 2022  - ..." data-site="https://www.ips.pt/"> <img src="POLISET.png" alt="Politécnico de Setúbal" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática" data-site="https://www.isel.pt/"> <img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: English A2." data-detail="TECMINHO: 2023." data-site="https://www.uminho.pt/"> <img src="TECMINHO.png" alt="Universidade do Minho" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Processamento e Análise de Dados com Pyhon." data-detail="IPC: 2022." data-site="https://www.ipc.pt/"> <img src="IPC.png" alt="Instituto Politécnico de Coimbra" style="width:50%; display:block; margin:0 auto"></div>
     </div>
     <div id="infoContainer"></div>
   </div>
@@ -451,8 +451,9 @@ infoBoxes.addEventListener("click", function(e) {
       const verMaisBtn = infoBoxWindow.querySelector(".verMaisBtn");
       verMaisBtn.addEventListener("click", function() {
         showModal(
-          e.target.textContent,
-          e.target.getAttribute('data-detail')
+          e.target.textContent.trim(),
+          e.target.getAttribute('data-detail'),
+          e.target.getAttribute('data-site')
         );
       });
     }, 1510);
@@ -489,7 +490,7 @@ function showConfirmBox() {
   };
 }
 // Modal de detalhes
-function showModal(titulo, texto) {
+function showModal(titulo, texto, site) {
   const overlay = document.createElement("div");
   overlay.className = "modalOverlay";
   const modal = document.createElement("div");
@@ -499,16 +500,19 @@ function showModal(titulo, texto) {
     <h2>${titulo}</h2>
     <p>${texto}</p>
   `;
-  if (titulo.includes('IPS')) {
-    // Só insere o botão DOCUMENTOS se for IPS
+  // Botão Documentos para IPS e ISEL
+  if (titulo.includes('IPS') || titulo.includes('ISEL')) {
     modalHTML += `<button id="btnDocsModal" style="margin-top:18px;background:#004422;border:1px solid #00ff00;color:#00ff00;padding:8px 22px;cursor:pointer;font-size:15px;">Documentos</button>`;
+  } else { // Botão Planos de Estudos para os outros
+    modalHTML += `<button id="btnPlanosEstudos" style="margin-top:18px;background:#004422;border:1px solid #00ff00;color:#00ff00;padding:8px 22px;cursor:pointer;font-size:15px;">Planos de Estudos</button>`;
   }
   modal.innerHTML = modalHTML;
   overlay.appendChild(modal);
   document.body.appendChild(overlay);
 
   modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
-  if (titulo.includes('IPS')) {
+
+  if (titulo.includes('IPS') || titulo.includes('ISEL')) {
     modal.querySelector("#btnDocsModal").onclick = () => {
       document.body.removeChild(overlay);
       desktop.style.display = "none";
@@ -516,6 +520,14 @@ function showModal(titulo, texto) {
       threeContainer.style.display = "block";
       document.body.classList.add('three-active');
       if (!scene) init3D();
+    };
+  } else {
+    modal.querySelector("#btnPlanosEstudos").onclick = () => {
+      if (site) {
+        window.open(site, "_blank");
+      } else {
+        alert("Link para Planos de Estudos não disponível.");
+      }
     };
   }
 }
@@ -801,7 +813,6 @@ voltarEduBtn.addEventListener("click", () => {
 document.getElementById("icon-home").addEventListener("click", function() {
   window.location.href = "index.html";
 });  
-  
 </script>
 </body>
 </html>
