@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8" />
-<title>Currículo com Mapa Leaflet integrado</title>
+<title>Currículo com Mapa Leaflet</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
   html, body {
@@ -119,35 +119,6 @@
     transform: translateY(-4px) scale(1.035);
     outline: 0;
   }
-  .dica-msg {
-    position: absolute;
-    left: 50%; top: 28px;
-    background: #fff8ce;
-    color: #473c08;
-    font-weight: bold;
-    padding: 8px 17px;
-    border-radius: 13px;
-    font-size: 1.05em;
-    box-shadow: 0 2px 10px #0003;
-    opacity: 0.96;
-    pointer-events: none;
-    z-index: 30;
-    transform: translateX(-50%);
-    transition: opacity 0.17s, top 0.17s;
-    animation: piscarDica 1.6s infinite alternate;
-    white-space: nowrap;
-  }
-  @keyframes piscarDica { 0%{opacity:1;} 100%{opacity:.5;} }
-  #screen-fade {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: black;
-    opacity: 1;
-    pointer-events: none;
-    transition: opacity 0.8s ease-out;
-    z-index: 10000;
-  }
-  /* Modal */
   .cartao-modal-bg {
     position: fixed;
     inset: 0;
@@ -208,7 +179,6 @@
     text-align: center;
     padding: 0 !important;
   }
-  /* mapa Leaflet container */
   #mapid {
     width: 600px;
     height: 370px;
@@ -260,7 +230,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 10px;             /* Reduzido - menos espaço entre medalhas */
+    gap: 10px;
     background: #1a2e45;
     border-radius: 10px;
     color: #e4f3ff;
@@ -361,36 +331,13 @@ function updateHudTime() {
 setInterval(updateHudTime, 1000);
 updateHudTime();
 
+// Botao voltar ao menu inicial
 document.querySelector('.left-decor-btn').addEventListener('click', () => {
   window.location.href = 'desporto.html';
 });
 
-document.querySelectorAll('.sala-imagens img[onclick]').forEach(function(img) {
-  let dica;
-  img.addEventListener('mouseenter', function(e) {
-    dica = document.createElement('div');
-    dica.className = 'dica-msg';
-    dica.textContent = 'Clica para ver o cartão!';
-    const sala = document.querySelector('.sala-imagens');
-    const imgRect = img.getBoundingClientRect();
-    const salaRect = sala.getBoundingClientRect();
-    dica.style.top = (imgRect.top - salaRect.top + 22) + 'px';
-    dica.style.left = (imgRect.left - salaRect.left + imgRect.width/2) + 'px';
-    sala.appendChild(dica);
-  });
-  img.addEventListener('mouseleave', function(e) {
-    if (dica && dica.parentNode) dica.parentNode.removeChild(dica);
-    dica = null;
-  });
-  img.addEventListener('keydown', function(e) {
-    if(e.key === "Enter" || e.key === " ") {
-      abrirCartao(parseInt(e.target.getAttribute('onclick')?.match(/\d+/)?.[0]));
-    }
-  });
-});
-
-// Dados dos pins para Leaflet
-const pins4Leaflet = [
+// Dados dos pins Leaflet
+const pinsLeaflet = [
   { lat: 38.704, lng: -9.304, nome: "Piscina 15", local: "Algés- PT" },
   { lat: 38.839, lng: -8.971, nome: "Piscina 12", local: "Sto. António dos Cavaleiros - PT" },
   { lat: 38.615, lng: -9.140, nome: "Piscina 13", local: "Corroios - PT" },
@@ -401,24 +348,46 @@ const pins4Leaflet = [
   { lat: 38.683, lng: -9.160, nome: "Piscina 13", local: "Amora - PT" }
 ];
 
-// Modal e conteúdo dos cartões
+// Modal cartões dados
 const dadosCartoes = {
-  2: {...}, // Mantém teus dados atuais e imagens
-  3: {...},
-  4: {...},
-  5: {...},
-  6: {...}
+  2: {
+    medalhas: { ouro: 59, prata: 16, bronze: 3 },
+    lesoes: [],
+    eventos: [{ src: "ChatGPT_Image_10_08_2025__20_01_18-removebg-preview.png", alt: "Jogos do Futuro 2017" }]
+  },
+  3: {
+    medalhas: { ouro: 10, prata: 0, bronze: 0 },
+    lesoes: [{ src: "ChatGPT_Image_10_08_2025__20_42_26-removebg-preview.png", alt: "Nadador Completo 2018" }],
+    eventos: [{ src: "ChatGPT_Image_8_08_2025__14_38_48-removebg-preview.png", alt: "SWIM CAMP" }]
+  },
+  4: {
+    medalhas: { ouro: 1, prata: 2, bronze: 4 },
+    lesoes: [{ src: "ChatGPT_Image_10_08_2025__21_19_11-removebg-preview.png", alt: "3º Lugar Nacional" }],
+    eventos: [{ src: "ChatGPT_Image_8_08_2025__14_38_48-removebg-preview.png", alt: "SWIM CAMP" }]
+  },
+  5: {
+    medalhas: { ouro: 0, prata: 1, bronze: 2 },
+    lesoes: [],
+    eventos: []
+  },
+  6: {
+    medalhas: { ouro: 68, prata: 19, bronze: 9 },
+    lesoes: [{ src: "ChatGPT_Image_10_08_2025__21_19_11-removebg-preview.png", alt: "3º Lugar Nacional" },
+             { src: "ChatGPT_Image_10_08_2025__20_42_26-removebg-preview.png", alt: "Nadador Completo 2018" }]
+  }
 };
 
+// Conteúdos dos cartões (com mapa Leaflet para cartão 3,4,5)
 const conteudosCartao = {
-  2: getCartaoModal('cmbcart-removebg-preview.png', 'mapato-removebg-preview.png', [], dadosCartoes[2].medalhas, dadosCartoes[2].lesoes, dadosCartoes[2].eventos),
-  3: getCartaoModal('anacart-removebg-preview.png', 'mapato-removebg-preview.png', pins3, dadosCartoes[3].medalhas, dadosCartoes[3].lesoes, dadosCartoes[3].eventos),
-  4: getCartaoModal('sfuapcart-removebg-preview.png', 'crcr-removebg-preview.png', pins4, dadosCartoes[4].medalhas, dadosCartoes[4].lesoes, dadosCartoes[4].eventos),
-  5: getCartaoModal('cirlcart-removebg-preview.png', 'mapato-removebg-preview.png', pins5, dadosCartoes[5].medalhas, dadosCartoes[5].lesoes, dadosCartoes[5].eventos),
+  2: getCartaoModal('cmbcart-removebg-preview.png', null, [], dadosCartoes[2].medalhas, dadosCartoes[2].lesoes, dadosCartoes[2].eventos),
+  3: getCartaoModal('anacart-removebg-preview.png', 'mapato-removebg-preview.png', pinsLeaflet, dadosCartoes[3].medalhas, dadosCartoes[3].lesoes, dadosCartoes[3].eventos),
+  4: getCartaoModal('sfuapcart-removebg-preview.png', 'mapato-removebg-preview.png', pinsLeaflet, dadosCartoes[4].medalhas, dadosCartoes[4].lesoes, dadosCartoes[4].eventos),
+  5: getCartaoModal('cirlcart-removebg-preview.png', 'mapato-removebg-preview.png', pinsLeaflet, dadosCartoes[5].medalhas, dadosCartoes[5].lesoes, dadosCartoes[5].eventos),
   6: getCartaoSemMapa('anycart-removebg-preview.png', dadosCartoes[6].medalhas, dadosCartoes[6].lesoes)
 };
 
-function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas, lesoes, eventos) {
+// Função de montagem do modal com mapa ou sem
+function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas = {ouro:0, prata:0, bronze:0}, lesoes = [], eventos = []) {
   const eventosHtml = eventos.map(evt => `<img src="${evt.src}" alt="${evt.alt}" class="evento-img" />`).join("");
   const lesoesHtml = lesoes.length > 0 ? lesoes.map(l => `<img src="${l.src}" alt="${l.alt}" class="evento-img" />`).join("") : '<span style="color:#bbb">Sem Conquistas Importantes Registadas.</span>';
 
@@ -427,7 +396,9 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas, lesoes, even
       <div class="cartao-esq">
         <img src="${imagemEsq}" alt="Cartão">
       </div>
-      <div class="cartao-centro" id="mapid"></div>
+      <div class="cartao-centro">
+        ${imagemMapa ? '<div id="mapid" style="width:600px;height:370px;border-radius:7px;box-shadow: 0 5px 20px rgba(0,0,0,0.4);"></div>' : ''}
+      </div>
       <div class="cartao-dir">
           <div class="info-rect medalhas-info-horizontal">
             <div class="medalha-col">
@@ -450,13 +421,13 @@ function getCartaoModal(imagemEsq, imagemMapa, pins = [], medalhas, lesoes, even
   `;
 }
 
-// Inicialização do mapa Leaflet dentro do modal após abrir cartão
+// Inicializa mapa Leaflet dentro do modal
 function inicializarMapaLeaflet(pins) {
   const mapDiv = document.getElementById('mapid');
   if (!mapDiv) return;
 
-  // Limpar mapa anterior se existir (na mesma div)
   if (mapDiv._leaflet_id) {
+    // Remove mapa anterior se existir
     mapDiv._leaflet_id = null;
     mapDiv.innerHTML = "";
   }
@@ -477,44 +448,40 @@ function inicializarMapaLeaflet(pins) {
   }).addTo(map);
 
   pins.forEach(pin => {
-    L.marker([pin.lat || pin.top, pin.lng || pin.left]) // Considera Lng, Lat; ajusta aí
-      .addTo(map)
+    L.marker([pin.lat, pin.lng]).addTo(map)
       .bindPopup(`<b>${pin.nome}</b><br>${pin.local}`);
   });
 }
 
-// Modificar a função abrirCartao para inicializar mapa Leaflet para cartões que tenham mapa
+// Abre o modal
 function abrirCartao(idx) {
   const conteudo = conteudosCartao[idx] || "";
   const bg = document.createElement('div');
   bg.className = 'cartao-modal-bg';
   bg.setAttribute('tabindex', '-1');
-  bg.onclick = function(e){
+  bg.onclick = function(e) {
     if (e.target === bg) fecharCartao(bg);
   };
   const box = document.createElement('div');
   box.className = 'cartao-modal' + (idx === 6 ? ' pequeno' : '');
   box.tabIndex = 0;
-  box.innerHTML = conteudo +
-    `<button class="cartao-fechar" title="Fechar" aria-label="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
+  box.innerHTML = conteudo + `<button class="cartao-fechar" title="Fechar" aria-label="Fechar" onclick="fecharCartaoModal(event)">✕</button>`;
   bg.appendChild(box);
   document.body.appendChild(bg);
-
   requestAnimationFrame(() => {
     bg.classList.add('show');
     box.focus();
-
-    // Inicializa Leaflet para cartões 3, 4 e 5 que usam pins e mapa
     if ([3,4,5].includes(idx)) {
       let pinsMap;
-      if (idx === 3) pinsMap = pins3;
-      else if (idx === 4) pinsMap = pins4;
-      else pinsMap = pins5;
+      if (idx === 3) pinsMap = pinsLeaflet;
+      else if (idx === 4) pinsMap = pinsLeaflet;
+      else pinsMap = pinsLeaflet;
       inicializarMapaLeaflet(pinsMap);
     }
   });
 }
 
+// Fechar o modal
 function fecharCartao(bg) {
   if (!bg) return;
   bg.classList.remove('show');
@@ -523,7 +490,6 @@ function fecharCartao(bg) {
     bg.removeEventListener('transitionend', handler);
   });
 }
-
 function fecharCartaoModal(e) {
   e.stopPropagation();
   const modalBg = e.target.closest('.cartao-modal-bg');
