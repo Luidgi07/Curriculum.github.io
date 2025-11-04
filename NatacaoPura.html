@@ -69,17 +69,32 @@
       border-radius: 7px;
       background: #7ed5fc;
     }
-    .cartao-dir { width:230px; background:#101e30; display:flex; flex-direction:column; justify-content:center; align-items:stretch; padding-top:14px; padding-bottom:10px; gap:10px; }
-    .cartao-dir .info-rect { background:#1a2e45; color:#e4f3ff; font-size:1.11em; font-family:'Fira Mono',monospace; border-radius:10px; padding:14px 0; margin:0 14px; letter-spacing:1.2px; text-align:center; box-shadow:inset 0 0 6px #2d83ff55;}
-    .medalhas-info-horizontal { display:flex; flex-direction:row; justify-content:center; align-items:center; gap:4px; background:#1a2e45; border-radius:10px; color:#e4f3ff; box-shadow:inset 0 0 6px #2d83ff55; margin:5px; padding:4px 0;}
+    .cartao-dir { width:250px; background:#101e30; display:flex; flex-direction:column; justify-content:center; align-items:stretch; padding-top:18px; padding-bottom:16px; gap:18px; }
+    .cartao-dir .info-rect { background:#1a2e45; color:#e4f3ff; font-size:1.13em; font-family:'Fira Mono',monospace; border-radius:12px; padding:22px 0; margin:0 16px; letter-spacing:1.2px; text-align:center; box-shadow:inset 0 0 6px #2d83ff55;}
+    .medalhas-info-horizontal { display:flex; flex-direction:row; justify-content:center; align-items:center; gap:10px; background:#1a2e45; border-radius:12px; color:#e4f3ff; box-shadow:inset 0 0 6px #2d83ff55; margin:5px; padding:8px 0;}
     .medalha-col { display:flex; flex-direction:column; align-items:center; gap:2px;}
-    .medalha-img { width:24px; height:24px; object-fit:contain; border-radius:7px; background:#fff2; border:1.5px solid #eee6;}
-    .qtd-medalha { font-family:'Fira Mono',monospace; font-size:1em; font-weight:bold; color:#ffd700;}
+    .medalha-img { width:36px; height:36px; object-fit:contain; border-radius:7px; background:#fff2; border:1.5px solid #eee6; cursor:pointer; transition:opacity 0.25s; }
+    .qtd-medalha { font-family:'Fira Mono',monospace; font-size:1.09em; font-weight:bold; color:#ffd700; }
     .qtd-medalha.prata {color:#d0d8e6;}
     .qtd-medalha.bronze {color:#fa9940;}
     .cartao-fechar { position: absolute; top: 11px; right: 15px; background: none; border: none; font-size: 1.5em; color: #e9f8ff; font-weight: bold; cursor: pointer; border-radius: 5px;}
     .cartao-fechar:hover {background:#428cff33;color:#b02;}
-    .evento-img { width:54px; height:54px; margin:4px auto; border-radius:6px; object-fit:cover; background:#fff3;}
+    .evento-img { width:92px; height:92px; margin:4px auto; border-radius:14px; object-fit:contain; background:#fff3; transition: opacity 0.25s; cursor:pointer; }
+    .explicacao-medalha {
+      position:relative;
+      z-index:8;
+      color:#fff9b0;
+      font-size:1.10em;
+      padding:7px 10px;
+      margin-top:8px;
+      text-align:center;
+      background:#203060b2;
+      border-radius:9px;
+      min-width:120px;
+      max-width:175px;
+      margin-left:auto;
+      margin-right:auto;
+    }
   </style>
 </head>
 <body>
@@ -180,9 +195,9 @@
           <div class="cartao-centro"><div id="${mapId}"></div></div>
           <div class="cartao-dir">
             <div class="info-rect medalhas-info-horizontal">
-              <div class="medalha-col"><img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img"><span class="qtd-medalha">${dados.medalhas.ouro}</span></div>
-              <div class="medalha-col"><img src="med2-removebg-preview.png" alt="Prata" class="medalha-img"><span class="qtd-medalha prata">${dados.medalhas.prata}</span></div>
-              <div class="medalha-col"><img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img"><span class="qtd-medalha bronze">${dados.medalhas.bronze}</span></div>
+              <div class="medalha-col"><img src="med1-removebg-preview.png" alt="Ouro" class="medalha-img" /><span class="qtd-medalha">59</span></div>
+              <div class="medalha-col"><img src="med2-removebg-preview.png" alt="Prata" class="medalha-img" /><span class="qtd-medalha prata">16</span></div>
+              <div class="medalha-col"><img src="med3-removebg-preview.png" alt="Bronze" class="medalha-img" /><span class="qtd-medalha bronze">3</span></div>
             </div>
             <div class="info-rect lesoes-info">${
               dados.lesoes && dados.lesoes.length > 0 
@@ -209,6 +224,7 @@
         });
         setTimeout(()=>{mapaLeaflet.invalidateSize()}, 250);
       },30);
+      setTimeout(adicionarExplicacaoMedalha, 450);
     }
     function fecharCartao(bg) {
       if (!bg) return;
@@ -219,7 +235,28 @@
       e.stopPropagation();
       fecharCartao(e.target.closest('.cartao-modal-bg'));
     }
+    function adicionarExplicacaoMedalha() {
+      document.querySelectorAll('.medalha-img, .evento-img').forEach(img => {
+        img.addEventListener('click', function() {
+          img.style.opacity = '0.25';
+          if (img.parentNode.querySelector('.explicacao-medalha')) return;
+          let explicacao = document.createElement('div');
+          explicacao.className = 'explicacao-medalha';
+          explicacao.textContent = obterExplicacaoMedalha(img.alt);
+          img.parentNode.appendChild(explicacao);
+        });
+      });
+    }
+    function obterExplicacaoMedalha(tipo) {
+      if (tipo === "Ouro") return "Medalha de ouro conquistada em evento nacional.";
+      if (tipo === "Prata") return "Medalha de prata por segundo lugar regional.";
+      if (tipo === "Bronze") return "Medalha de bronze por terceiro lugar absoluto.";
+      if (tipo === "3º Lugar Nacional") return "Este prémio representa o terceiro lugar em prova nacional.";
+      if (tipo === "Nadador Completo 2018") return "Reconhecimento especial pelo desempenho completo em 2018.";
+      if (tipo.indexOf("Jogos do Futuro") !== -1) return "Participação destacada nos Jogos do Futuro.";
+      if (tipo.indexOf("SWIM CAMP") !== -1) return "Participação no campo intensivo de natação.";
+      return "Explicação da medalha ou conquista.";
+    }
   </script>
 </body>
 </html>
-
