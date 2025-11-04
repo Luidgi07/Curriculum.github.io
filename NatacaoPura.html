@@ -34,15 +34,34 @@
     .left-decor-btn:hover { background: #428cff22; }
     .hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
     .profile-area {
-      display: flex; align-items: center; gap: 11px;
+      display: flex; align-items: center; gap: 18px; /* mais espaço para o botão */
       background: rgba(42,62,94,0.82); border-radius: 9px;
       padding: 5px 55px;
       box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
       border: 1.5px solid #42aaff60;
-      max-width: 260px;
+      max-width: 350px;
+      transition: box-shadow 0.18s;
     }
-    .profile-img { width: 38px; height: 38px; border-radius: 7px; object-fit: cover; border: 2.5px solid #42aaff; background: #202a41; }
-    .profile-name { color: #f3f8fc; font-weight: 600; font-size: 1em; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+    .profile-img { width: 44px; height: 44px; border-radius: 7px; object-fit: cover; border: 2.5px solid #42aaff; background: #202a41; }
+    .profile-name { color: #f3f8fc; font-weight: 600; font-size: 1.13em; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+    .swimrankings-btn {
+      width: 38px; height: 38px;
+      background: #193560;
+      border-radius: 8px;
+      display: flex; justify-content: center; align-items: center;
+      border: 2px solid #51cbfa;
+      margin-left: 6px;
+      transition: background 0.14s, box-shadow 0.14s;
+      cursor: pointer;
+      box-shadow: 0 1px 6px #0091ff42;
+    }
+    .swimrankings-btn:hover {
+      background: #0af7e4;
+      box-shadow: 0 2px 12px #44baff99;
+    }
+    .swimrankings-btn img {
+      width: 28px; height: 28px; object-fit: contain;
+    }
     .conteudo-wrapper { position: relative; flex: 1 1 auto; margin-top: 58px; width: 100vw; height: calc(100vh - 58px); display: flex; overflow: hidden; }
     .sala-imagens {
       display: flex; flex-direction: row;
@@ -122,6 +141,10 @@
       <div class="profile-area" title="Meu Perfil" tabindex="0">
         <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
         <span class="profile-name">Luís Correia</span>
+        <button class="swimrankings-btn" title="Ver perfil no Swimrankings" aria-label="Swimrankings"
+          onclick="window.open('https://www.swimrankings.net/index.php?page=athleteDetail&athleteId=4005761&athletePage=MEET', '_blank')">
+          <img src="swimrankings.png" alt="Swimrankings" />
+        </button>
       </div>
     </div>
     <div class="hud-right"></div>
