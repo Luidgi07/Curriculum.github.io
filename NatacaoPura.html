@@ -73,27 +73,40 @@
     .cartao-dir .info-rect { background:#1a2e45; color:#e4f3ff; font-size:1.13em; font-family:'Fira Mono',monospace; border-radius:12px; padding:22px 0; margin:0 16px; letter-spacing:1.2px; text-align:center; box-shadow:inset 0 0 6px #2d83ff55;}
     .medalhas-info-horizontal { display:flex; flex-direction:row; justify-content:center; align-items:center; gap:10px; background:#1a2e45; border-radius:12px; color:#e4f3ff; box-shadow:inset 0 0 6px #2d83ff55; margin:5px; padding:8px 0;}
     .medalha-col { display:flex; flex-direction:column; align-items:center; gap:2px;}
-    .medalha-img { width:36px; height:36px; object-fit:contain; border-radius:7px; background:#fff2; border:1.5px solid #eee6; cursor:pointer; transition:opacity 0.25s; }
+    .medalha-img { position:relative; z-index:1; width:36px; height:36px; object-fit:contain; border-radius:7px; background:#fff2; border:1.5px solid #eee6; cursor:pointer; transition:opacity 0.25s; margin:0 auto; }
     .qtd-medalha { font-family:'Fira Mono',monospace; font-size:1.09em; font-weight:bold; color:#ffd700; }
     .qtd-medalha.prata {color:#d0d8e6;}
     .qtd-medalha.bronze {color:#fa9940;}
     .cartao-fechar { position: absolute; top: 11px; right: 15px; background: none; border: none; font-size: 1.5em; color: #e9f8ff; font-weight: bold; cursor: pointer; border-radius: 5px;}
     .cartao-fechar:hover {background:#428cff33;color:#b02;}
-    .evento-img { width:92px; height:92px; margin:4px auto; border-radius:14px; object-fit:contain; background:#fff3; transition: opacity 0.25s; cursor:pointer; }
+    .evento-img { position:relative; z-index:1; width:92px; height:92px; margin:4px auto; border-radius:14px; object-fit:contain; background:#fff3; transition: opacity 0.25s; cursor:pointer; display:block; }
     .explicacao-medalha {
-      position:relative;
-      z-index:8;
-      color:#fff9b0;
-      font-size:1.10em;
-      padding:7px 10px;
-      margin-top:8px;
-      text-align:center;
-      background:#203060b2;
-      border-radius:9px;
-      min-width:120px;
-      max-width:175px;
-      margin-left:auto;
-      margin-right:auto;
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%) translateY(0);
+      z-index: 2;
+      background: #203060e6;
+      color: #fff9b0;
+      width: 90%;
+      height: 90%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 1.08em;
+      text-align: center;
+      padding: 8px 6px;
+      cursor: pointer;
+      font-family:'Fira Mono',monospace;
+      line-height: 1.35em;
+    }
+    .lesoes-info, .eventos-info {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 110px;
+      justify-content: center;
     }
   </style>
 </head>
@@ -237,14 +250,20 @@
     }
     function adicionarExplicacaoMedalha() {
       document.querySelectorAll('.medalha-img, .evento-img').forEach(img => {
-        img.addEventListener('click', function() {
-          img.style.opacity = '0.25';
+        img.onclick = function() {
           if (img.parentNode.querySelector('.explicacao-medalha')) return;
+          img.style.opacity = '0.15';
           let explicacao = document.createElement('div');
           explicacao.className = 'explicacao-medalha';
           explicacao.textContent = obterExplicacaoMedalha(img.alt);
+          explicacao.onclick = function(e) {
+            e.stopPropagation();
+            img.style.opacity = '1.0';
+            explicacao.remove();
+          }
+          img.parentNode.style.position = "relative";
           img.parentNode.appendChild(explicacao);
-        });
+        };
       });
     }
     function obterExplicacaoMedalha(tipo) {
