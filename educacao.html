@@ -2,9 +2,8 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Jurassic Desktop Escola</title>
+  <title>Jurassic Desktop Escola - Dois Sistemas 3D</title>
   <style>
-    /* Estilos originais da página desktop - NÃO mexer */
     body {
       margin: 0;
       background: #004040;
@@ -236,15 +235,16 @@
       font-size: 13px;
     }
     body.three-active { overflow: hidden; background: #080c0e; }
-    #threeContainer {
+    #threeContainer1, #threeContainer2 {
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
       z-index: 1500;
       background: #080c0e;
       overflow: hidden;
+      display: none;
     }
-    #info {
+    #info1, #info2 {
       position: absolute; top: 18px; left: 18px;
       font-family: 'Courier New', monospace;
       background: rgba(5,40,15,0.92); color: #00ff00;
@@ -252,7 +252,7 @@
       border-radius: 8px; font-size: 18px; z-index: 1550;
       user-select: none;
     }
-    #confirm {
+    #confirm1, #confirm2 {
       position: absolute; left:50%; top:51%;
       transform:translate(-50%, -50%);
       background:#002e0d; color:#00ff00;
@@ -261,14 +261,7 @@
       box-shadow: 0 0 33px #00ff005c;
       padding:35px 40px; display:none;
     }
-    #confirm button {
-      background:#004422; border:2px solid #00ff00;
-      color:#00ff00; font-family:inherit; font-size:18px;
-      padding:9px 32px; cursor:pointer; border-radius:9px;
-      margin:15px 16px 0 16px; transition:background 0.11s;
-    }
-    #confirm button:hover {background: #005555; color: #fff;}
-    #conteudo {
+    #conteudo1, #conteudo2 {
       position: absolute; left:50%; top:54%;
       transform:translate(-50%, -50%);
       background:#001c19;color:#00ff00;
@@ -276,13 +269,7 @@
       border:3px solid #00ff00;border-radius:13px;
       box-shadow:0 0 25px #00ff0033;padding:33px 40px;display:none;
     }
-    #conteudo button {
-      margin-top:18px;background:#004422; color:#00ff00;
-      border:2px solid #00ff00;padding:7px 24px;font-size:18px;
-      cursor:pointer;border-radius:9px;transition:background 0.11s;
-    }
-    #conteudo button:hover {background: #005555; color: #fff;}
-    #voltar-edu {
+    #voltar-edu1, #voltar-edu2 {
       position: fixed;
       top: 26px;
       right: 26px;
@@ -295,27 +282,6 @@
       border: none;
       cursor: pointer;
       box-shadow: 1px 2px 12px #00334ab7;
-    }
-    /* Botões lado a lado no modal */
-    #modalButtons {
-      display: flex;
-      justify-content: flex-start;
-      gap: 12px;
-      margin-top: 18px;
-    }
-    #modalButtons button {
-      background: #004422;
-      border: 1px solid #00ff00;
-      color: #00ff00;
-      padding: 8px 22px;
-      font-size: 15px;
-      cursor: pointer;
-      font-family: inherit;
-      border-radius: 3px;
-      transition: background 0.2s;
-    }
-    #modalButtons button:hover {
-      background: #005555;
     }
   </style>
 </head>
@@ -358,9 +324,9 @@
     <div id="infoBoxes">
       <div class="box" data-info="Status: Ciências e Tecnologias." data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos" data-site="https://www.aed.edu.pt/"><img src="casquilhos.png" alt="Escola Secundária dos Casquilhos"></div>
       <div class="box" data-info="Status: Licenciatura em Tecnologia Biomédica." data-detail="IPS: 2022  - ..." data-site="https://www.ips.pt/"><img src="POLISET.png" alt="Politécnico de Setúbal"></div>
-      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática" data-site="https://www.isel.pt/"><img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa"></div>
+      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Física Médica, Curso Preparatório de Matemática" data-site="https://www.isel.pt/"><img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa"></div>
       <div class="box" data-info="Status: English A2." data-detail="TECMINHO: 2023." data-site="https://www.uminho.pt/"><img src="TECMINHO.png" alt="Universidade do Minho"></div>
-      <div class="box" data-info="Status: Processamento e Análise de Dados com Pyhon." data-detail="IPC: 2022." data-site="https://www.ipc.pt/"><img src="IPC.png" alt="Instituto Politécnico de Coimbra"></div>
+      <div class="box" data-info="Status: Processamento e Análise de Dados com Python." data-detail="IPC: 2022." data-site="https://www.ipc.pt/"><img src="IPC.png" alt="Instituto Politécnico de Coimbra"></div>
     </div>
     <div id="infoContainer"></div>
   </div>
@@ -372,11 +338,20 @@
   </div>
 </div>
 
-<div id="threeContainer" style="display:none;">
-  <div id="info">Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!</div>
-  <div id="confirm"></div>
-  <div id="conteudo"></div>
-  <button id="voltar-edu">Voltar atrás</button>
+<!-- Sistema 3D 1 -->
+<div id="threeContainer1">
+  <div id="info1">Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!</div>
+  <div id="confirm1"></div>
+  <div id="conteudo1"></div>
+  <button id="voltar-edu1">Voltar atrás</button>
+</div>
+
+<!-- Sistema 3D 2 -->
+<div id="threeContainer2">
+  <div id="info2">Sistema 3D 2: Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!</div>
+  <div id="confirm2"></div>
+  <div id="conteudo2"></div>
+  <button id="voltar-edu2">Voltar atrás</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
@@ -473,23 +448,36 @@ infoBoxes.addEventListener("click", function(e) {
       const isIPS = tituloUpper.includes('IPS');
       const isISEL = tituloUpper.includes('ISEL');
 
-      // Criar botões lado a lado
-      if (isIPS || isISEL) {
-        // Botão Documentos
-        const btnDocs = document.createElement("button");
-        btnDocs.textContent = "Documentos";
-        btnDocs.addEventListener("click", () => {
+      // Botões lado a lado
+      if (isIPS) {
+        // Botão Documentos para sistema 3D 1
+        const btnDocs1 = document.createElement("button");
+        btnDocs1.textContent = "Documentos";
+        btnDocs1.addEventListener("click", () => {
           desktop.style.display = "none";
           programWindow.style.display = "none";
-          threeContainer.style.display = "block";
+          threeContainer1.style.display = "block";
           document.body.classList.add('three-active');
-          if (!scene) init3D();
+          if (!scene1) init3D1();
           closeModal();
         });
-        modalBtnsDiv.appendChild(btnDocs);
+        modalBtnsDiv.appendChild(btnDocs1);
+      } else if (isISEL) {
+        // Botão Documentos para sistema 3D 2
+        const btnDocs2 = document.createElement("button");
+        btnDocs2.textContent = "Documentos";
+        btnDocs2.addEventListener("click", () => {
+          desktop.style.display = "none";
+          programWindow.style.display = "none";
+          threeContainer2.style.display = "block";
+          document.body.classList.add('three-active');
+          if (!scene2) init3D2();
+          closeModal();
+        });
+        modalBtnsDiv.appendChild(btnDocs2);
       }
 
-      // Botão Planos de Estudos para todos (IPS e ISEL ou não)
+      // Botão Planos de Estudos para todos
       const btnPlanos = document.createElement("button");
       btnPlanos.textContent = "Planos de Estudos";
       btnPlanos.addEventListener("click", () => {
@@ -543,51 +531,45 @@ function showConfirmBox() {
   };
 }
 
-//--------- INÍCIO - CÓDIGO THREE.JS INTEGRADO PARA DOCUMENTOS ---------
-const iconDocs = document.getElementById("icon-docs");
-const threeContainer = document.getElementById("threeContainer");
-const voltarEduBtn = document.getElementById("voltar-edu");
-const infoText = document.getElementById("info");
-const confirmBox = document.getElementById("confirm");
-const conteudoBox = document.getElementById("conteudo");
+// SISTEMA 3D #1
+const threeContainer1 = document.getElementById("threeContainer1");
+const infoText1 = document.getElementById("info1");
+const confirmBox1 = document.getElementById("confirm1");
+const conteudoBox1 = document.getElementById("conteudo1");
+const voltarEduBtn1 = document.getElementById("voltar-edu1");
 
-let arquivos = [
+let scene1, camera1, renderer1;
+let camDist1 = 21, camRotX1 = 0.16, camRotY1 = -0.02;
+let blocos1 = [], luzes1 = [];
+const arquivos1 = [
   {nome:"Bioquímica", descricao:"Seminário de Fosfatidilserina", conteudo:"Conteúdo PDF: Bioquímica", link:"bioquimica.pdf"},
   {nome:"Sinais Vida", descricao:"Relatório Eletrotecnia", conteudo:"Conteúdo PDF: Sinais de Vida", link:"relatorio_eletrotecnia.pdf"},
-  {nome:"Exoesqueleto", descricao:"Exoesqueleto Inferior", conteudo:"Conteúdo PDF: Exoesqueleto", link:"projeto_dpm_LTB.pdf"},
-  {nome:"Genética", descricao:"Aula Genética", conteudo:"Conteúdo PDF: Exoesqueleto PPT", link:"DPM.pdf"},
-  {nome:"Bombas Insulina", descricao:"Inovação em Insulina", conteudo:"Conteúdo PDF: Bombas Insulina", link:"Dispositivos_Médicos.pdf"},
-  {nome:"Ressonância", descricao:"Projeto RM", conteudo:"Conteúdo PDF: Ressonância", link:"equipsaude.pdf"},
-  {nome:"Nanopartículas", descricao:"Poster Nanopartículas", conteudo:"Conteúdo PDF: Nanopartículas", link:"Poster_1.pdf"},
-  {nome:"CRISPR", descricao:"Poster CRISPR", conteudo:"Conteúdo PDF: CRISPR", link:"Poster_2.pdf"}
+  {nome:"Exoesqueleto", descricao:"Exoesqueleto Inferior", conteudo:"Conteúdo PDF: Exoesqueleto", link:"projeto_dpm_LTB.pdf"}
 ];
 
-let scene, camera, renderer;
-let camDist = 21, camRotX = 0.16, camRotY = -0.02;
-let blocos = [], luzes = [];
+function init3D1() {
+  if (scene1) return; // já inicializado
+  scene1 = new THREE.Scene();
+  camera1 = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
+  setCameraPos1();
 
-function init3D() {
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
-  setCameraPos();
+  renderer1 = new THREE.WebGLRenderer({antialias:true});
+  renderer1.setSize(window.innerWidth, window.innerHeight);
+  renderer1.setPixelRatio(window.devicePixelRatio);
 
-  renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  threeContainer1.innerHTML = '';
+  threeContainer1.appendChild(infoText1);
+  threeContainer1.appendChild(confirmBox1);
+  threeContainer1.appendChild(conteudoBox1);
+  threeContainer1.appendChild(voltarEduBtn1);
+  threeContainer1.appendChild(renderer1.domElement);
 
-  threeContainer.innerHTML = '';
-  threeContainer.appendChild(infoText);
-  threeContainer.appendChild(confirmBox);
-  threeContainer.appendChild(conteudoBox);
-  threeContainer.appendChild(voltarEduBtn);
-  threeContainer.appendChild(renderer.domElement);
-
-  scene.add(new THREE.AmbientLight(0x88ffbb, 0.63));
+  scene1.add(new THREE.AmbientLight(0x88ffbb, 0.63));
   let dirLight = new THREE.DirectionalLight(0xffffff, 0.80);
   dirLight.position.set(50,70,45);
-  scene.add(dirLight);
+  scene1.add(dirLight);
 
-  const quadTam = 2.7, quadQtX = 28, quadQtZ = 18;
+  const quadTam = 2.7, quadQtX = 10, quadQtZ = 5;
   for (let x=-quadQtX;x<=quadQtX;x++) {
     for (let z=-quadQtZ;z<=quadQtZ;z++) {
       let geo = new THREE.BoxGeometry(quadTam,0.14,quadTam);
@@ -596,26 +578,27 @@ function init3D() {
       });
       let quad = new THREE.Mesh(geo, mat);
       quad.position.set(x*quadTam,0, z*quadTam);
-      scene.add(quad);
+      scene1.add(quad);
     }
   }
   let baseGeo = new THREE.BoxGeometry(15*quadTam,0.48,6.4*quadTam);
   let baseMat = new THREE.MeshPhongMaterial({color:0xff3333, transparent:true, opacity:0.90});
   let base = new THREE.Mesh(baseGeo, baseMat);
   base.position.set(0, 0.17, 0);
-  scene.add(base);
+  scene1.add(base);
 
-  const nFileiras = 3;
-  const blocosPorFileira = Math.ceil(arquivos.length / nFileiras);
+  const nFileiras = 2;
+  const blocosPorFileira = Math.ceil(arquivos1.length / nFileiras);
   const larguraBase = 15 * quadTam;
   const profundBase = 6.4 * quadTam;
   const espacoX = larguraBase / blocosPorFileira;
   const xInit = -larguraBase / 2 + espacoX / 2;
   const espacoZ = profundBase / (nFileiras + 1);
   const zInit = -profundBase / 2 + espacoZ;
-  blocos = [];
-  luzes = [];
-  for (let i=0; i<arquivos.length; i++) {
+  blocos1 = [];
+  luzes1 = [];
+
+  for (let i=0; i<arquivos1.length; i++) {
     let geometry = new THREE.BoxGeometry(2.6,0.75,1.7);
     let material = new THREE.MeshPhongMaterial({
       color:0x00ffbb, emissive:0x00ff00, emissiveIntensity:0.18
@@ -628,16 +611,16 @@ function init3D() {
       0.82,
       zInit + linha * espacoZ
     );
-    bloco.userData = arquivos[i];
-    scene.add(bloco);
-    blocos.push(bloco);
+    bloco.userData = arquivos1[i];
+    scene1.add(bloco);
+    blocos1.push(bloco);
 
     let canvas = document.createElement('canvas');
     canvas.width=130; canvas.height=37;
     let ctx = canvas.getContext('2d');
     ctx.font = 'bold 20px Courier';
     ctx.fillStyle = '#00ff00';
-    ctx.fillText(arquivos[i].nome,10,29);
+    ctx.fillText(arquivos1[i].nome,10,29);
     let tex = new THREE.CanvasTexture(canvas);
     let face = new THREE.Mesh(
       new THREE.PlaneGeometry(2.25,0.29),
@@ -645,7 +628,7 @@ function init3D() {
     );
     face.position.set(bloco.position.x, bloco.position.y+0.5, bloco.position.z);
     face.rotation.x = -0.54;
-    scene.add(face);
+    scene1.add(face);
 
     let cylGeo = new THREE.CylinderGeometry(1.42,1.42,38,64,1,true);
     let cylMat = new THREE.MeshPhongMaterial({
@@ -659,83 +642,83 @@ function init3D() {
       bloco.position.z
     );
     spotlight.visible = false;
-    scene.add(spotlight);
-    luzes.push(spotlight);
+    scene1.add(spotlight);
+    luzes1.push(spotlight);
   }
 
   let isDragging = false, prevX=0, prevY=0;
-  threeContainer.addEventListener("mousedown", e=>{
+  threeContainer1.addEventListener("mousedown", e=>{
     isDragging=true; prevX=e.clientX; prevY=e.clientY;
   });
   window.addEventListener("mouseup", ()=> isDragging=false);
   window.addEventListener("mousemove", e=>{
     if(isDragging){
-      camRotY += (e.clientX-prevX)*0.012;
-      camRotX += (e.clientY-prevY)*0.006;
-      camRotX = Math.max(0,Math.min(0.55, camRotX));
+      camRotY1 += (e.clientX-prevX)*0.012;
+      camRotX1 += (e.clientY-prevY)*0.006;
+      camRotX1 = Math.max(0,Math.min(0.55, camRotX1));
       prevX = e.clientX; prevY = e.clientY;
-      setCameraPos();
+      setCameraPos1();
     }
   });
-  threeContainer.addEventListener("wheel", e=>{
+  threeContainer1.addEventListener("wheel", e=>{
     e.preventDefault();
-    camDist += e.deltaY<0 ? -2 : 2;
-    camDist = Math.max(16,Math.min(34,camDist));
-    setCameraPos();
+    camDist1 += e.deltaY<0 ? -2 : 2;
+    camDist1 = Math.max(16,Math.min(34,camDist1));
+    setCameraPos1();
   }, { passive:false });
 
-  threeContainer.addEventListener("mousemove", updateHoverHighlight);
-  threeContainer.addEventListener("click", onClickBloco);
+  threeContainer1.addEventListener("mousemove", updateHoverHighlight1);
+  threeContainer1.addEventListener("click", onClickBloco1);
 
-  function setCameraPos() {
-    camera.position.x = Math.sin(camRotY) * Math.cos(camRotX) * camDist;
-    camera.position.y = Math.sin(camRotX) * camDist + 3.2;
-    camera.position.z = Math.cos(camRotY) * Math.cos(camRotX) * camDist;
-    camera.lookAt(0,0,0);
+  function setCameraPos1() {
+    camera1.position.x = Math.sin(camRotY1) * Math.cos(camRotX1) * camDist1;
+    camera1.position.y = Math.sin(camRotX1) * camDist1 + 3.2;
+    camera1.position.z = Math.cos(camRotY1) * Math.cos(camRotX1) * camDist1;
+    camera1.lookAt(0,0,0);
   }
-  setCameraPos();
+  setCameraPos1();
 
-  function updateHoverHighlight(e) {
-    const rect = renderer.domElement.getBoundingClientRect();
+  function updateHoverHighlight1(e) {
+    const rect = renderer1.domElement.getBoundingClientRect();
     const mouse = {
       x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
       y: -((e.clientY - rect.top) / rect.height) * 2 + 1
     };
     const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(blocos);
+    raycaster.setFromCamera(mouse, camera1);
+    const intersects = raycaster.intersectObjects(blocos1);
     let found = false;
-    for (let i=0; i<blocos.length; i++) {
-      if (intersects.length > 0 && blocos[i] === intersects[0].object) {
-        luzes[i].visible = true;
+    for (let i=0; i<blocos1.length; i++) {
+      if (intersects.length > 0 && blocos1[i] === intersects[0].object) {
+        luzes1[i].visible = true;
         found = true;
-        infoText.textContent = `Selecionado: ${blocos[i].userData.nome}`;
+        infoText1.textContent = `Selecionado: ${blocos1[i].userData.nome}`;
       } else {
-        luzes[i].visible = false;
+        luzes1[i].visible = false;
       }
     }
-    if (!found) infoText.textContent = "Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique para aceder aos documentos!";
+    if (!found) infoText1.textContent = "Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!";
   }
 
-  function onClickBloco(e) {
-    const rect = renderer.domElement.getBoundingClientRect();
+  function onClickBloco1(e) {
+    const rect = renderer1.domElement.getBoundingClientRect();
     const mouse = {
       x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
       y: -((e.clientY - rect.top) / rect.height) * 2 + 1
     };
     const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(blocos);
+    raycaster.setFromCamera(mouse, camera1);
+    const intersects = raycaster.intersectObjects(blocos1);
 
-    confirmBox.style.display = "none";
-    conteudoBox.style.display = "none";
-    clearTimeout(window.delayPopup);
-    luzes.forEach(luz => luz.visible = false);
+    confirmBox1.style.display = "none";
+    conteudoBox1.style.display = "none";
+    clearTimeout(window.delayPopup1);
+    luzes1.forEach(luz => luz.visible = false);
 
     if (intersects.length > 0) {
-      const i = blocos.indexOf(intersects[0].object);
+      const i = blocos1.indexOf(intersects[0].object);
       if (i >= 0) {
-        let luz = luzes[i];
+        let luz = luzes1[i];
         luz.visible = true;
         luz.scale.set(1,0.18,1);
         let grow = () => {
@@ -745,36 +728,36 @@ function init3D() {
           }
         };
         grow();
-        infoText.textContent = `Selecionado: ${blocos[i].userData.nome}`;
+        infoText1.textContent = `Selecionado: ${blocos1[i].userData.nome}`;
 
-        window.delayPopup = setTimeout(() => {
-          confirmBox.innerHTML =
-            `<b>${blocos[i].userData.nome}</b><br>
-             <small>${blocos[i].userData.descricao}</small><br>
+        window.delayPopup1 = setTimeout(() => {
+          confirmBox1.innerHTML =
+            `<b>${blocos1[i].userData.nome}</b><br>
+             <small>${blocos1[i].userData.descricao}</small><br>
              <div style="margin-top:13px;">Quero abrir esta pasta?</div>
-             <button id="sim">Sim</button>
-             <button id="nao">Não</button>`;
-          confirmBox.style.display = "block";
+             <button id="sim1">Sim</button>
+             <button id="nao1">Não</button>`;
+          confirmBox1.style.display = "block";
 
-          document.getElementById("sim").onclick = () => {
-            confirmBox.style.display = "none";
+          document.getElementById("sim1").onclick = () => {
+            confirmBox1.style.display = "none";
             luz.visible = false;
-            if (blocos[i].userData.link) {
-              window.open(blocos[i].userData.link, "_blank");
+            if (blocos1[i].userData.link) {
+              window.open(blocos1[i].userData.link, "_blank");
             } else {
               alert("PDF não encontrado para este documento.");
             }
           };
 
-          document.getElementById("nao").onclick = () => {
-            confirmBox.style.display = "none";
+          document.getElementById("nao1").onclick = () => {
+            confirmBox1.style.display = "none";
             luz.visible = false;
           };
 
           setTimeout(() => document.body.onclick = function(ev){
-            if(!confirmBox.contains(ev.target) && !conteudoBox.contains(ev.target)){
-              confirmBox.style.display = "none";
-              conteudoBox.style.display = "none";
+            if(!confirmBox1.contains(ev.target) && !conteudoBox1.contains(ev.target)){
+              confirmBox1.style.display = "none";
+              conteudoBox1.style.display = "none";
               luz.visible = false;
               document.body.onclick = null;
             }
@@ -784,35 +767,291 @@ function init3D() {
     }
   }
 
-  function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
+  function animate1() {
+    requestAnimationFrame(animate1);
+    renderer1.render(scene1, camera1);
   }
-  animate();
+  animate1();
 
   window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (!camera1 || !renderer1) return;
+    camera1.aspect = window.innerWidth/window.innerHeight;
+    camera1.updateProjectionMatrix();
+    renderer1.setSize(window.innerWidth, window.innerHeight);
   });
 }
 
-iconDocs.addEventListener("click", () => {
-  desktop.style.display = "none";
-  programWindow.style.display = "none";
-  threeContainer.style.display = "block";
-  document.body.classList.add('three-active');
-  if (!scene) init3D();
-});
+// SISTEMA 3D #2
+const threeContainer2 = document.getElementById("threeContainer2");
+const infoText2 = document.getElementById("info2");
+const confirmBox2 = document.getElementById("confirm2");
+const conteudoBox2 = document.getElementById("conteudo2");
+const voltarEduBtn2 = document.getElementById("voltar-edu2");
 
-voltarEduBtn.addEventListener("click", () => {
-  threeContainer.style.display = "none";
+let scene2, camera2, renderer2;
+let camDist2 = 21, camRotX2 = 0.16, camRotY2 = -0.02;
+let blocos2 = [], luzes2 = [];
+const arquivos2 = [
+  {nome:"Genética", descricao:"Aula Genética", conteudo:"Conteúdo PDF: Genética", link:"DPM.pdf"},
+  {nome:"Bombas Insulina", descricao:"Inovação em Insulina", conteudo:"Conteúdo PDF: Bombas Insulina", link:"Dispositivos_Médicos.pdf"},
+  {nome:"Ressonância", descricao:"Projeto RM", conteudo:"Conteúdo PDF: Ressonância", link:"equipsaude.pdf"},
+  {nome:"Nanopartículas", descricao:"Poster Nanopartículas", conteudo:"Conteúdo PDF: Nanopartículas", link:"Poster_1.pdf"},
+  {nome:"CRISPR", descricao:"Poster CRISPR", conteudo:"Conteúdo PDF: CRISPR", link:"Poster_2.pdf"}
+];
+
+function init3D2() {
+  if (scene2) return; // já inicializado
+  scene2 = new THREE.Scene();
+  camera2 = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
+  setCameraPos2();
+
+  renderer2 = new THREE.WebGLRenderer({antialias:true});
+  renderer2.setSize(window.innerWidth, window.innerHeight);
+  renderer2.setPixelRatio(window.devicePixelRatio);
+
+  threeContainer2.innerHTML = '';
+  threeContainer2.appendChild(infoText2);
+  threeContainer2.appendChild(confirmBox2);
+  threeContainer2.appendChild(conteudoBox2);
+  threeContainer2.appendChild(voltarEduBtn2);
+  threeContainer2.appendChild(renderer2.domElement);
+
+  scene2.add(new THREE.AmbientLight(0x88ffbb, 0.63));
+  let dirLight = new THREE.DirectionalLight(0xffffff, 0.80);
+  dirLight.position.set(50,70,45);
+  scene2.add(dirLight);
+
+  const quadTam = 2.7, quadQtX = 12, quadQtZ = 7;
+  for (let x=-quadQtX;x<=quadQtX;x++) {
+    for (let z=-quadQtZ;z<=quadQtZ;z++) {
+      let geo = new THREE.BoxGeometry(quadTam,0.14,quadTam);
+      let mat = new THREE.MeshPhongMaterial({
+        color:0x61ff7c, emissive:0x19ff36, emissiveIntensity:0.22, transparent:true, opacity:0.44
+      });
+      let quad = new THREE.Mesh(geo, mat);
+      quad.position.set(x*quadTam,0, z*quadTam);
+      scene2.add(quad);
+    }
+  }
+  let baseGeo = new THREE.BoxGeometry(15*quadTam,0.48,6.4*quadTam);
+  let baseMat = new THREE.MeshPhongMaterial({color:0xff3333, transparent:true, opacity:0.90});
+  let base = new THREE.Mesh(baseGeo, baseMat);
+  base.position.set(0, 0.17, 0);
+  scene2.add(base);
+
+  const nFileiras = 3;
+  const blocosPorFileira = Math.ceil(arquivos2.length / nFileiras);
+  const larguraBase = 15 * quadTam;
+  const profundBase = 6.4 * quadTam;
+  const espacoX = larguraBase / blocosPorFileira;
+  const xInit = -larguraBase / 2 + espacoX / 2;
+  const espacoZ = profundBase / (nFileiras + 1);
+  const zInit = -profundBase / 2 + espacoZ;
+  blocos2 = [];
+  luzes2 = [];
+
+  for (let i=0; i<arquivos2.length; i++) {
+    let geometry = new THREE.BoxGeometry(2.6,0.75,1.7);
+    let material = new THREE.MeshPhongMaterial({
+      color:0x00ffbb, emissive:0x00ff00, emissiveIntensity:0.18
+    });
+    const linha = Math.floor(i / blocosPorFileira);
+    let posNaLinha = i % blocosPorFileira;
+    let bloco = new THREE.Mesh(geometry, material);
+    bloco.position.set(
+      xInit + posNaLinha * espacoX,
+      0.82,
+      zInit + linha * espacoZ
+    );
+    bloco.userData = arquivos2[i];
+    scene2.add(bloco);
+    blocos2.push(bloco);
+
+    let canvas = document.createElement('canvas');
+    canvas.width=130; canvas.height=37;
+    let ctx = canvas.getContext('2d');
+    ctx.font = 'bold 20px Courier';
+    ctx.fillStyle = '#00ff00';
+    ctx.fillText(arquivos2[i].nome,10,29);
+    let tex = new THREE.CanvasTexture(canvas);
+    let face = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.25,0.29),
+      new THREE.MeshBasicMaterial({map:tex,transparent:true})
+    );
+    face.position.set(bloco.position.x, bloco.position.y+0.5, bloco.position.z);
+    face.rotation.x = -0.54;
+    scene2.add(face);
+
+    let cylGeo = new THREE.CylinderGeometry(1.42,1.42,38,64,1,true);
+    let cylMat = new THREE.MeshPhongMaterial({
+      color:0xffffff, transparent:true, opacity:0.40, side:THREE.DoubleSide,
+      emissive:0xffffff, emissiveIntensity:0.35
+    });
+    let spotlight = new THREE.Mesh(cylGeo, cylMat);
+    spotlight.position.set(
+      bloco.position.x,
+      base.position.y + (baseGeo.parameters.height/2) + (38/2),
+      bloco.position.z
+    );
+    spotlight.visible = false;
+    scene2.add(spotlight);
+    luzes2.push(spotlight);
+  }
+
+  let isDragging = false, prevX=0, prevY=0;
+  threeContainer2.addEventListener("mousedown", e=>{
+    isDragging=true; prevX=e.clientX; prevY=e.clientY;
+  });
+  window.addEventListener("mouseup", ()=> isDragging=false);
+  window.addEventListener("mousemove", e=>{
+    if(isDragging){
+      camRotY2 += (e.clientX-prevX)*0.012;
+      camRotX2 += (e.clientY-prevY)*0.006;
+      camRotX2 = Math.max(0,Math.min(0.55, camRotX2));
+      prevX = e.clientX; prevY = e.clientY;
+      setCameraPos2();
+    }
+  });
+  threeContainer2.addEventListener("wheel", e=>{
+    e.preventDefault();
+    camDist2 += e.deltaY<0 ? -2 : 2;
+    camDist2 = Math.max(16,Math.min(34,camDist2));
+    setCameraPos2();
+  }, { passive:false });
+
+  threeContainer2.addEventListener("mousemove", updateHoverHighlight2);
+  threeContainer2.addEventListener("click", onClickBloco2);
+
+  function setCameraPos2() {
+    camera2.position.x = Math.sin(camRotY2) * Math.cos(camRotX2) * camDist2;
+    camera2.position.y = Math.sin(camRotX2) * camDist2 + 3.2;
+    camera2.position.z = Math.cos(camRotY2) * Math.cos(camRotX2) * camDist2;
+    camera2.lookAt(0,0,0);
+  }
+  setCameraPos2();
+
+  function updateHoverHighlight2(e) {
+    const rect = renderer2.domElement.getBoundingClientRect();
+    const mouse = {
+      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+    };
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera2);
+    const intersects = raycaster.intersectObjects(blocos2);
+    let found = false;
+    for (let i=0; i<blocos2.length; i++) {
+      if (intersects.length > 0 && blocos2[i] === intersects[0].object) {
+        luzes2[i].visible = true;
+        found = true;
+        infoText2.textContent = `Selecionado: ${blocos2[i].userData.nome}`;
+      } else {
+        luzes2[i].visible = false;
+      }
+    }
+    if (!found) infoText2.textContent = "Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!";
+  }
+
+  function onClickBloco2(e) {
+    const rect = renderer2.domElement.getBoundingClientRect();
+    const mouse = {
+      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+    };
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera2);
+    const intersects = raycaster.intersectObjects(blocos2);
+
+    confirmBox2.style.display = "none";
+    conteudoBox2.style.display = "none";
+    clearTimeout(window.delayPopup2);
+    luzes2.forEach(luz => luz.visible = false);
+
+    if (intersects.length > 0) {
+      const i = blocos2.indexOf(intersects[0].object);
+      if (i >= 0) {
+        let luz = luzes2[i];
+        luz.visible = true;
+        luz.scale.set(1,0.18,1);
+        let grow = () => {
+          if(luz.scale.y < 1) {
+            luz.scale.y += 0.11;
+            requestAnimationFrame(grow);
+          }
+        };
+        grow();
+        infoText2.textContent = `Selecionado: ${blocos2[i].userData.nome}`;
+
+        window.delayPopup2 = setTimeout(() => {
+          confirmBox2.innerHTML =
+            `<b>${blocos2[i].userData.nome}</b><br>
+             <small>${blocos2[i].userData.descricao}</small><br>
+             <div style="margin-top:13px;">Quero abrir esta pasta?</div>
+             <button id="sim2">Sim</button>
+             <button id="nao2">Não</button>`;
+          confirmBox2.style.display = "block";
+
+          document.getElementById("sim2").onclick = () => {
+            confirmBox2.style.display = "none";
+            luz.visible = false;
+            if (blocos2[i].userData.link) {
+              window.open(blocos2[i].userData.link, "_blank");
+            } else {
+              alert("PDF não encontrado para este documento.");
+            }
+          };
+
+          document.getElementById("nao2").onclick = () => {
+            confirmBox2.style.display = "none";
+            luz.visible = false;
+          };
+
+          setTimeout(() => document.body.onclick = function(ev){
+            if(!confirmBox2.contains(ev.target) && !conteudoBox2.contains(ev.target)){
+              confirmBox2.style.display = "none";
+              conteudoBox2.style.display = "none";
+              luz.visible = false;
+              document.body.onclick = null;
+            }
+          }, 120);
+        }, 500);
+      }
+    }
+  }
+
+  function animate2() {
+    requestAnimationFrame(animate2);
+    renderer2.render(scene2, camera2);
+  }
+  animate2();
+
+  window.addEventListener("resize", () => {
+    if (!camera2 || !renderer2) return;
+    camera2.aspect = window.innerWidth/window.innerHeight;
+    camera2.updateProjectionMatrix();
+    renderer2.setSize(window.innerWidth, window.innerHeight);
+  });
+}
+
+// Botões voltar atrás para esconder os sistemas 3D e voltar ao desktop
+voltarEduBtn1.addEventListener("click", () => {
+  threeContainer1.style.display = "none";
   desktop.style.display = "block";
   programWindow.style.display = "block";
   document.body.classList.remove('three-active');
-  confirmBox.style.display = "none";
-  conteudoBox.style.display = "none";
+  confirmBox1.style.display = "none";
+  conteudoBox1.style.display = "none";
 });
+
+voltarEduBtn2.addEventListener("click", () => {
+  threeContainer2.style.display = "none";
+  desktop.style.display = "block";
+  programWindow.style.display = "block";
+  document.body.classList.remove('three-active');
+  confirmBox2.style.display = "none";
+  conteudoBox2.style.display = "none";
+});
+
 document.getElementById("icon-home").addEventListener("click", function() {
   window.location.href = "index.html";
 });
