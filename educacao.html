@@ -132,19 +132,19 @@
       from { opacity: 0; transform: translateY(12px);}
       to { opacity: 1; transform: translateY(0); }
     }
-    .verMaisBtn {
+    .btn-duo {display: flex; gap:10px; margin-top:16px;}
+    .btnModal {
       background: #004422;
       border: 1px solid #00ff00;
       color: #00ff00;
-      font-family: inherit;
-      font-size: 14px;
-      padding: 6px 18px;
+      padding: 8px 22px;
       cursor: pointer;
-      margin-top: 11px;
-      display: block;
+      font-size: 15px;
+      font-family: inherit;
       transition: background 0.2s;
     }
-    .verMaisBtn:hover { background: #005555; }
+    .btnModal:hover { background: #005555; color: #fff; }
+    .btnModal[disabled] { opacity:0.63; cursor:not-allowed;}
     .modalOverlay, .confirmOverlay {
       position: fixed;
       left: 0; top: 0;
@@ -341,11 +341,11 @@
     </header>
     <button id="startButton">Iniciar programa</button>
     <div id="infoBoxes">
-      <div class="box" data-info="Status: Ciências e Tecnologias." data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos" data-site="https://www.aed.edu.pt/"><img src="casquilhos.png" alt="Escola Secundária dos Casquilhos" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: Licenciatura em Tecnologia Biomédica." data-detail="IPS: 2022  - ..." data-site="https://www.ips.pt/"><img src="POLISET.png" alt="Politécnico de Setúbal" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática" data-site="https://www.isel.pt/"><img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: English A2." data-detail="TECMINHO: 2023." data-site="https://www.uminho.pt/"><img src="TECMINHO.png" alt="Universidade do Minho" style="width:50%; display:block; margin:0 auto"></div>
-      <div class="box" data-info="Status: Processamento e Análise de Dados com Pyhon." data-detail="IPC: 2022." data-site="https://www.ipc.pt/"><img src="IPC.png" alt="Instituto Politécnico de Coimbra" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Ciências e Tecnologias." data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos" data-site="https://www.aed.edu.pt/" data-inst="casquilhos"><img src="casquilhos.png" alt="Escola Secundária dos Casquilhos" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Licenciatura em Tecnologia Biomédica." data-detail="IPS: 2022  - ..." data-site="https://www.ips.pt/" data-inst="ips"><img src="POLISET.png" alt="Politécnico de Setúbal" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Unidades Curriculares Isoladas." data-detail="ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática" data-site="https://www.isel.pt/" data-inst="isel"><img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: English A2." data-detail="TECMINHO: 2023." data-site="https://www.uminho.pt/" data-inst="tecminho"><img src="TECMINHO.png" alt="Universidade do Minho" style="width:50%; display:block; margin:0 auto"></div>
+      <div class="box" data-info="Status: Processamento e Análise de Dados com Pyhon." data-detail="IPC: 2022." data-site="https://www.ipc.pt/" data-inst="ipc"><img src="IPC.png" alt="Instituto Politécnico de Coimbra" style="width:50%; display:block; margin:0 auto"></div>
     </div>
     <div id="infoContainer"></div>
   </div>
@@ -366,7 +366,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
 <script>
-// --- Desktop e Modal controles --
 const preFade = document.getElementById('fadeInPreVideo');
 window.onload = () => { setTimeout(() => { preFade.style.opacity = "0"; }, 180); };
 const intro = document.getElementById('videoIntroContainer');
@@ -391,6 +390,7 @@ setTimeout(() => {
     }, 1500);
   }
 }, 17000);
+
 function updateHour() {
   const now = new Date();
   let hh = now.getHours().toString().padStart(2, '0');
@@ -400,12 +400,16 @@ function updateHour() {
 }
 setInterval(updateHour, 950);
 updateHour();
+
 const schoolIcon = document.getElementById("icon-school");
 const programWindow = document.getElementById("programWindow");
 const startButton = document.getElementById("startButton");
 const infoBoxes = document.getElementById("infoBoxes");
 const infoContainer = document.getElementById("infoContainer");
 const closeProgramBtn = document.querySelector('.closeProgramBtn');
+
+// --- MODAL LOGIC ---
+
 schoolIcon.addEventListener("click", () => {
   programWindow.style.display = "block";
 });
@@ -437,16 +441,29 @@ infoBoxes.addEventListener("click", function(e) {
     setTimeout(() => { fill.style.width = "100%"; }, 40);
     setTimeout(() => {
       infoBoxWindow.innerHTML = `<div>${e.target.getAttribute("data-info")}</div>
-      <button class="verMaisBtn">Ver mais</button>`;
+      <div class="btn-duo">
+        <button class="btnModal" id="btnDocsModal">Documentos</button>
+        <button class="btnModal" id="btnPlanosEstudos">Plano de Estudos</button>
+      </div>`;
       downloadBar.remove();
-      const verMaisBtn = infoBoxWindow.querySelector(".verMaisBtn");
-      verMaisBtn.addEventListener("click", function() {
-        showModal(
-          e.target.getAttribute("data-detail"),
-          e.target.getAttribute("data-detail"),
-          e.target.getAttribute("data-site")
-        );
-      });
+
+      const inst = e.target.getAttribute("data-inst");
+      // Botão: para IPS e ISEL ativo, os outros desabilitado
+      infoBoxWindow.querySelector("#btnDocsModal").disabled = !(inst === 'ips' || inst === 'isel');
+
+      infoBoxWindow.querySelector("#btnDocsModal").onclick = function() {
+        if (inst === 'ips' || inst === 'isel') {
+          showDocsModal(inst);
+        }
+      };
+      infoBoxWindow.querySelector("#btnPlanosEstudos").onclick = function() {
+        const site = e.target.getAttribute("data-site");
+        if (site) {
+          window.open(site, "_blank");
+        } else {
+          alert("Link para Plano de Estudos não disponível.");
+        }
+      };
     }, 1510);
   }
 });
@@ -480,51 +497,50 @@ function showConfirmBox() {
     document.body.removeChild(overlay);
   };
 }
-// Modal de detalhes
-function showModal(titulo, texto, site) {
+// -------- MODAL DOS DOCUMENTOS DIFERENTE POR BLOCO IPS OU ISEL ------
+function showDocsModal(inst) {
   const overlay = document.createElement("div");
   overlay.className = "modalOverlay";
   const modal = document.createElement("div");
   modal.className = "modalPage";
-  let modalHTML = `
-    <button class="closeBtn">X</button>
-    <h2>${titulo}</h2>
-    <p>${texto}</p>
-  `;
-  // Botão Documentos para IPS e ISEL (case-insensitive)
-  const isIPS = titulo.toUpperCase().includes('IPS');
-  const isISEL = titulo.toUpperCase().includes('ISEL');
-  if (isIPS || isISEL) {
-    modalHTML += `<button id="btnDocsModal" style="margin-top:18px;background:#004422;border:1px solid #00ff00;color:#00ff00;padding:8px 22px;cursor:pointer;font-size:15px;">Documentos</button>`;
-  } else {
-    modalHTML += `<button id="btnPlanosEstudos" style="margin-top:18px;background:#004422;border:1px solid #00ff00;color:#00ff00;padding:8px 22px;cursor:pointer;font-size:15px;">Planos de Estudos</button>`;
+  let docsList = [];
+  if (inst === "ips") {
+    docsList = [
+      {nome:"Bioquímica", link:"bioquimica.pdf"},
+      {nome:"Sinais Vida", link:"relatorio_eletrotecnia.pdf"},
+      {nome:"Exoesqueleto", link:"projeto_dpm_LTB.pdf"},
+      {nome:"Genética", link:"DPM.pdf"},
+      {nome:"Bombas Insulina", link:"Dispositivos_Médicos.pdf"},
+      {nome:"Ressonância", link:"equipsaude.pdf"},
+      {nome:"Nanopartículas", link:"Poster_1.pdf"},
+      {nome:"CRISPR", link:"Poster_2.pdf"}
+    ];
+  } else if (inst === "isel") {
+    docsList = [
+      {nome:"Sinais e Sistemas", link:"sinais_sistemas.pdf"},
+      {nome:"Eletrónica", link:"eletronica.pdf"},
+      {nome:"Instrumentação", link:"instrumentacao.pdf"},
+      {nome:"CAD", link:"cad.pdf"},
+      {nome:"Processamento Biomédico", link:"biomedicos.pdf"},
+      {nome:"Física Médica", link:"fisica_medica.pdf"},
+      {nome:"Curso Matemática", link:"matematica.pdf"}
+    ];
   }
-  modal.innerHTML = modalHTML;
+  let docsHTML = `<button class="closeBtn">X</button>
+    <h2>Documentos (${inst.toUpperCase()})</h2>
+    <div>`;
+  docsList.forEach(doc => {
+    docsHTML += `<div style="margin-bottom:9px;">
+      <a href="${doc.link}" target="_blank" style="color:#00ff00;text-decoration:underline;">${doc.nome}</a>
+    </div>`;
+  });
+  docsHTML += `</div>`;
+  modal.innerHTML = docsHTML;
   overlay.appendChild(modal);
   document.body.appendChild(overlay);
-
   modal.querySelector(".closeBtn").onclick = () => document.body.removeChild(overlay);
-  if (isIPS || isISEL) {
-    modal.querySelector("#btnDocsModal").onclick = () => {
-      document.body.removeChild(overlay);
-      desktop.style.display = "none";
-      programWindow.style.display = "none";
-      threeContainer.style.display = "block";
-      document.body.classList.add('three-active');
-      if (!scene) init3D();
-    };
-  } else {
-    modal.querySelector("#btnPlanosEstudos").onclick = () => {
-      if (site) {
-        window.open(site, "_blank");
-      } else {
-        alert("Link para Planos de Estudos não disponível.");
-      }
-    };
-  }
 }
-
-//--------- INÍCIO - CÓDIGO THREE.JS INTEGRADO PARA DOCUMENTOS ---------
+// --------- INÍCIO - CÓDIGO THREE.JS INTEGRADO PARA DOCUMENTOS ---------
 const iconDocs = document.getElementById("icon-docs");
 const threeContainer = document.getElementById("threeContainer");
 const voltarEduBtn = document.getElementById("voltar-edu");
