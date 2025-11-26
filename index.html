@@ -308,23 +308,30 @@ body.gradient-fade::after { opacity: 1; }
   50%     { transform: translateX(4px); }
 }
 
-/* ===== BOTÃO CIMA ===== */
+/* ===== BOTÃO CIMA (APENAS SETAS) ===== */
 .scroll-top-btn {
   position: absolute;
   left: 50%;
-  top: -38px;
+  top: -52px;                 /* mais espaço para cima */
   transform: translateX(-50%);
-  background: #1da1f2;
+  background: transparent;
   border: none;
-  border-radius: 50%;
-  width: 54px;
-  height: 54px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 14px #1da1f277;
   cursor: pointer;
   z-index: 20;
+  padding: 0;
+}
+.scroll-top-btn svg {
+  width: 32px;
+  height: 32px;
+  stroke: #1da1f2;
+}
+.game-details {
+  margin-top: 16px;          /* espaço extra para não colar tudo em baixo */
 }
 
 /* ===== HUB EM BAIXO (SEM CARD, COM VÍDEO) ===== */
@@ -358,7 +365,7 @@ body.gradient-fade::after { opacity: 1; }
   gap: 26px;
 }
 
-/* texto principal */
+/* imagem principal */
 .cover-main {
   width: 100%;
   height: 210px;
@@ -488,7 +495,7 @@ body.gradient-fade::after { opacity: 1; }
   }
   .game-details-inner {
     max-width: 100%;
-    grid-template-columns: 260px 1fr 260px; /* imagem + texto + coluna (activities+vídeo) */
+    grid-template-columns: 260px 1fr 260px;
   }
   .side-column {
     gap: 6px;
@@ -667,9 +674,9 @@ body.gradient-fade::after { opacity: 1; }
 <!-- ===== HUB DESPORTO ===== -->
 <div class="game-details" id="gameDetails-1">
   <button class="scroll-top-btn" onclick="scrollToCarousel()">
-    <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
-      <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg viewBox="0 0 48 48" fill="none">
+      <polyline points="16,28 24,20 32,28" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="16,36 24,28 32,36" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
   <div class="game-details-inner">
@@ -706,9 +713,9 @@ body.gradient-fade::after { opacity: 1; }
 <!-- ===== HUB EDUCAÇÃO ===== -->
 <div class="game-details" id="gameDetails-2">
   <button class="scroll-top-btn" onclick="scrollToCarousel()">
-    <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
-      <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg viewBox="0 0 48 48" fill="none">
+      <polyline points="16,28 24,20 32,28" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="16,36 24,28 32,36" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
   <div class="game-details-inner">
@@ -743,9 +750,9 @@ body.gradient-fade::after { opacity: 1; }
 <!-- ===== HUB FORMAÇÕES ===== -->
 <div class="game-details" id="gameDetails-3">
   <button class="scroll-top-btn" onclick="scrollToCarousel()">
-    <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
-      <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg viewBox="0 0 48 48" fill="none">
+      <polyline points="16,28 24,20 32,28" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="16,36 24,28 32,36" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
   <div class="game-details-inner">
@@ -776,9 +783,9 @@ body.gradient-fade::after { opacity: 1; }
 <!-- ===== HUB EXPERIÊNCIAS ===== -->
 <div class="game-details" id="gameDetails-4">
   <button class="scroll-top-btn" onclick="scrollToCarousel()">
-    <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
-      <polyline points="16,28 24,20 32,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg viewBox="0 0 48 48" fill="none">
+      <polyline points="16,28 24,20 32,28" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="16,36 24,28 32,36" stroke="#1da1f2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
   <div class="game-details-inner">
