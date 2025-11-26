@@ -308,12 +308,12 @@ body.gradient-fade::after { opacity: 1; }
   50%     { transform: translateX(4px); }
 }
 
-/* ===== BOTÃO CIMA (APENAS SETAS) ===== */
+/* ===== BOTÃO CIMA (APENAS SETAS, CENTRADO ENTRE HUB E CARROSSEL) ===== */
 .scroll-top-btn {
   position: absolute;
   left: 50%;
-  top: -52px;                 /* mais espaço para cima */
-  transform: translateX(-50%);
+  top: 0;                    /* ponto de referência é o topo do hub */
+  transform: translate(-50%, -120%); /* sobe para o meio do espaço */
   background: transparent;
   border: none;
   width: 38px;
@@ -329,9 +329,6 @@ body.gradient-fade::after { opacity: 1; }
   width: 32px;
   height: 32px;
   stroke: #1da1f2;
-}
-.game-details {
-  margin-top: 16px;          /* espaço extra para não colar tudo em baixo */
 }
 
 /* ===== HUB EM BAIXO (SEM CARD, COM VÍDEO) ===== */
