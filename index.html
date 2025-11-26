@@ -97,12 +97,36 @@ body.gradient-fade::after{opacity:1;}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
 
 /* CD à frente da palavra Desporto */
-.hud-title.desporto-title{display:inline-flex;align-items:center;gap:12px;}
-.cd-label-wrap{display:inline-flex;align-items:center;gap:10px;}
-.cd-small{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffffff 0%,#dfe3eb 40%,#7f8aa5 70%,#151924 100%);border:3px solid #111722;box-shadow:0 0 8px rgba(0,0,0,.85);position:relative;animation:cdRotate 4s linear infinite,cdWobble 3s ease-in-out infinite;}
-.cd-small::before{content:"";position:absolute;inset:28%;border-radius:50%;background:radial-gradient(circle,#0b1724 0%,#1e3f6a 70%);}
-@keyframes cdRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-@keyframes cdWobble{0%,100%{transform:translateX(0);}50%{transform:translateX(4px);}}
+.cd-label-wrap{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+.cd-small{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#ffffff 0%,#dfe3eb 40%,#7f8aa5 70%,#151924 100%);
+  border:3px solid #111722;
+  box-shadow:0 0 8px rgba(0,0,0,.85);
+  position:relative;
+  animation:cdRotate 4s linear infinite,cdWobble 3s ease-in-out infinite;
+}
+.cd-small::before{
+  content:"";
+  position:absolute;
+  inset:28%;
+  border-radius:50%;
+  background:radial-gradient(circle,#0b1724 0%,#1e3f6a 70%);
+}
+@keyframes cdRotate{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+@keyframes cdWobble{
+  0%,100%{transform:translateX(0);}
+  50%{transform:translateX(4px);}
+}
 
 /* ===== BOTÃO CIMA ===== */
 .scroll-top-btn{position:absolute;left:50%;top:-38px;transform:translateX(-50%);background:#1da1f2;border:none;border-radius:50%;width:54px;height:54px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px #1da1f277;cursor:pointer;z-index:20;}
@@ -241,19 +265,16 @@ body.gradient-fade::after{opacity:1;}
         <div class="menu-item selected" tabindex="0">
           <img src="a1771bdd-c824-4fc4-9310-3479b887080a.png" alt="Habilidades">
         </div>
+        <!-- HABILIDADES (sem CD) -->
         <div class="hud-row">
           <div class="hud-start"><button class="hud-btn">START</button></div>
           <div class="hud-title">Habilidades</div>
         </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0">
-          <img src="3c924d2a-8986-4445-a71e-a9ef40853344.png" alt="Desporto">
-        </div>
+        
+        <!-- DESPORTO (com CD) -->
         <div class="hud-row">
           <div class="hud-start"><button class="hud-btn" id="hud-desporto-start">START</button></div>
-          <div class="hud-title desporto-title">
+          <div class="hud-title">
             <span class="cd-label-wrap">
               <span class="cd-small"></span>
               <span>Desporto</span>
@@ -261,73 +282,54 @@ body.gradient-fade::after{opacity:1;}
             <span class="down-arrow">▼</span>
           </div>
         </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0">
-          <img src="b99a94aa-3bbd-4292-b2fa-789f23416bc9.png" alt="Educação">
-        </div>
+        
+        <!-- EDUCAÇÃO (com CD) -->
         <div class="hud-row">
           <div class="hud-start"><button class="hud-btn" id="hud-educacao-start">START</button></div>
-          <div class="hud-title desporto-title">
+          <div class="hud-title">
             <span class="cd-label-wrap">
               <span class="cd-small"></span>
               <span>Educação</span>
             </span>
             <span class="down-arrow">▼</span>
+          </div>
         </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0">
-          <img src="8ac9e92f-5912-427d-aae2-d382f30773cd.png" alt="Formações">
-        </div>
+        
+        <!-- FORMAÇÕES (com CD) -->
         <div class="hud-row">
           <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title desporto-title">
+          <div class="hud-title">
             <span class="cd-label-wrap">
               <span class="cd-small"></span>
               <span>Formações</span>
             </span>
             <span class="down-arrow">▼</span>
+          </div>
         </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0">
-          <img src="9dbeafd2-8154-4a82-a2a3-d940787db848.png" alt="Experiências">
-        </div>
+        
+        <!-- EXPERIÊNCIAS (com CD) -->
         <div class="hud-row">
           <div class="hud-start"><button class="hud-btn">START</button></div>
-          <div class="hud-title desporto-title">
+          <div class="hud-title">
             <span class="cd-label-wrap">
               <span class="cd-small"></span>
               <span>Experiências</span>
             </span>
             <span class="down-arrow">▼</span>
+          </div>
         </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0">
-          <img src="af126983-cdf7-4dc0-a72f-571d654035ed.png" alt="Definições">
-        </div>
+        
+        <!-- DEFINIÇÕES (sem seta nem CD) -->
         <div class="hud-row">
           <div class="hud-start"><button class="hud-btn">START</button></div>
           <div class="hud-title">Definições</div>
         </div>
-      </div>
-
-      <div class="menu-item-wrapper">
-        <div class="menu-item" tabindex="0">
-          <img src="732d3a76-d3cc-4e89-b9d1-53bfedaf1257.png" alt="Biblioteca">
-        </div>
+        
+        <!-- BIBLIOTECA (sem seta nem CD) -->
         <div class="hud-row">
           <div class="hud-start"><button class="hud-btn">START</button></div>
           <div class="hud-title">Biblioteca</div>
         </div>
-      </div>
-
     </div>
   </div>
 </div>
