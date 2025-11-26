@@ -68,6 +68,11 @@ body::after{
   background:linear-gradient(to bottom,rgba(18,26,36,.75) 0%,rgba(18,26,36,.8) 30%,rgba(18,26,36,.4) 60%,rgba(18,26,36,0) 90%);
   opacity:0;transition:opacity 1.1s cubic-bezier(.36,1,.72,1);
 }
+/* véu mais escuro quando hub aberto */
+body.hub-open::after{
+  opacity:1;
+  background:radial-gradient(circle at top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.78) 45%,rgba(0,0,0,0.90) 100%);
+}
 body.gradient-fade::after{opacity:1;}
 
 /* ===== DASHBOARD / CARROSSEL ===== */
@@ -100,9 +105,9 @@ body.gradient-fade::after{opacity:1;}
 @keyframes cdWobble{0%,100%{transform:translateX(0);}50%{transform:translateX(4px);}}
 
 /* ===== BOTÃO CIMA ===== */
-.scroll-top-btn{position:absolute;left:50%;top:-38px;transform:translateX(-50%);background:#1da1f2;border:none;border-radius:50%;width:54px;height:54px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px #1da1f277;cursor:pointer;}
+.scroll-top-btn{position:absolute;left:50%;top:-38px;transform:translateX(-50%);background:#1da1f2;border:none;border-radius:50%;width:54px;height:54px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px #1da1f277;cursor:pointer;z-index:20;}
 
-/* ===== HUB EM BAIXO (SEM RETÂNGULO) ===== */
+/* ===== HUB EM BAIXO (SEM CARD, COM VÍDEO) ===== */
 .game-details{
   position:fixed;left:0;bottom:0;width:100vw;
   padding:40px 80px 60px;
@@ -113,12 +118,12 @@ body.gradient-fade::after{opacity:1;}
 }
 .game-details.visible{opacity:1;pointer-events:auto;transform:translateY(0);}
 
-/* container invisível – só layout */
+/* 4 colunas: imagem – texto – mini cards – vídeo */
 .game-details-inner{
   width:100%;
-  max-width:1200px;
+  max-width:1500px;
   display:grid;
-  grid-template-columns:340px 1fr 220px;
+  grid-template-columns:340px 1.2fr 220px 360px;
   gap:26px;
 }
 
@@ -189,6 +194,21 @@ body.gradient-fade::after{opacity:1;}
 .side-card .text{
   font-size:.8em;
   color:#dfe8ff;
+}
+
+/* coluna vídeo à direita */
+.video-slot{
+  border-radius:18px;
+  border:2px solid #42aaff;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+}
+.video-slot video,
+.video-slot iframe{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
 }
 
 /* ===== LOADING HUD ===== */
@@ -330,6 +350,10 @@ body.gradient-fade::after{opacity:1;}
         <div class="text"><strong>Salvamento aquático</strong><br>Competições e provas técnicas.</div>
       </div>
     </div>
+    <div class="video-slot">
+      <!-- Troca por iframe YouTube ou outro vídeo se quiseres -->
+      <video src="video_desporto.mp4" autoplay muted loop playsinline></video>
+    </div>
   </div>
 </div>
 
@@ -362,6 +386,11 @@ body.gradient-fade::after{opacity:1;}
         <div class="text"><strong>Ensino secundário</strong><br>Ciências e Tecnologias.</div>
       </div>
     </div>
+    <div class="video-slot">
+      <div style="width:100%;height:100%;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9em;">
+        Espaço para vídeo sobre estudos
+      </div>
+    </div>
   </div>
 </div>
 
@@ -390,6 +419,11 @@ body.gradient-fade::after{opacity:1;}
         <div class="text"><strong>Sinais biomédicos</strong><br>Workshops e cursos.</div>
       </div>
     </div>
+    <div class="video-slot">
+      <div style="width:100%;height:100%;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9em;">
+        Vídeo sobre formações
+      </div>
+    </div>
   </div>
 </div>
 
@@ -416,6 +450,11 @@ body.gradient-fade::after{opacity:1;}
       <div class="side-card">
         <img src="thumb_estagios.png" alt="Estágios">
         <div class="text"><strong>Estágios</strong><br>Contextos clínicos e I&D.</div>
+      </div>
+    </div>
+    <div class="video-slot">
+      <div style="width:100%;height:100%;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9em;">
+        Vídeo sobre experiências
       </div>
     </div>
   </div>
@@ -449,7 +488,7 @@ function moveCarousel(idx){
   carousel.style.transform=`translateX(calc(50vw - 90px - ${(quadW+gap)*idx + quadW/2}px))`;
 }
 function clearWallpapers(){
-  document.body.classList.remove('bg-dynamic-1','bg-dynamic-2','bg-dynamic-3','bg-dynamic-4','bg-dynamic','gradient-fade');
+  document.body.classList.remove('bg-dynamic-1','bg-dynamic-2','bg-dynamic-3','bg-dynamic-4','bg-dynamic','gradient-fade','hub-open');
 }
 function updateHUD(idx){
   if(expanded||idx===selected)return;
@@ -468,7 +507,7 @@ function expandDetails(){
   if(gameDetailsPanels[selected]) gameDetailsPanels[selected].classList.add('visible');
   hudTitles.forEach((t,i)=>t.classList.toggle('exp-arrow',i===selected));
   clearWallpapers();
-  document.body.classList.add('bg-dynamic-'+selected,'bg-dynamic','gradient-fade');
+  document.body.classList.add('bg-dynamic-'+selected,'bg-dynamic','gradient-fade','hub-open');
 }
 function collapseDetails(){
   expanded=false;
