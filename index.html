@@ -358,7 +358,7 @@ body.gradient-fade::after { opacity: 1; }
   gap: 26px;
 }
 
-/* imagem principal */
+/* texto principal */
 .cover-main {
   width: 100%;
   height: 210px;
@@ -374,7 +374,7 @@ body.gradient-fade::after { opacity: 1; }
   flex-direction: column;
   justify-content: flex-start;
   font-size: .96em;
-  line-height: 1.35em;
+  line-height: 1.4em;
 }
 .game-details .info h1 {
   font-size: 2.1em;
@@ -382,6 +382,7 @@ body.gradient-fade::after { opacity: 1; }
   text-transform: uppercase;
   margin: 0 0 4px;
   text-shadow: 0 3px 10px #000;
+  font-weight: 600;
 }
 .game-details .info .tagline {
   margin: 0 0 8px;
@@ -447,6 +448,71 @@ body.gradient-fade::after { opacity: 1; }
   object-fit: cover;
 }
 
+/* ===== UX HINT ===== */
+.hub-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  background: rgba(10,14,28,0.92);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #e5f2ff;
+  font-size: 0.82em;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 30;
+  transition: opacity .4s ease;
+}
+.hub-hint.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hub-hint span.key {
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.4);
+  font-size: 0.78em;
+}
+
+/* ===== RESPONSIVE HUB ===== */
+@media (max-width: 1200px) {
+  .game-details {
+    padding: 28px 32px 40px;
+  }
+  .game-details-inner {
+    max-width: 100%;
+    grid-template-columns: 260px 1fr 260px; /* imagem + texto + coluna (activities+vídeo) */
+  }
+  .side-column {
+    gap: 6px;
+  }
+  .cover-main {
+    height: 180px;
+  }
+}
+@media (max-width: 900px) {
+  .ps4-dashboard {
+    padding-left: 20px;
+  }
+  .carousel-inner {
+    gap: 22px;
+  }
+  .game-details-inner {
+    grid-template-columns: 1fr;
+  }
+  .video-slot {
+    margin-top: 12px;
+    height: 180px;
+  }
+}
+
 /* ===== LOADING HUD ===== */
 .hud-start.loading { background: #23283a !important; }
 .loading-bar-simple {
@@ -496,7 +562,7 @@ body.gradient-fade::after { opacity: 1; }
         </div>
       </div>
 
-      <!-- Desporto (CD + seta) -->
+      <!-- Desporto -->
       <div class="menu-item-wrapper">
         <div class="menu-item" tabindex="0">
           <img src="3c924d2a-8986-4445-a71e-a9ef40853344.png" alt="Desporto">
@@ -515,7 +581,7 @@ body.gradient-fade::after { opacity: 1; }
         </div>
       </div>
 
-      <!-- Educação (CD + seta) -->
+      <!-- Educação -->
       <div class="menu-item-wrapper">
         <div class="menu-item" tabindex="0">
           <img src="b99a94aa-3bbd-4292-b2fa-789f23416bc9.png" alt="Educação">
@@ -534,7 +600,7 @@ body.gradient-fade::after { opacity: 1; }
         </div>
       </div>
 
-      <!-- Formações (CD + seta) -->
+      <!-- Formações -->
       <div class="menu-item-wrapper">
         <div class="menu-item" tabindex="0">
           <img src="8ac9e92f-5912-427d-aae2-d382f30773cd.png" alt="Formações">
@@ -553,7 +619,7 @@ body.gradient-fade::after { opacity: 1; }
         </div>
       </div>
 
-      <!-- Experiências (CD + seta) -->
+      <!-- Experiências -->
       <div class="menu-item-wrapper">
         <div class="menu-item" tabindex="0">
           <img src="9dbeafd2-8154-4a82-a2a3-d940787db848.png" alt="Experiências">
@@ -740,6 +806,15 @@ body.gradient-fade::after { opacity: 1; }
   </div>
 </div>
 
+<!-- Hint UX -->
+<div id="hubHint" class="hub-hint">
+  <span>Carrega</span>
+  <span class="key">START</span>
+  <span>ou</span>
+  <span class="key">↓</span>
+  <span>para ver mais</span>
+</div>
+
 <div id="screen-fade" style="
   position:fixed;
   top:0; left:0; width:100vw; height:100vh;
@@ -771,9 +846,11 @@ const gameDetailsPanels = [
   document.getElementById('gameDetails-3'),
   document.getElementById('gameDetails-4')
 ];
+const hubHint = document.getElementById('hubHint');
 
 let selected = 0;
 let expanded = false;
+let hintShown = false;
 const quadW = 160;
 const gap = 38;
 
@@ -787,6 +864,16 @@ function clearWallpapers() {
     'bg-dynamic','gradient-fade','hub-open'
   );
 }
+function hideHint() {
+  hubHint.classList.remove('visible');
+}
+function showHintOnce() {
+  if (hintShown) return;
+  hintShown = true;
+  hubHint.classList.add('visible');
+  setTimeout(hideHint, 4000);
+}
+
 function updateHUD(idx) {
   if (expanded || idx === selected) return;
   allItems[selected].classList.remove('selected');
@@ -809,6 +896,7 @@ function expandDetails() {
   hudTitles.forEach((t, i) => t.classList.toggle('exp-arrow', i === selected));
   clearWallpapers();
   document.body.classList.add('bg-dynamic-' + selected,'bg-dynamic','gradient-fade','hub-open');
+  showHintOnce();
 }
 function collapseDetails() {
   expanded = false;
@@ -818,12 +906,15 @@ function collapseDetails() {
   }
   hudTitles.forEach(t => t.classList.remove('exp-arrow'));
   clearWallpapers();
+  hideHint();
 }
+
 hudTitles.forEach((t, i) => {
   t.addEventListener('click', () => {
     if (selected === i && !expanded) expandDetails();
   });
 });
+
 document.addEventListener('keydown', e => {
   if (!expanded && selected > 0 && (e.key === 'ArrowDown' || e.key === 'PageDown')) expandDetails();
   if (expanded && (e.key === 'Escape' || e.key === 'ArrowUp')) collapseDetails();
@@ -831,11 +922,13 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' && selected < allItems.length - 1) updateHUD(selected + 1);
   if (e.key === 'ArrowLeft' && selected > 0) updateHUD(selected - 1);
 });
+
 allItems.forEach((item, idx) => {
   item.addEventListener('focus', () => { if (!expanded) updateHUD(idx); });
   item.addEventListener('click', () => { if (!expanded) updateHUD(idx); });
   item.addEventListener('mouseover', () => { if (!expanded) updateHUD(idx); });
 });
+
 moveCarousel(selected);
 hudRows.forEach((row, i) => {
   row.style.display = (i === selected) ? 'flex' : 'none';
@@ -881,6 +974,7 @@ function genericHudLoading(button, url) {
     }
   }, frameDuration);
 }
+
 document.getElementById('hud-desporto-start')?.addEventListener('click', e => {
   e.preventDefault();
   genericHudLoading(e.currentTarget, 'desporto.html');
