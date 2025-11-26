@@ -102,68 +102,93 @@ body.gradient-fade::after{opacity:1;}
 /* ===== BOTÃO CIMA ===== */
 .scroll-top-btn{position:absolute;left:50%;top:-38px;transform:translateX(-50%);background:#1da1f2;border:none;border-radius:50%;width:54px;height:54px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px #1da1f277;cursor:pointer;}
 
-/* ===== PAINEL ESTILO HUB PS5 ===== */
+/* ===== HUB EM BAIXO (SEM RETÂNGULO) ===== */
 .game-details{
   position:fixed;left:0;bottom:0;width:100vw;
-  padding:18px 32px 26px;
-  display:flex;justify-content:center;
+  padding:40px 80px 60px;
+  display:flex;justify-content:flex-start;align-items:flex-end;
   opacity:0;pointer-events:none;transform:translateY(100%);
   transition:opacity .7s cubic-bezier(.42,1,.72,1),transform .7s cubic-bezier(.42,1,.72,1);
   z-index:12;
 }
 .game-details.visible{opacity:1;pointer-events:auto;transform:translateY(0);}
 
-/* card largo com imagem grande + thumbnails + texto */
-.game-details .card{
-  width:100%;max-width:1180px;
-  background:rgba(8,10,20,.86);
-  border-radius:24px;
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 18px 55px rgba(0,0,0,.85);
-  padding:18px 24px 20px;
+/* container invisível – só layout */
+.game-details-inner{
+  width:100%;
+  max-width:1200px;
   display:grid;
   grid-template-columns:340px 1fr 220px;
-  gap:22px;
-  backdrop-filter:blur(24px);
+  gap:26px;
 }
 
 /* imagem principal */
-.card .cover-main{
+.cover-main{
   width:100%;height:210px;
   border-radius:20px;
   border:2px solid #42aaff;
   object-fit:cover;
 }
 
-/* descrição + botões */
-.card .info{
-  display:flex;flex-direction:column;justify-content:space-between;color:#f5f7fa;font-size:.96em;line-height:1.35em;
+/* texto central */
+.game-details .info{
+  color:#f5f7fa;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  font-size:.96em;
+  line-height:1.35em;
 }
-.card .info p{margin:0 0 12px 0;}
-.card .buttons{margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;}
-.card .buttons button{
+.game-details .info h1{
+  font-size:2.1em;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin:0 0 4px;
+  text-shadow:0 3px 10px #000;
+}
+.game-details .info .tagline{
+  margin:0 0 8px;
+  opacity:.9;
+  font-weight:500;
+}
+.game-details .info p{margin:0 0 10px;}
+.game-details .buttons{
+  margin-top:10px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.game-details .buttons button{
   background:linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
-  border:none;color:#fff;padding:7px 22px;font-weight:600;
-  border-radius:999px;cursor:pointer;
+  border:none;color:#fff;
+  padding:7px 22px;
+  font-weight:600;
+  border-radius:999px;
+  cursor:pointer;
 }
 
-/* coluna direita – mini “cards” / thumbs */
-.card .side-column{
-  display:flex;flex-direction:column;gap:10px;
+/* coluna direita – mini “activities” */
+.side-column{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 .side-card{
-  background:rgba(18,24,40,.9);
+  background:rgba(8,12,24,.65);
   border-radius:14px;
   padding:6px 10px;
-  display:flex;align-items:center;
+  display:flex;
+  align-items:center;
   gap:8px;
-  border:1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter:blur(12px);
 }
 .side-card img{
   width:64px;height:40px;border-radius:10px;object-fit:cover;
 }
 .side-card .text{
-  font-size:.8em;color:#dfe8ff;
+  font-size:.8em;
+  color:#dfe8ff;
 }
 
 /* ===== LOADING HUD ===== */
@@ -280,9 +305,11 @@ body.gradient-fade::after{opacity:1;}
       <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
-  <div class="card">
+  <div class="game-details-inner">
     <img class="cover-main" src="ChatGPT Image 2_08_2025, 19_35_09.png" alt="Desporto">
     <div class="info">
+      <h1>DESPORTO</h1>
+      <p class="tagline">Natação pura, águas abertas e salvamento aquático desportivo.</p>
       <p><strong>Desporto:</strong> Praticante regular de natação pura, águas abertas e salvamento aquático desportivo, atividades que promovem o desenvolvimento global da condição física, reforço muscular, resistência cardiovascular e respiratória, melhora da flexibilidade, postura e coordenação motora. A prática destes desportos também contribui para o aumento da resiliência mental, redução do stress, um estilo de vida mais saudável e permitiu-me desenvolver competências como a gestão de tempo, disciplina e foco em objetivos. Para ver mais informação sobre os meus desportos, carregue em START.</p>
       <div class="buttons">
         <button>Ver Troféus</button>
@@ -306,7 +333,7 @@ body.gradient-fade::after{opacity:1;}
   </div>
 </div>
 
-<!-- Outros hubs (Educação, Formações, Experiências) seguem mesma estrutura, podes adaptar thumbs/textos -->
+<!-- ===== HUB EDUCAÇÃO ===== -->
 <div class="game-details" id="gameDetails-2">
   <button class="scroll-top-btn" onclick="scrollToCarousel()">
     <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
@@ -314,9 +341,11 @@ body.gradient-fade::after{opacity:1;}
       <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
-  <div class="card">
+  <div class="game-details-inner">
     <img class="cover-main" src="ChatGPT Image 2_08_2025, 20_24_46.png" alt="Educação">
     <div class="info">
+      <h1>EDUCAÇÃO</h1>
+      <p class="tagline">Percurso académico em tecnologia e saúde.</p>
       <p><strong>Educação</strong>: Percorri várias etapas académicas desafiantes, incluindo o curso de Ciências e Tecnologias no ensino secundário e a licenciatura em Tecnologia Biomédica. Estou empenhado em aprofundar continuamente os meus conhecimentos e tenciono prosseguir os meus estudos muito além da licenciatura, reforçando o meu compromisso com a aprendizagem ao longo da vida e o desenvolvimento profissional. Para ver mais informação sobre os meus estudos, carregue em START.</p>
       <div class="buttons">
         <button>Ver Troféus</button>
@@ -330,12 +359,13 @@ body.gradient-fade::after{opacity:1;}
       </div>
       <div class="side-card">
         <img src="thumb_secundario.png" alt="Secundário">
-        <div class="text"><strong>Ensino Secundário</strong><br>Ciências e Tecnologias.</div>
+        <div class="text"><strong>Ensino secundário</strong><br>Ciências e Tecnologias.</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ===== HUB FORMAÇÕES ===== -->
 <div class="game-details" id="gameDetails-3">
   <button class="scroll-top-btn" onclick="scrollToCarousel()">
     <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
@@ -343,10 +373,12 @@ body.gradient-fade::after{opacity:1;}
       <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
-  <div class="card">
+  <div class="game-details-inner">
     <img class="cover-main" src="ChatGPT Image 2_08_2025, 21_42_43.png" alt="Formações">
     <div class="info">
-      <p><strong>Formações</strong>: Ao longo do meu percurso participei em várias formações e cursos complementares, contribuindo para a expansão dos meus conhecimentos práticos e teóricos. Estes cursos permitiram-me adquirir novas competências técnicas e desenvolver uma visão mais abrangente e multidisciplinar sobre temas relevantes para a minha área de interesse. Para ver mais informação sobre as minhas formações e cursos, carregue em START.</p>
+      <h1>FORMAÇÕES</h1>
+      <p class="tagline">Cursos complementares em tecnologia e saúde.</p>
+      <p><strong>Formações</strong>: Ao longo do meu percurso participei em várias formações e cursos complementares, contribuindo significativamente para a expansão dos meus conhecimentos práticos e teóricos. Estes cursos permitiram-me adquirir novas competências técnicas e desenvolver uma visão mais abrangente e multidisciplinar sobre temas relevantes para a minha área de interesse. Para ver mais informação sobre as minhas formações e cursos, carregue em START.</p>
       <div class="buttons">
         <button>Ver Troféus</button>
         <button>START</button>
@@ -355,12 +387,13 @@ body.gradient-fade::after{opacity:1;}
     <div class="side-column">
       <div class="side-card">
         <img src="thumb_signal.png" alt="Sinais">
-        <div class="text"><strong>Sinais biomédicos</strong><br>Cursos extra.</div>
+        <div class="text"><strong>Sinais biomédicos</strong><br>Workshops e cursos.</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ===== HUB EXPERIÊNCIAS ===== -->
 <div class="game-details" id="gameDetails-4">
   <button class="scroll-top-btn" onclick="scrollToCarousel()">
     <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
@@ -368,10 +401,12 @@ body.gradient-fade::after{opacity:1;}
       <polyline points="16,36 24,28 32,36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
-  <div class="card">
+  <div class="game-details-inner">
     <img class="cover-main" src="ChatGPT Image 2_08_2025, 21_47_32.png" alt="Experiências">
     <div class="info">
-      <p><strong>Experiências</strong>: Integração em diferentes contextos de trabalho e estágios, onde aprofundei conhecimentos técnicos e desenvolvi competências essenciais, como trabalho em equipa multidisciplinar e gestão de desafios reais. Para ver mais informação sobre as minhas experiências profissionais e estágios, carregue em START.</p>
+      <h1>EXPERIÊNCIAS</h1>
+      <p class="tagline">Estágios e projetos em contexto real.</p>
+      <p><strong>Experiências</strong>: Integrei diferentes contextos de trabalho e estágios, onde aprofundei conhecimentos técnicos e desenvolvi competências essenciais como trabalho em equipa multidisciplinar, comunicação e gestão de desafios reais. Para ver mais informação sobre as minhas experiências profissionais e estágios, carregue em START.</p>
       <div class="buttons">
         <button>Ver Troféus</button>
         <button>START</button>
