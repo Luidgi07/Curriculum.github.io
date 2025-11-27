@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jurassic Desktop Escola</title>
+  <title>Jurassic Desktop Tech Biomed</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -127,12 +127,12 @@
       #icon-docs  { top: 280px; }
     }
 
-    /* Caixas tipo botão Início */
+    /* Caixas tipo botão (Tech Biomed + Início) */
     .start-box {
       position: absolute;
       bottom: 50px;
       left: 30px;
-      width: 120px;
+      width: 140px;
       height: 60px;
       background: #004422;
       border-radius: 10px;
@@ -148,7 +148,7 @@
     }
 
     .start-box + .start-box {
-      left: 170px; /* segunda caixa ao lado da primeira */
+      left: 190px; /* segunda caixa ao lado da primeira */
     }
 
     .start-box:hover {
@@ -176,7 +176,7 @@
       font-weight: bold;
     }
 
-    /* Janela School System */
+    /* Janela School System (Formação académica) */
     #programWindow {
       display: none;
       position: absolute;
@@ -562,12 +562,12 @@
       <div>Documentos</div>
     </div>
 
-    <!-- Caixa 1: Pasta (abre School System) -->
-    <div id="start-box" class="start-box" title="Abrir Escola">
+    <!-- Caixa 1: Tech Biomed (abre School System) -->
+    <div id="start-box" class="start-box" title="Tech Biomed - Formação & Projetos">
       <div class="start-icon">
-        <img src="https://img.icons8.com/fluency/48/folder-invoices.png" alt="Pasta" />
+        <img src="https://img.icons8.com/fluency/48/heart-monitor.png" alt="Tech Biomed" />
       </div>
-      <span>Escola</span>
+      <span>Tech Biomed</span>
     </div>
 
     <!-- Caixa 2: Casa (voltar à página inicial) -->
@@ -580,10 +580,10 @@
 
     <div id="programWindow">
       <header>
-        School System
+        Formação Académica
         <button class="closeProgramBtn" title="Fechar programa">X</button>
       </header>
-      <button id="startButton">Iniciar programa</button>
+      <button id="startButton">Ver percurso académico</button>
 
       <div id="infoBoxes">
         <div class="box" data-status="ATIVO"
@@ -691,7 +691,7 @@
       programWindow.style.display = "block";
     });
 
-    // Caixa pasta abre o School System
+    // Caixa Tech Biomed abre o School System
     document.getElementById('start-box').addEventListener('click', () => {
       programWindow.style.display = "block";
     });
