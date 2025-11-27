@@ -1,983 +1,645 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Jurassic Desktop Escola</title>
-  <style>
-    /* Estilos originais da página desktop - Melhorados */
-    body {
-      margin: 0;
-      background: #004040;
-      font-family: 'Courier New', Courier, monospace;
-      color: #00ff00;
-      cursor: crosshair; /* cursor simples para evitar bugs */
-      overflow: hidden;
-    }
-    #fadeInPreVideo { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 6000; background: #000; opacity: 1; pointer-events: none; transition: opacity 1.5s; }
-    #videoIntroContainer { position: fixed; z-index: 5000; left: 0; top: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity 1.6s; }
-    #videoIntroContainer video { width: 100vw; height: 100vh; object-fit: cover; display: block; background: #000; }
-    #introFade { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 5100; background: #000; opacity: 0; pointer-events: none; transition: opacity 1.6s; }
-    #skipIntro {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      z-index: 6100;
-      background: #004422;
-      color: #00ff00;
-      border: 2px solid #00ff00;
-      font-family: inherit;
-      font-size: 16px;
-      padding: 8px 16px;
-      cursor: pointer;
-      user-select: none;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    #skipIntro:hover {
-      background: #005555;
-      color: #fff;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jurassic Desktop Escola - Currículo</title>
+<style>
+  /* Base reset e estilo responsivo */
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #004040;
+    font-family: 'Courier New', Courier, monospace;
+    color: #00ff00;
+    cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
+    overflow-x: hidden;
+  }
+  /* Contraste melhorado para leitura */
+  .desktop-icon div {
+    text-shadow: 0 0 6px #002a00;
+  }
+  /* Layout Desktop e Responsive */
+  #desktop {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 14px 15px 60px 15px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #003333 25%, #006666 75%);
+  }
+  .desktop-icon {
+    width: 100px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    margin: 12px 0;
+    flex-shrink: 0;
+    color: #00ff00;
+  }
+  .desktop-icon img {
+    width: 44px;
+    height: 44px;
+    filter: drop-shadow(0 0 4px #00ff00);
+    margin-bottom: 6px;
+  }
+  /* Tooltip claro para usabilidade */
+  .desktop-icon[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: #001f12cc;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #00ff00;
+    white-space: nowrap;
+    transform: translateY(-130%);
+    pointer-events: none;
+    text-shadow: none;
+  }
 
-    .desktop-icon {
-      width: 95px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-      color: #00ff00;
-      margin-bottom: 28px;
-      position: absolute;
-      left: 15px;
-    }
-    .desktop-icon img {
-      width: 44px;
-      height: 44px;
-      filter: drop-shadow(0 0 4px #00ff00);
-      margin-bottom: 3px;
-    }
-    #icon-school { top: 14px; }
-    #icon-pc { top: 97px; }
-    #icon-trash { top: 180px; }
-    #icon-docs { top: 263px; }
-    #icon-home {
-      left: auto;
-      right: 15px;
-      top: 14px;
-    }
-    .desktop-icon[title]:hover::after {
-      content: attr(title);
-      position: absolute;
-      bottom: -22px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 255, 0, 0.85);
-      color: #002200;
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 4px;
-      white-space: nowrap;
-      pointer-events: none;
-      z-index: 10000;
-    }
+  /* Janela do programa com acessibilidade */
+  #programWindow {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 540px;
+    min-height: 370px;
+    background: #002222;
+    border: 2px solid #00ff00;
+    padding: 18px 22px;
+    box-sizing: border-box;
+    z-index: 10000;
+    transition: opacity 0.3s;
+    outline: none;
+  }
+  #programWindow[aria-hidden="false"] {
+    display: block;
+  }
+  #programWindow header {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #00ff00;
+    padding-bottom: 8px;
+    position: relative;
+  }
+  .closeProgramBtn {
+    position: absolute;
+    top: 0; right: 8px;
+    background: #004422;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 12px;
+    height: 28px;
+    width: 30px;
+    line-height: 28px;
+    font-family: inherit;
+    border-radius: 4px;
+  }
+  .closeProgramBtn:hover, .closeProgramBtn:focus {
+    background: #005555;
+    color: #fff;
+    outline: none;
+  }
+  #startButton {
+    background: #004422;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    font-size: 16px;
+    padding: 10px 24px;
+    cursor: pointer;
+    margin: 28px auto 12px auto;
+    display: block;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+  #startButton:hover, #startButton:focus {
+    background: #005555;
+    outline: none;
+  }
+  #infoBoxes {
+    display: none;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    justify-content: center;
+  }
+  .box {
+    width: 140px;
+    height: 70px;
+    border: 2px solid #00ff00;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #003333 0%, #00ff0050 100%);
+    font-size: 16px;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .box:hover, .box:focus {
+    background: #005555;
+    outline: none;
+  }
+  .box img {
+    width: 50%;
+    margin-bottom: 6px;
+    pointer-events: none;
+  }
+  #infoContainer {
+    margin-top: 12px;
+    position: relative;
+  }
+  .download-bar {
+    width: 96%;
+    height: 20px;
+    background: #001a00;
+    border: 2px solid #00ff00;
+    margin: 12px auto;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+  }
+  .download-fill {
+    background: #00ff00;
+    height: 16px;
+    width: 0;
+    transition: width 1.5s linear;
+    border-radius: 4px;
+  }
+  .infoBoxWindow {
+    background: #002222;
+    border: 2px solid #00ff00;
+    margin-top: 13px;
+    padding: 12px;
+    font-size: 15px;
+    width: 95%;
+    animation: windowAppear 0.3s ease forwards;
+    position: relative;
+    z-index: 3;
+    border-radius: 6px;
+  }
+  @keyframes windowAppear {
+    from { opacity: 0; transform: translateY(12px);}
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modalOverlay, .confirmOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,32,30,0.87);
+    z-index: 20000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modalPage, .confirmBox {
+    background: #002c26;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    min-width: 340px;
+    min-height: 110px;
+    padding: 27px 32px 20px 32px;
+    font-size: 16px;
+    box-shadow: 0 0 20px #003833;
+    text-align: left;
+    position: relative;
+    animation: windowAppear 0.18s ease forwards;
+    border-radius: 10px;
+  }
+  .closeBtn {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    background: #004422;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 0 12px;
+    font-family: inherit;
+    border-radius: 4px;
+  }
+  .closeBtn:hover, .closeBtn:focus {
+    background: #005555;
+    outline: none;
+    color: #fff;
+  }
+  .confirmBtn, .cancelBtn {
+    background: #004422;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    font-family: inherit;
+    font-size: 15px;
+    padding: 9px 30px;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-right: 15px;
+    transition: background 0.22s;
+    border-radius: 6px;
+  }
+  .cancelBtn:hover, .cancelBtn:focus,
+  .confirmBtn:hover, .confirmBtn:focus {
+    background: #005555;
+    outline: none;
+    color: #fff;
+  }
 
+  /* Barra do sistema no rodapé melhor posicionada */
+  #sysBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 36px;
+    background: #001f12;
+    border-top: 2px solid #00ff00;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 22px;
+    color: #00ff00;
+    font-family: inherit;
+    font-size: 15px;
+    z-index: 9000;
+  }
+  .sysIcon {
+    margin-right: 16px;
+    vertical-align: middle;
+    width: 21px;
+    height: 21px;
+    filter: drop-shadow(0 0 3px #00ff001c);
+  }
+  #sysBar span {
+    margin-right: 23px;
+    font-size: 13px;
+    user-select: none;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
     #desktop {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      background: linear-gradient(135deg, #003333 25%, #006666 75%);
-      overflow: hidden;
-      display: none;
-    }
-
-    #programWindow {
-      display: block;
-      position: absolute;
-      top: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px; /* maior para mais espaço */
-      min-height: 370px;
-      background: #002222;
-      border: 2px solid #00ff00;
-      padding: 22px 30px;
-      box-sizing: border-box;
-      z-index: 10;
-      transition: opacity 0.3s;
-      color: #00ff00;
-    }
-    #programWindow.closed {
-      opacity: 0.3;
-      pointer-events: none;
-    }
-    #programWindow header {
-      font-weight: bold;
-      font-size: 20px;
-      margin-bottom: 18px;
-      border-bottom: 1px solid #00ff00;
-      padding-bottom: 10px;
-      position: relative;
-    }
-    .closeProgramBtn {
-      position: absolute;
-      top: 2px;
-      right: 12px;
-      background: #004422;
-      border: 1px solid #00ff00;
-      color: #00ff00;
-      font-size: 18px;
-      cursor: pointer;
-      padding: 0 12px;
-      width: 30px;
-      height: 28px;
-      text-align: center;
-      line-height: 28px;
-      font-family: inherit;
-      border-radius: 3px;
-      transition: background 0.3s;
-    }
-    .closeProgramBtn:hover {
-      background: #005555;
-      color: #fff;
-    }
-
-    #infoBoxes {
-      display: flex; /* visível logo */
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    .box {
-      width: 146px;
-      height: 80px;
-      border: 2px solid #00ff00;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: linear-gradient(90deg, #003333 0%, #ffffff 100%);
-      font-size: 14px;
-      user-select: none;
-      transition: background 0.25s;
-      flex-shrink: 0;
-      position: relative;
       flex-direction: column;
-      color: #004422;
-      font-weight: bold;
-      text-align: center;
-    }
-    .box:hover {
-      background: #005555;
-      color: #aaffaa;
-    }
-    .box img {
-      width: 52%;
-      display: block;
-      margin: 0 auto 6px auto;
-      pointer-events: none;
-    }
-
-    #infoContainer {
-      margin-top: 14px;
-      position: relative;
-      max-height: 260px;
-      overflow-y: auto;
-    }
-
-    .download-bar {
-      width: 96%;
-      height: 20px;
-      background: #001a00;
-      border: 2px solid #00ff00;
-      margin: 12px auto 10px auto;
-      position: relative;
-      overflow: hidden;
-      display: flex;
       align-items: center;
+      padding-bottom: 80px;
     }
-    .download-fill {
-      background: #00ff00;
-      height: 16px;
-      width: 0;
-      transition: width 1.5s linear;
+    .desktop-icon {
+      margin: 12px 0 20px;
     }
-    .infoBoxWindow {
-      background: #002222;
-      border: 2px solid #00ff00;
-      margin-bottom: 15px;
-      padding: 14px;
-      font-size: 15px;
-      width: 95%;
-      animation: windowAppear 0.23s linear;
-      position: relative;
-      z-index: 3;
-      white-space: pre-wrap;
-      color: #aaddaa;
+    #programWindow {
+      width: 95vw;
+      min-height: auto;
     }
-    @keyframes windowAppear {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Botões */
-    #modalButtons button {
-      background: #004422;
-      border: 1px solid #00ff00;
-      color: #00ff00;
-      padding: 8px 22px;
-      font-size: 15px;
-      cursor: pointer;
-      font-family: inherit;
-      border-radius: 4px;
-      transition: background 0.22s;
-      margin-right: 10px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      user-select: none;
-    }
-    #modalButtons button:disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
-    #modalButtons button:hover:not(:disabled) {
-      background: #005555;
-    }
-
-    /* Sistema Barra inferior */
-    #sysBar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100vw;
-      height: 36px;
-      background: #001f12;
-      border-top: 2px solid #00ff00;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 22px;
-      color: #00ff00;
-      font-family: inherit;
-      font-size: 15px;
-      z-index: 900;
-      user-select: none;
-    }
-    .sysIcon {
-      margin-right: 16px;
-      vertical-align: middle;
-      width: 21px;
-      height: 21px;
-      filter: drop-shadow(0 0 3px #00ff001c);
-    }
-    #sysBar span {
-      margin-right: 23px;
-      font-size: 13px;
-    }
-
-    /* Three.js container */
-    body.three-active { overflow: hidden; background: #080c0e; }
-    #threeContainer {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: 1500;
-      background: #080c0e;
-      overflow: hidden;
-      display: none;
-    }
-    #info {
-      position: absolute; top: 18px; left: 18px;
-      font-family: 'Courier New', monospace;
-      background: rgba(5,40,15,0.92); color: #00ff00;
-      padding: 13px 21px; border:2px solid #00ff00;
-      border-radius: 8px; font-size: 18px; z-index: 1550;
-      user-select: none;
-      max-width: 35vw;
-      word-wrap: break-word;
-    }
-    #confirm {
-      position: absolute; left:50%; top:51%;
-      transform:translate(-50%, -50%);
-      background:#002e0d; color:#00ff00;
-      font-family:inherit;font-size:20px;z-index:1600;
-      border:3px solid #00ff00; border-radius:14px;
-      box-shadow: 0 0 33px #00ff005c;
-      padding:35px 40px; display:none;
-      max-width: 360px;
-      text-align: center;
-    }
-    #conteudo {
-      position: absolute; left:50%; top:54%;
-      transform:translate(-50%, -50%);
-      background:#001c19;color:#00ff00;
-      font-family:inherit;font-size:19px;z-index:1650;
-      border:3px solid #00ff00;border-radius:13px;
-      box-shadow:0 0 25px #00ff0033;padding:33px 40px;display:none;
-      max-width: 420px;
-      max-height: 70vh;
-      overflow-y: auto;
-      text-align: center;
-    }
-    #conteudo button {
-      margin-top:18px;background:#004422; color:#00ff00;
-      border:2px solid #00ff00;padding:7px 24px;font-size:18px;
-      cursor:pointer;border-radius:9px;transition:background 0.11s;
-    }
-    #conteudo button:hover {
-      background: #005555; color: #fff;
-    }
-    #voltar-edu {
-      position: fixed;
-      top: 26px;
-      right: 26px;
-      z-index: 1660;
-      font-size: 18px;
-      padding: 7px 19px;
-      background: #11553d;
-      color: #fff;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 1px 2px 12px #00334ab7;
-      user-select: none;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-<div id="fadeInPreVideo"></div>
-<div id="videoIntroContainer">
-  <video id="introVideo" autoplay muted playsinline>
-    <source src="Hailuo_Video_Num fundo preto profundo com u_419356922821341193.mp4" type="video/mp4">
+<!-- Fade e vídeo intro -->
+<div id="fadeInPreVideo" aria-hidden="true" style="position:fixed;left:0;top:0;width:100vw;height:100vh; background:#000; z-index:6000; opacity:1; pointer-events:none; transition:opacity 1.5s;"></div>
+<div id="videoIntroContainer" aria-label="Vídeo de introdução" role="region" aria-live="polite" aria-atomic="true" style="position:fixed; z-index:5000; inset:0; background:#000; display:flex; align-items:center; justify-content:center; transition: opacity 1.6s;">
+  <video id="introVideo" autoplay muted playsinline style="width:100vw; height:100vh; object-fit:cover; background:#000;">
+    <source src="Hailuo_Video_Num fundo preto profundo com u_419356922821341193.mp4" type="video/mp4" />
+    Seu navegador não suporta o vídeo.
   </video>
-  <button id="skipIntro" title="Carregar para saltar intro">Skip Intro</button>
 </div>
-<div id="introFade"></div>
+<div id="introFade" style="position:fixed; left:0; top:0; width:100vw; height:100vh; z-index:5100; background:#000; opacity:0; pointer-events:none; transition:opacity 1.6s;" aria-hidden="true"></div>
 
-<div id="desktop">
-  <div id="icon-school" class="desktop-icon" title="Abrir Escola - Percursos Educativos">
-    <img src="https://img.icons8.com/fluency/48/school-building.png" alt="Icone Escola" />
+<!-- Desktop -->
+<div id="desktop" role="main" aria-label="Área principal do site">
+  <div id="icon-school" class="desktop-icon" role="button" tabindex="0" aria-label="Abrir Escola" title="Abrir Escola">
+    <img src="https://img.icons8.com/fluency/48/school-building.png" alt="Ícone de Escola" />
     <div>Escola</div>
   </div>
-  <div id="icon-pc" class="desktop-icon" title="Este PC - Área técnica (em desenvolvimento)">
-    <img src="https://img.icons8.com/fluency/48/monitor.png" alt="Icone Este PC" />
+  <div id="icon-pc" class="desktop-icon" role="button" tabindex="0" aria-label="Abrir Este PC" title="Este PC">
+    <img src="https://img.icons8.com/fluency/48/monitor.png" alt="Ícone de Este PC" />
     <div>Este PC</div>
   </div>
-  <div id="icon-trash" class="desktop-icon" title="Lixo - Espaço para easter eggs e arquivos apagados">
-    <img src="https://img.icons8.com/fluency/48/trash.png" alt="Icone Lixo" />
+  <div id="icon-trash" class="desktop-icon" role="button" tabindex="0" aria-label="Abrir Lixo" title="Lixo">
+    <img src="https://img.icons8.com/fluency/48/trash.png" alt="Ícone de Lixo" />
     <div>Lixo</div>
   </div>
-  <div id="icon-docs" class="desktop-icon" title="Documentos de projetos e relatórios">
-    <img src="https://img.icons8.com/fluency/48/documents.png" alt="Icone Documentos" />
+  <div id="icon-docs" class="desktop-icon" role="button" tabindex="0" aria-label="Abrir Documentos" title="Documentos">
+    <img src="https://img.icons8.com/fluency/48/documents.png" alt="Ícone de Documentos" />
     <div>Documentos</div>
   </div>
-  <div id="icon-home" class="desktop-icon" title="Página Inicial">
+  <div id="icon-home" class="desktop-icon" role="button" tabindex="0" aria-label="Página Inicial" title="Página Inicial" style="right: 15px; left: auto; top: 14px;">
     <img src="https://img.icons8.com/fluency/48/home.png" alt="Ícone Casa" />
     <div>Início</div>
   </div>
 
-  <div id="programWindow" role="dialog" aria-labelledby="programTitle" aria-modal="true">
-    <header id="programTitle">
-      School Sistem
-      <button class="closeProgramBtn" aria-label="Fechar programa" title="Fechar programa">X</button>
+  <!-- Janela do programa -->
+  <section id="programWindow" aria-hidden="true" aria-label="Janela do sistema escolar" tabindex="-1">
+    <header>
+      Sistema Escolar
+      <button class="closeProgramBtn" title="Fechar programa" aria-label="Fechar programa">×</button>
     </header>
-    <div id="infoBoxes">
-      <div class="box" data-info="Status: <strong>Ciências e Tecnologias</strong>.\n\nSECUNDÁRIO:\n- Escola Secundária de Santo André\n- Escola Secundária de Casquilhos"
-           data-detail="SECUNDÁRIO – Ciências e Tecnologias\n2020 - 2022\n- Biologia\n- Química\n- Matemática Aplicada"
-           data-site="https://www.aed.edu.pt/">
-        <img src="casquilhos.png" alt="Escola Secundária dos Casquilhos">
-        Secundário
-      </div>
-      <div class="box" data-info="Status: <strong>Licenciatura em Tecnologia Biomédica</strong>.\n\nIPS:\n2022 - Presente\n- Processamento de Sinais\n- Instrumentação Biomédica\n- Projeto Integrado"
-           data-detail="IPS – Tecnologia Biomédica\n2022 - Presente\n- Processamento Digital de Sinais Biomédicos\n- Eletrónica e Instrumentação\n- Fisiologia Médica"
-           data-site="https://www.ips.pt/">
-        <img src="POLISET.png" alt="Politécnico de Setúbal">
-        IPS
-      </div>
-      <div class="box" data-info="Status: <strong>Unidades Curriculares Isoladas</strong>.\n\nISEL:\n2025 - Presente\n- Sinais e Sistemas\n- Eletrónica e Instrumentação\n- Processamento Digital de Sinais Biomédicos\n- Física Médica\n- Curso Preparatório de Matemática"
-           data-detail="ISEL – Unidades Curriculares Isoladas\n2025 - Presente\n- Sinais e Sistemas\n- Eletrónica e Instrumentação\n- Processamento Digital de Sinais Biomédicos\n- Física Médica\n- Curso Preparatório de Matemática"
-           data-site="https://www.isel.pt/">
-        <img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa">
-        ISEL
-      </div>
-      <div class="box" data-info="Status: <strong>English A2</strong>.\n\nTECMINHO:\n2023"
-           data-detail="Universidade do Minho – English A2\n2023\n- Curso de língua inglesa"
-           data-site="https://www.uminho.pt/">
-        <img src="TECMINHO.png" alt="Universidade do Minho">
-        TECMINHO
-      </div>
-      <div class="box" data-info="Status: <strong>Processamento e Análise de Dados com Python</strong>.\n\nIPC:\n2022"
-           data-detail="IPC – Processamento e Análise de Dados com Python\n2022\n- Python para dados\n- Estatística aplicada"
-           data-site="https://www.ipc.pt/">
-        <img src="IPC.png" alt="Instituto Politécnico de Coimbra">
-        IPC
-      </div>
-    </div>
+    <button id="startButton" aria-haspopup="true" aria-controls="infoBoxes" aria-expanded="false">Iniciar programa</button>
+    <div id="infoBoxes" role="list" aria-live="polite" aria-relevant="additions"></div>
     <div id="infoContainer" aria-live="polite" aria-atomic="true"></div>
-  </div>
-
-  <div id="sysBar" role="contentinfo" aria-label="Barra do sistema">
-    <img src="https://img.icons8.com/fluency/48/wifi.png" class="sysIcon" title="Wi-Fi" alt="Ícone Wi-Fi" />
-    <img src="https://img.icons8.com/fluency/48/high-volume.png" class="sysIcon" title="Volume" alt="Ícone Volume" />
-    <img src="https://img.icons8.com/fluency/48/empty-battery.png" class="sysIcon" title="Bateria" alt="Ícone Bateria" />
-    <span id="sysHour" aria-live="polite"></span>
-  </div>
+  </section>
 </div>
 
-<div id="threeContainer" role="main" aria-label="Visor 3D de documentos" >
-  <div id="info" aria-live="polite" aria-atomic="true">Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique para aceder aos documentos!</div>
-  <div id="confirm" role="dialog" aria-modal="true"></div>
-  <div id="conteudo"></div>
-  <button id="voltar-edu" aria-label="Voltar para a escola">Voltar atrás</button>
+<!-- Barra de sistema -->
+<div id="sysBar" aria-label="Barra do sistema">
+  <img src="https://img.icons8.com/fluency/48/wifi.png" class="sysIcon" alt="Ícone Wi-Fi" />
+  <img src="https://img.icons8.com/fluency/48/high-volume.png" class="sysIcon" alt="Ícone de Volume" />
+  <img src="https://img.icons8.com/fluency/48/empty-battery.png" class="sysIcon" alt="Ícone de Bateria" />
+  <span id="sysHour" aria-live="polite" aria-atomic="true">00:00:00</span>
 </div>
 
+<!-- Scripts organizados -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
 <script src="https://threejs.org/examples/js/loaders/FontLoader.js"></script>
 <script src="https://threejs.org/examples/js/geometries/TextGeometry.js"></script>
+
 <script>
-const preFade = document.getElementById('fadeInPreVideo');
-const intro = document.getElementById('videoIntroContainer');
-const fade = document.getElementById('introFade');
-const desktop = document.getElementById('desktop');
-const introVideo = document.getElementById('introVideo');
-const skipIntroBtn = document.getElementById('skipIntro');
+  // DOM elements
+  const preFade = document.getElementById('fadeInPreVideo');
+  const intro = document.getElementById('videoIntroContainer');
+  const fade = document.getElementById('introFade');
+  const desktop = document.getElementById('desktop');
+  const introVideo = document.getElementById('introVideo');
+  const schoolIcon = document.getElementById("icon-school");
+  const programWindow = document.getElementById("programWindow");
+  const startButton = document.getElementById("startButton");
+  const infoBoxes = document.getElementById("infoBoxes");
+  const infoContainer = document.getElementById("infoContainer");
+  const closeProgramBtn = document.querySelector('.closeProgramBtn');
+  const sysHour = document.getElementById("sysHour");
+  const iconDocs = document.getElementById("icon-docs");
 
-function showDesktop() {
-  fade.style.opacity = "1";
-  setTimeout(() => {
-    fade.style.opacity = "0";
-    intro.style.display = "none";
-    desktop.style.display = "block";
-  }, 900);
-}
-
-introVideo.onended = showDesktop;
-
-// permite skip do vídeo
-skipIntroBtn.onclick = () => {
-  introVideo.pause();
-  showDesktop();
-  skipIntroBtn.style.display = "none";
-};
-
-// fallback se vídeo não carregar em 15s
-setTimeout(() => {
-  if (intro.style.display !== "none") {
-    introVideo.pause();
-    showDesktop();
-    skipIntroBtn.style.display = "none";
+  // Accessibility helper to toggle aria attributes
+  function toggleAriaExpanded(expanded) {
+    startButton.setAttribute('aria-expanded', expanded);
+    programWindow.setAttribute('aria-hidden', !expanded);
+    if (expanded) programWindow.focus();
   }
-}, 15000);
 
-function updateHour() {
-  const now = new Date();
-  let hh = now.getHours().toString().padStart(2, '0');
-  let mm = now.getMinutes().toString().padStart(2, '0');
-  let ss = now.getSeconds().toString().padStart(2, '0');
-  document.getElementById("sysHour").textContent = `${hh}:${mm}:${ss}`;
-}
-setInterval(updateHour, 950);
-updateHour();
-
-// DOM Elements
-const schoolIcon = document.getElementById("icon-school");
-const programWindow = document.getElementById("programWindow");
-const infoBoxes = document.getElementById("infoBoxes");
-const infoContainer = document.getElementById("infoContainer");
-const closeProgramBtn = document.querySelector('.closeProgramBtn');
-const iconDocs = document.getElementById("icon-docs");
-const threeContainer = document.getElementById("threeContainer");
-const voltarEduBtn = document.getElementById("voltar-edu");
-const infoText = document.getElementById("info");
-const confirmBox = document.getElementById("confirm");
-const conteudoBox = document.getElementById("conteudo");
-
-// Abertura do programa com boxes já visíveis; ícone abre/fecha programa
-schoolIcon.addEventListener("click", () => {
-  if (programWindow.style.display === "none" || programWindow.style.display === "") {
-    programWindow.style.display = "block";
-    desktop.style.display = "block";
-  } else {
-    programWindow.style.display = "none";
-  }
-});
-
-// Sistema para mostrar informação ao clicar na box
-function manageDownloadWindows() {
-  const downloads = infoContainer.querySelectorAll('.infoBoxWindow');
-  const downloadBars = infoContainer.querySelectorAll('.download-bar');
-  if (downloads.length >= 4) {
-    if (downloadBars[0]) downloadBars[0].remove();
-    downloads[0].remove();
-  }
-}
-
-infoBoxes.addEventListener("click", function(e) {
-  let targetBox = null;
-  if (e.target.classList.contains("box")) {
-    targetBox = e.target;
-  } else if (e.target.parentElement && e.target.parentElement.classList.contains("box")) {
-    targetBox = e.target.parentElement;
-  }
-  if (!targetBox) return;
-
-  manageDownloadWindows();
-
-  // Barra e janela de loading
-  const downloadBar = document.createElement("div");
-  downloadBar.className = "download-bar";
-  const fill = document.createElement("div");
-  fill.className = "download-fill";
-  downloadBar.appendChild(fill);
-
-  const infoBoxWindow = document.createElement("div");
-  infoBoxWindow.className = "infoBoxWindow";
-  infoBoxWindow.innerHTML = `<strong>Carregando módulo...</strong>`;
-  infoContainer.appendChild(downloadBar);
-  infoContainer.appendChild(infoBoxWindow);
-
-  // Anima a barra
-  setTimeout(() => { fill.style.width = "100%"; }, 40);
-
-  // Dados info
-  setTimeout(() => {
-    // Formata o texto de info com quebras e negrito já no HTML
-    const rawInfo = targetBox.getAttribute("data-info");
-    infoBoxWindow.innerHTML = rawInfo.replace(/\n/g, '<br>');
-
-    // Botões sempre visíveis
-    const modalBtnsDiv = document.createElement("div");
-    modalBtnsDiv.id = "modalButtons";
-
-    // Botão Documentos: habilita só para IPS/ISEL que têm documentos 3D
-    const detailText = targetBox.getAttribute("data-detail").toUpperCase();
-    const isIPS = detailText.includes('IPS');
-    const isISEL = detailText.includes('ISEL');
-
-    const btnDocs = document.createElement("button");
-    btnDocs.textContent = "📄 Documentos";
-    if (isIPS || isISEL) {
-      btnDocs.disabled = false;
-      btnDocs.title = "Abrir documentos em 3D";
-      btnDocs.addEventListener("click", () => {
-        desktop.style.display = "none";
-        programWindow.style.display = "none";
-        threeContainer.style.display = "block";
-        document.body.classList.add('three-active');
-        if (!scene) {
-          const fontURL = 'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json';
-          const loader = new THREE.FontLoader();
-          loader.load(fontURL, function(font) {
-            init3D(font);
-          }, undefined, () => {
-            alert("Erro a carregar o modo 3D. Pode usar apenas a lista.");
-            init3D(null); // fallback simples
-          });
-        }
-      });
-    } else {
-      btnDocs.disabled = true;
-      btnDocs.title = "Sem documentos disponíveis";
-    }
-    modalBtnsDiv.appendChild(btnDocs);
-
-    // Botão Planos de Estudos - sempre ativo se link disponível
-    const btnPlanos = document.createElement("button");
-    btnPlanos.textContent = "🔗 Planos de Estudos";
-    const site = targetBox.getAttribute("data-site");
-    if (site) {
-      btnPlanos.addEventListener("click", () => {
-        window.open(site, "_blank");
-      });
-    } else {
-      btnPlanos.disabled = true;
-      btnPlanos.title = "Link não disponível";
-    }
-    modalBtnsDiv.appendChild(btnPlanos);
-
-    infoBoxWindow.appendChild(modalBtnsDiv);
-
-    downloadBar.remove();
-  }, 1500);
-});
-
-closeProgramBtn.addEventListener('click', () => {
-  showConfirmBox();
-});
-function showConfirmBox() {
-  const overlay = document.createElement("div");
-  overlay.className = "confirmOverlay";
-  const box = document.createElement("div");
-  box.className = "confirmBox";
-  box.innerHTML = `<div>Deseja mesmo fechar o programa?</div>
-    <button class="confirmBtn">Sim</button>
-    <button class="cancelBtn">Não</button>`;
-  overlay.appendChild(box);
-  document.body.appendChild(overlay);
-  box.querySelector('.confirmBtn').onclick = () => {
-    box.innerHTML = '<div>A fechar programa...</div>' +
-      '<div class="loadingBar"><div class="loadingFill"></div></div>';
-    const loadingFill = box.querySelector('.loadingFill');
-    setTimeout(() => { loadingFill.style.width = "100%"; }, 30);
+  // Smooth fade out after load
+  window.onload = () => {
     setTimeout(() => {
-      document.body.removeChild(overlay);
-      programWindow.style.display = "none";
-      infoContainer.innerHTML = "";
-    }, 1300);
+      preFade.style.opacity = "0";
+      setTimeout(() => { preFade.style.display = "none"; }, 1500);
+    }, 180);
   };
-  box.querySelector('.cancelBtn').onclick = () => {
-    document.body.removeChild(overlay);
+
+  // Video intro fade handling
+  introVideo.onended = () => {
+    fade.style.opacity = "1";
+    setTimeout(() => {
+      fade.style.opacity = "0";
+      intro.style.display = "none";
+      desktop.style.display = "flex";
+    }, 1500);
   };
-}
 
-// Three.js 3D documentos - otimizado
+  // Backup fade after max 17s
+  setTimeout(() => {
+    if (intro.style.display !== "none") {
+      fade.style.opacity = "1";
+      setTimeout(() => {
+        fade.style.opacity = "0";
+        intro.style.display = "none";
+        desktop.style.display = "flex";
+      }, 1500);
+    }
+  }, 17000);
 
-let arquivos = [
-  {nome:"Bioquímica", descricao:"Seminário de Fosfatidilserina", conteudo:"Conteúdo PDF: Bioquímica", link:"bioquimica.pdf"},
-  {nome:"Sinais Vida", descricao:"Relatório Eletrotecnia", conteudo:"Conteúdo PDF: Sinais de Vida", link:"relatorio_eletrotecnia.pdf"},
-  {nome:"Exoesqueleto", descricao:"Exoesqueleto Inferior", conteudo:"Conteúdo PDF: Exoesqueleto", link:"projeto_dpm_LTB.pdf"},
-  {nome:"Genética", descricao:"Aula Genética", conteudo:"Conteúdo PDF: Genética", link:"DPM.pdf"},
-  {nome:"Bombas Insulina", descricao:"Inovação em Insulina", conteudo:"Conteúdo PDF: Bombas Insulina", link:"Dispositivos_Médicos.pdf"},
-  {nome:"Ressonância", descricao:"Projeto RM", conteudo:"Conteúdo PDF: Ressonância", link:"equipsaude.pdf"},
-];
+  // Update system clock every second (optimized for accessibility)
+  function updateHour() {
+    const now = new Date();
+    const hh = now.getHours().toString().padStart(2, '0');
+    const mm = now.getMinutes().toString().padStart(2, '0');
+    const ss = now.getSeconds().toString().padStart(2, '0');
+    sysHour.textContent = `${hh}:${mm}:${ss}`;
+  }
+  setInterval(updateHour, 1000);
+  updateHour();
 
-let scene, camera, renderer;
-let camDist = 21, camRotX = 0.16, camRotY = -0.02;
-let blocos = [], luzes = [];
+  // Data for infoBoxes
+  const schoolData = [
+    {info: "Status: Ciências e Tecnologias.", detail: "SECUNDÁRIO: Escola Secundária de Santo André e Escola Secundária de Casquilhos", site: "https://www.aed.edu.pt/", img:"casquilhos.png", alt:"Escola Secundária dos Casquilhos"},
+    {info: "Status: Licenciatura em Tecnologia Biomédica.", detail: "IPS: 2022  - ...", site: "https://www.ips.pt/", img:"POLISET.png", alt:"Politécnico de Setúbal"},
+    {info: "Status: Unidades Curriculares Isoladas.", detail: "ISEL: 2025 - ... Sinais e Sistemas, Eletrónica e Instrumentação, Desenho Assistido por Computador, Processamento Digital de Sinais Biomédicos, Fisíca Médica, Curso Preparatório de Matemática", site: "https://www.isel.pt/", img:"ISEL.png", alt:"Instituto Superior de Engenharia de Lisboa"},
+    {info: "Status: English A2.", detail: "TECMINHO: 2023.", site: "https://www.uminho.pt/", img:"TECMINHO.png", alt:"Universidade do Minho"},
+    {info: "Status: Processamento e Análise de Dados com Python.", detail: "IPC: 2022.", site: "https://www.ipc.pt/", img:"IPC.png", alt:"Instituto Politécnico de Coimbra"}
+  ];
 
-function init3D(font) {
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(57, window.innerWidth/window.innerHeight, 0.1, 160);
-  setCameraPos();
+  // Open program window on school icon click
+  schoolIcon.addEventListener("click", () => {
+    toggleAriaExpanded(true);
+    populateInfoBoxes();
+  });
 
-  renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  // Keyboard accessibility for icons
+  document.querySelectorAll('.desktop-icon').forEach(icon => {
+    icon.addEventListener('keydown', e => {
+      if (e.key === "Enter" || e.key === " ") {
+        icon.click();
+        e.preventDefault();
+      }
+    });
+  });
 
-  threeContainer.innerHTML = '';
-  threeContainer.appendChild(infoText);
-  threeContainer.appendChild(confirmBox);
-  threeContainer.appendChild(conteudoBox);
-  threeContainer.appendChild(voltarEduBtn);
-  threeContainer.appendChild(renderer.domElement);
+  // Populate info boxes and show start button
+  function populateInfoBoxes() {
+    infoBoxes.innerHTML = "";
+    schoolData.forEach((item, index) => {
+      const box = document.createElement('div');
+      box.className = 'box';
+      box.setAttribute('role', 'listitem');
+      box.setAttribute('tabindex', '0');
+      box.setAttribute('title', item.info);
 
-  scene.add(new THREE.AmbientLight(0x88ffbb, 0.63));
-  let dirLight = new THREE.DirectionalLight(0xffffff, 0.80);
-  dirLight.position.set(50,70,45);
-  scene.add(dirLight);
+      const img = document.createElement('img');
+      img.src = item.img;
+      img.alt = item.alt;
+      box.appendChild(img);
 
-  // Redução das grades do chão quadrado para metade
-  const quadTam = 2.7, quadQtX = 14, quadQtZ = 9;
-  for (let x=-quadQtX; x<=quadQtX; x++) {
-    for (let z=-quadQtZ; z<=quadQtZ; z++) {
-      let geo = new THREE.BoxGeometry(quadTam, 0.14, quadTam);
-      let mat = new THREE.MeshPhongMaterial({
-        color:0x61ff7c, emissive:0x19ff36, emissiveIntensity:0.22, transparent:true, opacity:0.44
+      const divText = document.createElement('div');
+      divText.textContent = item.info;
+      box.appendChild(divText);
+
+      box.dataset.info = item.info;
+      box.dataset.detail = item.detail;
+      box.dataset.site = item.site;
+
+      infoBoxes.appendChild(box);
+    });
+    infoBoxes.style.display = "flex";
+    startButton.style.display = "none";
+    infoContainer.innerHTML = "";
+  }
+
+  // Handle click on boxes for download simulation and modal buttons
+  infoBoxes.addEventListener("click", e => {
+    const targetBox = e.target.closest('.box');
+    if (!targetBox) return;
+
+    // Control max 4 downloads at a time
+    while (infoContainer.childElementCount >= 8) {
+      infoContainer.firstChild.remove();
+      infoContainer.firstChild.remove();
+    }
+
+    const downloadBar = document.createElement("div");
+    downloadBar.className = "download-bar";
+    const fill = document.createElement("div");
+    fill.className = "download-fill";
+    downloadBar.appendChild(fill);
+
+    const infoBoxWindow = document.createElement("div");
+    infoBoxWindow.className = "infoBoxWindow";
+    infoBoxWindow.textContent = "Carregando módulo...";
+
+    infoContainer.appendChild(downloadBar);
+    infoContainer.appendChild(infoBoxWindow);
+
+    setTimeout(() => {
+      fill.style.width = "100%";
+    }, 40);
+
+    setTimeout(() => {
+      infoBoxWindow.innerHTML =
+        `<div>${targetBox.dataset.info}</div>
+         <div id="modalButtons"></div>`;
+      downloadBar.remove();
+
+      const modalBtnsDiv = infoBoxWindow.querySelector("#modalButtons");
+      const titulo = targetBox.dataset.detail.toUpperCase();
+      const site = targetBox.dataset.site;
+
+      const isIPS = titulo.includes('IPS');
+      const isISEL = titulo.includes('ISEL');
+
+      // Button to open documents view for IPS or ISEL
+      if (isIPS || isISEL) {
+        const btnDocs = document.createElement("button");
+        btnDocs.textContent = "Documentos";
+        btnDocs.addEventListener("click", () => {
+          openDocuments3D();
+        });
+        modalBtnsDiv.appendChild(btnDocs);
+      }
+
+      // Button always available to open study plans
+      const btnPlanos = document.createElement("button");
+      btnPlanos.textContent = "Planos de Estudos";
+      btnPlanos.addEventListener("click", () => {
+        if (site) window.open(site, "_blank");
+        else alert("Link para Planos de Estudos não disponível.");
       });
-      let quad = new THREE.Mesh(geo, mat);
-      quad.position.set(x*quadTam, 0, z*quadTam);
-      scene.add(quad);
-    }
-  }
-
-  let baseGeo = new THREE.BoxGeometry(15*quadTam, 0.48, 6.4*quadTam);
-  let baseMat = new THREE.MeshPhongMaterial({color:0xff3333, transparent:true, opacity:0.90});
-  let base = new THREE.Mesh(baseGeo, baseMat);
-  base.position.set(0, 0.17, 0);
-  scene.add(base);
-
-  // Blocos para documentos PDF (reduzidos)
-  const nFileiras = 3;
-  const blocosPorFileira = Math.ceil(arquivos.length / nFileiras);
-  const larguraBase = 15 * quadTam;
-  const profundBase = 6.4 * quadTam;
-  const espacoX = larguraBase / blocosPorFileira;
-  const xInit = -larguraBase / 2 + espacoX / 2;
-  const espacoZ = profundBase / (nFileiras + 1);
-  const zInit = -profundBase / 2 + espacoZ;
-  blocos = [];
-  luzes = [];
-  for (let i=0; i<arquivos.length; i++) {
-    let geometry = new THREE.BoxGeometry(2.6, 0.75, 1.7);
-    let material = new THREE.MeshPhongMaterial({
-      color:0x00ffbb, emissive:0x00ff00, emissiveIntensity:0.18
-    });
-    const linha = Math.floor(i / blocosPorFileira);
-    let posNaLinha = i % blocosPorFileira;
-    let bloco = new THREE.Mesh(geometry, material);
-    bloco.position.set(
-      xInit + posNaLinha * espacoX,
-      0.82,
-      zInit + linha * espacoZ
-    );
-    bloco.userData = arquivos[i];
-    scene.add(bloco);
-    blocos.push(bloco);
-
-    let canvas = document.createElement('canvas');
-    canvas.width = 130; canvas.height = 37;
-    let ctx = canvas.getContext('2d');
-    ctx.font = 'bold 20px Courier';
-    ctx.fillStyle = '#00ff00';
-    ctx.fillText(arquivos[i].nome, 10, 29);
-    let tex = new THREE.CanvasTexture(canvas);
-    let face = new THREE.Mesh(
-      new THREE.PlaneGeometry(2.25, 0.29),
-      new THREE.MeshBasicMaterial({map:tex, transparent:true})
-    );
-    face.position.set(bloco.position.x, bloco.position.y + 0.5, bloco.position.z);
-    face.rotation.x = -0.54;
-    scene.add(face);
-
-    let cylGeo = new THREE.CylinderGeometry(1.42, 1.42, 38, 64, 1, true);
-    let cylMat = new THREE.MeshPhongMaterial({
-      color:0xffffff, transparent:true, opacity:0.40, side:THREE.DoubleSide,
-      emissive:0xffffff, emissiveIntensity:0.35
-    });
-    let spotlight = new THREE.Mesh(cylGeo, cylMat);
-    spotlight.position.set(
-      bloco.position.x,
-      base.position.y + (baseGeo.parameters.height / 2) + (38 / 2),
-      bloco.position.z
-    );
-    spotlight.visible = false;
-    scene.add(spotlight);
-    luzes.push(spotlight);
-  }
-
-  addBlocksIPS_ISEL(font);
-
-  // Controlo da câmara
-  let isDragging = false, prevX = 0, prevY = 0;
-  threeContainer.addEventListener("mousedown", e => {
-    isDragging = true; prevX = e.clientX; prevY = e.clientY;
+      modalBtnsDiv.appendChild(btnPlanos);
+    }, 1500);
   });
-  window.addEventListener("mouseup", () => isDragging = false);
-  window.addEventListener("mousemove", e => {
-    if (isDragging) {
-      camRotY += (e.clientX - prevX) * 0.012;
-      camRotX += (e.clientY - prevY) * 0.006;
-      camRotX = Math.max(0, Math.min(0.55, camRotX));
-      prevX = e.clientX; prevY = e.clientY;
-      setCameraPos();
-    }
+
+  // Close program window with confirmation
+  closeProgramBtn.addEventListener('click', () => {
+    showConfirmClose();
   });
-  threeContainer.addEventListener("wheel", e => {
-    e.preventDefault();
-    camDist += e.deltaY < 0 ? -2 : 2;
-    camDist = Math.max(16, Math.min(34, camDist));
-    setCameraPos();
-  }, { passive: false });
 
-  threeContainer.addEventListener("mousemove", updateHoverHighlight);
-  threeContainer.addEventListener("click", onClickBloco);
+  function showConfirmClose() {
+    const overlay = document.createElement("div");
+    overlay.className = "confirmOverlay";
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.innerHTML = `
+      <div class="confirmBox" tabindex="0">
+        <p>Deseja mesmo fechar o programa?</p>
+        <button class="confirmBtn">Sim</button>
+        <button class="cancelBtn">Não</button>
+      </div>`;
+    document.body.appendChild(overlay);
 
-  function setCameraPos() {
-    camera.position.x = Math.sin(camRotY) * Math.cos(camRotX) * camDist;
-    camera.position.y = Math.sin(camRotX) * camDist + 3.2;
-    camera.position.z = Math.cos(camRotY) * Math.cos(camRotX) * camDist;
-    camera.lookAt(0, 0, 0);
-  }
-  setCameraPos();
+    const yesBtn = overlay.querySelector('.confirmBtn');
+    const noBtn = overlay.querySelector('.cancelBtn');
 
-  function updateHoverHighlight(e) {
-    const rect = renderer.domElement.getBoundingClientRect();
-    const mouse = {
-      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
-      y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+    yesBtn.focus();
+
+    yesBtn.onclick = () => {
+      const loadingHtml = `
+      <div>A fechar programa...</div>
+      <div class="loadingBar"><div class="loadingFill"></div></div>`;
+      overlay.querySelector('.confirmBox').innerHTML = loadingHtml;
+
+      const loadingFill = overlay.querySelector('.loadingFill');
+      setTimeout(() => { loadingFill.style.width = "100%"; }, 30);
+      setTimeout(() => {
+        document.body.removeChild(overlay);
+        toggleAriaExpanded(false);
+        infoBoxes.style.display = "none";
+        startButton.style.display = "block";
+        infoContainer.innerHTML = "";
+      }, 1300);
     };
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(blocos);
-    let found = false;
-    for (let i = 0; i < blocos.length; i++) {
-      if (intersects.length > 0 && blocos[i] === intersects[0].object) {
-        luzes[i].visible = true;
-        found = true;
-        infoText.textContent = `Selecionado: ${blocos[i].userData.nome}`;
-      } else {
-        luzes[i].visible = false;
-      }
-    }
-    if (!found) infoText.textContent = "Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique para aceder aos documentos!";
-  }
-
-  function onClickBloco(e) {
-    const rect = renderer.domElement.getBoundingClientRect();
-    const mouse = {
-      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
-      y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+    noBtn.onclick = () => {
+      document.body.removeChild(overlay);
     };
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(blocos);
 
-    confirmBox.style.display = "none";
-    conteudoBox.style.display = "none";
-    clearTimeout(window.delayPopup);
-    luzes.forEach(luz => luz.visible = false);
-
-    if (intersects.length > 0) {
-      const i = blocos.indexOf(intersects[0].object);
-      if (i >= 0) {
-        let luz = luzes[i];
-        luz.visible = true;
-        luz.scale.set(1, 0.18, 1);
-        let grow = () => {
-          if (luz.scale.y < 1) {
-            luz.scale.y += 0.11;
-            requestAnimationFrame(grow);
+    // Keyboard trap
+    overlay.addEventListener('keydown', function trapFocus(e) {
+      if (e.key === 'Tab') {
+        const focusable = overlay.querySelectorAll('button');
+        if (focusable.length === 0) return;
+        const firstElem = focusable[0];
+        const lastElem = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === firstElem) {
+            e.preventDefault();
+            lastElem.focus();
           }
-        };
-        grow();
-        infoText.textContent = `Selecionado: ${blocos[i].userData.nome}`;
-
-        window.delayPopup = setTimeout(() => {
-          confirmBox.innerHTML =
-            `<b>${blocos[i].userData.nome}</b><br>
-             <small>${blocos[i].userData.descricao}</small><br>
-             <div style="margin-top:13px;">Quero abrir esta pasta?</div>
-             <button id="sim">Sim</button>
-             <button id="nao">Não</button>`;
-          confirmBox.style.display = "block";
-
-          document.getElementById("sim").onclick = () => {
-            confirmBox.style.display = "none";
-            luz.visible = false;
-            if (blocos[i].userData.link) {
-              window.open(blocos[i].userData.link, "_blank");
-            } else {
-              alert("PDF não encontrado para este documento.");
-            }
-          };
-
-          document.getElementById("nao").onclick = () => {
-            confirmBox.style.display = "none";
-            luz.visible = false;
-          };
-
-          setTimeout(() => document.body.onclick = function(ev){
-            if(!confirmBox.contains(ev.target) && !conteudoBox.contains(ev.target)){
-              confirmBox.style.display = "none";
-              conteudoBox.style.display = "none";
-              luz.visible = false;
-              document.body.onclick = null;
-            }
-          }, 120);
-        }, 500);
+        } else {
+          if (document.activeElement === lastElem) {
+            e.preventDefault();
+            firstElem.focus();
+          }
+        }
       }
-    }
+      if (e.key === 'Escape') {
+        document.body.removeChild(overlay);
+      }
+    });
   }
 
-  function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
+  // Open documents 3D placeholder function
+  function openDocuments3D() {
+    alert("Abrir visualização 3D dos documentos - funcionalidade a implementar.");
   }
-  animate();
 
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+  // Home icon returns to index
+  document.getElementById("icon-home").addEventListener("click", () => {
+    window.location.href = "index.html";
   });
-}
 
-function addBlocksIPS_ISEL(font) {
-  // Bloco IPS
-  let blocoIPS = new THREE.Mesh(
-    new THREE.BoxGeometry(2.1, 0.7, 1.3),
-    new THREE.MeshPhongMaterial({
-      color: 0x13ffe9,
-      emissive: 0x00ff00,
-      emissiveIntensity: 0.13,
-    })
-  );
-  blocoIPS.position.set(-12, 0.3, 0);
-  scene.add(blocoIPS);
+  // Keyboard-friendly triggers for startButton
+  startButton.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      startButton.click();
+      e.preventDefault();
+    }
+  });
 
-  if (font) {
-    const geoIPS = new THREE.TextGeometry("I P S", {
-      font: font,
-      size: 0.7,
-      height: 0.23,
-      curveSegments: 10,
-      bevelEnabled: true,
-      bevelThickness: 0.06,
-      bevelSize: 0.06,
-      bevelOffset: 0,
-      bevelSegments: 3,
-    });
-    geoIPS.computeBoundingBox();
-    const xOffIPS = (geoIPS.boundingBox.max.x + geoIPS.boundingBox.min.x) / 2;
-    geoIPS.translate(-xOffIPS, 0, 0);
-    const meshIPS = new THREE.Mesh(geoIPS, new THREE.MeshPhongMaterial({ color: 0x00ff00, specular: 0x009900 }));
-    meshIPS.position.set(blocoIPS.position.x, blocoIPS.position.y + 0.75, blocoIPS.position.z);
-    scene.add(meshIPS);
-  }
-
-  // Bloco ISEL
-  let blocoISEL = new THREE.Mesh(
-    new THREE.BoxGeometry(2.1, 0.7, 1.3),
-    new THREE.MeshPhongMaterial({
-      color: 0x13ffe9,
-      emissive: 0x00ff00,
-      emissiveIntensity: 0.13,
-    })
-  );
-  blocoISEL.position.set(-9, 0.3, 0);
-  scene.add(blocoISEL);
-
-  if (font) {
-    const geoISEL = new THREE.TextGeometry("I S E L", {
-      font: font,
-      size: 0.7,
-      height: 0.23,
-      curveSegments: 10,
-      bevelEnabled: true,
-      bevelThickness: 0.06,
-      bevelSize: 0.06,
-      bevelOffset: 0,
-      bevelSegments: 3,
-    });
-    geoISEL.computeBoundingBox();
-    const xOffISEL = (geoISEL.boundingBox.max.x + geoISEL.boundingBox.min.x) / 2;
-    geoISEL.translate(-xOffISEL, 0, 0);
-    const meshISEL = new THREE.Mesh(geoISEL, new THREE.MeshPhongMaterial({ color: 0x00ff00, specular: 0x009900 }));
-    meshISEL.position.set(blocoISEL.position.x, blocoISEL.position.y + 0.75, blocoISEL.position.z);
-    scene.add(meshISEL);
-  }
-}
-
-// Ação do ícone "Documentos"
-iconDocs.addEventListener("click", () => {
-  desktop.style.display = "none";
-  programWindow.style.display = "none";
-  threeContainer.style.display = "block";
-  document.body.classList.add('three-active');
-  if (!scene) {
-    const fontURL = 'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json';
-    const loader = new THREE.FontLoader();
-    loader.load(fontURL, function(font) {
-      init3D(font);
-    }, undefined, () => {
-      alert("Erro a carregar o modo 3D. Pode usar apenas a lista.");
-      init3D(null);
-    });
-  }
-});
-
-// Botão voltar atrás no modo 3D
-voltarEduBtn.addEventListener("click", () => {
-  threeContainer.style.display = "none";
-  desktop.style.display = "block";
-  programWindow.style.display = "block";
-  document.body.classList.remove('three-active');
-  confirmBox.style.display = "none";
-  conteudoBox.style.display = "none";
-});
-
-document.getElementById("icon-home").addEventListener("click", () => {
-  window.location.href = "index.html";
-});
+  // Show infoBoxes on start button click
+  startButton.addEventListener("click", () => {
+    if (schoolData.length > 0) {
+      infoBoxes.style.display = "flex";
+      startButton.style.display = "none";
+      infoContainer.innerHTML = "";
+      toggleAriaExpanded(true);
+    }
+  });
 </script>
 </body>
 </html>
+
