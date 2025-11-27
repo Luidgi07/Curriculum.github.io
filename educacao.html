@@ -201,7 +201,7 @@
       justify-content: center;
     }
 
-    /* CARTÕES ESCOLA – LOGO CENTRADO + NEON */
+    /* CARTÕES ESCOLA – FUNDO BRANCO + NEON */
     .box {
       width: 200px;
       height: 130px;
@@ -216,12 +216,12 @@
         0 0 12px #00ff66aa,
         0 0 24px #00ff6633;
 
-      background: radial-gradient(circle at 10% 0%, #00ffcc 0%, #002222 40%, #001414 100%);
+      background: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #eaffff;
+      color: #003333;
       font-size: 14px;
       padding: 10px;
       overflow: hidden;
@@ -247,7 +247,7 @@
     .box::after {
       content: attr(data-status);
       font-size: 12px;
-      color: #00ff99;
+      color: #00aa55;
       position: absolute;
       bottom: 6px;
       left: 50%;
@@ -610,9 +610,7 @@
     skipBtn.addEventListener('click', finishIntro);
 
     setTimeout(() => {
-      if (intro.style.display !== "none") {
-        finishIntro();
-      }
+      if (intro.style.display !== "none") finishIntro();
     }, 12000);
 
     function updateHour() {
@@ -686,8 +684,8 @@
 
         const btnDocs  = infoBoxWindow.querySelector('#btnDocs');
         const btnPlanos= infoBoxWindow.querySelector('#btnPlanos');
-
         const upperDetail = detail.toUpperCase();
+
         btnDocs.addEventListener("click", () => {
           if (upperDetail.includes('IPS') || upperDetail.includes('ISEL')) {
             desktop.style.display = "none";
@@ -701,11 +699,8 @@
         });
 
         btnPlanos.addEventListener("click", () => {
-          if (site) {
-            window.open(site, "_blank");
-          } else {
-            alert("Link para Planos de Estudos não disponível.");
-          }
+          if (site) window.open(site, "_blank");
+          else alert("Link para Planos de Estudos não disponível.");
         });
       }, 1200);
     });
