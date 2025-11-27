@@ -14,6 +14,7 @@
       background: #28345A;
     }
     body { min-height: 100vh; }
+
     /* ---------- HUD fixo topo ---------- */
     .top-hud {
       position: fixed;
@@ -42,7 +43,11 @@
     }
     .left-decor-btn svg { width: 20px; height: 20px; }
     .left-decor-btn:hover { background: #428cff22; }
-    .hud-center { flex: 1; display: flex; justify-content: flex-end; margin-left: auto; margin-right: 80px; }
+
+    .hud-center {
+      flex: 1; display: flex; justify-content: flex-end;
+      margin-left: auto; margin-right: 80px;
+    }
     .profile-area {
       display: flex; align-items: center; gap: 11px;
       background: rgba(42,62,94,0.82); border-radius: 9px;
@@ -63,6 +68,7 @@
       text-overflow: ellipsis; white-space: nowrap;
       user-select: text;
     }
+
     /* ---------- Galeria/Colunas ---------- */
     .gallery {
       position: absolute;
@@ -73,7 +79,7 @@
       display: flex;
       overflow: hidden;
       margin: 0;
-      background: #fff;
+      background: #000;
       z-index: 9;
     }
     .col {
@@ -83,16 +89,31 @@
       display: flex;
       align-items: stretch;
       cursor: pointer;
-      transition: filter 0.25s;
+      transition: filter 0.25s, transform 0.25s;
+      padding: 0 4px; /* pequeno espaço entre fotos */
+      box-sizing: border-box;
+    }
+    .col-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 18px;              /* cantos arredondados tipo PS5 */
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
     }
     .col img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: filter 0.3s;
+      transition: filter 0.3s, transform 0.3s;
       display: block;
       pointer-events: none;
       user-select: none;
+    }
+    .col:hover img,
+    .col:focus img {
+      filter: brightness(0.6);          /* escurece ligeiro ao hover */
+      transform: scale(1.03);
     }
     .overlay {
       position: absolute;
@@ -100,10 +121,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(38,38,38,0.56);
+      background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.35));
       color: #fff;
-      font-weight: bold;
-      font-size: 2.4em;
+      font-weight: 600;
+      font-size: 1.8em;
       letter-spacing: 1px;
       opacity: 0;
       pointer-events: none;
@@ -111,14 +132,15 @@
       text-shadow: 1px 1px 12px #181818ad;
       text-align: center;
       z-index: 2;
+      padding: 0 10px;
+      box-sizing: border-box;
     }
-    .col:hover .overlay, .col:focus .overlay {
+    .col:hover .overlay,
+    .col:focus .overlay {
       opacity: 1;
       pointer-events: auto;
     }
-    .col:hover img, .col:focus img {
-      filter: brightness(0.44);
-    }
+
     /* ---------- Loader HUD ---------- */
     #screen-fade {
       position: fixed;
@@ -215,21 +237,27 @@
   <div class="gallery">
     <!-- Coluna 1 -->
     <div class="col" tabindex="0" data-link="NatacaoPura.html">
-      <img
-        src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg"
-        alt="Natação Pura"
-      />
-      <div class="overlay">Natação Pura</div>
+      <div class="col-inner">
+        <img
+          src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg"
+          alt="Natação Pura"
+        />
+        <div class="overlay">Natação Pura</div>
+      </div>
     </div>
     <!-- Coluna 2 -->
     <div class="col" tabindex="0" data-link="pagina2.html">
-      <img src="FB_IMG_1696068644775 (1).jpg" alt="Águas Abertas" />
-      <div class="overlay">Águas Abertas</div>
+      <div class="col-inner">
+        <img src="FB_IMG_1696068644775 (1).jpg" alt="Águas Abertas" />
+        <div class="overlay">Águas Abertas</div>
+      </div>
     </div>
     <!-- Coluna 3 -->
     <div class="col" tabindex="0" data-link="pagina3.html">
-      <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático" />
-      <div class="overlay">Salvamento Aquático</div>
+      <div class="col-inner">
+        <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático" />
+        <div class="overlay">Salvamento Aquático</div>
+      </div>
     </div>
   </div>
 
@@ -241,7 +269,6 @@
     window.addEventListener("load", () => {
       const screenFade = document.getElementById("screen-fade");
       if (!screenFade) return;
-      // Só fade out simples sem loader na entrada
       screenFade.style.pointerEvents = "auto";
       screenFade.style.opacity = "1";
       setTimeout(() => {
@@ -252,7 +279,6 @@
         () => {
           if (screenFade.style.opacity === "0") {
             screenFade.style.pointerEvents = "none";
-            // Não adiciona loader aqui - deixa vazio
             screenFade.innerHTML = "";
           }
         },
@@ -265,7 +291,6 @@
       const screenFade = document.getElementById("screen-fade");
       if (!screenFade) return;
 
-      // Insere o loader circular de retângulos aqui
       screenFade.innerHTML = `
         <div class="loader-circle-ret" aria-label="A carregar">
           <svg class="loader-svg" aria-hidden="true" focusable="false"></svg>
@@ -326,7 +351,7 @@
     function createRectangularLoaderAnimation(onComplete) {
       const svg = document.querySelector(".loader-svg");
       if (!svg) return;
-      svg.innerHTML = ""; // limpa o SVG antes
+      svg.innerHTML = "";
       const WIDTH = 150,
         HEIGHT = 150;
       const cx = WIDTH / 2,
@@ -337,7 +362,6 @@
         RECT_H = 16;
       const ANGLE_STEP = (2 * Math.PI) / SEGMENTS;
 
-      // Cria os grupos e retângulos
       for (let i = 0; i < SEGMENTS; i++) {
         const angle = i * ANGLE_STEP - Math.PI / 2;
         const x = cx + Math.cos(angle) * OUTER_RADIUS;
@@ -366,7 +390,6 @@
         svg.appendChild(group);
       }
 
-      // Animação - pinta retângulos progressivamente e atualiza %
       const percentEl = document.getElementById("loaderPercent");
       const completeEl = document.getElementById("loaderComplete");
       const rects = svg.querySelectorAll(".loader-rect");
@@ -401,4 +424,3 @@
   </script>
 </body>
 </html>
-
