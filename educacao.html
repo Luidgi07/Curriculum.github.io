@@ -127,7 +127,7 @@
       #icon-docs  { top: 280px; }
     }
 
-    /* Caixas tipo botão (Tech Biomed + Início) */
+    /* Caixas Tech Biomed + Início */
     .start-box {
       position: absolute;
       bottom: 50px;
@@ -145,10 +145,11 @@
       color: #00ff00;
       font-size: 14px;
       column-gap: 8px;
+      z-index: 20;
     }
 
     .start-box + .start-box {
-      left: 190px; /* segunda caixa ao lado da primeira */
+      left: 190px;
     }
 
     .start-box:hover {
@@ -174,6 +175,77 @@
 
     .start-box span {
       font-weight: bold;
+    }
+
+    /* Painel deslizante Tech Biomed (direita) */
+    #techPanel {
+      position: fixed;
+      top: 0;
+      right: -320px; /* escondido à direita */
+      width: 300px;
+      height: 100vh;
+      background: #001b1a;
+      border-left: 2px solid #00ff66;
+      box-shadow: -4px 0 16px #001010cc;
+      z-index: 1700;
+      padding: 20px 18px;
+      color: #00ffcc;
+      transition: right 0.3s ease-out;
+      display: flex;
+      flex-direction: column;
+      row-gap: 12px;
+    }
+
+    #techPanel.open {
+      right: 0;
+    }
+
+    #techPanel h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: #00ff99;
+    }
+
+    .tech-item {
+      background: #002b2a;
+      border-radius: 8px;
+      border: 1px solid #00ff66;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      font-size: 13px;
+    }
+
+    .tech-item:hover {
+      background: #01423f;
+      transform: translateX(-2px);
+    }
+
+    .tech-item-title {
+      font-weight: bold;
+      margin-bottom: 3px;
+      color: #00ffdd;
+    }
+
+    .tech-item small {
+      font-size: 11px;
+      color: #a8fff0;
+    }
+
+    #techPanelClose {
+      align-self: flex-end;
+      background: #004422;
+      border-radius: 5px;
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    #techPanelClose:hover {
+      background: #005555;
     }
 
     /* Janela School System (Formação académica) */
@@ -562,7 +634,7 @@
       <div>Documentos</div>
     </div>
 
-    <!-- Caixa 1: Tech Biomed (abre School System) -->
+    <!-- Caixa 1: Tech Biomed -->
     <div id="start-box" class="start-box" title="Tech Biomed - Formação & Projetos">
       <div class="start-icon">
         <img src="https://img.icons8.com/fluency/48/heart-monitor.png" alt="Tech Biomed" />
@@ -570,7 +642,7 @@
       <span>Tech Biomed</span>
     </div>
 
-    <!-- Caixa 2: Casa (voltar à página inicial) -->
+    <!-- Caixa 2: Início -->
     <div id="home-box" class="start-box" title="Voltar à página inicial">
       <div class="start-icon">
         <img src="https://img.icons8.com/fluency/48/home.png" alt="Início" />
@@ -578,6 +650,38 @@
       <span>Início</span>
     </div>
 
+    <!-- Painel lateral Tech Biomed -->
+    <aside id="techPanel" aria-label="Projetos Tech Biomed">
+      <button id="techPanelClose">Fechar ✕</button>
+      <h3>Projetos Tech Biomed</h3>
+
+      <div class="tech-item" onclick="window.open('projeto_dpm_LTB.pdf','_blank')">
+        <div class="tech-item-title">Exoesqueleto Inferior</div>
+        <small>Projeto LTB | Mecatrónica Biomédica</small>
+      </div>
+
+      <div class="tech-item" onclick="window.open('#','_blank')">
+        <div class="tech-item-title">Processamento ECG/EEG</div>
+        <small>Python (NumPy/SciPy) | Filtro + deteção de picos</small>
+      </div>
+
+      <div class="tech-item" onclick="window.open('Poster_2.pdf','_blank')">
+        <div class="tech-item-title">CRISPR Poster</div>
+        <small>Edição genética | Comunicação científica</small>
+      </div>
+
+      <div class="tech-item" onclick="window.open('https://github.com/TEU_USERNAME','_blank')">
+        <div class="tech-item-title">GitHub Tech Biomed</div>
+        <small>Repositórios de sinais biomédicos e eletrónica</small>
+      </div>
+
+      <div class="tech-item" onclick="window.open('mailto:teu@email?subject=Contacto%20Tech%20Biomed','_blank')">
+        <div class="tech-item-title">Contacto Rápido</div>
+        <small>Enviar email para estágio / colaboração</small>
+      </div>
+    </aside>
+
+    <!-- Janela Formação -->
     <div id="programWindow">
       <header>
         Formação Académica
@@ -667,10 +771,7 @@
 
     introVideo.addEventListener('ended', finishIntro);
     skipBtn.addEventListener('click', finishIntro);
-
-    setTimeout(() => {
-      if (intro.style.display !== "none") finishIntro();
-    }, 12000);
+    setTimeout(() => { if (intro.style.display !== "none") finishIntro(); }, 12000);
 
     function updateHour() {
       const now = new Date();
@@ -691,9 +792,16 @@
       programWindow.style.display = "block";
     });
 
-    // Caixa Tech Biomed abre o School System
+    // Painel Tech Biomed
+    const techPanel = document.getElementById('techPanel');
+    const techPanelClose = document.getElementById('techPanelClose');
+
     document.getElementById('start-box').addEventListener('click', () => {
-      programWindow.style.display = "block";
+      techPanel.classList.add('open');
+    });
+
+    techPanelClose.addEventListener('click', () => {
+      techPanel.classList.remove('open');
     });
 
     // Caixa casa volta à página inicial
