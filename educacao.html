@@ -117,7 +117,6 @@
     #icon-pc    { top: 97px; }
     #icon-trash { top: 180px; }
     #icon-docs  { top: 263px; }
-    #icon-home  { left: auto; right: 15px; top: 14px; }
 
     @media (max-width: 768px) {
       #desktop { padding: 10px; }
@@ -126,7 +125,55 @@
       #icon-pc    { top: 100px; }
       #icon-trash { top: 190px; }
       #icon-docs  { top: 280px; }
-      #icon-home  { right: 10px; top: 10px; }
+    }
+
+    /* Caixas tipo botão Início */
+    .start-box {
+      position: absolute;
+      bottom: 50px;
+      left: 30px;
+      width: 120px;
+      height: 60px;
+      background: #004422;
+      border-radius: 10px;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 10px #00ff66aa;
+      display: flex;
+      align-items: center;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: #00ff00;
+      font-size: 14px;
+      column-gap: 8px;
+    }
+
+    .start-box + .start-box {
+      left: 170px; /* segunda caixa ao lado da primeira */
+    }
+
+    .start-box:hover {
+      background: #005555;
+      box-shadow: 0 0 16px #00ff66;
+    }
+
+    .start-icon {
+      width: 38px;
+      height: 38px;
+      background: #003016;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 6px #00ff66aa;
+    }
+
+    .start-icon img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .start-box span {
+      font-weight: bold;
     }
 
     /* Janela School System */
@@ -514,9 +561,21 @@
       <img src="https://img.icons8.com/fluency/48/documents.png" alt="Documentos" />
       <div>Documentos</div>
     </div>
-    <div id="icon-home" class="desktop-icon" title="Página Inicial">
-      <img src="https://img.icons8.com/fluency/48/home.png" alt="Início" />
-      <div>Início</div>
+
+    <!-- Caixa 1: Pasta (abre School System) -->
+    <div id="start-box" class="start-box" title="Abrir Escola">
+      <div class="start-icon">
+        <img src="https://img.icons8.com/fluency/48/folder-invoices.png" alt="Pasta" />
+      </div>
+      <span>Escola</span>
+    </div>
+
+    <!-- Caixa 2: Casa (voltar à página inicial) -->
+    <div id="home-box" class="start-box" title="Voltar à página inicial">
+      <div class="start-icon">
+        <img src="https://img.icons8.com/fluency/48/home.png" alt="Início" />
+      </div>
+      <span>Início</span>
     </div>
 
     <div id="programWindow">
@@ -632,6 +691,16 @@
       programWindow.style.display = "block";
     });
 
+    // Caixa pasta abre o School System
+    document.getElementById('start-box').addEventListener('click', () => {
+      programWindow.style.display = "block";
+    });
+
+    // Caixa casa volta à página inicial
+    document.getElementById('home-box').addEventListener('click', () => {
+      window.location.href = "index.html";
+    });
+
     startButton.addEventListener("click", () => {
       infoBoxes.style.display = "flex";
       startButton.style.display = "none";
@@ -740,10 +809,6 @@
     }
 
     closeProgramBtn.addEventListener('click', showConfirmBox);
-
-    document.getElementById("icon-home").addEventListener("click", function() {
-      window.location.href = "index.html";
-    });
 
     const iconDocs = document.getElementById("icon-docs");
     const threeContainer = document.getElementById("threeContainer");
