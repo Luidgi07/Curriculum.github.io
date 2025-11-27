@@ -259,7 +259,7 @@
     const dadosCartoes = {
       2: { medalhas:{ ouro:0, prata:0, bronze:0 }, lesoes:[], eventos:[], esqImg:"ANA_AA-removebg-preview.png" },
       3: { medalhas:{ ouro:5, prata:6, bronze:4 }, lesoes:[], eventos:[], esqImg:"SFUAP_AA-removebg-preview.png" },
-      4: { medalhas:{ ouro:5, prata:8, bronze:9 }, lesoes:[{ src:"moedaCNAA.png", alt:"1º Lugar Circuito Nacional de Águas Abertas AA20+" },{ src:"moedaCAAA.png", alt:"2º Lugar Circuito de Águas Abertas do Algarve AA20+" }], eventos:[{ src:"ChatGPT_Image_8_08_2025__14_38_48-removebg-preview.png", alt:"SWIM CAMP" }], esqImg:"CIRL_AA-removebg-preview.png" },
+      4: { medalhas:{ ouro:5, prata:8, bronze:9 }, lesoes:[{ src:"moedaCNAA.png", alt:"1º Lugar Circuito Nacional de Águas Abertas AA20+" },{ src:"moedaCAAA.png", alt:"2º Lugar Circuito de Águas Abertas do Algarve AA20+" }], eventos:[{ src:"moedaGD.png", alt:"Gala de Desporto de Almada" }], esqImg:"CIRL_AA-removebg-preview.png" },
       5: { medalhas:{ ouro:0, prata:0, bronze:0 }, lesoes:[], eventos:[], esqImg:"S4F_AA-removebg-preview (1).png" },
       6: { medalhas:{ ouro:10, prata:15, bronze:13 }, lesoes:[{ src:"moedaGD.png", alt:"Gala de Desporto de Almada" }], eventos:[], esqImg:"SFS_AA-removebg-preview.png" }
     };
@@ -267,7 +267,7 @@
     function abrirCartao(idx) {
     const dados = dadosCartoes[idx];
     if (!dados) return;
-  
+
     const bg = document.createElement('div');
     bg.className = 'cartao-modal-bg';
     bg.onclick = function(e){ if (e.target === bg) fecharCartao(bg); };
@@ -367,10 +367,9 @@
       if (tipo === "Ouro") return "Medalha de ouro conquistada em evento nacional.";
       if (tipo === "Prata") return "Medalha de prata por segundo lugar regional.";
       if (tipo === "Bronze") return "Medalha de bronze por terceiro lugar absoluto.";
-      if (tipo === "3º Lugar Nacional") return "Este prémio representa o terceiro lugar em prova nacional.";
-      if (tipo === "Nadador Completo 2018") return "Reconhecimento especial pelo desempenho completo em 2018.";
-      if (tipo.indexOf("Jogos do Futuro") !== -1) return "Participação destacada nos Jogos do Futuro.";
-      if (tipo.indexOf("SWIM CAMP") !== -1) return "Participação no campo intensivo de natação.";
+      if (tipo === "1º Lugar Circuito Nacional de Águas Abertas AA20+") return "Campeão nacional do circuito nacional de águas abertas no escalão AA20+";
+      if (tipo === "2º Lugar Circuito de Águas Abertas do Algarve AA20+") return "Vice-Campeão circuito de águas abertas do Algarve no escalão AA20+.";
+      if (tipo.indexOf("Gala de Desporto de Almada") !== -1) return "Participação na Gala de Desporto de Almada de 2024.";
       return "Explicação da medalha ou conquista.";
     }
   </script>
