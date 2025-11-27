@@ -14,9 +14,10 @@
       color: #00ff00;
       cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
       overflow-x: hidden;
+      line-height: 1.4;
     }
 
-    /* INTRO VÍDEO + FADE */
+    /* Ecrã de vídeo + fade */
     #fadeInPreVideo {
       position: fixed;
       left: 0; top: 0;
@@ -32,19 +33,38 @@
       position: fixed;
       left: 0; top: 0;
       width: 100vw; height: 100vh;
-      z-index: 5000;
       background: #000;
+      z-index: 5000;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    #introVideo {
+    #videoIntroContainer video {
       width: 100vw;
       height: 100vh;
       object-fit: cover;
       display: block;
       background: #000;
+    }
+
+    #skipVideoBtn {
+      position: fixed;
+      bottom: 40px;
+      right: 30px;
+      z-index: 5100;
+      background: #004422;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 10px 22px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    #skipVideoBtn:hover {
+      background: #005555;
+      color: #fff;
     }
 
     #introFade {
@@ -58,33 +78,15 @@
       transition: opacity 0.8s;
     }
 
-    #skipVideoBtn {
-      position: fixed;
-      right: 30px;
-      bottom: 50px;
-      z-index: 5200;
-      background: #004422;
-      border: 1px solid #00ff00;
-      color: #00ff00;
-      padding: 10px 22px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 14px;
-    }
-
-    #skipVideoBtn:hover {
-      background: #005555;
-      color: #fff;
-    }
-
-    /* DESKTOP */
+    /* Desktop */
     #desktop {
       width: 100vw;
       height: 100vh;
       position: relative;
       background: linear-gradient(135deg, #005050 25%, #008080 75%);
       overflow: hidden;
+      padding: 20px;
+      display: none;
     }
 
     .desktop-icon {
@@ -96,11 +98,7 @@
       margin-bottom: 28px;
       position: absolute;
       left: 15px;
-      transition: transform 0.2s;
-    }
-
-    .desktop-icon:hover {
-      transform: scale(1.05);
+      transition: all 0.2s ease;
     }
 
     .desktop-icon img {
@@ -110,38 +108,48 @@
       margin-bottom: 3px;
     }
 
+    .desktop-icon:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 8px #00ff00);
+    }
+
     #icon-school { top: 14px; }
     #icon-pc    { top: 97px; }
     #icon-trash { top: 180px; }
     #icon-docs  { top: 263px; }
+    #icon-home  { left: auto; right: 15px; top: 14px; }
 
-    #icon-home {
-      left: auto;
-      right: 15px;
-      top: 14px;
+    @media (max-width: 768px) {
+      #desktop { padding: 10px; }
+      .desktop-icon { transform: scale(0.85); }
+      #icon-school { top: 10px; }
+      #icon-pc    { top: 100px; }
+      #icon-trash { top: 190px; }
+      #icon-docs  { top: 280px; }
+      #icon-home  { right: 10px; top: 10px; }
     }
 
-    /* JANELA PROGRAMA */
+    /* Janela School System */
     #programWindow {
       display: none;
       position: absolute;
       top: 60px;
       left: 50%;
       transform: translateX(-50%);
-      width: 540px;
-      max-width: 90vw;
-      min-height: 370px;
+      width: min(90vw, 600px);
+      min-height: 380px;
       background: #002222;
       border: 2px solid #00ff00;
-      padding: 18px 22px;
+      padding: 20px;
       box-sizing: border-box;
       z-index: 10;
+      border-radius: 8px;
     }
 
     #programWindow header {
       font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 15px;
+      font-size: 20px;
+      margin-bottom: 16px;
       border-bottom: 1px solid #00ff00;
       padding-bottom: 8px;
       position: relative;
@@ -161,7 +169,7 @@
       height: 28px;
       text-align: center;
       line-height: 28px;
-      font-family: inherit;
+      border-radius: 3px;
     }
 
     .closeProgramBtn:hover {
@@ -174,10 +182,11 @@
       border: 1px solid #00ff00;
       color: #00ff00;
       font-size: 16px;
-      padding: 8px 24px;
+      padding: 10px 26px;
       cursor: pointer;
-      margin: 28px auto 12px auto;
+      margin: 18px auto 14px auto;
       display: block;
+      border-radius: 5px;
     }
 
     #startButton:hover {
@@ -187,8 +196,8 @@
     #infoBoxes {
       display: none;
       flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 15px;
+      gap: 16px;
+      margin-bottom: 16px;
       justify-content: center;
     }
 
@@ -247,80 +256,73 @@
     }
 
     #infoContainer {
-      margin-top: 12px;
-      max-height: 280px;
+      margin-top: 10px;
+      max-height: 260px;
       overflow-y: auto;
-      position: relative;
-    }
-
-    .download-bar {
-      width: 96%;
-      height: 6px;
-      background: #001a00;
-      border: 1px solid #00ff00;
-      margin: 10px auto;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      border-radius: 3px;
-    }
-
-    .download-fill {
-      background: #00ff00;
-      height: 100%;
-      width: 0;
-      transition: width 1.2s linear;
+      padding-right: 6px;
     }
 
     .infoBoxWindow {
       background: #002222;
       border: 2px solid #00ff00;
-      margin-top: 13px;
-      padding: 12px;
+      margin-bottom: 12px;
+      padding: 14px;
       font-size: 15px;
-      width: 95%;
-      animation: windowAppear 0.23s linear;
-      position: relative;
-      z-index: 3;
-      color: #00ff00;
+      width: 100%;
+      border-radius: 6px;
+      animation: windowAppear 0.25s ease;
     }
 
-    @keyframes windowAppear {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .download-bar {
+      width: 100%;
+      height: 6px;
+      background: #001a00;
+      border: 1px solid #00ff00;
+      margin: 10px 0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .download-fill {
+      background: linear-gradient(90deg, #00ff00, #00cc00);
+      height: 100%;
+      width: 0;
+      transition: width 1.1s ease-out;
     }
 
     #modalButtons {
       display: flex;
-      justify-content: flex-start;
-      gap: 12px;
-      margin-top: 18px;
       flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
     }
 
     #modalButtons button {
       background: #004422;
       border: 1px solid #00ff00;
       color: #00ff00;
-      padding: 8px 22px;
-      font-size: 15px;
+      padding: 8px 18px;
+      font-size: 14px;
       cursor: pointer;
-      font-family: inherit;
-      border-radius: 3px;
-      transition: background 0.2s;
+      border-radius: 5px;
+      flex: 1 1 120px;
     }
 
     #modalButtons button:hover {
       background: #005555;
     }
 
-    /* CONFIRM BOX */
+    @keyframes windowAppear {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal confirmação */
     .confirmOverlay {
       position: fixed;
       left: 0; top: 0;
       width: 100vw; height: 100vh;
-      background: rgba(0,32,30,0.87);
+      background: rgba(0,32,30,0.92);
       z-index: 2000;
       display: flex;
       justify-content: center;
@@ -331,54 +333,48 @@
       background: #002c26;
       border: 2px solid #00ff00;
       color: #00ff00;
-      font-family: 'Courier New', Courier, monospace;
-      min-width: 340px;
-      min-height: 110px;
-      padding: 27px 32px 20px 32px;
+      min-width: 320px;
+      max-width: 480px;
+      padding: 24px 26px 20px 26px;
       font-size: 16px;
-      box-shadow: 0 0 20px #003833;
-      text-align: left;
-      position: relative;
-      animation: windowAppear 0.18s ease;
+      border-radius: 8px;
+      box-shadow: 0 0 30px #003833;
     }
 
     .confirmBtn, .cancelBtn {
       background: #004422;
       border: 1px solid #00ff00;
       color: #00ff00;
-      font-family: inherit;
       font-size: 15px;
-      padding: 9px 30px;
+      padding: 8px 22px;
       cursor: pointer;
-      margin-top: 15px;
-      margin-right: 15px;
-      transition: background 0.22s;
+      margin-top: 14px;
+      margin-right: 10px;
+      border-radius: 5px;
     }
 
-    .cancelBtn:hover, .confirmBtn:hover {
+    .confirmBtn:hover, .cancelBtn:hover {
       background: #005555;
     }
 
     .loadingBar {
-      width: 92%;
-      height: 19px;
+      width: 95%;
+      height: 18px;
       background: #001a00;
       border: 2px solid #00ff00;
-      margin: 29px auto 3px auto;
-      position: relative;
+      margin: 18px auto 4px auto;
+      border-radius: 8px;
       overflow: hidden;
-      display: flex;
-      align-items: center;
     }
 
     .loadingFill {
-      background: #00ff00;
-      height: 15px;
+      background: linear-gradient(90deg, #00ff00, #00cc00);
+      height: 100%;
       width: 0;
-      transition: width 1.0s linear;
+      transition: width 1s ease-out;
     }
 
-    /* SYSBAR */
+    /* Barra do sistema */
     #sysBar {
       position: fixed;
       bottom: 0;
@@ -390,26 +386,22 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding: 0 22px;
+      padding: 0 18px;
       color: #00ff00;
-      font-family: inherit;
-      font-size: 15px;
+      font-size: 13px;
       z-index: 900;
     }
 
     .sysIcon {
-      margin-right: 16px;
-      vertical-align: middle;
-      width: 21px;
-      height: 21px;
+      margin-right: 10px;
+      width: 19px;
+      height: 19px;
       filter: drop-shadow(0 0 3px #00ff001c);
     }
 
-    #sysBar span {
-      margin-right: 6px;
-    }
+    #sysBar span { margin-left: 6px; }
 
-    /* THREE CONTAINER SIMPLIFICADO */
+    /* Three.js container básico */
     body.three-active { overflow: hidden; background: #080c0e; }
 
     #threeContainer {
@@ -482,19 +474,26 @@
     #voltar-edu:hover {
       transform: translateY(-2px);
     }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 7px; }
+    ::-webkit-scrollbar-track { background: #001a00; }
+    ::-webkit-scrollbar-thumb { background: #00ff00; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00cc00; }
   </style>
 </head>
 <body>
-  <!-- Intro vídeo -->
+  <!-- Pré-fade e vídeo -->
   <div id="fadeInPreVideo"></div>
+
   <div id="videoIntroContainer">
     <video id="introVideo" autoplay muted playsinline preload="auto">
-      <!-- muda para o nome REAL do vídeo -->
       <source src="intro.mp4" type="video/mp4">
       O teu browser não suporta vídeo HTML5.
     </video>
     <button id="skipVideoBtn">Saltar vídeo</button>
   </div>
+
   <div id="introFade"></div>
 
   <!-- Desktop -->
@@ -575,9 +574,9 @@
     </div>
   </div>
 
-  <!-- Three.js simples -->
+  <!-- Three.js -->
   <div id="threeContainer">
-    <div id="info">Scroll para zoom, arraste para girar. Clique nos blocos para abrir PDFs.</div>
+    <div id="info">Scroll para zoom, arraste para girar. Passe o rato sobre os blocos e clique!</div>
     <div id="confirm"></div>
     <div id="conteudo"></div>
     <button id="voltar-edu">Voltar atrás</button>
@@ -598,6 +597,7 @@
       setTimeout(() => {
         fade.style.opacity = "0";
         intro.style.display = "none";
+        desktop.style.display = "block";
         preFade.style.opacity = "0";
       }, 800);
     }
@@ -609,12 +609,12 @@
     introVideo.addEventListener('ended', finishIntro);
     skipBtn.addEventListener('click', finishIntro);
 
-    // fallback se o vídeo não arrancar
     setTimeout(() => {
-      if (intro.style.display !== "none") finishIntro();
+      if (intro.style.display !== "none") {
+        finishIntro();
+      }
     }, 12000);
 
-    // relógio
     function updateHour() {
       const now = new Date();
       document.getElementById("sysHour").textContent =
@@ -623,7 +623,6 @@
     setInterval(updateHour, 1000);
     updateHour();
 
-    // lógica School System
     const schoolIcon     = document.getElementById("icon-school");
     const programWindow  = document.getElementById("programWindow");
     const startButton    = document.getElementById("startButton");
@@ -685,10 +684,10 @@
         `;
         downloadBar.remove();
 
-        const btnDocs   = infoBoxWindow.querySelector('#btnDocs');
-        const btnPlanos = infoBoxWindow.querySelector('#btnPlanos');
-        const upperDetail = detail.toUpperCase();
+        const btnDocs  = infoBoxWindow.querySelector('#btnDocs');
+        const btnPlanos= infoBoxWindow.querySelector('#btnPlanos');
 
+        const upperDetail = detail.toUpperCase();
         btnDocs.addEventListener("click", () => {
           if (upperDetail.includes('IPS') || upperDetail.includes('ISEL')) {
             desktop.style.display = "none";
@@ -702,8 +701,11 @@
         });
 
         btnPlanos.addEventListener("click", () => {
-          if (site) window.open(site, "_blank");
-          else alert("Link para Planos de Estudos não disponível.");
+          if (site) {
+            window.open(site, "_blank");
+          } else {
+            alert("Link para Planos de Estudos não disponível.");
+          }
         });
       }, 1200);
     });
@@ -748,11 +750,11 @@
       window.location.href = "index.html";
     });
 
-    // THREE.JS SIMPLES PARA DOCUMENTOS
-    const iconDocs      = document.getElementById("icon-docs");
-    const threeContainer= document.getElementById("threeContainer");
-    const voltarEduBtn  = document.getElementById("voltar-edu");
-    const infoText      = document.getElementById("info");
+    const iconDocs = document.getElementById("icon-docs");
+    const threeContainer = document.getElementById("threeContainer");
+    const voltarEduBtn = document.getElementById("voltar-edu");
+    const infoText = document.getElementById("info");
+    let scene, camera, renderer, blocos = [];
 
     let arquivos = [
       {nome:"Bioquímica",   link:"bioquimica.pdf"},
@@ -760,8 +762,6 @@
       {nome:"Exoesqueleto", link:"projeto_dpm_LTB.pdf"},
       {nome:"CRISPR",       link:"Poster_2.pdf"}
     ];
-
-    let scene, camera, renderer, blocos = [];
 
     function init3D() {
       scene = new THREE.Scene();
