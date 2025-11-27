@@ -77,20 +77,24 @@
       width: 100vw;
       height: calc(100vh - 58px);
       display: flex;
+      justify-content: center;
       overflow: hidden;
       margin: 0;
       background: #000;
       z-index: 9;
+      padding: 16px 10px;          /* espaço em cima/baixo e laterais */
+      box-sizing: border-box;
+      gap: 16px;
     }
     .col {
       position: relative;
       flex: 1;
+      max-width: 30vw;             /* encolhe um pouco cada foto */
       overflow: hidden;
       display: flex;
       align-items: stretch;
       cursor: pointer;
       transition: filter 0.25s, transform 0.25s;
-      padding: 0 4px; /* pequeno espaço entre fotos */
       box-sizing: border-box;
     }
     .col-inner {
@@ -98,7 +102,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      border-radius: 18px;              /* cantos arredondados tipo PS5 */
+      border-radius: 18px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.6);
     }
     .col img {
@@ -112,19 +116,19 @@
     }
     .col:hover img,
     .col:focus img {
-      filter: brightness(0.6);          /* escurece ligeiro ao hover */
+      filter: brightness(0.6);
       transform: scale(1.03);
     }
     .overlay {
       position: absolute;
       inset: 0;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
-      background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.35));
+      background: linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.0));
       color: #fff;
       font-weight: 600;
-      font-size: 1.8em;
+      font-size: 1.6em;
       letter-spacing: 1px;
       opacity: 0;
       pointer-events: none;
@@ -132,7 +136,7 @@
       text-shadow: 1px 1px 12px #181818ad;
       text-align: center;
       z-index: 2;
-      padding: 0 10px;
+      padding: 18px 10px;
       box-sizing: border-box;
     }
     .col:hover .overlay,
@@ -146,7 +150,7 @@
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       background: black;
-      opacity: 1; /* começa opaco */
+      opacity: 1;
       pointer-events: none;
       transition: opacity 0.8s ease-out;
       z-index: 10000;
