@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jurassic Desktop Escola - Tecnologia Biomédica</title>
+  <title>Jurassic Desktop Escola</title>
   <style>
-    /* Reset e base otimizado para mobile */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       margin: 0;
       background: #004040;
@@ -14,754 +14,383 @@
       color: #00ff00;
       cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
       overflow-x: hidden;
-      line-height: 1.4;
-    }
-    @media (max-width: 768px) { body { font-size: 14px; } }
-
-    /* Loading otimizado */
-    #fadeInPreVideo { 
-      position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; 
-      z-index: 6000; background: #000; opacity: 1; pointer-events: none; 
-      transition: opacity 0.8s ease-out; 
-    }
-    #videoIntroContainer { 
-      position: fixed; z-index: 5000; left: 0; top: 0; width: 100vw; height: 100vh; 
-      background: #000; display: flex; align-items: center; justify-content: center; 
-      transition: opacity 1s; 
-    }
-    #videoIntroContainer video { 
-      width: 100vw; height: 100vh; object-fit: cover; display: block; background: #000; 
-    }
-    #introFade { 
-      position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 5100; 
-      background: #000; opacity: 0; pointer-events: none; transition: opacity 1s; 
     }
 
-    /* Desktop responsivo */
-    #desktop { 
-      width: 100vw; height: 100vh; position: relative; 
-      background: linear-gradient(135deg, #003333 25%, #006666 75%); 
-      overflow: hidden; padding: 20px; 
-    }
-    @media (max-width: 768px) { 
-      #desktop { padding: 10px; } 
-      .desktop-icon { transform: scale(0.8); margin-bottom: 20px; }
+    /* INTRO VÍDEO + FADE */
+    #fadeInPreVideo {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      z-index: 6000;
+      background: #000;
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 0.8s ease-out;
     }
 
-    .desktop-icon { 
-      width: 95px; text-align: center; cursor: pointer; user-select: none; 
-      color: #00ff00; margin-bottom: 28px; position: absolute; left: 15px; 
-      transition: all 0.2s ease; 
+    #videoIntroContainer {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      z-index: 5000;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .desktop-icon:hover { transform: scale(1.05); filter: drop-shadow(0 0 8px #00ff00); }
-    .desktop-icon img { 
-      width: 44px; height: 44px; filter: drop-shadow(0 0 4px #00ff00); margin-bottom: 3px; 
-    }
-    @media (max-width: 768px) {
-      #icon-school {top: 10px;}
-      #icon-pc {top: 110px;}
-      #icon-trash {top: 200px;}
-      #icon-docs {top: 290px;}
-    }
-    #icon-school {top: 14px;}
-    #icon-pc {top: 97px;}
-    #icon-trash {top: 180px;}
-    #icon-docs {top: 263px;}
-    #icon-home { left: auto; right: 15px; top: 14px; }
-    @media (max-width: 768px) { #icon-home { right: 10px; top: 10px; } }
 
-    /* Sidebar direta de projetos (NOVO) */
-    #projectSidebar {
-      position: fixed; right: -350px; top: 0; width: 350px; height: 100vh;
-      background: rgba(0,34,34,0.95); backdrop-filter: blur(10px);
-      border-left: 2px solid #00ff00; z-index: 1000;
-      transition: right 0.3s ease; padding: 20px;
-      overflow-y: auto;
+    #introVideo {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: block;
+      background: #000;
     }
-    #projectSidebar.open { right: 0; }
-    #projectSidebar h3 { color: #00ff00; margin-bottom: 15px; font-size: 18px; }
-    .project-item {
-      background: rgba(0,68,68,0.6); border: 1px solid #00ff00; margin-bottom: 12px;
-      padding: 15px; border-radius: 5px; cursor: pointer; transition: all 0.2s;
-    }
-    .project-item:hover { background: rgba(0,85,85,0.9); transform: translateX(-5px); }
-    .project-item h4 { color: #00ffcc; margin-bottom: 5px; }
-    .project-item p { font-size: 14px; opacity: 0.9; }
-    #toggleSidebar { position: fixed; top: 20px; right: 20px; z-index: 1100; background: #004422; border: 1px solid #00ff00; color: #00ff00; padding: 10px; border-radius: 5px; cursor: pointer; }
 
-    /* Janela principal melhorada */
+    #introFade {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      z-index: 5100;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s;
+    }
+
+    #skipVideoBtn {
+      position: fixed;
+      right: 30px;
+      bottom: 50px;
+      z-index: 5200;
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 10px 22px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    #skipVideoBtn:hover {
+      background: #005555;
+      color: #fff;
+    }
+
+    /* DESKTOP */
+    #desktop {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background: linear-gradient(135deg, #005050 25%, #008080 75%);
+      overflow: hidden;
+    }
+
+    .desktop-icon {
+      width: 95px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      color: #00ff00;
+      margin-bottom: 28px;
+      position: absolute;
+      left: 15px;
+      transition: transform 0.2s;
+    }
+
+    .desktop-icon:hover {
+      transform: scale(1.05);
+    }
+
+    .desktop-icon img {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 0 4px #00ff00);
+      margin-bottom: 3px;
+    }
+
+    #icon-school { top: 14px; }
+    #icon-pc    { top: 97px; }
+    #icon-trash { top: 180px; }
+    #icon-docs  { top: 263px; }
+
+    #icon-home {
+      left: auto;
+      right: 15px;
+      top: 14px;
+    }
+
+    /* JANELA PROGRAMA */
     #programWindow {
-      display: none; position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
-      width: min(90vw, 600px); min-height: 400px; background: #002222;
-      border: 2px solid #00ff00; padding: 20px; box-sizing: border-box; z-index: 10;
-      transition: opacity 0.3s; border-radius: 8px;
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 540px;
+      max-width: 90vw;
+      min-height: 370px;
+      background: #002222;
+      border: 2px solid #00ff00;
+      padding: 18px 22px;
+      box-sizing: border-box;
+      z-index: 10;
     }
-    #programWindow.closed { opacity: 0.3; pointer-events: none; }
+
     #programWindow header {
-      font-weight: bold; font-size: 20px; margin-bottom: 20px;
-      border-bottom: 1px solid #00ff00; padding-bottom: 10px; position: relative;
-    }
-    .closeProgramBtn {
-      position: absolute; top: -2px; right: 8px; background: #004422;
-      border: 1px solid #00ff00; color: #00ff00; font-size: 18px; cursor: pointer;
-      padding: 0 12px; width: 30px; height: 28px; text-align: center; line-height: 28px;
-      border-radius: 3px; transition: all 0.2s;
-    }
-    .closeProgramBtn:hover { background: #005555; color: #fff; }
-
-    #startButton {
-      background: #004422; border: 1px solid #00ff00; color: #00ff00; font-size: 16px;
-      padding: 12px 30px; cursor: pointer; margin: 20px auto 15px auto; display: block;
-      border-radius: 5px; transition: all 0.2s; width: 200px;
-    }
-    #startButton:hover { background: #005555; transform: scale(1.05); }
-
-    #infoBoxes {
-      display: none; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; justify-content: center;
-    }
-    @media (max-width: 768px) { #infoBoxes { gap: 10px; } }
-    .box {
-      width: 160px; height: 80px; border: 2px solid #00ff00; display: flex;
-      align-items: center; justify-content: center; cursor: pointer; background: linear-gradient(90deg, #003333 0%, #004444 100%);
-      font-size: 14px; user-select: none; transition: all 0.2s; flex-direction: column;
-      border-radius: 8px; position: relative; overflow: hidden;
-    }
-    @media (max-width: 768px) { .box { width: 140px; height: 70px; font-size: 12px; } }
-    .box:hover { background: #005555; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,255,0,0.3); }
-    .box img { width: 45%; margin-bottom: 5px; filter: drop-shadow(0 0 4px #00ff00); }
-    .box::after { content: attr(data-status); position: absolute; bottom: 5px; font-size: 10px; opacity: 0.8; }
-
-    /* Info container com scroll */
-    #infoContainer { margin-top: 15px; max-height: 300px; overflow-y: auto; padding-right: 10px; }
-    .infoBoxWindow {
-      background: #002222; border: 2px solid #00ff00; margin-bottom: 15px; padding: 15px;
-      font-size: 15px; width: 100%; animation: windowAppear 0.3s ease; border-radius: 5px;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+      padding-bottom: 8px;
       position: relative;
     }
-    @keyframes windowAppear {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    #modalButtons {
-      display: flex; justify-content: flex-start; gap: 12px; margin-top: 18px; flex-wrap: wrap;
-    }
-    #modalButtons button {
-      background: #004422; border: 1px solid #00ff00; color: #00ff00; padding: 10px 25px;
-      font-size: 14px; cursor: pointer; font-family: inherit; border-radius: 5px;
-      transition: all 0.2s; flex: 1; min-width: 120px;
-    }
-    @media (max-width: 768px) { #modalButtons button { padding: 8px 15px; font-size: 13px; } }
-    #modalButtons button:hover { background: #005555; transform: scale(1.02); }
 
-    /* Download bar melhorado */
+    .closeProgramBtn {
+      position: absolute;
+      top: -2px;
+      right: 8px;
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 12px;
+      width: 30px;
+      height: 28px;
+      text-align: center;
+      line-height: 28px;
+      font-family: inherit;
+    }
+
+    .closeProgramBtn:hover {
+      background: #005555;
+      color: #fff;
+    }
+
+    #startButton {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-size: 16px;
+      padding: 8px 24px;
+      cursor: pointer;
+      margin: 28px auto 12px auto;
+      display: block;
+    }
+
+    #startButton:hover {
+      background: #005555;
+    }
+
+    #infoBoxes {
+      display: none;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+      justify-content: center;
+    }
+
+    /* CARTÕES ESCOLA – FUNDO CLARO E SEM SOBREPOSIÇÃO */
+    .box {
+      width: 160px;
+      height: 100px;
+      border: 2px solid #00ff00;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      background: #f5f5f5;
+      font-size: 14px;
+      user-select: none;
+      transition: background 0.2s, transform 0.2s;
+      position: relative;
+      border-radius: 8px;
+      color: #003333;
+      padding-top: 10px;
+      padding-bottom: 8px;
+    }
+
+    .box:hover {
+      background: #e2fff2;
+      transform: translateY(-4px);
+    }
+
+    .box img {
+      width: 55%;
+      display: block;
+      margin-bottom: 8px;
+      filter: none;
+    }
+
+    /* Estado ATIVO/CONCLUÍDO em linha separada */
+    .box::after {
+      content: attr(data-status);
+      font-size: 12px;
+      margin-top: 4px;
+      color: #00aa00;
+    }
+
+    #infoContainer {
+      margin-top: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      position: relative;
+    }
+
     .download-bar {
-      width: 100%; height: 6px; background: #001a00; border: 1px solid #00ff00;
-      margin: 12px 0; position: relative; overflow: hidden; border-radius: 3px;
+      width: 96%;
+      height: 6px;
+      background: #001a00;
+      border: 1px solid #00ff00;
+      margin: 10px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border-radius: 3px;
     }
-    .download-fill { background: linear-gradient(90deg, #00ff00, #00cc00); height: 100%; width: 0; transition: width 1.2s ease-out; }
 
-    /* Modals acessíveis */
-    .modalOverlay, .confirmOverlay {
-      position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
-      background: rgba(0,32,30,0.92); z-index: 2000; display: flex;
-      justify-content: center; align-items: center;
+    .download-fill {
+      background: #00ff00;
+      height: 100%;
+      width: 0;
+      transition: width 1.2s linear;
     }
-    .modalPage, .confirmBox {
-      background: #002c26; border: 2px solid #00ff00; color: #00ff00;
-      font-family: 'Courier New', monospace; min-width: 90vw; max-width: 500px;
-      min-height: 120px; padding: 25px; font-size: 16px; box-shadow: 0 0 30px #003833;
-      text-align: left; position: relative; animation: windowAppear 0.25s ease; border-radius: 8px;
-      max-height: 80vh; overflow-y: auto;
+
+    .infoBoxWindow {
+      background: #002222;
+      border: 2px solid #00ff00;
+      margin-top: 13px;
+      padding: 12px;
+      font-size: 15px;
+      width: 95%;
+      animation: windowAppear 0.23s linear;
+      position: relative;
+      z-index: 3;
+      color: #00ff00;
     }
-    @media (min-width: 769px) { .modalPage, .confirmBox { min-width: 400px; } }
-    .closeBtn {
-      position: absolute; right: 12px; top: 12px; background: #004422; color: #00ff00;
-      border: 1px solid #00ff00; font-size: 15px; cursor: pointer; padding: 5px 12px;
-      border-radius: 3px; transition: all 0.2s;
+
+    @keyframes windowAppear {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .closeBtn:hover { background: #005555; }
+
+    #modalButtons {
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    #modalButtons button {
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 8px 22px;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+
+    #modalButtons button:hover {
+      background: #005555;
+    }
+
+    /* CONFIRM BOX */
+    .confirmOverlay {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,32,30,0.87);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .confirmBox {
+      background: #002c26;
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      min-width: 340px;
+      min-height: 110px;
+      padding: 27px 32px 20px 32px;
+      font-size: 16px;
+      box-shadow: 0 0 20px #003833;
+      text-align: left;
+      position: relative;
+      animation: windowAppear 0.18s ease;
+    }
+
     .confirmBtn, .cancelBtn {
-      background: #004422; border: 1px solid #00ff00; color: #00ff00; font-size: 15px;
-      padding: 10px 30px; cursor: pointer; margin-top: 15px; margin-right: 15px;
-      border-radius: 5px; transition: all 0.2s;
+      background: #004422;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 9px 30px;
+      cursor: pointer;
+      margin-top: 15px;
+      margin-right: 15px;
+      transition: background 0.22s;
     }
-    .confirmBtn:hover, .cancelBtn:hover { background: #005555; transform: scale(1.05); }
 
-    /* Sysbar melhorado */
-    #sysBar {
-      position: fixed; bottom: 0; left: 0; width: 100vw; height: 40px;
-      background: #001f12; border-top: 2px solid #00ff00; display: flex;
-      align-items: center; justify-content: space-between; padding: 0 20px;
-      color: #00ff00; font-size: 14px; z-index: 900;
+    .cancelBtn:hover, .confirmBtn:hover {
+      background: #005555;
     }
-    .sysIcon { width: 20px; height: 20px; margin-right: 10px; filter: drop-shadow(0 0 3px #00ff001c); }
-    #sysBar span { font-size: 13px; }
 
-    /* Three.js otimizado */
-    body.three-active { overflow: hidden; background: #080c0e; }
-    #threeContainer {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1500;
-      background: #080c0e; overflow: hidden;
-    }
-    #info {
-      position: absolute; top: 20px; left: 20px; font-size: 16px; background: rgba(5,40,15,0.95);
-      color: #00ff00; padding: 15px 25px; border: 2px solid #00ff00; border-radius: 8px;
-      z-index: 1550; user-select: none; backdrop-filter: blur(10px);
-    }
-    #confirm, #conteudo {
-      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      background: #002e0d; color: #00ff00; font-size: 18px; z-index: 1600;
-      border: 3px solid #00ff00; border-radius: 12px; box-shadow: 0 0 40px #00ff005c;
-      padding: 30px 40px; display: none;
-    }
-    #confirm button, #conteudo button {
-      background: #004422; border: 2px solid #00ff00; color: #00ff00; font-size: 16px;
-      padding: 10px 28px; cursor: pointer; border-radius: 8px; margin: 12px 10px 0 0;
-      transition: all 0.2s;
-    }
-    #confirm button:hover, #conteudo button:hover { background: #005555; color: #fff; transform: scale(1.05); }
-    #voltar-edu {
-      position: fixed; top: 25px; right: 25px; z-index: 1660; font-size: 16px;
-      padding: 12px 25px; background: #11553d; color: #fff; border-radius: 8px;
-      border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(0,51,51,0.7);
-      transition: all 0.2s;
-    }
-    #voltar-edu:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0,51,51,0.9); }
-
-    /* Scrollbar customizada */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #001a00; }
-    ::-webkit-scrollbar-thumb { background: #00ff00; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #00cc00; }
-
-    /* Loading spinner */
     .loadingBar {
-      width: 95%; height: 20px; background: #001a00; border: 2px solid #00ff00;
-      margin: 20px auto; position: relative; overflow: hidden; border-radius: 10px;
-    }
-    .loadingFill { background: linear-gradient(90deg, #00ff00, #00cc00); height: 100%; width: 0; transition: width 1s ease-out; }
-  </style>
-</head>
-<body>
-  <!-- Loading otimizado com skip rápido -->
-  <div id="fadeInPreVideo"></div>
-  <div id="videoIntroContainer">
-    <video id="introVideo" autoplay muted playsinline preload="auto">
-      <source src="Hailuo_Video_Num fundo preto profundo com u_419356922821341193.mp4" type="video/mp4">
-    </video>
-  </div>
-  <div id="introFade"></div>
-
-  <!-- Toggle sidebar (NOVO - acesso direto) -->
-  <button id="toggleSidebar" title="Projetos Rápidos">📁</button>
-
-  <!-- Sidebar de projetos rápidos (NOVO) -->
-  <div id="projectSidebar">
-    <h3>🚀 Projetos Biomédicos</h3>
-    <div class="project-item" onclick="openProject('exoesqueleto')">
-      <h4>Exoesqueleto Inferior</h4>
-      <p>Design paramétrico LTB | PDF + Demo</p>
-    </div>
-    <div class="project-item" onclick="openProject('ecg')">
-      <h4>Processamento ECG/EEG</h4>
-      <p>Python SciPy | Peak detection 95% acc</p>
-    </div>
-    <div class="project-item" onclick="openProject('crispr')">
-      <h4>CRISPR Poster</h4>
-      <p>Edição genética | Poster científico</p>
-    </div>
-    <div class="project-item" onclick="openProject('github')">
-      <h4>GitHub Portfolio</h4>
-      <p>Repositórios completos | Jupyter notebooks</p>
-    </div>
-    <div class="project-item" onclick="openProject('contact')">
-      <h4>Contato Estágio</h4>
-      <p>CardioID | LinkedIn | Email direto</p>
-    </div>
-  </div>
-
-  <div id="desktop">
-    <!-- Ícones desktop -->
-    <div id="icon-school" class="desktop-icon" title="School System - Formação Acadêmica" tabindex="1">
-      <img src="https://img.icons8.com/fluency/48/school-building.png" alt="Escola" />
-      <div>Escola</div>
-    </div>
-    <div id="icon-pc" class="desktop-icon" title="Este PC" tabindex="2">
-      <img src="https://img.icons8.com/fluency/48/monitor.png" alt="Este PC" />
-      <div>Este PC</div>
-    </div>
-    <div id="icon-trash" class="desktop-icon" title="Lixo" tabindex="3">
-      <img src="https://img.icons8.com/fluency/48/trash.png" alt="Lixo" />
-      <div>Lixo</div>
-    </div>
-    <div id="icon-docs" class="desktop-icon" title="Documentos 3D" tabindex="4">
-      <img src="https://img.icons8.com/fluency/48/documents.png" alt="Documentos" />
-      <div>Documentos</div>
-    </div>
-    <div id="icon-home" class="desktop-icon" title="Página Inicial" tabindex="5">
-      <img src="https://img.icons8.com/fluency/48/home.png" alt="Página Inicial" />
-      <div>Início</div>
-    </div>
-
-    <!-- Janela principal melhorada -->
-    <div id="programWindow">
-      <header>
-        School System v2.0 - Tecnologia Biomédica
-        <button class="closeProgramBtn" title="Fechar (Esc)" aria-label="Fechar">×</button>
-      </header>
-      <button id="startButton">🚀 Iniciar Sistema</button>
-      <div id="infoBoxes" role="grid" aria-label="Formação Acadêmica">
-        <div class="box" data-status="ATIVO" data-info="Ciências e Tecnologias" data-detail="SECUNDÁRIO: Escola Secundária de Santo André e Casquilhos" data-site="https://www.aed.edu.pt/">
-          <img src="casquilhos.png" alt="Escola Secundária dos Casquilhos" />
-        </div>
-        <div class="box" data-status="ATIVO" data-info="Licenciatura Tecnologia Biomédica" data-detail="IPS: 2022 - Atual" data-site="https://www.ips.pt/ips_24515/cursos/tecnica-superior-profissional/tecnologia-biomedica.html">
-          <img src="POLISET.png" alt="Politécnico de Setúbal" />
-        </div>
-        <div class="box" data-status="ATIVO" data-info="Unidades Curriculares Isoladas" data-detail="ISEL: 2025 - Sinais/Sistemas, Eletrónica, PDSB" data-site="https://www.isel.pt/">
-          <img src="ISEL.png" alt="Instituto Superior de Engenharia de Lisboa" />
-        </div>
-        <div class="box" data-status="CONCLUÍDO" data-info="English A2" data-detail="TECMINHO: 2023" data-site="https://www.uminho.pt/">
-          <img src="TECMINHO.png" alt="Universidade do Minho" />
-        </div>
-        <div class="box" data-status="CONCLUÍDO" data-info="Python Data Analysis" data-detail="IPC: 2022" data-site="https://www.ipc.pt/">
-          <img src="IPC.png" alt="Instituto Politécnico de Coimbra" />
-        </div>
-      </div>
-      <div id="infoContainer" aria-live="polite"></div>
-    </div>
-
-    <!-- Sysbar -->
-    <div id="sysBar">
-      <span>Ctrl+Shift para DevTools</span>
-      <div>
-        <img src="https://img.icons8.com/fluency/48/wifi.png" class="sysIcon" title="Wi-Fi" alt="Wi-Fi" />
-        <img src="https://img.icons8.com/fluency/48/high-volume.png" class="sysIcon" title="Volume" alt="Volume" />
-        <img src="https://img.icons8.com/fluency/48/empty-battery.png" class="sysIcon" title="Bateria" alt="Bateria" />
-        <span id="sysHour"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Three.js Container -->
-  <div id="threeContainer" style="display:none;">
-    <div id="info">Scroll zoom | Drag rotate | Hover+Click documentos</div>
-    <div id="confirm" role="dialog" aria-labelledby="confirm-title"></div>
-    <div id="conteudo"></div>
-    <button id="voltar-edu" aria-label="Voltar ao Desktop">← Voltar</button>
-  </div>
-
-  <!-- Three.js CDN otimizado -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
-  <script src="https://unpkg.com/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
-
-  <script>
-    // Performance monitoring
-    let startTime = performance.now();
-    
-    // Inicialização rápida
-    const preFade = document.getElementById('fadeInPreVideo');
-    const intro = document.getElementById('videoIntroContainer');
-    const fade = document.getElementById('introFade');
-    const desktop = document.getElementById('desktop');
-    const introVideo = document.getElementById('introVideo');
-    
-    // Skip vídeo em 5s ou onended
-    setTimeout(() => {
-      fade.style.opacity = "1";
-      setTimeout(() => {
-        fade.style.opacity = "0";
-        intro.style.display = "none";
-        desktop.style.display = "block";
-        preFade.style.opacity = "0";
-      }, 800);
-    }, 5000);
-
-    introVideo.onended = () => {
-      fade.style.opacity = "1";
-      setTimeout(() => {
-        fade.style.opacity = "0";
-        intro.style.display = "none";
-        desktop.style.display = "block";
-      }, 800);
-    };
-
-    // Relógio otimizado
-    function updateHour() {
-      const now = new Date();
-      document.getElementById("sysHour").textContent = now.toLocaleTimeString('pt-PT', {hour12: false});
-    }
-    setInterval(updateHour, 1000);
-    updateHour();
-
-    // Sidebar toggle (NOVO)
-    document.getElementById('toggleSidebar').addEventListener('click', () => {
-      document.getElementById('projectSidebar').classList.toggle('open');
-    });
-
-    // Funções projetos rápidos (NOVO)
-    function openProject(type) {
-      const projects = {
-        'exoesqueleto': 'https://github.com/TEU_USERNAME/exoesqueleto', // Substitui pelos teus links
-        'ecg': 'https://github.com/TEU_USERNAME/ecg-processing',
-        'crispr': 'projeto_dpm_LTB.pdf',
-        'github': 'https://github.com/TEU_USERNAME',
-        'contact': 'mailto:teu@email.com?subject=Estágio%20CardioID'
-      };
-      window.open(projects[type] || '#', '_blank');
-      document.getElementById('projectSidebar').classList.remove('open');
+      width: 92%;
+      height: 19px;
+      background: #001a00;
+      border: 2px solid #00ff00;
+      margin: 29px auto 3px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
     }
 
-    // School icon
-    document.getElementById("icon-school").addEventListener("click", () => {
-      document.getElementById("programWindow").style.display = "block";
-      document.getElementById("programWindow").focus();
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        document.getElementById("programWindow").style.display = "none";
-        document.getElementById('projectSidebar').classList.remove('open');
-      }
-      if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        if (window.devtools.isOpen) window.location.reload();
-      }
-    });
-
-    // Start button
-    document.getElementById("startButton").addEventListener("click", () => {
-      document.getElementById("infoBoxes").style.display = "flex";
-      document.getElementById("startButton").style.display = "none";
-    });
-
-    // Info boxes melhorado
-    function manageWindows() {
-      const windows = document.querySelectorAll('.infoBoxWindow');
-      if (windows.length >= 3) {
-        windows[0].previousElementSibling?.remove();
-        windows[0].remove();
-      }
+    .loadingFill {
+      background: #00ff00;
+      height: 15px;
+      width: 0;
+      transition: width 1.0s linear;
     }
 
-    document.getElementById("infoBoxes").addEventListener("click", function(e) {
-      let targetBox = e.target.closest(".box");
-      if (targetBox) {
-        manageWindows();
-        
-        // Download simulation
-        const downloadBar = document.createElement("div");
-        downloadBar.className = "download-bar";
-        const fill = document.createElement("div");
-        fill.className = "download-fill";
-        downloadBar.appendChild(fill);
-
-        const infoBoxWindow = document.createElement("div");
-        infoBoxWindow.className = "infoBoxWindow";
-        infoBoxWindow.setAttribute('role', 'status');
-        infoBoxWindow.textContent = "🔄 Carregando módulo académico...";
-        
-        document.getElementById("infoContainer").appendChild(downloadBar);
-        document.getElementById("infoContainer").appendChild(infoBoxWindow);
-        
-        setTimeout(() => { fill.style.width = "100%"; }, 50);
-        setTimeout(() => {
-          const info = targetBox.getAttribute("data-info");
-          const detail = targetBox.getAttribute("data-detail");
-          const site = targetBox.getAttribute("data-site");
-          
-          infoBoxWindow.innerHTML = `
-            <div><strong>${info}</strong></div>
-            <div style="margin: 8px 0; opacity: 0.9;">${detail}</div>
-            <div id="modalButtons" style="margin-top: 15px;">
-              <button onclick="launch3D('${detail}')" ${!detail.includes('IPS') && !detail.includes('ISEL') ? 'disabled' : ''}>📐 3D Explorer</button>
-              <button onclick="openSite('${site}')">📚 Planos Estudos</button>
-              <button onclick="quickMetrics('${info}')">📊 Métricas</button>
-            </div>
-          `;
-          downloadBar.remove();
-          infoBoxWindow.scrollIntoView({ behavior: 'smooth' });
-        }, 1200);
-      }
-    });
-
-    // Funções utilitárias
-    function launch3D(detail) {
-      document.getElementById('desktop').style.display = "none";
-      document.getElementById('programWindow').style.display = "none";
-      document.getElementById('threeContainer').style.display = "block";
-      document.body.classList.add('three-active');
-      if (typeof init3D === 'function' && !window.scene) init3D();
+    /* SYSBAR */
+    #sysBar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 36px;
+      background: #001f12;
+      border-top: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 22px;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: 15px;
+      z-index: 900;
     }
 
-    function openSite(url) {
-      if (url) window.open(url, "_blank");
-      else alert("🔗 Link dos planos de estudo em breve!");
+    .sysIcon {
+      margin-right: 16px;
+      vertical-align: middle;
+      width: 21px;
+      height: 21px;
+      filter: drop-shadow(0 0 3px #00ff001c);
     }
 
-    function quickMetrics(info) {
-      const metrics = {
-        'Tecnologia Biomédica': '📈 150+ horas | 4.2 GPA | Projetos reais',
-        'Unidades Curriculares': '⚡ PDSB, Sinais, Eletrónica | ISEL 2025',
-        'Python Data Analysis': '🐍 Pandas, SciPy, Matplotlib | IPC Certificado'
-      };
-      alert(metrics[info] || '📊 Métricas disponíveis em GitHub');
-    }
-
-    // Close program
-    document.querySelector('.closeProgramBtn').addEventListener('click', showConfirmBox);
-
-    function showConfirmBox() {
-      const overlay = document.createElement("div");
-      overlay.className = "confirmOverlay";
-      const box = document.createElement("div");
-      box.className = "confirmBox";
-      box.innerHTML = `
-        <div>Deseja fechar o School System?</div>
-        <div style="margin: 15px 0 10px 0; font-size: 14px; opacity: 0.8;">
-          💾 Progresso salvo automaticamente
-        </div>
-        <button class="confirmBtn">✅ Sim</button>
-        <button class="cancelBtn">❌ Não</button>
-      `;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-      
-      box.querySelector('.confirmBtn').onclick = function() {
-        box.innerHTML = '<div>⏳ Fechando sistema...</div><div class="loadingBar"><div class="loadingFill"></div></div>';
-        const fill = box.querySelector('.loadingFill');
-        setTimeout(() => { fill.style.width = "100%"; }, 50);
-        setTimeout(() => {
-          document.body.removeChild(overlay);
-          document.getElementById("programWindow").style.display = "none";
-          document.getElementById("infoBoxes").style.display = "none";
-          document.getElementById("startButton").style.display = "block";
-          document.getElementById("infoContainer").innerHTML = "";
-        }, 1100);
-      };
-      
-      box.querySelector('.cancelBtn').onclick = () => document.body.removeChild(overlay);
-    }
-
-    // Home button
-    document.getElementById("icon-home").addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
-
-    // THREE.JS OTIMIZADO (mantido mas melhorado)
-    const iconDocs = document.getElementById("icon-docs");
-    const threeContainer = document.getElementById("threeContainer");
-    const voltarEduBtn = document.getElementById("voltar-edu");
-
-    let arquivos = [
-      {nome:"Bioquímica", descricao:"Fosfatidilserina", link:"bioquimica.pdf"},
-      {nome:"Sinais Vida", descricao:"Relatório Eletrotecnia", link:"relatorio_eletrotecnia.pdf"},
-      {nome:"Exoesqueleto", descricao:"Design LTB", link:"projeto_dpm_LTB.pdf"},
-      {nome:"Genética", descricao:"Aula prática", link:"DPM.pdf"},
-      {nome:"Bombas Insulina", descricao:"Inovação", link:"Dispositivos_Médicos.pdf"},
-      {nome:"Ressonância", descricao:"Projeto RM", link:"equipsaude.pdf"},
-      {nome:"Nanopartículas", descricao:"Poster", link:"Poster_1.pdf"},
-      {nome:"CRISPR", descricao:"Edição genética", link:"Poster_2.pdf"},
-      {nome:"ISEL Docs", descricao:"Engenharia Lisboa", link:"documento_isel.pdf"}
-    ];
-
-    let scene, camera, renderer, blocos = [], luzes = [];
-    let camDist = 20, camRotX = 0.2, camRotY = 0;
-
-    function init3D(font) {
-      // Scene otimizada
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-      
-      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-      threeContainer.appendChild(renderer.domElement);
-
-      // Lighting otimizada
-      const ambientLight = new THREE.AmbientLight(0x88ffbb, 0.6);
-      scene.add(ambientLight);
-      
-      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      dirLight.position.set(10, 20, 10);
-      dirLight.castShadow = true;
-      scene.add(dirLight);
-
-      // Base platform
-      const baseGeometry = new THREE.BoxGeometry(20, 0.5, 12);
-      const baseMaterial = new THREE.MeshPhongMaterial({ color: 0x333333, transparent: true, opacity: 0.8 });
-      const base = new THREE.Mesh(baseGeometry, baseMaterial);
-      base.position.y = 0.25;
-      base.receiveShadow = true;
-      scene.add(base);
-
-      // Document blocks (otimizado)
-      const blockCount = arquivos.length;
-      const cols = 4, rows = Math.ceil(blockCount / cols);
-      const spacingX = 4.5, spacingZ = 3.5;
-      
-      for (let i = 0; i < blockCount; i++) {
-        const geometry = new THREE.BoxGeometry(1.8, 0.8, 1.2);
-        const material = new THREE.MeshPhongMaterial({ 
-          color: 0x00ff88, 
-          emissive: 0x004422, 
-          emissiveIntensity: 0.3,
-          transparent: true,
-          opacity: 0.95
-        });
-        
-        const row = Math.floor(i / cols);
-        const col = i % cols;
-        const block = new THREE.Mesh(geometry, material);
-        block.position.set(
-          (col - cols/2 + 0.5) * spacingX,
-          0.9,
-          (row - rows/2 + 0.5) * spacingZ
-        );
-        block.castShadow = true;
-        block.userData = arquivos[i];
-        scene.add(block);
-        blocos.push(block);
-
-        // Text label
-        const canvas = document.createElement('canvas');
-        canvas.width = 256; canvas.height = 64;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, 256, 64);
-        ctx.font = 'bold 28px Courier New';
-        ctx.fillStyle = '#00ff00';
-        ctx.textAlign = 'center';
-        ctx.fillText(arquivos[i].nome, 128, 40);
-        
-        const texture = new THREE.CanvasTexture(canvas);
-        const textMesh = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.6, 0.4),
-          new THREE.MeshBasicMaterial({ map: texture, transparent: true })
-        );
-        textMesh.position.set(block.position.x, block.position.y + 0.6, block.position.z);
-        scene.add(textMesh);
-      }
-
-      // Controls otimizados
-      let isDragging = false, prevMouseX = 0, prevMouseY = 0;
-      
-      renderer.domElement.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        prevMouseX = e.clientX;
-        prevMouseY = e.clientY;
-      });
-      
-      window.addEventListener('mouseup', () => isDragging = false);
-      
-      renderer.domElement.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-          camRotY += (e.clientX - prevMouseX) * 0.005;
-          camRotX += (e.clientY - prevMouseY) * 0.005;
-          camRotX = Math.max(-0.3, Math.min(0.5, camRotX));
-          prevMouseX = e.clientX;
-          prevMouseY = e.clientY;
-          updateCamera();
-        }
-      });
-      
-      renderer.domElement.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        camDist += e.deltaY * 0.01;
-        camDist = Math.max(12, Math.min(30, camDist));
-        updateCamera();
-      }, { passive: false });
-
-      function updateCamera() {
-        const radius = camDist;
-        camera.position.x = Math.cos(camRotY) * Math.cos(camRotX) * radius;
-        camera.position.y = Math.sin(camRotX) * radius + 2;
-        camera.position.z = Math.sin(camRotY) * Math.cos(camRotX) * radius;
-        camera.lookAt(0, 1, 0);
-      }
-      updateCamera();
-
-      // Raycasting para hover/click
-      const raycaster = new THREE.Raycaster();
-      const mouse = new THREE.Vector2();
-
-      function onMouseMove(e) {
-        const rect = renderer.domElement.getBoundingClientRect();
-        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-        
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(blocos);
-        
-        blocos.forEach((block, i) => {
-          block.material.emissiveIntensity = intersects[0]?.object === block ? 0.6 : 0.2;
-        });
-      }
-
-      function onClick(e) {
-        const rect = renderer.domElement.getBoundingClientRect();
-        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-        
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(blocos);
-        
-        if (intersects.length > 0) {
-          const file = intersects[0].object.userData;
-          window.open(file.link, '_blank');
-        }
-      }
-
-      renderer.domElement.addEventListener('mousemove', onMouseMove);
-      renderer.domElement.addEventListener('click', onClick);
-
-      // Resize handler
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-
-      // Animation loop otimizado
-      function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-      }
-      animate();
-      
-      window.scene = scene; // Global para evitar recriação
-    }
-
-    // Load font e init 3D quando necessário
-    iconDocs.addEventListener("click", () => {
-      if (!window.scene) {
-        const loader = new THREE.FontLoader();
-        loader.load('https://threejs.org/examples/fonts/helvetiker_bold.typeface.json', init3D);
-      } else {
-        launch3D();
-      }
-    });
-
-    voltarEduBtn.addEventListener("click", () => {
-      threeContainer.style.display = "none";
-      desktop.style.display = "block";
-      document.getElementById('programWindow').style.display = "block";
-      document.body.classList.remove('three-active');
-    });
-
-    // Performance metrics
-    window.addEventListener('load', () => {
-      const loadTime = performance.now() - startTime;
-      console.log(`🚀 Jurassic Desktop carregado em ${loadTime.toFixed(0)}ms`);
-    });
-
-    // PWA ready (adicione manifest.json para full PWA)
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    }
-  </script>
-</body>
-</html>
+    #sysBar span {
+      margin-right
