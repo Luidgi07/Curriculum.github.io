@@ -2,12 +2,11 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Timeline – Percurso</title>
+  <title>Timeline – Formações & Workshops</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-
     body{
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:radial-gradient(circle at top,#1c3d5a 0%,#020617 55%,#000 100%);
@@ -18,7 +17,6 @@
       justify-content:center;
     }
 
-    /* Container principal */
     #timeline-section{
       position:relative;
       width:min(1180px,100%);
@@ -31,7 +29,6 @@
       grid-template-rows:auto auto 1fr;
       row-gap:18px;
     }
-
     .tl-bg{
       position:absolute;
       inset:-40px;
@@ -109,13 +106,12 @@
       box-shadow:0 0 14px rgba(59,130,246,0.9);
     }
 
-    /* Área da timeline */
     .tl-main{
       position:relative;
       z-index:1;
       margin-top:4px;
       display:grid;
-      grid-template-rows:auto minmax(170px,1fr);
+      grid-template-rows:auto minmax(190px,1fr);
       row-gap:16px;
     }
 
@@ -126,8 +122,8 @@
     }
     .tl-track{
       position:relative;
-      height:140px;
-      min-width:900px;
+      height:150px;
+      min-width:980px;
       display:flex;
       align-items:center;
       padding:0 40px;
@@ -145,28 +141,24 @@
     .tl-node{
       position:relative;
       flex:0 0 auto;
-      width:120px;
+      width:140px;
       display:flex;
       flex-direction:column;
       align-items:center;
       gap:8px;
       margin:0 24px;
       cursor:pointer;
+      text-align:center;
     }
-
     .tl-dot{
-      width:26px;
-      height:26px;
+      width:30px;
+      height:30px;
       border-radius:50%;
       border:2px solid rgba(191,219,254,0.9);
       background:radial-gradient(circle at 30% 20%,#ffffff 0,#67e8f9 35%,#0b1120 85%);
       box-shadow:0 0 16px rgba(56,189,248,0.9);
-      display:flex;
-      align-items:center;
-      justify-content:center;
       position:relative;
     }
-
     .tl-dot::after{
       content:"";
       position:absolute;
@@ -176,10 +168,13 @@
       opacity:.7;
     }
 
+    /* cores por categoria */
     .tl-node[data-category="educacao"] .tl-dot{border-color:#a5b4fc;}
-    .tl-node[data-category="formacao"] .tl-dot{border-color:#22c55e;}
-    .tl-node[data-category="experiencia"] .tl-dot{border-color:#facc15;}
+    .tl-node[data-category="saude"] .tl-dot{border-color:#22c55e;}
     .tl-node[data-category="desporto"] .tl-dot{border-color:#f97316;}
+    .tl-node[data-category="ia"] .tl-dot{border-color:#38bdf8;}
+    .tl-node[data-category="engenharia"] .tl-dot{border-color:#eab308;}
+    .tl-node[data-category="online"] .tl-dot{border-color:#ec4899;}
 
     .tl-node.active .tl-dot{
       transform:scale(1.15);
@@ -194,11 +189,10 @@
     }
     .tl-label{
       font-size:.9rem;
-      text-align:center;
-      max-width:120px;
+      max-width:140px;
     }
 
-    /* Painel de detalhe */
+    /* Painel detalhe */
     .tl-detail{
       position:relative;
       background:rgba(15,23,42,0.94);
@@ -208,7 +202,7 @@
       grid-template-columns:1.3fr 0.9fr;
       column-gap:18px;
       box-shadow:0 0 24px rgba(15,23,42,0.95);
-      min-height:170px;
+      min-height:190px;
     }
     .tl-detail-main h2{
       margin-bottom:4px;
@@ -256,10 +250,9 @@
       color:#e5e7eb;
       background:rgba(15,23,42,0.9);
     }
-
     .tl-media{
       width:100%;
-      height:105px;
+      height:115px;
       border-radius:14px;
       border:1.5px solid rgba(56,189,248,0.9);
       background:radial-gradient(circle at 20% 20%,rgba(59,130,246,0.6),rgba(15,23,42,0.9));
@@ -269,20 +262,17 @@
       font-size:.82rem;
       color:#e5f2ff;
       box-shadow:0 0 16px rgba(8,47,73,0.9);
+      text-align:center;
+      padding:0 10px;
     }
 
-    /* Responsivo */
     @media (max-width:900px){
-      #timeline-section{
-        padding:32px 4vw 32px;
-      }
+      #timeline-section{padding:32px 4vw 32px;}
       .tl-detail{
         grid-template-columns:1fr;
         row-gap:10px;
       }
-      .tl-detail-side{
-        align-items:flex-start;
-      }
+      .tl-detail-side{align-items:flex-start;}
     }
   </style>
 </head>
@@ -294,27 +284,27 @@
   <div class="tl-header">
     <div>
       <div class="tl-title">Timeline</div>
-      <div class="tl-sub">Campanha Académica & Profissional</div>
+      <div class="tl-sub">Formações & Workshops</div>
     </div>
     <a href="index.html" class="tl-back">← Voltar</a>
   </div>
 
-  <!-- Filtros -->
   <div class="tl-filters">
     <button class="tl-filter active" data-filter="all">Tudo</button>
     <button class="tl-filter" data-filter="educacao">Educação</button>
-    <button class="tl-filter" data-filter="formacao">Formações</button>
-    <button class="tl-filter" data-filter="experiencia">Experiências</button>
-    <button class="tl-filter" data-filter="desporto">Desporto</button>
+    <button class="tl-filter" data-filter="saude">Saúde & Emergência</button>
+    <button class="tl-filter" data-filter="desporto">Natação & Desporto</button>
+    <button class="tl-filter" data-filter="ia">IA & Dados</button>
+    <button class="tl-filter" data-filter="engenharia">Engenharia & Biomédica</button>
+    <button class="tl-filter" data-filter="online">Cursos Online / Web</button>
   </div>
 
-  <!-- Timeline + detalhe -->
   <div class="tl-main">
     <div class="tl-track-wrapper">
       <div class="tl-track" id="tlTrack">
         <div class="tl-line"></div>
 
-        <!-- Nós da timeline -->
+        <!-- Educação base -->
         <div class="tl-node active"
              data-id="secundario"
              data-category="educacao">
@@ -331,122 +321,153 @@
           <div class="tl-label">Licenciatura<br>Tecnologia Biomédica</div>
         </div>
 
+        <!-- Saúde & emergência -->
         <div class="tl-node"
-             data-id="workshops-sinais"
-             data-category="formacao">
-          <div class="tl-year">2023–2024</div>
+             data-id="saude-emergencia"
+             data-category="saude">
+          <div class="tl-year">2021–2024</div>
           <div class="tl-dot"></div>
-          <div class="tl-label">Workshops de<br>Sinais Biomédicos</div>
+          <div class="tl-label">Saúde &<br>Emergência Médica</div>
         </div>
 
-        <div class="tl-node"
-             data-id="formacoes-online"
-             data-category="formacao">
-          <div class="tl-year">2023–2025</div>
-          <div class="tl-dot"></div>
-          <div class="tl-label">Cursos Online<br>Python / ML / Saúde</div>
-        </div>
-
-        <div class="tl-node"
-             data-id="estagios"
-             data-category="experiencia">
-          <div class="tl-year">2024–2025</div>
-          <div class="tl-dot"></div>
-          <div class="tl-label">Estágios e<br>Projetos em Contexto Real</div>
-        </div>
-
+        <!-- Natação & desporto -->
         <div class="tl-node"
              data-id="desporto"
              data-category="desporto">
-          <div class="tl-year">2017–hoje</div>
+          <div class="tl-year">2021–2025</div>
           <div class="tl-dot"></div>
-          <div class="tl-label">Natação Pura,<br>Águas Abertas & Salvamento</div>
+          <div class="tl-label">Natação, Águas<br>Abertas & Salvamento</div>
+        </div>
+
+        <!-- IA & dados -->
+        <div class="tl-node"
+             data-id="ia-dados"
+             data-category="ia">
+          <div class="tl-year">2023–2025</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">IA, Dados &<br>Excel Avançado</div>
+        </div>
+
+        <!-- Engenharia & biomédica -->
+        <div class="tl-node"
+             data-id="engenharia-bio"
+             data-category="engenharia">
+          <div class="tl-year">2023–2024</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Engenharia &<br>Biomédica / 3D</div>
+        </div>
+
+        <!-- Cursos online / Web / Python -->
+        <div class="tl-node"
+             data-id="online-web"
+             data-category="online">
+          <div class="tl-year">2022–2023</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Python, Análise<br>de Dados & Web</div>
         </div>
 
       </div>
     </div>
 
-    <!-- Painel de detalhe -->
-    <div class="tl-detail" id="tlDetail">
-      <!-- Conteúdo preenchido por JS -->
-    </div>
+    <div class="tl-detail" id="tlDetail"></div>
   </div>
 </section>
 
 <script>
-  // Dados dos eventos (personaliza à vontade)
   const TL_DATA = {
     secundario: {
       titulo: "Ensino Secundário – Ciências e Tecnologias",
-      meta: "2019–2022 · Escola Secundária · Área de Ciências e Tecnologias",
+      meta: "2019–2022 · Área de Ciências e Tecnologias",
       bullets: [
-        "Formação sólida em matemática, física e química, base para a transição para tecnologia biomédica.",
-        "Projetos escolares focados em ciência aplicada e resolução de problemas em equipa.",
-        "Primeiros contactos com programação e pensamento algorítmico."
+        "Formação base em matemática, física e química, suporte para estudos em tecnologia biomédica.",
+        "Projetos escolares com foco em ciência aplicada e resolução de problemas em grupo."
       ],
-      tags: ["Matemática", "Física", "Ciências", "Trabalho em Equipa"],
+      tags: ["Educação", "Ciências", "Matemática", "Base Tecnológica"],
       badge: "Fundação",
-      media: "Início da jornada académica na área de ciência e tecnologia."
+      media: "Início do percurso académico orientado para ciência e tecnologia."
     },
+
     licenciatura: {
       titulo: "Licenciatura em Tecnologia Biomédica",
-      meta: "2022–2025 · Instituto Politécnico · Tecnologia e Saúde",
+      meta: "2022–2025 · Tecnologia e Saúde",
       bullets: [
         "Estudo de eletrónica, instrumentação biomédica e processamento de sinais fisiológicos (ECG, EEG, etc.).",
-        "Desenvolvimento de projetos com Python para análise de dados biomédicos e criação de ferramentas de monitorização.",
-        "Trabalho em equipa multidisciplinar, ligando engenharia, saúde e investigação."
+        "Projetos com Python para análise de dados e desenvolvimento de ferramentas de monitorização.",
+        "Trabalho em equipa multidisciplinar entre engenharia, saúde e investigação."
       ],
       tags: ["Tecnologia Biomédica", "Python", "Sinais Biomédicos", "Eletrónica"],
       badge: "Core Académico",
-      media: "Licenciatura orientada para a interseção entre engenharia e cuidados de saúde."
+      media: "Formação superior que liga engenharia a cuidados de saúde."
     },
-    "workshops-sinais": {
-      titulo: "Workshops de Sinais Biomédicos",
-      meta: "2023–2024 · Formações práticas e sessões técnicas",
+
+    "saude-emergencia": {
+      titulo: "Formações em Saúde & Emergência Médica",
+      meta: "2021–2024 · Saúde, emergência e suporte à vida",
       bullets: [
-        "Participação em workshops focados em aquisição, filtragem e análise de sinais ECG, EEG e outros biosinais.",
-        "Aplicação de técnicas como filtragem digital, FFT e deteção de eventos em ambientes laboratoriais.",
-        "Exploração de ferramentas de software específicas para análise de sinais médicos."
+        "INEM: Reanimar com INEM, Reanimação de Alto Desempenho; formação sobre COVID‑19 (prevenções básicas de controlo de infeções e gestão de \"COVIDIOTERMINAR\"); abordagem à pessoa autista; Via Verde AVC / Via Verde Sépsis (2022).",
+        "AFSS: Suporte Básico de Vida com e sem DAE, Suporte Básico de Vida Pediátrico, Primeiros Socorros em Adultos, STOP THE BLEED, Eletrocardiografia Nível I e II (2021/2022).",
+        "FEMÉDICA: Curso Tripulante de Ambulância de Socorro (2021).",
+        "IPS: Seminário «Electromedicina: Gestão e Manutenção de Equipamentos Médicos» – Hospital Garcia de Orta (2022)."
       ],
-      tags: ["Workshops", "ECG / EEG", "Processamento de Sinal", "Laboratório"],
-      badge: "Especialização",
-      media: "Formações focadas em competências práticas de análise de sinais biomédicos."
+      tags: ["Suporte Básico de Vida", "Emergência Médica", "INEM", "Electromedicina"],
+      badge: "Saúde & Emergência",
+      media: "Formações práticas focadas em suporte à vida, emergência e contexto hospitalar."
     },
-    "formacoes-online": {
-      titulo: "Formações Online em Python, ML e Saúde Digital",
-      meta: "2023–2025 · Cursos complementares",
-      bullets: [
-        "Cursos online em Python avançado para análise de dados e visualização.",
-        "Introdução a machine learning aplicado a dados biomédicos e monitorização remota.",
-        "Exploração de temas como telemedicina, dispositivos wearable e saúde digital."
-      ],
-      tags: ["Python Avançado", "Machine Learning", "Saúde Digital", "Cursos Online"],
-      badge: "Aprendizagem Contínua",
-      media: "Cursos auto-dirigidos para aprofundar competências técnicas além da licenciatura."
-    },
-    estagios: {
-      titulo: "Estágios e Projetos em Contexto Real",
-      meta: "2024–2025 · Ambientes clínicos e I&D",
-      bullets: [
-        "Integração em equipas multidisciplinares para desenvolvimento e teste de soluções biomédicas.",
-        "Aplicação de conhecimentos de sinais, eletrónica e programação em casos reais.",
-        "Desenvolvimento de competências de comunicação, gestão de tempo e adaptação a desafios práticos."
-      ],
-      tags: ["Estágios", "I&D", "Aplicação Prática", "Comunicação"],
-      badge: "Experiência Real",
-      media: "Primeiras experiências profissionais diretamente ligadas à tecnologia biomédica."
-    },
+
     desporto: {
-      titulo: "Natação, Águas Abertas & Salvamento Aquático",
-      meta: "2017–hoje · Competições em piscina, mar e salvamento desportivo",
+      titulo: "Natação, Águas Abertas & Salvamento",
+      meta: "2021–2025 · Desporto aquático e salvamento",
       bullets: [
-        "Participação regular em provas de natação pura e águas abertas (1.5 km a 10 km).",
-        "Treino e competições em salvamento aquático desportivo, reforçando responsabilidade e foco sob pressão.",
-        "Desenvolvimento de elevada resistência cardiovascular, disciplina e capacidade de trabalho a longo prazo."
+        "ASSOCIAÇÃO DE NATAÇÃO DE LISBOA (2025): Curso Elementar de Natação Pura, Natação Adaptada e Águas Abertas + estágio.",
+        "TREINO DE MAR (2024): Carta de Patrão Local / Curso Vela – Iniciação.",
+        "AESP & ISN (2022): Surf & Rescue.",
+        "4EMES (2021): Curso Nadador Salvador.",
+        "Prática contínua de natação pura, águas abertas e salvamento aquático desportivo."
       ],
-      tags: ["Natação", "Águas Abertas", "Salvamento", "Resistência", "Disciplina"],
-      badge: "Desenvolvimento Físico & Mental",
-      media: "Percurso desportivo paralelo à formação académica, complementando capacidades técnicas."
+      tags: ["Natação", "Águas Abertas", "Salvamento", "Resistência"],
+      badge: "Desporto & Resgate",
+      media: "Percurso desportivo que reforça disciplina, resistência e responsabilidade em contexto aquático."
+    },
+
+    "ia-dados": {
+      titulo: "IA, Dados & Excel Avançado",
+      meta: "2023–2025 · Inteligência Artificial, análise de dados e ferramentas",
+      bullets: [
+        "SANTANDER | OPEN ACADEMY (2024): Workshop Introdução à AI (Code for ALL) e formação em Excel.",
+        "TECMINHO (2024): Inteligência Artificial aplicada ao Marketing de Conteúdo.",
+        "HOSPITAL DA LUZ (2024): Inteligência Artificial na área da saúde.",
+        "WORKVIEW (2025): Prevenção e combate a incêndios e evacuação de pessoas; primeiros socorros (emergências médicas e SBV); introdução a segurança e saúde ocupacional, com foco em contextos práticos.",
+        "MAGMA STUDIO (2024): Workshops de Excel (níveis 1.0 e 2.0), finanças pessoais e gestão de projetos com NTT Data."
+      ],
+      tags: ["IA", "Excel", "Análise de Dados", "Saúde Digital"],
+      badge: "IA & Dados",
+      media: "Workshops que combinam inteligência artificial, análise de dados e ferramentas de produtividade."
+    },
+
+    "engenharia-bio": {
+      titulo: "Engenharia, Biomédica & 3D",
+      meta: "2023–2024 · Engenharia, biomédica e impressão 3D",
+      bullets: [
+        "NOVA FCT (2023): JORTC23 de Engenharia Biomédica FCT.",
+        "XIX ENEEB (2024): Workshop de modelagem e impressão 3D com aplicações em reabilitação e interfaces computacionais para comunicação e controlo.",
+        "MAGMA STUDIO (2024): Workshop de Matemática e Engenharia com a TAP e workshop de Engenharia de Sistemas Ferroviários."
+      ],
+      tags: ["Engenharia Biomédica", "Impressão 3D", "Sistemas", "Reabilitação"],
+      badge: "Engenharia & I&D",
+      media: "Eventos focados em engenharia biomédica, sistemas e tecnologias emergentes."
+    },
+
+    "online-web": {
+      titulo: "Python, Análise de Dados & Desenvolvimento Web",
+      meta: "2022–2023 · Cursos online e workshops digitais",
+      bullets: [
+        "CASA EUROPA, LE WAGON (2022/2023): Workshop de Análise de Dados com Python.",
+        "CASA EUROPA, LE WAGON (2022/2023): Workshop Design para dispositivos móveis (UX/UI).",
+        "CASA EUROPA, LE WAGON (2022/2023): Curso criar um site (HTML & CSS, Bootstrap, PHP, SQL e UX/UI)."
+      ],
+      tags: ["Python", "Análise de Dados", "UX/UI", "HTML & CSS", "Web Dev"],
+      badge: "Cursos Online",
+      media: "Formações digitais que reforçam competências em programação, UX/UI e desenvolvimento web."
     }
   };
 
@@ -456,39 +477,34 @@
   const filters = document.querySelectorAll(".tl-filter");
 
   function renderDetail(id){
-    const data = TL_DATA[id];
-    if(!data) return;
+    const d = TL_DATA[id];
+    if(!d) return;
     detail.innerHTML = `
       <div class="tl-detail-main">
-        <h2>${data.titulo}</h2>
-        <div class="tl-detail-meta">${data.meta}</div>
-        <ul>
-          ${data.bullets.map(b => `<li>${b}</li>`).join("")}
-        </ul>
+        <h2>${d.titulo}</h2>
+        <div class="tl-detail-meta">${d.meta}</div>
+        <ul>${d.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
         <div class="tl-tags">
-          ${data.tags.map(t => `<span class="tl-tag">${t}</span>`).join("")}
+          ${d.tags.map(t=>`<span class="tl-tag">${t}</span>`).join("")}
         </div>
       </div>
       <div class="tl-detail-side">
-        <div class="tl-badge">${data.badge}</div>
-        <div class="tl-media">
-          ${data.media}
-        </div>
+        <div class="tl-badge">${d.badge}</div>
+        <div class="tl-media">${d.media}</div>
       </div>
     `;
   }
 
-  // ativar primeiro nó
+  // inicial
   renderDetail("secundario");
 
   nodes.forEach(node=>{
-    node.addEventListener("click", ()=>{
+    node.addEventListener("click",()=>{
       nodes.forEach(n=>n.classList.remove("active"));
       node.classList.add("active");
       const id = node.getAttribute("data-id");
       renderDetail(id);
 
-      // centra o nó selecionado
       const wrapper = node.closest(".tl-track-wrapper");
       const rect = node.getBoundingClientRect();
       const wrapRect = wrapper.getBoundingClientRect();
@@ -497,7 +513,6 @@
     });
   });
 
-  // Filtros
   filters.forEach(btn=>{
     btn.addEventListener("click",()=>{
       const cat = btn.getAttribute("data-filter");
@@ -506,12 +521,12 @@
 
       nodes.forEach(node=>{
         const nCat = node.getAttribute("data-category");
-        if(cat === "all" || nCat === cat){
-          node.style.opacity = "1";
-          node.style.pointerEvents = "auto";
+        if(cat==="all" || nCat===cat){
+          node.style.opacity="1";
+          node.style.pointerEvents="auto";
         }else{
-          node.style.opacity = ".25";
-          node.style.pointerEvents = "none";
+          node.style.opacity=".25";
+          node.style.pointerEvents="none";
         }
       });
     });
