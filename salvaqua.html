@@ -153,7 +153,7 @@
     <div class="sala-imagens" role="list">
       <img src="coralSA1.png" alt="imagem 1" role="listitem" tabindex="-1">
       <div class="separador"></div>
-      <img src="SA_CORAL.png" alt="imagem 2" onclick="abrirCartao(2)" role="listitem" tabindex="0">
+      <img src="CORALSV.png" alt="imagem 2" onclick="abrirCartao(2)" role="listitem" tabindex="0">
       <div class="separador"></div>
       <img src="VAZIO.png" alt="imagem 3" role="listitem" tabindex="0"> //onclick="abrirCartao(3)"
       <div class="separador"></div>
@@ -161,7 +161,7 @@
       <div class="separador"></div>
       <img src="VAZIO.png" alt="imagem 5" role="listitem" tabindex="0"> //onclick="abrirCartao(5)"
       <div class="separador"></div>
-      <img src="SA_SFS.png" alt="imagem 6" onclick="abrirCartao(6)" role="listitem" tabindex="0">
+      <img src="SFSSV.png" alt="imagem 6" onclick="abrirCartao(6)" role="listitem" tabindex="0">
     </div>
   </div>
   <script>
@@ -306,11 +306,11 @@
     
     };
     const dadosCartoes = {
-      2: { medalhas:{ ouro:0, prata:0, bronze:0 }, lesoes:[], eventos:[], esqImg:"ANA_AA-removebg-preview.png" },
-      3: { medalhas:{ ouro:5, prata:6, bronze:4 }, lesoes:[], eventos:[], esqImg:"SFUAP_AA-removebg-preview.png" },
-      4: { medalhas:{ ouro:5, prata:8, bronze:9 }, lesoes:[{ src:"moedaCNAA.png", alt:"1º Lugar Circuito Nacional de Águas Abertas AA20+" },{ src:"moedaCAAA.png", alt:"2º Lugar Circuito de Águas Abertas do Algarve AA20+" }], eventos:[{ src:"moedaGD.png", alt:"Gala de Desporto de Almada" }], esqImg:"CIRL_AA-removebg-preview.png" },
-      5: { medalhas:{ ouro:0, prata:0, bronze:0 }, lesoes:[], eventos:[], esqImg:"S4F_AA-removebg-preview (1).png" },
-      6: { medalhas:{ ouro:10, prata:15, bronze:13 }, lesoes:[{ src:"moedaCNAA.png", alt:"1º Lugar Circuito Nacional de Águas Abertas AA20+" },{ src:"moedaCAAA.png", alt:"2º Lugar Circuito de Águas Abertas do Algarve AA20+" }], eventos:[{src: "moedaGD.png", alt:"Gala de Desporto de Almada" }], esqImg:"SFS_AA-removebg-preview.png" }
+      2: { medalhas:{ ouro:13, prata:6, bronze:6 }, lesoes:[], eventos:[], esqImg:"SA_CORAL.png" },
+      3: { medalhas:{ ouro:0, prata:0, bronze:0 }, lesoes:[], eventos:[], esqImg:"" },
+      4: { medalhas:{ ouro:0, prata:0, bronze:0 }, lesoes:[], eventos:[], esqImg:"" },
+      5: { medalhas:{ ouro:0, prata:0, bronze:0 }, lesoes:[], eventos:[], esqImg:"" },
+      6: { medalhas:{ ouro:13, prata:6, bronze:6 }, lesoes:[], eventos:[], esqImg:"SA_SFS.png" }
     };
     let mapaLeaflet;
     function abrirCartao(idx) {
