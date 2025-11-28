@@ -129,8 +129,8 @@
         to top,
         rgba(255,255,255,0.95) 0%,
         rgba(255,255,255,0.0) 60%
-      );                                       /* degradé branco */
-      color: #000000;                          /* texto preto */
+      );
+      color: #000000;
       font-weight: 600;
       font-size: 1.4em;
       letter-spacing: 1px;
@@ -149,21 +149,20 @@
       pointer-events: auto;
     }
     
-    /* contentor em baixo, centrado */
     .overlay-bottom {
       width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;         /* centro horizontal */
+      align-items: center;
       justify-content: center;
-      padding-bottom: 18px;        /* distância ao fundo */
+      padding-bottom: 18px;
     }
     
-    /* logo pequeno */
+    /* se quiseres logo pequeno em TODAS, usas igual */
     .overlay-logo-small {
       width: 120px;
       height: auto;
-      margin-bottom: 6px;          /* espaço entre logo e texto */
+      margin-bottom: 6px;
     }
 
 
@@ -274,17 +273,41 @@
           src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg"
           alt="Natação Pura"
         />
-        <div class="overlay">Natação Pura</div>
+        <div class="overlay">
+          <div class="overlay-bottom">
+            <!-- Se não quiseres logo aqui, remove esta img -->
+            <img
+              src="icon_np.png"
+              class="overlay-logo-small"
+              alt="Símbolo Natação Pura"
+            />
+            <span>Natação Pura</span>
+          </div>
+        </div>
       </div>
     </div>
+
+    
     <!-- Coluna 2 -->
     <div class="col" tabindex="0" data-link="aguasabertas.html">
       <div class="col-inner">
         <img src="FB_IMG_1696068644775 (1).jpg" alt="Águas Abertas" />
-        <div class="overlay">Águas Abertas</div>
+        <div class="overlay">
+          <div class="overlay-bottom">
+            <img
+              src="icon_aa.png"
+              class="overlay-logo-small"
+              alt="Símbolo Águas Abertas"
+            />
+            <span>Águas Abertas</span>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- Coluna 3 -->
+
+
+    
+    
     <!-- Coluna 3 -->
     <div class="col" tabindex="0" data-link="salvaqua.html">
       <div class="col-inner">
