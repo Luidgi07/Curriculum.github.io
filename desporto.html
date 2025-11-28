@@ -123,34 +123,49 @@
       position: absolute;
       inset: 0;
       display: flex;
-      flex-direction: column;        /* empilha logo + texto */
-      align-items: center;           /* centra horizontalmente */
-      justify-content: center;       /* centra verticalmente */
-      background: rgba(255,255,255,0.85);  /* branco translúcido */
-      color: #000000;                /* texto preto */
+      align-items: center;
+      justify-content: flex-end;               /* conteúdo em baixo */
+      background: linear-gradient(
+        to top,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.0) 60%
+      );                                       /* degradé branco */
+      color: #000000;                          /* texto preto */
       font-weight: 600;
-      font-size: 1.6em;
+      font-size: 1.4em;
       letter-spacing: 1px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.33s;
-      text-shadow: none;             /* remove sombra escura */
+      text-shadow: none;
       text-align: center;
       z-index: 2;
-      padding: 18px 10px;
       box-sizing: border-box;
     }
+    
     .col:hover .overlay,
     .col:focus .overlay {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-logo {
-      width: 200px;
-      height: 200px;
-      object-fit: contain;
-      margin-bottom: 8px;            /* espaço entre logo e texto */
+    
+    /* contentor em baixo, centrado */
+    .overlay-bottom {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;         /* centro horizontal */
+      justify-content: center;
+      padding-bottom: 18px;        /* distância ao fundo */
     }
+    
+    /* logo pequeno */
+    .overlay-logo-small {
+      width: 120px;
+      height: auto;
+      margin-bottom: 6px;          /* espaço entre logo e texto */
+    }
+
 
     .col:hover .overlay,
     .col:focus .overlay {
@@ -275,12 +290,14 @@
       <div class="col-inner">
         <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático" />
         <div class="overlay">
-          <img
-            src="Imagem_WhatsApp_2025-10-26_às_00.09.13_5fb53800-removebg-preview.png"
-            class="overlay-logo"
-            alt="Símbolo Salvamento Aquático"
-          />
-          <span>Salvamento Aquático</span>
+          <div class="overlay-bottom">
+            <img
+              src="Imagem_WhatsApp_2025-10-26_às_00.09.13_5fb53800-removebg-preview.png"
+              class="overlay-logo-small"
+              alt="Símbolo Salvamento Aquático"
+            />
+            <span>Salvamento Aquático</span>
+          </div>
         </div>
       </div>
     </div>
