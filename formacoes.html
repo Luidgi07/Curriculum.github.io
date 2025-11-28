@@ -7,6 +7,9 @@
 
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      scroll-behavior:smooth;
+    }
     body{
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:radial-gradient(circle at top,#1c3d5a 0%,#020617 55%,#000 100%);
@@ -21,14 +24,14 @@
     #timeline-section{
       position:relative;
       width:min(1180px,100%);
-      padding:32px 4vw 32px;
+      padding:24px 4vw 32px;
       background:linear-gradient(135deg,rgba(10,20,40,0.97),rgba(1,6,20,0.96));
       border-radius:26px;
       box-shadow:0 0 40px rgba(0,0,0,0.85);
       overflow:hidden;
       display:grid;
-      grid-template-columns:auto 1fr;
-      column-gap:24px;
+      grid-template-columns:260px 1fr;
+      column-gap:26px;
     }
 
     .tl-bg{
@@ -42,33 +45,35 @@
       pointer-events:none;
     }
 
-    /* barra anos à esquerda */
+    /* Coluna esquerda fixa (título + filtros + anos + topo) */
     .tl-sidebar{
-      position:relative;
+      position:sticky;
+      top:16px;
+      align-self:flex-start;
       z-index:1;
       display:flex;
       flex-direction:column;
-      align-items:flex-start;
-      gap:10px;
-      padding-top:4px;
-      min-width:90px;
+      gap:12px;
+    }
+    .tl-header-block{
+      margin-bottom:4px;
     }
     .tl-title{
-      font-size:1.6rem;
+      font-size:1.4rem;
       letter-spacing:.18em;
       text-transform:uppercase;
       text-shadow:0 0 15px rgba(34,211,238,0.9);
-      margin-bottom:4px;
+      margin-bottom:2px;
     }
     .tl-sub{
-      font-size:.8rem;
+      font-size:.75rem;
       letter-spacing:.24em;
       text-transform:uppercase;
       color:#a5b4fc;
-      margin-bottom:10px;
     }
     .tl-back{
-      margin-top:4px;
+      margin-top:6px;
+      align-self:flex-start;
       padding:5px 12px;
       border-radius:999px;
       border:1px solid rgba(148,163,184,0.7);
@@ -87,41 +92,17 @@
       box-shadow:0 0 16px rgba(59,130,246,0.9);
     }
 
-    .year-nav{
-      margin-top:18px;
+    /* Filtros agora na coluna esquerda */
+    .tl-filters{
+      margin-top:6px;
       display:flex;
       flex-direction:column;
       gap:6px;
-      font-size:.8rem;
-    }
-    .year-link{
-      cursor:pointer;
-      color:#e5e7eb;
-      opacity:.75;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      padding:2px 0;
-    }
-    .year-link.active{
-      opacity:1;
-      font-weight:600;
-      color:#38bdf8;
-    }
-
-    /* filtros em cima da timeline */
-    .tl-main{
-      position:relative;
-      z-index:1;
-    }
-    .tl-filters{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-bottom:14px;
-      justify-content:flex-start;
     }
     .tl-filter{
-      padding:4px 12px;
+      width:100%;
+      text-align:left;
+      padding:5px 12px;
       border-radius:999px;
       border:1px solid rgba(148,163,184,0.7);
       background:rgba(15,23,42,0.85);
@@ -138,7 +119,60 @@
       box-shadow:0 0 14px rgba(59,130,246,0.9);
     }
 
-    /* timeline vertical */
+    /* Navegação de anos */
+    .year-nav{
+      margin-top:10px;
+      padding-top:8px;
+      border-top:1px solid rgba(148,163,184,0.35);
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      font-size:.8rem;
+    }
+    .year-label{
+      font-size:.75rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#9ca3af;
+      margin-bottom:2px;
+    }
+    .year-link{
+      cursor:pointer;
+      color:#e5e7eb;
+      opacity:.75;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      padding:2px 0;
+    }
+    .year-link.active{
+      opacity:1;
+      font-weight:600;
+      color:#38bdf8;
+    }
+
+    /* Botão voltar ao topo */
+    .btn-topo{
+      margin-top:10px;
+      align-self:flex-start;
+      padding:5px 12px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:rgba(15,23,42,0.9);
+      color:#e5e7eb;
+      font-size:.76rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    /* Coluna direita: timeline vertical */
+    .tl-main{
+      position:relative;
+      z-index:1;
+    }
     .tl-timeline{
       position:relative;
       margin-top:4px;
@@ -149,7 +183,7 @@
     .tl-year-block{
       margin-bottom:26px;
     }
-    .tl-year-label{
+    .tl-year-header{
       font-size:.9rem;
       letter-spacing:.16em;
       text-transform:uppercase;
@@ -194,7 +228,7 @@
       font-size:.95rem;
       margin-bottom:2px;
     }
-    .tl-title{
+    .tl-title-text{
       font-size:.88rem;
       margin-bottom:3px;
     }
@@ -219,47 +253,28 @@
     @media(max-width:900px){
       #timeline-section{
         grid-template-columns:1fr;
-        row-gap:16px;
+        row-gap:18px;
       }
       .tl-sidebar{
-        flex-direction:row;
-        align-items:center;
-        justify-content:space-between;
-      }
-      .year-nav{
-        flex-direction:row;
-        flex-wrap:wrap;
-      }
-      .tl-timeline{
-        margin-top:10px;
+        position:static;
+        flex-direction:column;
       }
     }
   </style>
 </head>
 <body>
 
-<section id="timeline-section">
+<section id="timeline-section" id="topo">
   <div class="tl-bg"></div>
 
-  <!-- Lado esquerdo: título + anos -->
+  <!-- ESQUERDA: título + filtros + anos -->
   <aside class="tl-sidebar">
-    <div>
+    <div class="tl-header-block">
       <div class="tl-title">Timeline</div>
       <div class="tl-sub">Formações & Workshops</div>
+      <a href="index.html" class="tl-back">← Voltar</a>
     </div>
-    <a href="index.html" class="tl-back">← Voltar</a>
 
-    <div class="year-nav">
-      <span class="year-link active" data-year="2025">2025</span>
-      <span class="year-link" data-year="2024">2024</span>
-      <span class="year-link" data-year="2023">2023</span>
-      <span class="year-link" data-year="2022">2022</span>
-      <span class="year-link" data-year="2021">2021</span>
-    </div>
-  </aside>
-
-  <!-- Lado direito: filtros + timeline vertical -->
-  <div class="tl-main">
     <div class="tl-filters">
       <button class="tl-filter active" data-filter="all">Tudo</button>
       <button class="tl-filter" data-filter="educacao">Educação</button>
@@ -270,35 +285,45 @@
       <button class="tl-filter" data-filter="online">Cursos Online / Web</button>
     </div>
 
+    <div class="year-nav">
+      <div class="year-label">Anos</div>
+      <span class="year-link active" data-year="2025">2025</span>
+      <span class="year-link" data-year="2024">2024</span>
+      <span class="year-link" data-year="2023">2023</span>
+      <span class="year-link" data-year="2022">2022</span>
+      <span class="year-link" data-year="2021">2021</span>
+    </div>
+
+    <button class="btn-topo" id="btnTopo">
+      ↑ Voltar ao topo
+    </button>
+  </aside>
+
+  <!-- DIREITA: timeline vertical -->
+  <div class="tl-main">
     <div class="tl-timeline">
       <!-- 2025 -->
       <div class="tl-year-block" id="year-2025">
-        <div class="tl-year-label">2025</div>
+        <div class="tl-year-header">2025</div>
 
-        <!-- ASSOCIAÇÃO NATAÇÃO LISBOA -->
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
             <div class="tl-entity">Associação de Natação de Lisboa</div>
-            <div class="tl-title">Curso Elementar de Natação Pura, Natação Adaptada e Águas Abertas + estágio</div>
+            <div class="tl-title-text">Curso Elementar de Natação Pura, Natação Adaptada e Águas Abertas + estágio</div>
             <div class="tl-desc">Formação técnica em ensino de natação, adaptação ao meio aquático e treino em águas abertas.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Natação</span>
-              <span class="tl-tag">Águas Abertas</span>
-              <span class="tl-tag">Ensino</span>
+              <span class="tl-tag">Natação</span><span class="tl-tag">Águas Abertas</span><span class="tl-tag">Ensino</span>
             </div>
           </div>
         </div>
 
-        <!-- WORKVIEW (2025) -->
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
             <div class="tl-entity">Workview</div>
-            <div class="tl-title">Formações em segurança, incêndios e primeiros socorros</div>
+            <div class="tl-title-text">Formações em segurança, incêndios e primeiros socorros</div>
             <div class="tl-desc">Prevenção e combate a incêndios, evacuação de pessoas, primeiros socorros (emergências médicas e SBV) e introdução à segurança e saúde ocupacional.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Segurança</span>
-              <span class="tl-tag">Primeiros Socorros</span>
-              <span class="tl-tag">Saúde Ocupacional</span>
+              <span class="tl-tag">Segurança</span><span class="tl-tag">Primeiros Socorros</span><span class="tl-tag">Saúde Ocupacional</span>
             </div>
           </div>
         </div>
@@ -306,84 +331,70 @@
 
       <!-- 2024 -->
       <div class="tl-year-block" id="year-2024">
-        <div class="tl-year-label">2024</div>
+        <div class="tl-year-header">2024</div>
 
-        <!-- TREINO DE MAR -->
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
             <div class="tl-entity">Treino de Mar</div>
-            <div class="tl-title">Carta de Patrão Local / Curso Vela – Iniciação</div>
+            <div class="tl-title-text">Carta de Patrão Local / Curso Vela – Iniciação</div>
             <div class="tl-desc">Noções de navegação e segurança em meio marítimo, complementando experiência em águas abertas.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Vela</span>
-              <span class="tl-tag">Navegação</span>
+              <span class="tl-tag">Vela</span><span class="tl-tag">Navegação</span>
             </div>
           </div>
         </div>
 
-        <!-- SANTANDER OPEN ACADEMY -->
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
             <div class="tl-entity">Santander | Open Academy</div>
-            <div class="tl-title">Workshop Introdução à AI (Code for ALL) + Excel</div>
-            <div class="tl-desc">Introdução prática a conceitos de Inteligência Artificial e utilização de Excel para análise de dados.</div>
+            <div class="tl-title-text">Workshop Introdução à AI (Code for ALL) + Excel</div>
+            <div class="tl-desc">Introdução a conceitos de Inteligência Artificial e utilização de Excel para análise de dados.</div>
             <div class="tl-tags">
-              <span class="tl-tag">IA</span>
-              <span class="tl-tag">Excel</span>
+              <span class="tl-tag">IA</span><span class="tl-tag">Excel</span>
             </div>
           </div>
         </div>
 
-        <!-- MAGMA STUDIO -->
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
             <div class="tl-entity">Magma Studio</div>
-            <div class="tl-title">Workshops de Gestão Ágil, Excel e Finanças</div>
+            <div class="tl-title-text">Workshops de Gestão Ágil, Excel e Finanças</div>
             <div class="tl-desc">Gestão Ágil de Projetos com a NTT Data; Excel 1.0 e 2.0; finanças pessoais; Matemática e Engenharia com a TAP; Engenharia de Sistemas Ferroviários.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Gestão de Projetos</span>
-              <span class="tl-tag">Excel</span>
-              <span class="tl-tag">Finanças</span>
-              <span class="tl-tag">Engenharia</span>
+              <span class="tl-tag">Gestão de Projetos</span><span class="tl-tag">Excel</span><span class="tl-tag">Finanças</span><span class="tl-tag">Engenharia</span>
             </div>
           </div>
         </div>
 
-        <!-- XIX ENEEB -->
         <div class="tl-item" data-category="engenharia">
           <div class="tl-card">
             <div class="tl-entity">XIX ENEEB</div>
-            <div class="tl-title">Workshop – Modelagem e impressão 3D</div>
+            <div class="tl-title-text">Workshop – Modelagem e impressão 3D</div>
             <div class="tl-desc">Aplicações de impressão 3D em reabilitação e interfaces computacionais para comunicação e controlo.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Impressão 3D</span>
-              <span class="tl-tag">Reabilitação</span>
+              <span class="tl-tag">Impressão 3D</span><span class="tl-tag">Reabilitação</span>
             </div>
           </div>
         </div>
 
-        <!-- TECMINHO -->
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
             <div class="tl-entity">Tecminho</div>
-            <div class="tl-title">Inteligência Artificial aplicada ao Marketing de Conteúdo</div>
+            <div class="tl-title-text">Inteligência Artificial aplicada ao Marketing de Conteúdo</div>
             <div class="tl-desc">Uso de IA para análise e otimização de estratégias de marketing digital.</div>
             <div class="tl-tags">
-              <span class="tl-tag">IA</span>
-              <span class="tl-tag">Marketing</span>
+              <span class="tl-tag">IA</span><span class="tl-tag">Marketing</span>
             </div>
           </div>
         </div>
 
-        <!-- HOSPITAL DA LUZ -->
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
             <div class="tl-entity">Hospital da Luz</div>
-            <div class="tl-title">Inteligência Artificial na área da saúde</div>
+            <div class="tl-title-text">Inteligência Artificial na área da saúde</div>
             <div class="tl-desc">Aplicações de IA em diagnóstico, apoio à decisão clínica e gestão de dados de saúde.</div>
             <div class="tl-tags">
-              <span class="tl-tag">IA</span>
-              <span class="tl-tag">Saúde</span>
+              <span class="tl-tag">IA</span><span class="tl-tag">Saúde</span>
             </div>
           </div>
         </div>
@@ -391,31 +402,26 @@
 
       <!-- 2023 -->
       <div class="tl-year-block" id="year-2023">
-        <div class="tl-year-label">2023</div>
+        <div class="tl-year-header">2023</div>
 
-        <!-- NOVA FCT -->
         <div class="tl-item" data-category="engenharia">
           <div class="tl-card">
             <div class="tl-entity">NOVA FCT</div>
-            <div class="tl-title">JORTC23 de Engenharia Biomédica</div>
+            <div class="tl-title-text">JORTC23 de Engenharia Biomédica</div>
             <div class="tl-desc">Jornadas técnicas focadas em inovação, investigação e aplicações de engenharia biomédica.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Engenharia Biomédica</span>
-              <span class="tl-tag">Investigação</span>
+              <span class="tl-tag">Engenharia Biomédica</span><span class="tl-tag">Investigação</span>
             </div>
           </div>
         </div>
 
-        <!-- CASA EUROPA / LE WAGON (pode abranger 2022/23, fica aqui) -->
         <div class="tl-item" data-category="online">
           <div class="tl-card">
             <div class="tl-entity">Casa Europa, Le Wagon</div>
-            <div class="tl-title">Python, UX/UI e Desenvolvimento Web</div>
-            <div class="tl-desc">Workshop de Análise de Dados com Python; workshop de design para dispositivos móveis (UX/UI); curso de criação de site com HTML & CSS, Bootstrap, PHP, SQL e UX/UI.</div>
+            <div class="tl-title-text">Python, UX/UI e Desenvolvimento Web</div>
+            <div class="tl-desc">Workshop de Análise de Dados com Python; design para dispositivos móveis (UX/UI); curso de criação de sites com HTML & CSS, Bootstrap, PHP, SQL e UX/UI.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Python</span>
-              <span class="tl-tag">UX/UI</span>
-              <span class="tl-tag">Web Dev</span>
+              <span class="tl-tag">Python</span><span class="tl-tag">UX/UI</span><span class="tl-tag">Web Dev</span>
             </div>
           </div>
         </div>
@@ -423,44 +429,37 @@
 
       <!-- 2022 -->
       <div class="tl-year-block" id="year-2022">
-        <div class="tl-year-label">2022</div>
+        <div class="tl-year-header">2022</div>
 
-        <!-- INEM -->
         <div class="tl-item" data-category="saude">
           <div class="tl-card">
             <div class="tl-entity">INEM</div>
-            <div class="tl-title">Formações em reanimação e emergência</div>
-            <div class="tl-desc">Reanimar com INEM; Reanimação de Alto Desempenho; formações relacionadas com COVID‑19; abordagem à pessoa autista; Via Verde AVC e Via Verde Sépsis.</div>
+            <div class="tl-title-text">Formações em reanimação e emergência</div>
+            <div class="tl-desc">Reanimar com INEM; Reanimação de Alto Desempenho; formações sobre COVID‑19; abordagem à pessoa autista; Via Verde AVC e Via Verde Sépsis.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Reanimação</span>
-              <span class="tl-tag">Emergência</span>
-              <span class="tl-tag">INEM</span>
+              <span class="tl-tag">Reanimação</span><span class="tl-tag">Emergência</span><span class="tl-tag">INEM</span>
             </div>
           </div>
         </div>
 
-        <!-- AESP & ISN -->
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
             <div class="tl-entity">AESP & ISN</div>
-            <div class="tl-title">Surf & Rescue</div>
+            <div class="tl-title-text">Surf & Rescue</div>
             <div class="tl-desc">Formação em salvamento em contexto de surf e ambiente marítimo.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Surf</span>
-              <span class="tl-tag">Resgate</span>
+              <span class="tl-tag">Surf</span><span class="tl-tag">Resgate</span>
             </div>
           </div>
         </div>
 
-        <!-- IPS Electromedicina -->
         <div class="tl-item" data-category="engenharia">
           <div class="tl-card">
             <div class="tl-entity">IPS</div>
-            <div class="tl-title">Seminário «Electromedicina: Gestão e Manutenção de Equipamentos Médicos»</div>
-            <div class="tl-desc">Seminário sobre gestão técnica e manutenção de equipamentos médicos (Hospital Garcia de Orta).</div>
+            <div class="tl-title-text">Seminário «Electromedicina: Gestão e Manutenção de Equipamentos Médicos»</div>
+            <div class="tl-desc">Seminário sobre gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Electromedicina</span>
-              <span class="tl-tag">Equipamentos Médicos</span>
+              <span class="tl-tag">Electromedicina</span><span class="tl-tag">Equipamentos Médicos</span>
             </div>
           </div>
         </div>
@@ -468,44 +467,37 @@
 
       <!-- 2021 -->
       <div class="tl-year-block" id="year-2021">
-        <div class="tl-year-label">2021</div>
+        <div class="tl-year-header">2021</div>
 
-        <!-- AFSS -->
         <div class="tl-item" data-category="saude">
           <div class="tl-card">
             <div class="tl-entity">AFSS</div>
-            <div class="tl-title">Formações em SBV, pediatria e EGC</div>
-            <div class="tl-desc">Suporte Básico de Vida com e sem DAE; Suporte Básico de Vida Pediátrico; Primeiros Socorros em Adultos; STOP THE BLEED; Eletrocardiografia Nível I e II.</div>
+            <div class="tl-title-text">Formações em SBV, pediatria e ECG</div>
+            <div class="tl-desc">Suporte Básico de Vida com e sem DAE; SBV Pediátrico; Primeiros Socorros em Adultos; STOP THE BLEED; Eletrocardiografia Nível I e II.</div>
             <div class="tl-tags">
-              <span class="tl-tag">SBV</span>
-              <span class="tl-tag">Pediatria</span>
-              <span class="tl-tag">ECG</span>
+              <span class="tl-tag">SBV</span><span class="tl-tag">Pediatria</span><span class="tl-tag">ECG</span>
             </div>
           </div>
         </div>
 
-        <!-- FEMÉDICA -->
         <div class="tl-item" data-category="saude">
           <div class="tl-card">
             <div class="tl-entity">FEMÉDICA</div>
-            <div class="tl-title">Curso Tripulante de Ambulância de Socorro</div>
+            <div class="tl-title-text">Curso Tripulante de Ambulância de Socorro</div>
             <div class="tl-desc">Formação para atuação em equipas de emergência pré‑hospitalar.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Ambulância</span>
-              <span class="tl-tag">Emergência</span>
+              <span class="tl-tag">Ambulância</span><span class="tl-tag">Emergência</span>
             </div>
           </div>
         </div>
 
-        <!-- 4EMES -->
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
             <div class="tl-entity">4EMES</div>
-            <div class="tl-title">Curso Nadador Salvador</div>
+            <div class="tl-title-text">Curso Nadador Salvador</div>
             <div class="tl-desc">Formação certificada em vigilância balnear e salvamento aquático.</div>
             <div class="tl-tags">
-              <span class="tl-tag">Nadador Salvador</span>
-              <span class="tl-tag">Segurança Aquática</span>
+              <span class="tl-tag">Nadador Salvador</span><span class="tl-tag">Segurança Aquática</span>
             </div>
           </div>
         </div>
@@ -516,7 +508,7 @@
 </section>
 
 <script>
-  // Filtros por categoria
+  // Filtros
   const filterButtons = document.querySelectorAll('.tl-filter');
   const items = document.querySelectorAll('.tl-item');
 
@@ -548,6 +540,11 @@
       yearLinks.forEach(l=>l.classList.remove('active'));
       link.classList.add('active');
     });
+  });
+
+  // Voltar ao topo
+  document.getElementById('btnTopo').addEventListener('click',()=>{
+    window.scrollTo({top:0,behavior:'smooth'});
   });
 </script>
 
