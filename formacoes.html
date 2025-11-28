@@ -43,26 +43,25 @@
       pointer-events:none;
     }
 
-    /* Coluna esquerda STICKY (acompanha o scroll) */
+    /* COLUNA ESQUERDA – tudo normal, sem sticky */
     .tl-sidebar{
-      position:sticky;
-      top:40px;                   /* espaço até ao topo */
+      position:relative;
       align-self:flex-start;
       z-index:1;
       display:flex;
       flex-direction:column;
-      gap:16px;
+      gap:18px;
     }
 
     .tl-header-block{
-      margin-bottom:8px;
+      margin-bottom:6px;
     }
     .tl-title{
       font-size:1.4rem;
       letter-spacing:.18em;
       text-transform:uppercase;
       text-shadow:0 0 15px rgba(34,211,238,0.9);
-      margin-bottom:2px;
+      margin-bottom:4px;
     }
     .tl-sub{
       font-size:.75rem;
@@ -70,9 +69,10 @@
       text-transform:uppercase;
       color:#a5b4fc;
     }
+
     .tl-back{
-      margin-top:12px;
-      align-self:flex-start;
+      display:inline-block;
+      margin-top:14px;
       padding:5px 12px;
       border-radius:999px;
       border:1px solid rgba(148,163,184,0.7);
@@ -91,7 +91,7 @@
       box-shadow:0 0 16px rgba(59,130,246,0.9);
     }
 
-    /* Filtros na esquerda */
+    /* FILTROS */
     .tl-filters{
       display:flex;
       flex-direction:column;
@@ -117,6 +117,7 @@
       box-shadow:0 0 14px rgba(59,130,246,0.9);
     }
 
+    /* ANOS */
     .year-nav{
       padding-top:10px;
       border-top:1px solid rgba(148,163,184,0.35);
@@ -163,7 +164,7 @@
       gap:6px;
     }
 
-    /* Coluna direita – timeline vertical */
+    /* DIREITA – TIMELINE */
     .tl-main{
       position:relative;
       z-index:1;
@@ -250,12 +251,6 @@
         grid-template-columns:1fr;
         row-gap:18px;
       }
-      .tl-sidebar{
-        position:static;
-      }
-      .tl-timeline{
-        margin-top:10px;
-      }
     }
   </style>
 </head>
@@ -264,13 +259,14 @@
 <section id="timeline-section">
   <div class="tl-bg"></div>
 
-  <!-- Esquerda -->
+  <!-- ESQUERDA -->
   <aside class="tl-sidebar">
     <div class="tl-header-block">
       <div class="tl-title">TIMELINE</div>
       <div class="tl-sub">FORMAÇÕES & WORKSHOPS</div>
-      <a href="index.html" class="tl-back">← VOLTAR</a>
     </div>
+
+    <a href="index.html" class="tl-back">← VOLTAR</a>
 
     <div class="tl-filters">
       <button class="tl-filter active" data-filter="all">TUDO</button>
@@ -294,7 +290,7 @@
     <button class="btn-topo" id="btnTopo">↑ VOLTAR AO TOPO</button>
   </aside>
 
-  <!-- Direita -->
+  <!-- DIREITA -->
   <div class="tl-main">
     <div class="tl-timeline">
 
