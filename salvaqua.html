@@ -202,64 +202,22 @@
     });
 
     const leafletPins = {
-      2: [{ nome: "Travessia da Baía 2018", local: "Sesimbra", lat:38.4420, lng:-9.1153 }],
-
-      
-      3: [{ nome: "Prova do Tejo 2019/2021 (José Freitas)﻿", local: "Lisboa (Terreiro do Paço)", lat: 38.7078, lng:-9.1367},
-          { nome: "Travessia da Baía 2019/2022/2023", local: "Sesimbra", lat:38.4420, lng:-9.1153 },
-          { nome: "Milha da Ericeira 2021/2022/2023", local: "Praia dos Pescadores (Ericeira) ", lat:38.9652, lng:-9.4154 },
-          { nome: "Águas Abertas Barragem dos Minutos 2022", local: " Barragem dos Minutos (Montemor-o-novo) ", lat:38.6598, lng:-8.0969 },
-          { nome: "Águas Abertas Fluviário de Mora 2022/2023", local: "Fluviário de Mora", lat:39.0556, lng:-8.0999 },
-          { nome: "Circuito de Águas Abertas do Algarve 2022", local: "Rio Gilão (Tavira)", lat:37.1243, lng:-7.6516 },
-          { nome: "Circuito de Águas Abertas do Algarve 2022", local: "Praia Grande", lat:37.1196, lng:-8.5234 },
-          { nome: "Circuito de Águas Abertas do Algarve 2022", local: "Praia da Rocha (Portimão)", lat:37.1175, lng:-8.5362 },
-          { nome: "Travessia a Nado da Baía de São Martinho do Porto 2023 & Waterproof Challenge 2023", local: "Praia da Rocha (Portimão)", lat:39.5104, lng:-9.1367 },
-          { nome: "Swim Challange Cascais 2023", local: "Praia dos Pescadores (Cascais)", lat:38.6967, lng:-9.4199 },
-          { nome: "Peniche a Nadar 2023", local: "Praia do Molhe Leste (Peniche)", lat:39.3501, lng:-9.4154 },
-          { nome: "Open Water Race 2023", local: "Praia do Creiro (Setúbal)", lat:38.4803, lng:-8.9782 },
-          { nome: "Open Water Swimming World Cup 2023", local: "Parque Urbano de Albarquel (Setúbal)", lat:38.5139, lng:-9.3670 }   
-         ],
-
-      
-      4: [ { nome: "Arrabida Swim Challange 2023", local: "Portinho da Arrábida (Setúbal)", lat: 38.4870, lng: -8.9795 },
-            { nome: "Setúbal Open Water Race 2024/2025", local: "Praia do Creiro (Setúbal)", lat: 38.4803, lng: -8.9782 },
-            { nome: "Circuito Nacional de Águas Abertas 2024 - I Travessia do Trízio & Open de Águas Abertas de Primavera", local: "Zona de lazer do Trízio (Sertã)", lat: 39.7298, lng: -8.2318 },
-            { nome: "Circuito Nacional de Águas Abertas 2024/2025 - XX Prova de Mar Baía de Sines", local: "Baía de Sines", lat: 37.9534, lng: -8.8650 },
-            { nome: "Ocean Global Cascais 2024/2025", local: "Praia dos Pescadores (Cascais)", lat: 38.6967, lng: -9.4199 },
-            { nome: "Circuito Nacional de Águas Abertas 2024/2025 - XVIII Travessia António Bessone Basto", local: "Praia de Santo Amaro (Oeiras)", lat: 38.6806, lng: -9.3114 },
-            { nome: "Águas Abertas Fluviário de Mora 2024/2025", local: "Fluviário de Mora", lat: 39.0556, lng: -8.0999 },
-            { nome: "Circuito Nacional de Águas Abertas 2024 - IV Meeting Águas de Goma", local: "Barragem das Andorinhas (Póvoa de Lanhoso)", lat: 41.6093, lng: -8.2483 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Ilhas", local: "Ilha de Tavira", lat: 37.1009, lng: -7.6407 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Rio Gilão", local: "Rio Gilão (Tavira)", lat: 37.1243, lng: -7.6516 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Praia Grande", local: "Praia Grande (Lagoa)", lat: 37.1196, lng: -8.5234 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Praia da Rocha", local: "Praia da Rocha (Portimão)", lat: 37.1175, lng: -8.5362 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Praia do Alvor", local: "Praia do Alvor", lat: 37.1222, lng: -8.5886 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Praia da Altura", local: "Praia da Altura (Castro Marim)", lat: 37.1699, lng: -7.4979 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Praia de Faro", local: "Praia de Faro", lat: 37.0076, lng: -7.9952 },
-            { nome: "Circuito de Águas Abertas do Algarve 2024/2025 - Praia dos Pescadores", local: "Praia dos Pescadores (Albufeira)", lat: 37.0889, lng: -8.2507 },
-            { nome: "Peniche a Nadar 2024/2025", local: "Praia do Molhe Leste (Peniche)", lat: 39.3501, lng: -9.3670 },
-            { nome: "Circuito Nacional de Águas Abertas 2024 - XIII Travessia do Rio Tua & Open Águas Abertas de Verão", local: "Rio Tua (Mirandela)", lat: 41.4860, lng: -7.1829 },
-            { nome: "Circuito Nacional de Águas Abertas 2024/2025 - Douro Valley - Open Water", local: "Cais da Ferradosa (São João da Pesqueira)", lat: 41.1470, lng: -7.4055 },
-            { nome: "Circuito Nacional de Águas Abertas 2024 - VIII Travessia de Albufeira de Montargil", local: "Albufeira de Montargil", lat: 39.0595, lng: -8.1744 },
-            { nome: "Circuito Nacional de Águas Abertas 2024 - Douro Bridges Porto & Gaia Open Water", local: "Rio Douro (Porto/Gaia)", lat: 41.1403, lng: -8.6109 },
-            { nome: "Circuito Nacional de Águas Abertas 2024 - XIV Torneio de AA do Rio Mondego", local: "Rio Mondego (Coimbra, Parque Verde)", lat: 40.2059, lng: -8.4292 },
-            { nome: "Circuito Nacional de Águas Abertas 2024 - III Waterproof Challange", local: "Baía de São Martinho do Porto", lat: 39.5104, lng: -9.1367 },
-            { nome: "Circuito Nacional de Águas Abertas 2024/2025 - XXXIV Travessia dos Templários", local: "Praia Fluvial de Vila Nova (Templários)", lat: 39.4635, lng: -8.4354 },
-            { nome: "Circuito Nacional de Águas Abertas 2024/2025 - Travessia da Baia de Sesimbra", local: "Baía de Sesimbra", lat: 38.4420, lng: -9.1153 },
-            { nome: "Swim Grand Prix 2024/2025 - Travessia Lisboa-Cascais", local: "Do Cais de Belém à Praia dos Pescadores (Cascais)", lat: 38.6915, lng: -9.2066 },
-            { nome: "Milha da Ericeira 2024", local: "Praia dos Pescadores (Ericeira)", lat: 38.9652, lng: -9.4154 },
-            { nome: "Oeiras Open Water Race 2025", local: "Praia de Caxias (Oeiras)", lat: 38.6987, lng: -9.2792 },
-            { nome: "Algarve 7s Sports Festival Home 2025", local: "Praia de Monte Gordo (Vila Real de Santo António)", lat: 37.1776, lng: -7.4513 }, // open water do Algarve 7s [web:250][web:254]
-            { nome: "Águas Abertas Barragem dos Minutos 2025", local: "Barragem dos Minutos (Montemor-o-Novo)", lat: 38.6598, lng: -8.0969 },
-            { nome: "Open Water Swimming World Cup 2024/2025", local: "Parque Urbano de Albarquel (Setúbal)", lat: 38.5139, lng: -8.9107 },
-            { nome: "Swim Party 10km 2025", local: "De Praia do Carvalho a Praia dos Caneiros (Lagoa, Algarve)", lat: 37.0908, lng: -8.4677 }, // ponto médio aproximado [web:255][web:258][web:264]
-            { nome: "1ª prova de nataçao de águas abertas 2025", local: "Praia Fluvial de Monsaraz", lat: 38.4346, lng: -7.3504 },
-            { nome: "VII Travessia Ricardo Pedroso 2025", local: "Tapada Grande da Mina de São Domingos (Mértola)", lat: 37.6673, lng: -7.5015 }, // praia fluvial Mina de São Domingos [web:256][web:259][web:262]
-            { nome: "Global Ocean Sagres 2025", local: "Praia da Mareta (Sagres)", lat: 37.0054, lng: -8.9401 }
+      2: [
+        { nome: "Campeonato Nacional de Salvamento Aquático de PC 2024/2025", local: "Coruche", lat: 38.9608, lng: -8.5319 },          
+        { nome: "Campeonato Nacional de Salvamento Aquático de PL 2024/2025 & Estágios", local: "Vila Franca de Xira", lat: 38.9567, lng: -8.9890 }, 
+        { nome: "Campeonato Nacional de Salvamento Aquático de Praia 2024", local: "Amieira (Portel)", lat: 38.2922, lng: -7.5483 },    
+        { nome: "Campeonato Nacional de Salvamento Aquático de Praia 2025", local: "Reguengos de Monsaraz", lat: 38.4346, lng: -7.3504 }, 
+        { nome: "O Guardião da Ria 2ª edição ", local: "Faro", lat: 37.0080, lng: -7.9940 }                            
       ],
 
 
       
+      3: [{}],
+
+      
+      4: [{}],
+
+
       5: [{}],
 
       
