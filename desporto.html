@@ -123,22 +123,35 @@
       position: absolute;
       inset: 0;
       display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      background: linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.0));
-      color: #fff;
+      flex-direction: column;        /* empilha logo + texto */
+      align-items: center;           /* centra horizontalmente */
+      justify-content: center;       /* centra verticalmente */
+      background: rgba(255,255,255,0.85);  /* branco translúcido */
+      color: #000000;                /* texto preto */
       font-weight: 600;
       font-size: 1.6em;
       letter-spacing: 1px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.33s;
-      text-shadow: 1px 1px 12px #181818ad;
+      text-shadow: none;             /* remove sombra escura */
       text-align: center;
       z-index: 2;
       padding: 18px 10px;
       box-sizing: border-box;
     }
+    .col:hover .overlay,
+    .col:focus .overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .overlay-logo {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 8px;            /* espaço entre logo e texto */
+    }
+
     .col:hover .overlay,
     .col:focus .overlay {
       opacity: 1;
@@ -257,12 +270,16 @@
       </div>
     </div>
     <!-- Coluna 3 -->
+    <!-- Coluna 3 -->
     <div class="col" tabindex="0" data-link="salvaqua.html">
       <div class="col-inner">
         <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático" />
         <div class="overlay">
-          <img src="Imagem_WhatsApp_2025-10-26_às_00.09.13_5fb53800-removebg-preview.png"
-               style="height:200px; width:200px; align-items: center; justify-content: center; padding: 0 0 0 55px" />
+          <img
+            src="Imagem_WhatsApp_2025-10-26_às_00.09.13_5fb53800-removebg-preview.png"
+            class="overlay-logo"
+            alt="Símbolo Salvamento Aquático"
+          />
           <span>Salvamento Aquático</span>
         </div>
       </div>
