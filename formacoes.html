@@ -45,10 +45,9 @@
       pointer-events:none;
     }
 
-    /* Coluna esquerda fixa (título + filtros + anos + topo) */
+    /* Coluna esquerda – agora normal, sem sticky */
     .tl-sidebar{
-      position:sticky;
-      top:16px;
+      position:relative;
       align-self:flex-start;
       z-index:1;
       display:flex;
@@ -92,7 +91,7 @@
       box-shadow:0 0 16px rgba(59,130,246,0.9);
     }
 
-    /* Filtros agora na coluna esquerda */
+    /* Filtros na esquerda */
     .tl-filters{
       margin-top:6px;
       display:flex;
@@ -119,7 +118,6 @@
       box-shadow:0 0 14px rgba(59,130,246,0.9);
     }
 
-    /* Navegação de anos */
     .year-nav{
       margin-top:10px;
       padding-top:8px;
@@ -150,7 +148,6 @@
       color:#38bdf8;
     }
 
-    /* Botão voltar ao topo */
     .btn-topo{
       margin-top:10px;
       align-self:flex-start;
@@ -168,7 +165,7 @@
       gap:6px;
     }
 
-    /* Coluna direita: timeline vertical */
+    /* Coluna direita – timeline vertical */
     .tl-main{
       position:relative;
       z-index:1;
@@ -256,37 +253,39 @@
         row-gap:18px;
       }
       .tl-sidebar{
-        position:static;
-        flex-direction:column;
+        position:relative;
+      }
+      .tl-timeline{
+        margin-top:10px;
       }
     }
   </style>
 </head>
 <body>
 
-<section id="timeline-section" id="topo">
+<section id="timeline-section">
   <div class="tl-bg"></div>
 
-  <!-- ESQUERDA: título + filtros + anos -->
+  <!-- Esquerda -->
   <aside class="tl-sidebar">
     <div class="tl-header-block">
-      <div class="tl-title">Timeline</div>
-      <div class="tl-sub">Formações & Workshops</div>
+      <div class="tl-title">TIMELINE</div>
+      <div class="tl-sub">FORMAÇÕES & WORKSHOPS</div>
       <a href="index.html" class="tl-back">← Voltar</a>
     </div>
 
     <div class="tl-filters">
-      <button class="tl-filter active" data-filter="all">Tudo</button>
-      <button class="tl-filter" data-filter="educacao">Educação</button>
-      <button class="tl-filter" data-filter="desporto">Natação & Desporto</button>
-      <button class="tl-filter" data-filter="saude">Saúde & Emergência</button>
-      <button class="tl-filter" data-filter="ia">IA & Dados</button>
-      <button class="tl-filter" data-filter="engenharia">Engenharia & Biomédica</button>
-      <button class="tl-filter" data-filter="online">Cursos Online / Web</button>
+      <button class="tl-filter active" data-filter="all">TUDO</button>
+      <button class="tl-filter" data-filter="educacao">EDUCAÇÃO</button>
+      <button class="tl-filter" data-filter="desporto">NATAÇÃO & DESPORTO</button>
+      <button class="tl-filter" data-filter="saude">SAÚDE & EMERGÊNCIA</button>
+      <button class="tl-filter" data-filter="ia">IA & DADOS</button>
+      <button class="tl-filter" data-filter="engenharia">ENGENHARIA & BIOMÉDICA</button>
+      <button class="tl-filter" data-filter="online">CURSOS ONLINE / WEB</button>
     </div>
 
     <div class="year-nav">
-      <div class="year-label">Anos</div>
+      <div class="year-label">ANOS</div>
       <span class="year-link active" data-year="2025">2025</span>
       <span class="year-link" data-year="2024">2024</span>
       <span class="year-link" data-year="2023">2023</span>
@@ -294,14 +293,13 @@
       <span class="year-link" data-year="2021">2021</span>
     </div>
 
-    <button class="btn-topo" id="btnTopo">
-      ↑ Voltar ao topo
-    </button>
+    <button class="btn-topo" id="btnTopo">↑ VOLTAR AO TOPO</button>
   </aside>
 
-  <!-- DIREITA: timeline vertical -->
+  <!-- Direita -->
   <div class="tl-main">
     <div class="tl-timeline">
+
       <!-- 2025 -->
       <div class="tl-year-block" id="year-2025">
         <div class="tl-year-header">2025</div>
@@ -457,7 +455,7 @@
           <div class="tl-card">
             <div class="tl-entity">IPS</div>
             <div class="tl-title-text">Seminário «Electromedicina: Gestão e Manutenção de Equipamentos Médicos»</div>
-            <div class="tl-desc">Seminário sobre gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.</div>
+            <div class="tl-desc">Gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.</div>
             <div class="tl-tags">
               <span class="tl-tag">Electromedicina</span><span class="tl-tag">Equipamentos Médicos</span>
             </div>
@@ -484,7 +482,7 @@
           <div class="tl-card">
             <div class="tl-entity">FEMÉDICA</div>
             <div class="tl-title-text">Curso Tripulante de Ambulância de Socorro</div>
-            <div class="tl-desc">Formação para atuação em equipas de emergência pré‑hospitalar.</div>
+            <div class="tl-desc">Atuação em equipas de emergência pré‑hospitalar.</div>
             <div class="tl-tags">
               <span class="tl-tag">Ambulância</span><span class="tl-tag">Emergência</span>
             </div>
@@ -519,11 +517,7 @@
       btn.classList.add('active');
       items.forEach(it=>{
         const iCat = it.getAttribute('data-category');
-        if(cat === 'all' || iCat === cat){
-          it.style.display = '';
-        } else {
-          it.style.display = 'none';
-        }
+        it.style.display = (cat === 'all' || iCat === cat) ? '' : 'none';
       });
     });
   });
