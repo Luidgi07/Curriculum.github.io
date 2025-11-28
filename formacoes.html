@@ -43,7 +43,7 @@
       pointer-events:none;
     }
 
-    /* COLUNA ESQUERDA (tudo desce com a página) */
+    /* COLUNA ESQUERDA */
     .tl-sidebar{
       position:relative;
       align-self:flex-start;
@@ -147,7 +147,7 @@
       color:#38bdf8;
     }
 
-    /* BOTÃO TOPO (usado em baixo) */
+    /* BOTÃO TOPO */
     .btn-topo{
       margin-top:18px;
       padding:6px 18px;
@@ -221,11 +221,28 @@
       border:1px solid rgba(148,163,184,0.4);
       box-shadow:0 6px 18px rgba(15,23,42,0.9);
     }
+
+    /* Cabeçalho do card com logo */
+    .tl-card-header{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:4px;
+    }
+    .tl-logo{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      object-fit:contain;
+      background:#0b1220;
+      padding:3px;
+      box-shadow:0 0 8px rgba(15,23,42,0.9);
+    }
     .tl-entity{
       font-weight:700;
       font-size:.95rem;
-      margin-bottom:2px;
     }
+
     .tl-title-text{
       font-size:.88rem;
       margin-bottom:3px;
@@ -300,7 +317,10 @@
 
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
-            <div class="tl-entity">Associação de Natação de Lisboa</div>
+            <div class="tl-card-header">
+              <img src="logos/anl.png" alt="Associação de Natação de Lisboa" class="tl-logo">
+              <div class="tl-entity">Associação de Natação de Lisboa</div>
+            </div>
             <div class="tl-title-text">Curso Elementar de Natação Pura, Natação Adaptada e Águas Abertas + estágio</div>
             <div class="tl-desc">Formação técnica em ensino de natação, adaptação ao meio aquático e treino em águas abertas.</div>
             <div class="tl-tags">
@@ -311,7 +331,10 @@
 
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
-            <div class="tl-entity">Workview</div>
+            <div class="tl-card-header">
+              <img src="logos/workview.png" alt="Workview" class="tl-logo">
+              <div class="tl-entity">Workview</div>
+            </div>
             <div class="tl-title-text">Formações em segurança, incêndios e primeiros socorros</div>
             <div class="tl-desc">Prevenção e combate a incêndios, evacuação de pessoas, primeiros socorros (emergências médicas e SBV) e introdução à segurança e saúde ocupacional.</div>
             <div class="tl-tags">
@@ -327,7 +350,10 @@
 
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
-            <div class="tl-entity">Treino de Mar</div>
+            <div class="tl-card-header">
+              <img src="logos/treino-mar.png" alt="Treino de Mar" class="tl-logo">
+              <div class="tl-entity">Treino de Mar</div>
+            </div>
             <div class="tl-title-text">Carta de Patrão Local / Curso Vela – Iniciação</div>
             <div class="tl-desc">Noções de navegação e segurança em meio marítimo, complementando experiência em águas abertas.</div>
             <div class="tl-tags">
@@ -338,7 +364,10 @@
 
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
-            <div class="tl-entity">Santander | Open Academy</div>
+            <div class="tl-card-header">
+              <img src="logos/santander.png" alt="Santander Open Academy" class="tl-logo">
+              <div class="tl-entity">Santander | Open Academy</div>
+            </div>
             <div class="tl-title-text">Workshop Introdução à AI (Code for ALL) + Excel</div>
             <div class="tl-desc">Introdução a conceitos de Inteligência Artificial e utilização de Excel para análise de dados.</div>
             <div class="tl-tags">
@@ -349,7 +378,10 @@
 
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
-            <div class="tl-entity">Magma Studio</div>
+            <div class="tl-card-header">
+              <img src="logos/magma.png" alt="Magma Studio" class="tl-logo">
+              <div class="tl-entity">Magma Studio</div>
+            </div>
             <div class="tl-title-text">Workshops de Gestão Ágil, Excel e Finanças</div>
             <div class="tl-desc">Gestão Ágil de Projetos com a NTT Data; Excel 1.0 e 2.0; finanças pessoais; Matemática e Engenharia com a TAP; Engenharia de Sistemas Ferroviários.</div>
             <div class="tl-tags">
@@ -360,7 +392,10 @@
 
         <div class="tl-item" data-category="engenharia">
           <div class="tl-card">
-            <div class="tl-entity">XIX ENEEB</div>
+            <div class="tl-card-header">
+              <img src="logos/eneeb.png" alt="XIX ENEEB" class="tl-logo">
+              <div class="tl-entity">XIX ENEEB</div>
+            </div>
             <div class="tl-title-text">Workshop – Modelagem e impressão 3D</div>
             <div class="tl-desc">Aplicações de impressão 3D em reabilitação e interfaces computacionais para comunicação e controlo.</div>
             <div class="tl-tags">
@@ -371,7 +406,10 @@
 
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
-            <div class="tl-entity">Tecminho</div>
+            <div class="tl-card-header">
+              <img src="logos/tecminho.png" alt="Tecminho" class="tl-logo">
+              <div class="tl-entity">Tecminho</div>
+            </div>
             <div class="tl-title-text">Inteligência Artificial aplicada ao Marketing de Conteúdo</div>
             <div class="tl-desc">Uso de IA para análise e otimização de estratégias de marketing digital.</div>
             <div class="tl-tags">
@@ -382,7 +420,10 @@
 
         <div class="tl-item" data-category="ia">
           <div class="tl-card">
-            <div class="tl-entity">Hospital da Luz</div>
+            <div class="tl-card-header">
+              <img src="logos/hospital-luz.png" alt="Hospital da Luz" class="tl-logo">
+              <div class="tl-entity">Hospital da Luz</div>
+            </div>
             <div class="tl-title-text">Inteligência Artificial na área da saúde</div>
             <div class="tl-desc">Aplicações de IA em diagnóstico, apoio à decisão clínica e gestão de dados de saúde.</div>
             <div class="tl-tags">
@@ -398,7 +439,10 @@
 
         <div class="tl-item" data-category="engenharia">
           <div class="tl-card">
-            <div class="tl-entity">NOVA FCT</div>
+            <div class="tl-card-header">
+              <img src="logos/nova-fct.png" alt="NOVA FCT" class="tl-logo">
+              <div class="tl-entity">NOVA FCT</div>
+            </div>
             <div class="tl-title-text">JORTC23 de Engenharia Biomédica</div>
             <div class="tl-desc">Jornadas técnicas focadas em inovação, investigação e aplicações de engenharia biomédica.</div>
             <div class="tl-tags">
@@ -409,9 +453,12 @@
 
         <div class="tl-item" data-category="online">
           <div class="tl-card">
-            <div class="tl-entity">Casa Europa, Le Wagon</div>
+            <div class="tl-card-header">
+              <img src="logos/le-wagon.png" alt="Casa Europa / Le Wagon" class="tl-logo">
+              <div class="tl-entity">Casa Europa, Le Wagon</div>
+            </div>
             <div class="tl-title-text">Python, UX/UI e Desenvolvimento Web</div>
-            <div class="tl-desc">Workshop de Análise de Dados com Python; design para dispositivos móveis (UX/UI); curso de criação de sites com HTML & CSS, Bootstrap, PHP, SQL e UX/UI.</div>
+            <div class="tl-desc">Análise de Dados com Python; design para dispositivos móveis (UX/UI); criação de sites com HTML & CSS, Bootstrap, PHP, SQL e UX/UI.</div>
             <div class="tl-tags">
               <span class="tl-tag">Python</span><span class="tl-tag">UX/UI</span><span class="tl-tag">Web Dev</span>
             </div>
@@ -425,7 +472,10 @@
 
         <div class="tl-item" data-category="saude">
           <div class="tl-card">
-            <div class="tl-entity">INEM</div>
+            <div class="tl-card-header">
+              <img src="logos/inem.png" alt="INEM" class="tl-logo">
+              <div class="tl-entity">INEM</div>
+            </div>
             <div class="tl-title-text">Formações em reanimação e emergência</div>
             <div class="tl-desc">Reanimar com INEM; Reanimação de Alto Desempenho; formações sobre COVID‑19; abordagem à pessoa autista; Via Verde AVC e Via Verde Sépsis.</div>
             <div class="tl-tags">
@@ -436,7 +486,10 @@
 
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
-            <div class="tl-entity">AESP & ISN</div>
+            <div class="tl-card-header">
+              <img src="logos/aesp-isn.png" alt="AESP & ISN" class="tl-logo">
+              <div class="tl-entity">AESP & ISN</div>
+            </div>
             <div class="tl-title-text">Surf & Rescue</div>
             <div class="tl-desc">Formação em salvamento em contexto de surf e ambiente marítimo.</div>
             <div class="tl-tags">
@@ -447,7 +500,10 @@
 
         <div class="tl-item" data-category="engenharia">
           <div class="tl-card">
-            <div class="tl-entity">IPS</div>
+            <div class="tl-card-header">
+              <img src="logos/ips.png" alt="IPS" class="tl-logo">
+              <div class="tl-entity">IPS</div>
+            </div>
             <div class="tl-title-text">Seminário «Electromedicina: Gestão e Manutenção de Equipamentos Médicos»</div>
             <div class="tl-desc">Gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.</div>
             <div class="tl-tags">
@@ -463,7 +519,10 @@
 
         <div class="tl-item" data-category="saude">
           <div class="tl-card">
-            <div class="tl-entity">AFSS</div>
+            <div class="tl-card-header">
+              <img src="logos/afss.png" alt="AFSS" class="tl-logo">
+              <div class="tl-entity">AFSS</div>
+            </div>
             <div class="tl-title-text">Formações em SBV, pediatria e ECG</div>
             <div class="tl-desc">SBV com e sem DAE; SBV Pediátrico; Primeiros Socorros em Adultos; STOP THE BLEED; Eletrocardiografia Nível I e II.</div>
             <div class="tl-tags">
@@ -474,7 +533,10 @@
 
         <div class="tl-item" data-category="saude">
           <div class="tl-card">
-            <div class="tl-entity">FEMÉDICA</div>
+            <div class="tl-card-header">
+              <img src="logos/femedica.png" alt="FEMÉDICA" class="tl-logo">
+              <div class="tl-entity">FEMÉDICA</div>
+            </div>
             <div class="tl-title-text">Curso Tripulante de Ambulância de Socorro</div>
             <div class="tl-desc">Atuação em equipas de emergência pré‑hospitalar.</div>
             <div class="tl-tags">
@@ -485,7 +547,10 @@
 
         <div class="tl-item" data-category="desporto">
           <div class="tl-card">
-            <div class="tl-entity">4EMES</div>
+            <div class="tl-card-header">
+              <img src="logos/4emes.png" alt="4EMES" class="tl-logo">
+              <div class="tl-entity">4EMES</div>
+            </div>
             <div class="tl-title-text">Curso Nadador Salvador</div>
             <div class="tl-desc">Formação certificada em vigilância balnear e salvamento aquático.</div>
             <div class="tl-tags">
