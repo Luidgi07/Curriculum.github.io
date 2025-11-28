@@ -101,16 +101,34 @@
       z-index: 1;
     }
 
-    .skill-lines {
+    /* Linhas entre os nós (CSS, sem SVG) */
+    .skill-line {
       position: absolute;
-      inset: 0;
+      height: 2px;
+      background: rgba(191, 219, 254, 0.55);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.9);
+      transform-origin: left center;
     }
-
-    .skill-lines line {
-      stroke: rgba(191, 219, 254, 0.55);
-      stroke-width: 2.2;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.9));
+    /* central ~50%/50%, nós nos cantos → ajusta largura/ângulo à tua preferência */
+    .line-soft {
+      left: 50%; top: 50%;
+      width: 260px;
+      transform: rotate(-30deg);
+    }
+    .line-tech {
+      left: 50%; top: 50%;
+      width: 260px;
+      transform: rotate(-150deg);
+    }
+    .line-lang {
+      left: 50%; top: 50%;
+      width: 260px;
+      transform: rotate(30deg);
+    }
+    .line-sport {
+      left: 50%; top: 50%;
+      width: 260px;
+      transform: rotate(150deg);
     }
 
     /* Nós */
@@ -234,7 +252,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Scrollbar discreta */
     .skill-card-wrapper::-webkit-scrollbar { width: 6px; }
     .skill-card-wrapper::-webkit-scrollbar-track { background: transparent; }
     .skill-card-wrapper::-webkit-scrollbar-thumb {
@@ -242,7 +259,6 @@
       border-radius: 999px;
     }
 
-    /* Responsivo */
     @media (max-width: 900px) {
       #skills-section {
         grid-template-columns: 1fr;
@@ -262,7 +278,6 @@
   <div class="skills-bg-overlay"></div>
 
   <div class="skills-top-bar">
-    <!-- altera o href para voltar ao teu index -->
     <a href="index.html">← Voltar</a>
   </div>
 
@@ -272,16 +287,15 @@
   <!-- Árvore -->
   <div class="skill-tree-container">
 
-    <svg class="skill-lines" viewBox="0 0 800 400" preserveAspectRatio="none">
-      <line x1="400" y1="200" x2="200" y2="80" />
-      <line x1="400" y1="200" x2="600" y2="80" />
-      <line x1="400" y1="200" x2="200" y2="320" />
-      <line x1="400" y1="200" x2="600" y2="320" />
-    </svg>
-
     <div class="skill-node central active-node" data-target="card-overview">
       <span>Skills</span>
     </div>
+
+    <!-- Linhas em CSS -->
+    <div class="skill-line line-soft"></div>
+    <div class="skill-line line-tech"></div>
+    <div class="skill-line line-lang"></div>
+    <div class="skill-line line-sport"></div>
 
     <div class="skill-node node-soft" data-target="card-soft">
       <span>Soft Skills</span>
@@ -401,24 +415,20 @@
 </section>
 
 <script>
-  // trocar cartões ao clicar nos nós
   const nodes = document.querySelectorAll('.skill-node');
   const cards = document.querySelectorAll('.skill-card');
 
   nodes.forEach(node => {
     node.addEventListener('click', () => {
       const targetId = node.getAttribute('data-target');
-
       cards.forEach(card => {
         card.classList.toggle('active', card.id === targetId);
       });
-
       nodes.forEach(n => n.classList.remove('active-node'));
       node.classList.add('active-node');
     });
   });
 
-  // criar orbes de nível
   const orbContainers = document.querySelectorAll('.skill-orbs');
   orbContainers.forEach(container => {
     const level = parseInt(container.getAttribute('data-level'), 10) || 0;
