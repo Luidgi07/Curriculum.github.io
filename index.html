@@ -360,6 +360,8 @@ body.gradient-fade::after { opacity: 1; }
   display: grid;
   grid-template-columns: 340px 1.2fr 220px 360px;
   gap: 26px;
+  align-items: start;         
+
 }
 
 /* imagem principal */
@@ -443,18 +445,15 @@ body.gradient-fade::after { opacity: 1; }
   border: 2px solid #42aaff;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-  height: 100%;              /* ocupa a mesma altura da linha do grid */
-  max-height: 100%;          /* não passa o texto ao lado */
+  max-height: 100%;           /* não passa a altura da linha (texto) */
 }
 
-/* garante que o vídeo se encaixa na altura da .video-slot */
-.video-slot video,
-.video-slot iframe {
+.video-slot video {
   width: 100%;
   height: 100%;
-  display: block;
-  object-fit: cover;         /* enche o espaço mantendo proporção */
+  object-fit: cover;          /* corta um bocadinho, mas respeita a altura */
 }
+
 
 
 /* ===== UX HINT ===== */
