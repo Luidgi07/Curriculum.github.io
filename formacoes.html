@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Timeline – Percurso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top,#1c3d5a 0%,#020617 55%,#000 100%);
+      color:#f9fafb;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* Container principal */
+    #timeline-section{
+      position:relative;
+      width:min(1180px,100%);
+      padding:40px 4vw 38px;
+      background:linear-gradient(135deg,rgba(10,20,40,0.97),rgba(1,6,20,0.96));
+      border-radius:26px;
+      box-shadow:0 0 40px rgba(0,0,0,0.85);
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:auto auto 1fr;
+      row-gap:18px;
+    }
+
+    .tl-bg{
+      position:absolute;
+      inset:-40px;
+      background:
+        radial-gradient(circle at 10% 20%,rgba(45,212,191,0.25),transparent 55%),
+        radial-gradient(circle at 85% 80%,rgba(56,189,248,0.3),transparent 55%);
+      opacity:0.8;
+      mix-blend-mode:screen;
+      pointer-events:none;
+    }
+
+    .tl-header{
+      position:relative;
+      z-index:1;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:4px;
+    }
+    .tl-title{
+      font-size:2.2rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      text-shadow:0 0 15px rgba(34,211,238,0.9);
+    }
+    .tl-sub{
+      font-size:.9rem;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:#a5b4fc;
+    }
+    .tl-back{
+      padding:6px 14px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      color:#e5e7eb;
+      text-decoration:none;
+      font-size:.8rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      background:radial-gradient(circle at 0 0,rgba(148,163,184,0.45),transparent 60%);
+      box-shadow:0 0 10px rgba(15,23,42,0.9);
+      transition:background .2s,transform .2s,box-shadow .2s;
+    }
+    .tl-back:hover{
+      background:radial-gradient(circle at 0 0,rgba(96,165,250,0.9),transparent 60%);
+      transform:translateY(-1px);
+      box-shadow:0 0 16px rgba(59,130,246,0.9);
+    }
+
+    /* Filtros */
+    .tl-filters{
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:8px;
+    }
+    .tl-filter{
+      padding:5px 14px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:rgba(15,23,42,0.85);
+      color:#e5e7eb;
+      font-size:.78rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:background .18s,border-color .18s,box-shadow .18s;
+    }
+    .tl-filter.active{
+      background:linear-gradient(135deg,#14aaff 40%,#75d5ff 120%);
+      border-color:#e5e7eb;
+      box-shadow:0 0 14px rgba(59,130,246,0.9);
+    }
+
+    /* Área da timeline */
+    .tl-main{
+      position:relative;
+      z-index:1;
+      margin-top:4px;
+      display:grid;
+      grid-template-rows:auto minmax(170px,1fr);
+      row-gap:16px;
+    }
+
+    .tl-track-wrapper{
+      position:relative;
+      overflow-x:auto;
+      padding-bottom:10px;
+    }
+    .tl-track{
+      position:relative;
+      height:140px;
+      min-width:900px;
+      display:flex;
+      align-items:center;
+      padding:0 40px;
+    }
+    .tl-line{
+      position:absolute;
+      left:40px;
+      right:40px;
+      top:50%;
+      height:3px;
+      background:linear-gradient(90deg,rgba(59,130,246,0.1),rgba(56,189,248,0.9),rgba(59,130,246,0.1));
+      box-shadow:0 0 12px rgba(56,189,248,0.9);
+    }
+
+    .tl-node{
+      position:relative;
+      flex:0 0 auto;
+      width:120px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      margin:0 24px;
+      cursor:pointer;
+    }
+
+    .tl-dot{
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      border:2px solid rgba(191,219,254,0.9);
+      background:radial-gradient(circle at 30% 20%,#ffffff 0,#67e8f9 35%,#0b1120 85%);
+      box-shadow:0 0 16px rgba(56,189,248,0.9);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+
+    .tl-dot::after{
+      content:"";
+      position:absolute;
+      inset:30%;
+      border-radius:50%;
+      background:radial-gradient(circle,#0f172a 0,#1d4ed8 80%);
+      opacity:.7;
+    }
+
+    .tl-node[data-category="educacao"] .tl-dot{border-color:#a5b4fc;}
+    .tl-node[data-category="formacao"] .tl-dot{border-color:#22c55e;}
+    .tl-node[data-category="experiencia"] .tl-dot{border-color:#facc15;}
+    .tl-node[data-category="desporto"] .tl-dot{border-color:#f97316;}
+
+    .tl-node.active .tl-dot{
+      transform:scale(1.15);
+      box-shadow:0 0 22px rgba(34,211,238,1);
+    }
+
+    .tl-year{
+      font-size:.78rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:#9ca3af;
+    }
+    .tl-label{
+      font-size:.9rem;
+      text-align:center;
+      max-width:120px;
+    }
+
+    /* Painel de detalhe */
+    .tl-detail{
+      position:relative;
+      background:rgba(15,23,42,0.94);
+      border-radius:20px;
+      padding:18px 22px;
+      display:grid;
+      grid-template-columns:1.3fr 0.9fr;
+      column-gap:18px;
+      box-shadow:0 0 24px rgba(15,23,42,0.95);
+      min-height:170px;
+    }
+    .tl-detail-main h2{
+      margin-bottom:4px;
+      font-size:1.28rem;
+    }
+    .tl-detail-main .tl-detail-meta{
+      font-size:.85rem;
+      color:#9ca3af;
+      margin-bottom:8px;
+    }
+    .tl-detail-main ul{
+      margin-left:18px;
+      font-size:.9rem;
+      color:#e5e7eb;
+    }
+    .tl-tags{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+    .tl-tag{
+      padding:3px 9px;
+      border-radius:999px;
+      font-size:.75rem;
+      background:rgba(37,99,235,0.25);
+      border:1px solid rgba(129,140,248,0.7);
+      color:#e5e7eb;
+    }
+
+    .tl-detail-side{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:flex-end;
+      justify-content:space-between;
+    }
+    .tl-badge{
+      padding:3px 8px;
+      border-radius:999px;
+      font-size:.75rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      border:1px solid rgba(148,163,184,0.8);
+      color:#e5e7eb;
+      background:rgba(15,23,42,0.9);
+    }
+
+    .tl-media{
+      width:100%;
+      height:105px;
+      border-radius:14px;
+      border:1.5px solid rgba(56,189,248,0.9);
+      background:radial-gradient(circle at 20% 20%,rgba(59,130,246,0.6),rgba(15,23,42,0.9));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.82rem;
+      color:#e5f2ff;
+      box-shadow:0 0 16px rgba(8,47,73,0.9);
+    }
+
+    /* Responsivo */
+    @media (max-width:900px){
+      #timeline-section{
+        padding:32px 4vw 32px;
+      }
+      .tl-detail{
+        grid-template-columns:1fr;
+        row-gap:10px;
+      }
+      .tl-detail-side{
+        align-items:flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<section id="timeline-section">
+  <div class="tl-bg"></div>
+
+  <div class="tl-header">
+    <div>
+      <div class="tl-title">Timeline</div>
+      <div class="tl-sub">Campanha Académica & Profissional</div>
+    </div>
+    <a href="index.html" class="tl-back">← Voltar</a>
+  </div>
+
+  <!-- Filtros -->
+  <div class="tl-filters">
+    <button class="tl-filter active" data-filter="all">Tudo</button>
+    <button class="tl-filter" data-filter="educacao">Educação</button>
+    <button class="tl-filter" data-filter="formacao">Formações</button>
+    <button class="tl-filter" data-filter="experiencia">Experiências</button>
+    <button class="tl-filter" data-filter="desporto">Desporto</button>
+  </div>
+
+  <!-- Timeline + detalhe -->
+  <div class="tl-main">
+    <div class="tl-track-wrapper">
+      <div class="tl-track" id="tlTrack">
+        <div class="tl-line"></div>
+
+        <!-- Nós da timeline -->
+        <div class="tl-node active"
+             data-id="secundario"
+             data-category="educacao">
+          <div class="tl-year">2019–2022</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Ensino Secundário<br>Ciências e Tecnologias</div>
+        </div>
+
+        <div class="tl-node"
+             data-id="licenciatura"
+             data-category="educacao">
+          <div class="tl-year">2022–2025</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Licenciatura<br>Tecnologia Biomédica</div>
+        </div>
+
+        <div class="tl-node"
+             data-id="workshops-sinais"
+             data-category="formacao">
+          <div class="tl-year">2023–2024</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Workshops de<br>Sinais Biomédicos</div>
+        </div>
+
+        <div class="tl-node"
+             data-id="formacoes-online"
+             data-category="formacao">
+          <div class="tl-year">2023–2025</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Cursos Online<br>Python / ML / Saúde</div>
+        </div>
+
+        <div class="tl-node"
+             data-id="estagios"
+             data-category="experiencia">
+          <div class="tl-year">2024–2025</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Estágios e<br>Projetos em Contexto Real</div>
+        </div>
+
+        <div class="tl-node"
+             data-id="desporto"
+             data-category="desporto">
+          <div class="tl-year">2017–hoje</div>
+          <div class="tl-dot"></div>
+          <div class="tl-label">Natação Pura,<br>Águas Abertas & Salvamento</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Painel de detalhe -->
+    <div class="tl-detail" id="tlDetail">
+      <!-- Conteúdo preenchido por JS -->
+    </div>
+  </div>
+</section>
+
+<script>
+  // Dados dos eventos (personaliza à vontade)
+  const TL_DATA = {
+    secundario: {
+      titulo: "Ensino Secundário – Ciências e Tecnologias",
+      meta: "2019–2022 · Escola Secundária · Área de Ciências e Tecnologias",
+      bullets: [
+        "Formação sólida em matemática, física e química, base para a transição para tecnologia biomédica.",
+        "Projetos escolares focados em ciência aplicada e resolução de problemas em equipa.",
+        "Primeiros contactos com programação e pensamento algorítmico."
+      ],
+      tags: ["Matemática", "Física", "Ciências", "Trabalho em Equipa"],
+      badge: "Fundação",
+      media: "Início da jornada académica na área de ciência e tecnologia."
+    },
+    licenciatura: {
+      titulo: "Licenciatura em Tecnologia Biomédica",
+      meta: "2022–2025 · Instituto Politécnico · Tecnologia e Saúde",
+      bullets: [
+        "Estudo de eletrónica, instrumentação biomédica e processamento de sinais fisiológicos (ECG, EEG, etc.).",
+        "Desenvolvimento de projetos com Python para análise de dados biomédicos e criação de ferramentas de monitorização.",
+        "Trabalho em equipa multidisciplinar, ligando engenharia, saúde e investigação."
+      ],
+      tags: ["Tecnologia Biomédica", "Python", "Sinais Biomédicos", "Eletrónica"],
+      badge: "Core Académico",
+      media: "Licenciatura orientada para a interseção entre engenharia e cuidados de saúde."
+    },
+    "workshops-sinais": {
+      titulo: "Workshops de Sinais Biomédicos",
+      meta: "2023–2024 · Formações práticas e sessões técnicas",
+      bullets: [
+        "Participação em workshops focados em aquisição, filtragem e análise de sinais ECG, EEG e outros biosinais.",
+        "Aplicação de técnicas como filtragem digital, FFT e deteção de eventos em ambientes laboratoriais.",
+        "Exploração de ferramentas de software específicas para análise de sinais médicos."
+      ],
+      tags: ["Workshops", "ECG / EEG", "Processamento de Sinal", "Laboratório"],
+      badge: "Especialização",
+      media: "Formações focadas em competências práticas de análise de sinais biomédicos."
+    },
+    "formacoes-online": {
+      titulo: "Formações Online em Python, ML e Saúde Digital",
+      meta: "2023–2025 · Cursos complementares",
+      bullets: [
+        "Cursos online em Python avançado para análise de dados e visualização.",
+        "Introdução a machine learning aplicado a dados biomédicos e monitorização remota.",
+        "Exploração de temas como telemedicina, dispositivos wearable e saúde digital."
+      ],
+      tags: ["Python Avançado", "Machine Learning", "Saúde Digital", "Cursos Online"],
+      badge: "Aprendizagem Contínua",
+      media: "Cursos auto-dirigidos para aprofundar competências técnicas além da licenciatura."
+    },
+    estagios: {
+      titulo: "Estágios e Projetos em Contexto Real",
+      meta: "2024–2025 · Ambientes clínicos e I&D",
+      bullets: [
+        "Integração em equipas multidisciplinares para desenvolvimento e teste de soluções biomédicas.",
+        "Aplicação de conhecimentos de sinais, eletrónica e programação em casos reais.",
+        "Desenvolvimento de competências de comunicação, gestão de tempo e adaptação a desafios práticos."
+      ],
+      tags: ["Estágios", "I&D", "Aplicação Prática", "Comunicação"],
+      badge: "Experiência Real",
+      media: "Primeiras experiências profissionais diretamente ligadas à tecnologia biomédica."
+    },
+    desporto: {
+      titulo: "Natação, Águas Abertas & Salvamento Aquático",
+      meta: "2017–hoje · Competições em piscina, mar e salvamento desportivo",
+      bullets: [
+        "Participação regular em provas de natação pura e águas abertas (1.5 km a 10 km).",
+        "Treino e competições em salvamento aquático desportivo, reforçando responsabilidade e foco sob pressão.",
+        "Desenvolvimento de elevada resistência cardiovascular, disciplina e capacidade de trabalho a longo prazo."
+      ],
+      tags: ["Natação", "Águas Abertas", "Salvamento", "Resistência", "Disciplina"],
+      badge: "Desenvolvimento Físico & Mental",
+      media: "Percurso desportivo paralelo à formação académica, complementando capacidades técnicas."
+    }
+  };
+
+  const track = document.getElementById("tlTrack");
+  const nodes = track.querySelectorAll(".tl-node");
+  const detail = document.getElementById("tlDetail");
+  const filters = document.querySelectorAll(".tl-filter");
+
+  function renderDetail(id){
+    const data = TL_DATA[id];
+    if(!data) return;
+    detail.innerHTML = `
+      <div class="tl-detail-main">
+        <h2>${data.titulo}</h2>
+        <div class="tl-detail-meta">${data.meta}</div>
+        <ul>
+          ${data.bullets.map(b => `<li>${b}</li>`).join("")}
+        </ul>
+        <div class="tl-tags">
+          ${data.tags.map(t => `<span class="tl-tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="tl-detail-side">
+        <div class="tl-badge">${data.badge}</div>
+        <div class="tl-media">
+          ${data.media}
+        </div>
+      </div>
+    `;
+  }
+
+  // ativar primeiro nó
+  renderDetail("secundario");
+
+  nodes.forEach(node=>{
+    node.addEventListener("click", ()=>{
+      nodes.forEach(n=>n.classList.remove("active"));
+      node.classList.add("active");
+      const id = node.getAttribute("data-id");
+      renderDetail(id);
+
+      // centra o nó selecionado
+      const wrapper = node.closest(".tl-track-wrapper");
+      const rect = node.getBoundingClientRect();
+      const wrapRect = wrapper.getBoundingClientRect();
+      const offset = rect.left - (wrapRect.left + wrapRect.width/2 - rect.width/2);
+      wrapper.scrollBy({left: offset, behavior:"smooth"});
+    });
+  });
+
+  // Filtros
+  filters.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const cat = btn.getAttribute("data-filter");
+      filters.forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+
+      nodes.forEach(node=>{
+        const nCat = node.getAttribute("data-category");
+        if(cat === "all" || nCat === cat){
+          node.style.opacity = "1";
+          node.style.pointerEvents = "auto";
+        }else{
+          node.style.opacity = ".25";
+          node.style.pointerEvents = "none";
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
