@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Habilidades – Skill Tree</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1c3d5a 0%, #020617 55%, #000 100%);
+      color: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Container geral */
+    #skills-section {
+      position: relative;
+      width: min(1100px, 100%);
+      padding: 40px 5vw 50px;
+      background: linear-gradient(135deg, rgba(10, 20, 40, 0.96), rgba(2, 6, 23, 0.96));
+      border-radius: 26px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .skills-bg-overlay {
+      position: absolute;
+      inset: -20px;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(45, 212, 191, 0.25), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.3), transparent 55%);
+      opacity: 0.65;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .skills-title {
+      grid-column: 1 / span 2;
+      font-size: 2.4rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 0 0 4px;
+      text-shadow: 0 0 15px rgba(34, 211, 238, 0.9);
+      z-index: 1;
+    }
+
+    .skills-subtitle {
+      grid-column: 1 / span 2;
+      margin: 0 0 18px;
+      color: #a8c5ff;
+      font-size: 0.9rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      z-index: 1;
+    }
+
+    /* Botão voltar/menu */
+    .skills-top-bar {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      display: flex;
+      gap: 10px;
+      z-index: 3;
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .skills-top-bar a {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+      text-decoration: none;
+      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.45), transparent 60%);
+      box-shadow: 0 0 10px rgba(15, 23, 42, 0.9);
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .skills-top-bar a:hover {
+      background: radial-gradient(circle at 0 0, rgba(96, 165, 250, 0.9), transparent 60%);
+      transform: translateY(-1px);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.9);
+    }
+
+    /* Área da árvore */
+    .skill-tree-container {
+      position: relative;
+      height: 360px;
+      z-index: 1;
+    }
+
+    .skill-lines {
+      position: absolute;
+      inset: 0;
+    }
+
+    .skill-lines line {
+      stroke: rgba(191, 219, 254, 0.55);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.9));
+    }
+
+    /* Nós */
+    .skill-node {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid rgba(191, 219, 254, 0.8);
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #67e8f9 16%, #0f172a 72%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.83rem;
+      padding: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .skill-node span {
+      text-shadow: 0 0 6px #000;
+    }
+
+    .central   { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    .node-soft { left: 7%;  top: 10%; }
+    .node-tech { right: 7%; top: 10%; }
+    .node-lang { left: 7%;  bottom: 6%; }
+    .node-sport{ right: 7%; bottom: 6%; }
+
+    .skill-node:hover {
+      transform: translate(-50%, -50%) scale(1.06);
+    }
+    .node-soft:hover,
+    .node-tech:hover,
+    .node-lang:hover,
+    .node-sport:hover {
+      transform: scale(1.06);
+    }
+
+    .skill-node.active-node {
+      border-color: #ffffff;
+      box-shadow: 0 0 28px rgba(34, 211, 238, 1);
+    }
+
+    /* Cartões */
+    .skill-card-wrapper {
+      position: relative;
+      z-index: 1;
+      background: rgba(15, 23, 42, 0.92);
+      border-radius: 20px;
+      padding: 22px 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 24px rgba(15, 23, 42, 0.95);
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    .skill-card {
+      display: none;
+      animation: cardFade 0.25s ease;
+    }
+
+    .skill-card.active {
+      display: block;
+    }
+
+    .skill-card h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .skill-card p {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .skill-card ul {
+      padding-left: 18px;
+      margin: 0 0 6px;
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 6px 0;
+      font-size: 0.9rem;
+    }
+
+    .skill-item span {
+      max-width: 68%;
+    }
+
+    /* Orbes de nível */
+    .skill-orbs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .skill-orbs span {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.35);
+      box-shadow: inset 0 0 4px rgba(15, 23, 42, 0.9);
+    }
+
+    .skill-orbs span.filled {
+      background: radial-gradient(circle, #ffffff 0, #a5f3fc 55%, #22d3ee 100%);
+      box-shadow: 0 0 7px rgba(34, 211, 238, 1);
+    }
+
+    @keyframes cardFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scrollbar discreta */
+    .skill-card-wrapper::-webkit-scrollbar { width: 6px; }
+    .skill-card-wrapper::-webkit-scrollbar-track { background: transparent; }
+    .skill-card-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.7);
+      border-radius: 999px;
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      #skills-section {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        padding-top: 56px;
+      }
+      .skill-tree-container { order: 1; margin-bottom: 22px; height: 320px; }
+      .skill-card-wrapper { order: 2; max-height: 320px; }
+      .skills-title, .skills-subtitle { text-align: center; }
+      .skills-top-bar { top: 8px; right: 50%; transform: translateX(50%); }
+    }
+  </style>
+</head>
+<body>
+
+<section id="skills-section">
+  <div class="skills-bg-overlay"></div>
+
+  <div class="skills-top-bar">
+    <!-- altera o href para voltar ao teu index -->
+    <a href="index.html">← Voltar</a>
+  </div>
+
+  <h1 class="skills-title">Habilidades</h1>
+  <p class="skills-subtitle">Skill Tree do Jogador</p>
+
+  <!-- Árvore -->
+  <div class="skill-tree-container">
+
+    <svg class="skill-lines" viewBox="0 0 800 400" preserveAspectRatio="none">
+      <line x1="400" y1="200" x2="200" y2="80" />
+      <line x1="400" y1="200" x2="600" y2="80" />
+      <line x1="400" y1="200" x2="200" y2="320" />
+      <line x1="400" y1="200" x2="600" y2="320" />
+    </svg>
+
+    <div class="skill-node central active-node" data-target="card-overview">
+      <span>Skills</span>
+    </div>
+
+    <div class="skill-node node-soft" data-target="card-soft">
+      <span>Soft Skills</span>
+    </div>
+
+    <div class="skill-node node-tech" data-target="card-tech">
+      <span>Tecnologia &amp; Saúde</span>
+    </div>
+
+    <div class="skill-node node-lang" data-target="card-lang">
+      <span>Línguas</span>
+    </div>
+
+    <div class="skill-node node-sport" data-target="card-sport">
+      <span>Desporto &amp; Salvamento</span>
+    </div>
+
+  </div>
+
+  <!-- Cartões -->
+  <div class="skill-card-wrapper">
+
+    <div class="skill-card active" id="card-overview">
+      <h2>Visão geral</h2>
+      <p>Clica nos ramos da árvore para veres as tuas habilidades organizadas por categoria.</p>
+      <ul>
+        <li>Estudante de Tecnologia Biomédica focado em sinais, eletrónica e sistemas de monitorização.</li>
+        <li>Atleta de natação pura, águas abertas e salvamento aquático desportivo.</li>
+      </ul>
+    </div>
+
+    <div class="skill-card" id="card-soft">
+      <h2>Soft Skills</h2>
+      <div class="skill-item">
+        <span>Trabalho em Equipa</span>
+        <div class="skill-orbs" data-level="5"></div>
+      </div>
+      <div class="skill-item">
+        <span>Liderança</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Organização &amp; Gestão de Tempo</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Criatividade</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Resolução de Problemas</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Comunicação</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+    </div>
+
+    <div class="skill-card" id="card-tech">
+      <h2>Tecnologia &amp; Saúde</h2>
+      <div class="skill-item">
+        <span>Python (análise de dados / sinais biomédicos)</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Processamento de Sinais Biomédicos (ECG, EEG, etc.)</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Eletrónica / Instrumentação Biomédica</span>
+        <div class="skill-orbs" data-level="3"></div>
+      </div>
+      <div class="skill-item">
+        <span>Excel</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>HTML5 &amp; CSS</span>
+        <div class="skill-orbs" data-level="3"></div>
+      </div>
+    </div>
+
+    <div class="skill-card" id="card-lang">
+      <h2>Línguas</h2>
+      <div class="skill-item">
+        <span>Português</span>
+        <div class="skill-orbs" data-level="5"></div>
+      </div>
+      <div class="skill-item">
+        <span>Inglês</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+    </div>
+
+    <div class="skill-card" id="card-sport">
+      <h2>Desporto &amp; Salvamento</h2>
+      <div class="skill-item">
+        <span>Natação em Águas Abertas (1.5 km – 10 km)</span>
+        <div class="skill-orbs" data-level="5"></div>
+      </div>
+      <div class="skill-item">
+        <span>Natação Pura (piscina)</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Salvamento Aquático Desportivo</span>
+        <div class="skill-orbs" data-level="4"></div>
+      </div>
+      <div class="skill-item">
+        <span>Resistência &amp; Foco sob Pressão</span>
+        <div class="skill-orbs" data-level="5"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // trocar cartões ao clicar nos nós
+  const nodes = document.querySelectorAll('.skill-node');
+  const cards = document.querySelectorAll('.skill-card');
+
+  nodes.forEach(node => {
+    node.addEventListener('click', () => {
+      const targetId = node.getAttribute('data-target');
+
+      cards.forEach(card => {
+        card.classList.toggle('active', card.id === targetId);
+      });
+
+      nodes.forEach(n => n.classList.remove('active-node'));
+      node.classList.add('active-node');
+    });
+  });
+
+  // criar orbes de nível
+  const orbContainers = document.querySelectorAll('.skill-orbs');
+  orbContainers.forEach(container => {
+    const level = parseInt(container.getAttribute('data-level'), 10) || 0;
+    const max = 5;
+    for (let i = 1; i <= max; i++) {
+      const orb = document.createElement('span');
+      if (i <= level) orb.classList.add('filled');
+      container.appendChild(orb);
+    }
+  });
+</script>
+
+</body>
+</html>
