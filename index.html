@@ -636,7 +636,7 @@ body.gradient-fade::after { opacity: 1; }
         </div>
         <div class="hud-row">
           <div class="hud-start">
-            <button class="hud-btn">START</button>
+            <button class="hud-btn" id="hud-start-formacoes">START</button>
           </div>
           <div class="hud-title">
             <span class="cd-label-wrap">
@@ -774,7 +774,7 @@ body.gradient-fade::after { opacity: 1; }
       <p><strong>Formações</strong>: Ao longo do meu percurso participei em várias formações e cursos complementares, contribuindo significativamente para a expansão dos meus conhecimentos práticos e teóricos. Estes cursos permitiram-me adquirir novas competências técnicas e desenvolver uma visão mais abrangente e multidisciplinar sobre temas relevantes para a minha área de interesse. Para ver mais informação sobre as minhas formações e cursos, carregue em START.</p>
       <div class="buttons">
         <button>Ver Troféus</button>
-        <button>START</button>
+        <button id="hud-formacoes-start-detail">START</button>
       </div>
     </div>
     <div class="side-column">
@@ -1017,6 +1017,18 @@ document.getElementById('hud-educacao-start-detail')?.addEventListener('click', 
 document.getElementById('hud-start-habilidade')?.addEventListener('click', e => {
   e.preventDefault();
   genericHudLoading(e.currentTarget, 'habilidades.html');
+});
+
+document.getElementById('hud-start-formacoes')?.addEventListener('click', e => {
+  e.preventDefault();
+  genericHudLoading(e.currentTarget, 'formacoes.html');
+});
+
+document.getElementById('hud-formacoes-start-detail')?.addEventListener('click', e => {
+  e.preventDefault();
+  screenFade.style.opacity = '1';
+  screenFade.style.pointerEvents = 'none';
+  setTimeout(() => { window.location.href = 'formacoes.html'; }, 700);
 });
 
 </script>
