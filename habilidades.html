@@ -101,36 +101,6 @@
       z-index: 1;
     }
 
-    /* Linhas entre os nós (CSS, sem SVG) */
-    .skill-line {
-      position: absolute;
-      height: 2px;
-      background: rgba(191, 219, 254, 0.55);
-      box-shadow: 0 0 8px rgba(59, 130, 246, 0.9);
-      transform-origin: left center;
-    }
-    /* central ~50%/50%, nós nos cantos → ajusta largura/ângulo à tua preferência */
-    .line-soft {
-      left: 50%; top: 50%;
-      width: 260px;
-      transform: rotate(-30deg);
-    }
-    .line-tech {
-      left: 50%; top: 50%;
-      width: 260px;
-      transform: rotate(-150deg);
-    }
-    .line-lang {
-      left: 50%; top: 50%;
-      width: 260px;
-      transform: rotate(30deg);
-    }
-    .line-sport {
-      left: 50%; top: 50%;
-      width: 260px;
-      transform: rotate(150deg);
-    }
-
     /* Nós */
     .skill-node {
       position: absolute;
@@ -290,12 +260,6 @@
     <div class="skill-node central active-node" data-target="card-overview">
       <span>Skills</span>
     </div>
-
-    <!-- Linhas em CSS -->
-    <div class="skill-line line-soft"></div>
-    <div class="skill-line line-tech"></div>
-    <div class="skill-line line-lang"></div>
-    <div class="skill-line line-sport"></div>
 
     <div class="skill-node node-soft" data-target="card-soft">
       <span>Soft Skills</span>
