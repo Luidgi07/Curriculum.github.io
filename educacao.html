@@ -88,10 +88,10 @@
     }
 
     /* esconder a scrollbar mas manter scroll */
-    #desktop::-webkit-scrollbar { display: none; }       /* Chrome/Safari/Edge [web:3][web:27] */
+    #desktop::-webkit-scrollbar { display: none; }
     #desktop {
-      -ms-overflow-style: none;                          /* IE/Edge legado [web:27] */
-      scrollbar-width: none;                             /* Firefox [web:27] */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
     .desktop-icon {
@@ -309,9 +309,11 @@
       justify-content: center;
     }
 
+    /* CORRIGIDO: 4 itens por fila */
     .box {
-      width: 200px;
+      flex: 0 0 calc(25% - 12px);
       height: 130px;
+      max-width: 220px;
       border-radius: 12px;
       position: relative;
       cursor: pointer;
@@ -330,6 +332,7 @@
       font-size: 14px;
       padding: 10px;
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     .box:hover {
@@ -358,6 +361,19 @@
       left: 50%;
       transform: translateX(-50%);
       letter-spacing: 1px;
+    }
+
+    /* Media queries responsivas para .box */
+    @media (max-width: 768px) {
+      .box {
+        flex: 0 0 calc(50% - 8px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .box {
+        flex: 0 0 calc(100% - 8px);
+      }
     }
 
     #infoContainer {
