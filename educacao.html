@@ -885,7 +885,7 @@
         const detail = targetBox.getAttribute("data-detail");
         const site   = targetBox.getAttribute("data-site");
         const upperDetail = detail.toUpperCase();
-
+      
         infoBoxWindow.innerHTML = `
           <div><strong>${info}</strong></div>
           <div style="margin-top:6px;">${detail}</div>
@@ -896,10 +896,13 @@
         `;
         
         downloadBar.remove();
-
+      
+        // ✅ SCROLL FINAL para garantir que vê TUDO no fim
+        infoContainer.scrollTop = infoContainer.scrollHeight;
+      
         const btnDocs  = infoBoxWindow.querySelector('#btnDocs');
         const btnPlanos= infoBoxWindow.querySelector('#btnPlanos');
-
+      
         btnDocs.addEventListener("click", () => {
           if (upperDetail.includes('IPS') || upperDetail.includes('ISEL')) {
             desktop.style.display = "none";
@@ -911,14 +914,13 @@
             alert("Neste curso não há visualização 3D, apenas documentos.");
           }
         });
-
+      
         btnPlanos.addEventListener("click", () => {
           if (site) window.open(site, "_blank");
           else alert("Link para Planos de Estudos não disponível.");
         });
         
       }, 1200);
-    });
 
     function showConfirmBox() {
       const overlay = document.createElement("div");
