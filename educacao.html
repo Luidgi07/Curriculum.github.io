@@ -87,11 +87,11 @@
       display: none;
     }
 
-    /* esconder a scrollbar mas manter scroll */
-    #desktop::-webkit-scrollbar { display: none; }
+    /* esconder a scrollbar mas manter scroll no desktop */
+    #desktop::-webkit-scrollbar { display: none; }         /* Chrome/Safari/Edge [web:27][web:40] */
     #desktop {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+      -ms-overflow-style: none;                            /* IE/Edge legado [web:27] */
+      scrollbar-width: none;                               /* Firefox [web:39] */
     }
 
     .desktop-icon {
@@ -254,7 +254,6 @@
       background: #002222;
       border: 2px solid #00ff00;
       padding: 20px;
-      box-sizing: border-box;
       z-index: 10;
       border-radius: 8px;
     }
@@ -309,7 +308,7 @@
       justify-content: center;
     }
 
-    /* CORRIGIDO: 4 itens por fila */
+    /* 4 itens por fila */
     .box {
       flex: 0 0 calc(25% - 12px);
       height: 130px;
@@ -332,7 +331,6 @@
       font-size: 14px;
       padding: 10px;
       overflow: hidden;
-      box-sizing: border-box;
     }
 
     .box:hover {
@@ -349,7 +347,6 @@
       object-fit: contain;
       display: block;
       margin-bottom: 6px;
-      filter: none;
     }
 
     .box::after {
@@ -363,26 +360,26 @@
       letter-spacing: 1px;
     }
 
-    /* Media queries responsivas para .box */
     @media (max-width: 768px) {
-      .box {
-        flex: 0 0 calc(50% - 8px);
-      }
+      .box { flex: 0 0 calc(50% - 8px); }
     }
 
     @media (max-width: 480px) {
-      .box {
-        flex: 0 0 calc(100% - 8px);
-      }
+      .box { flex: 0 0 calc(100% - 8px); }
     }
 
+    /* Contentor dos detalhes – scroll SEM barra */
     #infoContainer {
       margin-top: 10px;
-      max-height: 260px;   /* se quiseres, podes até remover o max-height */
-      overflow-y: hidden;  /* não mostra barra de scroll */
-      padding-right: 0;    /* retira o recuo da barra */
+      max-height: 260px;
+      overflow-y: auto;          /* permite scroll */
+      padding-right: 6px;
+      -ms-overflow-style: none;  /* IE/Edge [web:27][web:41] */
+      scrollbar-width: none;     /* Firefox [web:39][web:41] */
     }
-
+    #infoContainer::-webkit-scrollbar {
+      display: none;             /* Chrome/Safari/Opera [web:27][web:44] */
+    }
 
     .infoBoxWindow {
       background: #002222;
@@ -851,8 +848,11 @@
 
     function manageDownloadWindows() {
       const active = infoContainer.querySelectorAll('.infoBoxWindow');
-      if (active.length >= 4) {
-        active[0].previousSibling?.remove();
+      if (active.length >= 3) {
+        // remove o mais antigo + a barra imediatamente acima
+        if (active[0].previousSibling) {
+          active[0].previousSibling.remove();
+        }
         active[0].remove();
       }
     }
@@ -913,6 +913,9 @@
           if (site) window.open(site, "_blank");
           else alert("Link para Planos de Estudos não disponível.");
         });
+
+        // scroll automático até ao último bloco
+        infoContainer.scrollTop = infoContainer.scrollHeight;
       }, 1200);
     });
 
