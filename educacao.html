@@ -88,10 +88,10 @@
     }
 
     /* esconder a scrollbar mas manter scroll no desktop */
-    #desktop::-webkit-scrollbar { display: none; }         /* Chrome/Safari/Edge [web:27][web:40] */
+    #desktop::-webkit-scrollbar { display: none; }
     #desktop {
-      -ms-overflow-style: none;                            /* IE/Edge legado [web:27] */
-      scrollbar-width: none;                               /* Firefox [web:39] */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
     .desktop-icon {
@@ -372,13 +372,13 @@
     #infoContainer {
       margin-top: 10px;
       max-height: 260px;
-      overflow-y: auto;          /* permite scroll */
+      overflow-y: auto;
       padding-right: 6px;
-      -ms-overflow-style: none;  /* IE/Edge [web:27][web:41] */
-      scrollbar-width: none;     /* Firefox [web:39][web:41] */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     #infoContainer::-webkit-scrollbar {
-      display: none;             /* Chrome/Safari/Opera [web:27][web:44] */
+      display: none;
     }
 
     .infoBoxWindow {
@@ -849,7 +849,6 @@
     function manageDownloadWindows() {
       const active = infoContainer.querySelectorAll('.infoBoxWindow');
       if (active.length >= 3) {
-        // remove o mais antigo + a barra imediatamente acima
         if (active[0].previousSibling) {
           active[0].previousSibling.remove();
         }
@@ -876,12 +875,16 @@
       infoContainer.appendChild(downloadBar);
       infoContainer.appendChild(infoBoxWindow);
 
+      // ✅ SCROLL IMEDIATO para a área do novo conteúdo (3º clique)
+      infoContainer.scrollTop = infoContainer.scrollHeight;
+
       setTimeout(() => { fill.style.width = "100%"; }, 40);
 
       setTimeout(() => {
         const info   = targetBox.getAttribute("data-info");
         const detail = targetBox.getAttribute("data-detail");
         const site   = targetBox.getAttribute("data-site");
+        const upperDetail = detail.toUpperCase();
 
         infoBoxWindow.innerHTML = `
           <div><strong>${info}</strong></div>
@@ -891,11 +894,11 @@
             <button id="btnPlanos">Planos de Estudos</button>
           </div>
         `;
+        
         downloadBar.remove();
 
         const btnDocs  = infoBoxWindow.querySelector('#btnDocs');
         const btnPlanos= infoBoxWindow.querySelector('#btnPlanos');
-        const upperDetail = detail.toUpperCase();
 
         btnDocs.addEventListener("click", () => {
           if (upperDetail.includes('IPS') || upperDetail.includes('ISEL')) {
@@ -913,9 +916,7 @@
           if (site) window.open(site, "_blank");
           else alert("Link para Planos de Estudos não disponível.");
         });
-
-        // scroll automático até ao último bloco
-        infoContainer.scrollTop = infoContainer.scrollHeight;
+        
       }, 1200);
     });
 
