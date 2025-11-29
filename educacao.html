@@ -378,10 +378,11 @@
 
     #infoContainer {
       margin-top: 10px;
-      max-height: 260px;
-      overflow-y: auto;
-      padding-right: 6px;
+      max-height: 260px;   /* se quiseres, podes até remover o max-height */
+      overflow-y: hidden;  /* não mostra barra de scroll */
+      padding-right: 0;    /* retira o recuo da barra */
     }
+
 
     .infoBoxWindow {
       background: #002222;
