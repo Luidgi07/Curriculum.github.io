@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jurassic Desktop Tech Biomed</title>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -86,13 +87,13 @@
       display: none;
     }
 
-
-    #desktop::-webkit-scrollbar { display: none; }      /* Chrome/Safari/Edge */
+    /* esconder a scrollbar mas manter scroll */
+    #desktop::-webkit-scrollbar { display: none; }       /* Chrome/Safari/Edge [web:3][web:27] */
     #desktop {
-      -ms-overflow-style: none;    /* IE/Edge legado */
-      scrollbar-width: none;       /* Firefox */
+      -ms-overflow-style: none;                          /* IE/Edge legado [web:27] */
+      scrollbar-width: none;                             /* Firefox [web:27] */
     }
-    
+
     .desktop-icon {
       width: 95px;
       text-align: center;
@@ -133,7 +134,7 @@
 
     /* Caixas Tech Biomed + Início */
     .start-box {
-      position: absolute;
+      position: fixed;
       bottom: 50px;
       left: 30px;
       width: 140px;
@@ -308,7 +309,6 @@
       justify-content: center;
     }
 
-    /* CARTÕES ESCOLA – FUNDO BRANCO + NEON */
     .box {
       width: 200px;
       height: 130px;
@@ -475,7 +475,7 @@
       transition: width 1s ease-out;
     }
 
-    /* Barra do sistema */
+    /* Barra do sistema fixa em baixo */
     #sysBar {
       position: fixed;
       bottom: 0;
@@ -574,8 +574,25 @@
 
     #voltar-edu:hover { transform: translateY(-2px); }
 
+    /* Hint/tooltip para documentos 3D */
+    #docHint {
+      position: fixed;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      color: #00ffcc;
+      padding: 8px 14px;
+      border: 1px solid #00ff66;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: 'Courier New',monospace;
+      z-index: 2000;
+      display: none;
+    }
   </style>
 </head>
+
 <body>
   <!-- Pré-fade e vídeo -->
   <div id="fadeInPreVideo"></div>
@@ -724,13 +741,14 @@
 
       <div id="infoContainer"></div>
     </div>
+  </div>
 
-    <div id="sysBar">
-      <img src="https://img.icons8.com/fluency/48/wifi.png" class="sysIcon" alt="Wi-Fi" />
-      <img src="https://img.icons8.com/fluency/48/high-volume.png" class="sysIcon" alt="Volume" />
-      <img src="https://img.icons8.com/fluency/48/empty-battery.png" class="sysIcon" alt="Bateria" />
-      <span id="sysHour"></span>
-    </div>
+  <!-- Barra do sistema -->
+  <div id="sysBar">
+    <img src="https://img.icons8.com/fluency/48/wifi.png" class="sysIcon" alt="Wi-Fi" />
+    <img src="https://img.icons8.com/fluency/48/high-volume.png" class="sysIcon" alt="Volume" />
+    <img src="https://img.icons8.com/fluency/48/empty-battery.png" class="sysIcon" alt="Bateria" />
+    <span id="sysHour"></span>
   </div>
 
   <!-- Three.js -->
@@ -742,12 +760,7 @@
   </div>
 
   <!-- Hint/tooltip para documentos 3D -->
-  <div id="docHint"
-       style="position:fixed;bottom:50px;left:50%;transform:translateX(-50%);
-              background:rgba(0,0,0,0.85);color:#00ffcc;padding:8px 14px;
-              border:1px solid #00ff66;border-radius:6px;font-size:13px;
-              font-family:'Courier New',monospace;z-index:2000;display:none;">
-  </div>
+  <div id="docHint"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
 
@@ -769,7 +782,9 @@
       }, 800);
     }
 
-    window.onload = () => { setTimeout(() => { preFade.style.opacity = "0"; }, 200); };
+    window.onload = () => {
+      setTimeout(() => { preFade.style.opacity = "0"; }, 200);
+    };
 
     introVideo.addEventListener('ended', finishIntro);
     skipBtn.addEventListener('click', finishIntro);
@@ -790,7 +805,9 @@
     const infoContainer  = document.getElementById("infoContainer");
     const closeProgramBtn= document.querySelector('.closeProgramBtn');
 
-    schoolIcon.addEventListener("click", () => { programWindow.style.display = "block"; });
+    schoolIcon.addEventListener("click", () => {
+      programWindow.style.display = "block";
+    });
 
     // Painel Tech Biomed
     const techPanel = document.getElementById('techPanel');
@@ -921,11 +938,10 @@
     const iconDocs = document.getElementById("icon-docs");
     const threeContainer = document.getElementById("threeContainer");
     const voltarEduBtn = document.getElementById("voltar-edu");
-    const infoText = document.getElementById("info");
     const docHint = document.getElementById("docHint");
     let scene, camera, renderer, blocos = [];
 
-    let arquivos = [
+    const arquivos = [
       {nome:"Bioquímica",   link:"bioquimica.pdf",   curso:"IPS",  tipo:"Seminário Bioquímica"},
       {nome:"Sinais Vida",  link:"relatorio_eletrotecnia.pdf", curso:"IPS",  tipo:"Relatório Eletrotecnia"},
       {nome:"Exoesqueleto", link:"projeto_dpm_LTB.pdf", curso:"IPS",  tipo:"Projeto LTB"},
