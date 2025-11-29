@@ -13,7 +13,6 @@
       font-family: 'Courier New', Courier, monospace;
       color: #00ff00;
       cursor: url('https://img.icons8.com/fluency/48/old-mouse-cursor.png'), auto;
-      overflow-x: hidden;
       line-height: 1.4;
     }
 
@@ -78,14 +77,22 @@
     /* Desktop */
     #desktop {
       width: 100vw;
-      height: 100vh;
+      min-height: 100vh;
       position: relative;
       background: linear-gradient(135deg, #005050 25%, #008080 75%);
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       padding: 20px;
       display: none;
     }
 
+
+    #desktop::-webkit-scrollbar { display: none; }      /* Chrome/Safari/Edge */
+    #desktop {
+      -ms-overflow-style: none;    /* IE/Edge legado */
+      scrollbar-width: none;       /* Firefox */
+    }
+    
     .desktop-icon {
       width: 95px;
       text-align: center;
