@@ -876,49 +876,48 @@
       infoContainer.appendChild(downloadBar);
       infoContainer.appendChild(infoBoxWindow);
 
-     // anima rapidamente a barra (opcional)
-    setTimeout(() => { fill.style.width = "100%"; }, 20);
-    
-    // MUITO mais rápido: 150 ms em vez de 1200 ms
-    setTimeout(() => {
-      const info   = targetBox.getAttribute("data-info");
-      const detail = targetBox.getAttribute("data-detail");
-      const site   = targetBox.getAttribute("data-site");
-    
-      infoBoxWindow.innerHTML = `
-        <div><strong>${info}</strong></div>
-        <div style="margin-top:6px;">${detail}</div>
-        <div id="modalButtons">
-          <button id="btnDocs">Documentos</button>
-          <button id="btnPlanos">Planos de Estudos</button>
-        </div>
-      `;
-      downloadBar.remove();
-    
-      const btnDocs  = infoBoxWindow.querySelector('#btnDocs');
-      const btnPlanos= infoBoxWindow.querySelector('#btnPlanos');
-      const upperDetail = detail.toUpperCase();
-    
-      btnDocs.addEventListener("click", () => {
-        if (upperDetail.includes('IPS') || upperDetail.includes('ISEL')) {
-          desktop.style.display = "none";
-          programWindow.style.display = "none";
-          threeContainer.style.display = "block";
-          document.body.classList.add('three-active');
-          if (!scene) init3D();
-        } else {
-          alert("Neste curso não há visualização 3D, apenas documentos.");
-        }
-      });
-    
-      btnPlanos.addEventListener("click", () => {
-        if (site) window.open(site, "_blank");
-        else alert("Link para Planos de Estudos não disponível.");
-      });
-    
-      infoContainer.scrollTop = infoContainer.scrollHeight;
-    }, 150);
+      setTimeout(() => { fill.style.width = "100%"; }, 40);
 
+      setTimeout(() => {
+        const info   = targetBox.getAttribute("data-info");
+        const detail = targetBox.getAttribute("data-detail");
+        const site   = targetBox.getAttribute("data-site");
+
+        infoBoxWindow.innerHTML = `
+          <div><strong>${info}</strong></div>
+          <div style="margin-top:6px;">${detail}</div>
+          <div id="modalButtons">
+            <button id="btnDocs">Documentos</button>
+            <button id="btnPlanos">Planos de Estudos</button>
+          </div>
+        `;
+        downloadBar.remove();
+
+        const btnDocs  = infoBoxWindow.querySelector('#btnDocs');
+        const btnPlanos= infoBoxWindow.querySelector('#btnPlanos');
+        const upperDetail = detail.toUpperCase();
+
+        btnDocs.addEventListener("click", () => {
+          if (upperDetail.includes('IPS') || upperDetail.includes('ISEL')) {
+            desktop.style.display = "none";
+            programWindow.style.display = "none";
+            threeContainer.style.display = "block";
+            document.body.classList.add('three-active');
+            if (!scene) init3D();
+          } else {
+            alert("Neste curso não há visualização 3D, apenas documentos.");
+          }
+        });
+
+        btnPlanos.addEventListener("click", () => {
+          if (site) window.open(site, "_blank");
+          else alert("Link para Planos de Estudos não disponível.");
+        });
+
+        // scroll automático até ao último bloco
+        infoContainer.scrollTop = infoContainer.scrollHeight;
+      }, 1200);
+    });
 
     function showConfirmBox() {
       const overlay = document.createElement("div");
