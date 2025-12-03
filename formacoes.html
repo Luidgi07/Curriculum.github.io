@@ -248,18 +248,16 @@
       line-height: 1.3;
     }
 
-     .card-org-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      background: #d1d5db;      /* cinza light */
-      border: 1px solid #9ca3af; /* cinza médio 
+    /* ORG COM LOGO - MELHORADO */
+    .card-org-container {
       display: flex;
       align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      overflow: hidden;
-      font-size: 18px;
+      gap: 10px;
+      margin-bottom: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px 12px;
+      border-radius: 10px;
+      width: fit-content;
     }
 
     .card-org-logo {
@@ -451,14 +449,14 @@
       {
         id: 1,
         year: 2025,
-        title: "Curso Elementar de Natação Pura, Águas Abertas e Natação Adaptada",
+        title: "Curso Elementar de Natação Pura",
         org: "Associação de Natação de Lisboa",
-        description: "Formação técnica em arbitragem de natação pura, águas abertas e natação adaptada ",
-        hours: 32,
+        description: "Formação técnica em ensino de natação, adaptação ao meio aquático e treino em águas abertas.",
+        hours: 40,
         tags: ["Natação", "Águas Abertas", "Ensino"],
         category: "técnica",
         status: "Completado",
-        logo: "ANL.png"
+        logo: "https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/5a638459-c4bc-4d64-873e-1027410b4987"
       },
       {
         id: 2,
@@ -466,11 +464,11 @@
         title: "Formações em Segurança & Primeiros Socorros",
         org: "Workview",
         description: "Prevenção e combate a incêndios, evacuação de pessoas, primeiros socorros e segurança ocupacional.",
-        hours: 8,
+        hours: 32,
         tags: ["Segurança", "Primeiros Socorros", "Saúde Ocupacional"],
         category: "soft",
         status: "Completado",
-        logo: "image-removebg-preview (17).png"
+        logo: null
       },
       {
         id: 3,
@@ -478,11 +476,11 @@
         title: "Carta de Patrão Local / Curso Vela",
         org: "Treino de Mar",
         description: "Noções de navegação e segurança em meio marítimo, complementando experiência em águas abertas.",
-        hours: 40,
+        hours: 24,
         tags: ["Vela", "Navegação"],
         category: "técnica",
         status: "Completado",
-        logo: "image (4).png"
+        logo: null
       },
       {
         id: 4,
@@ -490,11 +488,11 @@
         title: "Workshop Introdução à AI + Excel",
         org: "Santander Open Academy",
         description: "Introdução a conceitos de Inteligência Artificial e utilização de Excel para análise de dados.",
-        hours: 12,
+        hours: 16,
         tags: ["IA", "Excel"],
         category: "técnica",
         status: "Completado",
-        logo: "image-removebg-preview (15).png"
+        logo: null
       },
       {
         id: 5,
@@ -502,11 +500,11 @@
         title: "Workshops de Gestão Ágil, Excel e Finanças",
         org: "Magma Studio",
         description: "Gestão Ágil de Projetos com NTT Data; Excel 1.0 e 2.0; finanças pessoais e Engenharia.",
-        hours: 12,
+        hours: 28,
         tags: ["Gestão de Projetos", "Excel", "Finanças"],
         category: "soft",
         status: "Completado",
-        logo: "image (3).png"
+        logo: null
       },
       {
         id: 6,
@@ -514,11 +512,11 @@
         title: "Workshop Modelagem e Impressão 3D",
         org: "XIX ENEEB",
         description: "Aplicações de impressão 3D em reabilitação e interfaces computacionais.",
-        days: 4,
+        hours: 12,
         tags: ["Impressão 3D", "Reabilitação"],
         category: "técnica",
         status: "Completado",
-        logo: "image-removebg-preview (19).png"
+        logo: null
       },
       {
         id: 7,
@@ -526,11 +524,11 @@
         title: "IA aplicada ao Marketing de Conteúdo",
         org: "Tecminho",
         description: "Uso de IA para análise e otimização de estratégias de marketing digital.",
-        hours: 2,
+        hours: 8,
         tags: ["IA", "Marketing"],
         category: "soft",
         status: "Completado",
-        logo: "TECMINHO.png"
+        logo: null
       },
       {
         id: 8,
@@ -538,11 +536,11 @@
         title: "Inteligência Artificial na Saúde",
         org: "Hospital da Luz",
         description: "Aplicações de IA em diagnóstico, apoio à decisão clínica e gestão de dados de saúde.",
-        hours: 2,
+        hours: 16,
         tags: ["IA", "Saúde"],
         category: "técnica",
         status: "Completado",
-        logo: "image-removebg-preview (20).png"
+        logo: null
       },
       {
         id: 9,
@@ -550,11 +548,11 @@
         title: "Jornadas Técnicas de Engenharia Biomédica",
         org: "NOVA FCT",
         description: "Jornadas técnicas focadas em inovação, investigação e aplicações de engenharia biomédica.",
-        days: 2,
+        hours: 8,
         tags: ["Engenharia Biomédica", "Investigação"],
         category: "técnica",
         status: "Completado",
-        logo: "image (5).png"
+        logo: null
       },
       {
         id: 10,
@@ -562,11 +560,11 @@
         title: "Python, UX/UI e Desenvolvimento Web",
         org: "Casa Europa, Le Wagon",
         description: "Análise de Dados com Python; design para dispositivos móveis; criação de sites com HTML, CSS, SQL.",
-        hours: 4,
+        hours: 60,
         tags: ["Python", "UX/UI", "Web Dev"],
         category: "técnica",
         status: "Completado",
-        logo: "image-removebg-preview (14).png"
+        logo: null
       },
       {
         id: 11,
@@ -574,11 +572,11 @@
         title: "Formações em Reanimação e Emergência",
         org: "INEM",
         description: "Reanimar com INEM; Reanimação de Alto Desempenho; Via Verde AVC e Via Verde Sépsis.",
-        hours: 50,
+        hours: 36,
         tags: ["Reanimação", "Emergência"],
         category: "soft",
         status: "Completado",
-        logo: "image-removebg-preview (12).png"
+        logo: null
       },
       {
         id: 12,
@@ -586,11 +584,11 @@
         title: "Surf & Rescue",
         org: "AESP & ISN",
         description: "Formação em salvamento em contexto de surf e ambiente marítimo.",
-        hours: 12,
+        hours: 20,
         tags: ["Surf", "Resgate"],
         category: "técnica",
         status: "Completado",
-        logo: "image (2).png"
+        logo: null
       },
       {
         id: 13,
@@ -598,11 +596,11 @@
         title: "Electromedicina: Gestão e Manutenção",
         org: "IPS",
         description: "Gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.",
-        hours: 2,
+        hours: 16,
         tags: ["Electromedicina", "Equipamentos Médicos"],
         category: "técnica",
         status: "Completado",
-        logo: "TecnologiaSetubal_Principal_PolicromiaPositivo_PT-1.png"
+        logo: null
       },
       {
         id: 14,
@@ -610,11 +608,11 @@
         title: "Formações em SBV, Pediatria e ECG",
         org: "AFSS",
         description: "SBV com e sem DAE; SBV Pediátrico; Primeiros Socorros; STOP THE BLEED; Eletrocardiografia.",
-        hours: 60,
+        hours: 48,
         tags: ["SBV", "Pediatria", "ECG"],
         category: "técnica",
         status: "Completado",
-        logo: "image-removebg-preview (11).png"
+        logo: null
       },
       {
         id: 15,
@@ -622,23 +620,11 @@
         title: "Curso Tripulante de Ambulância de Socorro",
         org: "FEMÉDICA",
         description: "Atuação em equipas de emergência pré-hospitalar.",
-        hours: 200,
+        hours: 32,
         tags: ["Ambulância", "Emergência"],
         category: "técnica",
         status: "Certificado",
-        logo: "FEMEDICA.png"
-      },
-      {
-        id: 16,
-        year: 2021,
-        title: "Curso Nadador Salvador",
-        org: "4EMES",
-        description: "Atuação em equipas de emergência na praia.",
-        hours: 150,
-        tags: ["Socorrismo", "Emergência"],
-        category: "técnica",
-        status: "Certificado",
-        logo: "4EMES.png"
+        logo: null
       }
     ];
 
