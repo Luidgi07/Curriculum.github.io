@@ -826,7 +826,7 @@ body.gradient-fade::after { opacity: 1; }
       <p><strong>Experiências</strong>: Integrei diferentes contextos de trabalho e estágios, onde aprofundei conhecimentos técnicos e desenvolvi competências essenciais como trabalho em equipa multidisciplinar, comunicação e gestão de desafios reais. Para ver mais informação sobre as minhas experiências profissionais e estágios, carregue em START.</p>
       <div class="buttons">
         <button>Ver Troféus</button>
-        <button>START</button>
+        <button id="hud-experiencias-start-detail">START</button>
       </div>
     </div>
     <div class="side-column">
@@ -1054,7 +1054,14 @@ document.getElementById('hud-start-experiencias')?.addEventListener('click', e =
   e.preventDefault();
   genericHudLoading(e.currentTarget, 'experiencias.html');
 });
-  
+
+document.getElementById('hud-experiencias-start-detail')?.addEventListener('click', e => {
+  e.preventDefault();
+  screenFade.style.opacity = '1';
+  screenFade.style.pointerEvents = 'none';
+  setTimeout(() => { window.location.href = 'formacoes.html'; }, 700);
+});
+ 
 </script>
 </body>
 </html>
