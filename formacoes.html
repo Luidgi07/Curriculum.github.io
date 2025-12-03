@@ -2,607 +2,717 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Timeline – Formações & Workshops</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Formações & Certificações - Grid View</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{scroll-behavior:smooth;}
-    body{
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:radial-gradient(circle at top,#1c3d5a 0%,#020617 55%,#000 100%);
-      color:#f9fafb;
-      min-height:100vh;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:40px 0;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    #timeline-section{
-      position:relative;
-      width:min(1180px,100%);
-      padding:24px 4vw 32px;
-      background:linear-gradient(135deg,rgba(10,20,40,0.97),rgba(1,6,20,0.96));
-      border-radius:26px;
-      box-shadow:0 0 40px rgba(0,0,0,0.85);
-      overflow:hidden;
-      display:grid;
-      grid-template-columns:260px 1fr;
-      column-gap:26px;
+    body {
+      background: radial-gradient(circle at top, #1e2a3d 0%, #05070b 55%, #000000 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #f5f7fa;
+      overflow-x: hidden;
     }
 
-    .tl-bg{
-      position:absolute;
-      inset:-40px;
-      background:
-        radial-gradient(circle at 10% 20%,rgba(45,212,191,0.25),transparent 55%),
-        radial-gradient(circle at 85% 80%,rgba(56,189,248,0.3),transparent 55%);
-      opacity:0.8;
-      mix-blend-mode:screen;
-      pointer-events:none;
+    /* HUD */
+    .top-hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 60px;
+      background: rgba(18, 26, 36, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 9999;
+      border-bottom: 2.5px solid #42aaff;
+      box-shadow: 0 2px 18px #12244477;
     }
 
-    /* COLUNA ESQUERDA */
-    .tl-sidebar{
-      position:relative;
-      align-self:flex-start;
-      z-index:1;
-      display:flex;
-      flex-direction:column;
-      gap:18px;
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
-    .tl-header-block{
-      margin-bottom:6px;
-    }
-    .tl-title{
-      font-size:1.4rem;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      text-shadow:0 0 15px rgba(34,211,238,0.9);
-      margin-bottom:4px;
-    }
-    .tl-sub{
-      font-size:.75rem;
-      letter-spacing:.24em;
-      text-transform:uppercase;
-      color:#a5b4fc;
+    .back-btn {
+      background: none;
+      border: none;
+      color: #e9f5fa;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: filter 0.2s;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .tl-back{
-      display:inline-block;
-      margin-top:14px;
-      padding:5px 12px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.7);
-      color:#e5e7eb;
-      text-decoration:none;
-      font-size:.78rem;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      background:radial-gradient(circle at 0 0,rgba(148,163,184,0.45),transparent 60%);
-      box-shadow:0 0 10px rgba(15,23,42,0.9);
-      transition:background .2s,transform .2s,box-shadow .2s;
-    }
-    .tl-back:hover{
-      background:radial-gradient(circle at 0 0,rgba(96,165,250,0.9),transparent 60%);
-      transform:translateY(-1px);
-      box-shadow:0 0 16px rgba(59,130,246,0.9);
+    .back-btn:hover {
+      filter: brightness(1.22) drop-shadow(0 2px 6px #069cffbb);
     }
 
-    /* FILTROS */
-    .tl-filters{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .tl-filter{
-      width:100%;
-      text-align:left;
-      padding:5px 12px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.7);
-      background:rgba(15,23,42,0.85);
-      color:#e5e7eb;
-      font-size:.76rem;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      cursor:pointer;
-      transition:background .18s,border-color .18s,box-shadow .18s;
-    }
-    .tl-filter.active{
-      background:linear-gradient(135deg,#14aaff 40%,#75d5ff 120%);
-      border-color:#e5e7eb;
-      box-shadow:0 0 14px rgba(59,130,246,0.9);
+    .hud-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #42aaff;
+      text-shadow: 0 2px 8px #0004;
     }
 
-    /* ANOS */
-    .year-nav{
-      padding-top:10px;
-      border-top:1px solid rgba(148,163,184,0.35);
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      font-size:.8rem;
-    }
-    .year-label{
-      font-size:.75rem;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:#9ca3af;
-      margin-bottom:2px;
-    }
-    .year-link{
-      cursor:pointer;
-      color:#e5e7eb;
-      opacity:.75;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      padding:2px 0;
-    }
-    .year-link.active{
-      opacity:1;
-      font-weight:600;
-      color:#38bdf8;
+    .hud-stats {
+      display: flex;
+      gap: 24px;
+      font-size: 0.9em;
     }
 
-    /* BOTÃO TOPO */
-    .btn-topo{
-      margin-top:18px;
-      padding:6px 18px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.7);
-      background:rgba(15,23,42,0.9);
-      color:#e5e7eb;
-      font-size:.76rem;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* DIREITA – TIMELINE */
-    .tl-main{
-      position:relative;
-      z-index:1;
-      display:flex;
-      flex-direction:column;
-    }
-    .tl-timeline{
-      position:relative;
-      margin-top:4px;
-      padding-left:26px;
-      border-left:2px solid rgba(148,163,184,0.6);
+    .stat-number {
+      color: #42aaff;
+      font-weight: 700;
+      font-size: 1.2em;
     }
 
-    .tl-year-block{
-      margin-bottom:26px;
-    }
-    .tl-year-header{
-      font-size:.9rem;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:#9ca3af;
-      margin-bottom:10px;
-    }
-
-    .tl-item{
-      position:relative;
-      margin-bottom:14px;
-      padding-left:22px;
-    }
-    .tl-item::before{
-      content:"";
-      position:absolute;
-      left:-11px;
-      top:10px;
-      width:14px;
-      height:14px;
-      border-radius:50%;
-      border:2px solid rgba(191,219,254,0.9);
-      background:radial-gradient(circle at 30% 20%,#ffffff 0,#67e8f9 35%,#0b1120 85%);
-      box-shadow:0 0 10px rgba(56,189,248,0.9);
+    /* FILTERS */
+    .filters-section {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      width: 100vw;
+      background: linear-gradient(to bottom, rgba(18, 26, 36, 0.8), transparent);
+      padding: 16px 40px;
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(66, 170, 255, 0.1);
     }
 
-    .tl-item[data-category="desporto"]::before{border-color:#f97316;}
-    .tl-item[data-category="saude"]::before{border-color:#22c55e;}
-    .tl-item[data-category="ia"]::before{border-color:#38bdf8;}
-    .tl-item[data-category="engenharia"]::before{border-color:#eab308;}
-    .tl-item[data-category="online"]::before{border-color:#ec4899;}
-    .tl-item[data-category="educacao"]::before{border-color:#a5b4fc;}
-
-    .tl-card{
-      background:rgba(15,23,42,0.9);
-      border-radius:12px;
-      padding:10px 12px;
-      border:1px solid rgba(148,163,184,0.4);
-      box-shadow:0 6px 18px rgba(15,23,42,0.9);
+    .filter-btn {
+      background: rgba(66, 170, 255, 0.1);
+      border: 1.5px solid rgba(66, 170, 255, 0.3);
+      color: #dfe8ff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9em;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      font-weight: 500;
     }
 
-    /* Cabeçalho do card com logo */
-    .tl-card-header{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-bottom:4px;
-    }
-    .tl-logo{
-      width:28px;
-      height:28px;
-      border-radius:999px;
-      object-fit:contain;
-      background:#0b1220;
-      padding:3px;
-      box-shadow:0 0 8px rgba(15,23,42,0.9);
-    }
-    .tl-entity{
-      font-weight:700;
-      font-size:.95rem;
+    .filter-btn:hover {
+      background: rgba(66, 170, 255, 0.2);
+      border-color: #42aaff;
     }
 
-    .tl-title-text{
-      font-size:.88rem;
-      margin-bottom:3px;
-    }
-    .tl-desc{
-      font-size:.8rem;
-      color:#d1d5db;
-    }
-    .tl-tags{
-      margin-top:5px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:5px;
-    }
-    .tl-tag{
-      font-size:.72rem;
-      padding:2px 7px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.7);
-      background:rgba(15,23,42,0.9);
+    .filter-btn.active {
+      background: #42aaff;
+      color: #fff;
+      border-color: #42aaff;
+      box-shadow: 0 0 16px rgba(66, 170, 255, 0.4);
     }
 
-    @media(max-width:900px){
-      #timeline-section{
-        grid-template-columns:1fr;
-        row-gap:18px;
+    /* CONTENT */
+    .content {
+      margin-top: 140px;
+      padding: 40px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* STATS CARDS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 50px;
+    }
+
+    .stat-card {
+      background: rgba(8, 12, 24, 0.6);
+      border: 1.5px solid rgba(66, 170, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: rgba(8, 12, 24, 0.9);
+      border-color: #42aaff;
+      transform: translateY(-2px);
+    }
+
+    .stat-card-number {
+      font-size: 2em;
+      font-weight: 700;
+      color: #42aaff;
+      margin-bottom: 6px;
+    }
+
+    .stat-card-label {
+      font-size: 0.9em;
+      color: #dfe8ff;
+      opacity: 0.9;
+    }
+
+    .stat-card-desc {
+      font-size: 0.75em;
+      color: #dfe8ff;
+      opacity: 0.6;
+      margin-top: 6px;
+    }
+
+    /* GRID LAYOUT */
+    .grid-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #42aaff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(66, 170, 255, 0.3);
+      letter-spacing: 0.05em;
+    }
+
+    .formations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .formation-card {
+      background: rgba(8, 12, 24, 0.55);
+      border: 1.5px solid rgba(66, 170, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .formation-card:hover {
+      background: rgba(8, 12, 24, 0.85);
+      border-color: #42aaff;
+      box-shadow: 0 8px 24px rgba(66, 170, 255, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .card-year {
+      font-size: 0.75em;
+      color: #42aaff;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card-title {
+      font-size: 0.95em;
+      font-weight: 600;
+      color: #f5f7fa;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    /* ORG COM LOGO */
+    .card-org-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 10px;
+      border-radius: 6px;
+      width: fit-content;
+    }
+
+    .card-org-logo {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      background: rgba(66, 170, 255, 0.1);
+      border: 1px solid rgba(66, 170, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      font-size: 10px;
+    }
+
+    .card-org-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-org {
+      font-size: 0.8em;
+      color: #dfe8ff;
+      opacity: 0.85;
+    }
+
+    .card-description {
+      font-size: 0.8em;
+      color: #dfe8ff;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      opacity: 0.75;
+      flex-grow: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.75em;
+      color: #dfe8ff;
+      opacity: 0.65;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(66, 170, 255, 0.1);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: rgba(66, 170, 255, 0.15);
+      border: 1px solid rgba(66, 170, 255, 0.3);
+      color: #42aaff;
+      padding: 3px 9px;
+      border-radius: 10px;
+      font-size: 0.7em;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .tag.soft {
+      background: rgba(255, 150, 100, 0.1);
+      border-color: rgba(255, 150, 100, 0.3);
+      color: #ff9664;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 768px) {
+      .top-hud {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+        padding: 14px;
+      }
+
+      .hud-stats {
+        width: 100%;
+        justify-content: space-around;
+        font-size: 0.8em;
+        gap: 8px;
+      }
+
+      .filters-section {
+        top: 100px;
+        padding: 12px 16px;
+      }
+
+      .content {
+        margin-top: 170px;
+        padding: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        padding: 16px;
+      }
+
+      .stat-card-number {
+        font-size: 1.6em;
+      }
+
+      .formations-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-
-<section id="timeline-section">
-  <div class="tl-bg"></div>
-
-  <!-- ESQUERDA -->
-  <aside class="tl-sidebar">
-    <div class="tl-header-block">
-      <div class="tl-title">TIMELINE</div>
-      <div class="tl-sub">FORMAÇÕES & WORKSHOPS</div>
+  <!-- HUD -->
+  <div class="top-hud">
+    <div class="hud-left">
+      <button class="back-btn" onclick="history.back()">←</button>
+      <span class="hud-title">FORMAÇÕES</span>
     </div>
-
-    <a href="index.html" class="tl-back">← VOLTAR</a>
-
-    <div class="tl-filters">
-      <button class="tl-filter active" data-filter="all">TUDO</button>
-      <button class="tl-filter" data-filter="educacao">EDUCAÇÃO</button>
-      <button class="tl-filter" data-filter="desporto">NATAÇÃO & DESPORTO</button>
-      <button class="tl-filter" data-filter="saude">SAÚDE & EMERGÊNCIA</button>
-      <button class="tl-filter" data-filter="ia">IA & DADOS</button>
-      <button class="tl-filter" data-filter="engenharia">ENGENHARIA & BIOMÉDICA</button>
-      <button class="tl-filter" data-filter="online">CURSOS ONLINE / WEB</button>
+    <div class="hud-stats">
+      <div class="stat-item">
+        <span class="stat-number" id="totalCount">15</span>
+        <span>Formações</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="hourCount">320</span>
+        <span>Horas</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="certCount">8</span>
+        <span>Certificados</span>
+      </div>
     </div>
-
-    <div class="year-nav">
-      <div class="year-label">ANOS</div>
-      <span class="year-link active" data-year="2025">2025</span>
-      <span class="year-link" data-year="2024">2024</span>
-      <span class="year-link" data-year="2023">2023</span>
-      <span class="year-link" data-year="2022">2022</span>
-      <span class="year-link" data-year="2021">2021</span>
-    </div>
-  </aside>
-
-  <!-- DIREITA -->
-  <div class="tl-main">
-    <div class="tl-timeline">
-
-      <!-- 2025 -->
-      <div class="tl-year-block" id="year-2025">
-        <div class="tl-year-header">2025</div>
-
-        <div class="tl-item" data-category="desporto">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="ANL.png" alt="Associação de Natação de Lisboa" class="tl-logo">
-              <div class="tl-entity">Associação de Natação de Lisboa</div>
-            </div>
-            <div class="tl-title-text">Curso Elementar de Natação Pura, Natação Adaptada e Águas Abertas & Curso de Treinador de Grau I </div>
-            <div class="tl-desc">Formação técnica em ensino de natação, adaptação ao meio aquático e treino em águas abertas.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Natação</span><span class="tl-tag">Águas Abertas</span><span class="tl-tag">Ensino</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="ia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image-removebg-preview (17).png" alt="Workview" class="tl-logo">
-              <div class="tl-entity">Workview</div>
-            </div>
-            <div class="tl-title-text">Formações em segurança, incêndios e primeiros socorros</div>
-            <div class="tl-desc">Prevenção e combate a incêndios, evacuação de pessoas, primeiros socorros (emergências médicas e SBV) e introdução à segurança e saúde ocupacional.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Segurança</span><span class="tl-tag">Primeiros Socorros</span><span class="tl-tag">Saúde Ocupacional</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2024 -->
-      <div class="tl-year-block" id="year-2024">
-        <div class="tl-year-header">2024</div>
-
-        <div class="tl-item" data-category="desporto">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image (4).png" alt="Treino de Mar" class="tl-logo">
-              <div class="tl-entity">Treino de Mar</div>
-            </div>
-            <div class="tl-title-text">Carta de Patrão Local / Curso Vela – Iniciação</div>
-            <div class="tl-desc">Noções de navegação e segurança em meio marítimo, complementando experiência em águas abertas.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Vela</span><span class="tl-tag">Navegação</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="ia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image-removebg-preview (15).png" alt="Santander Open Academy" class="tl-logo">
-              <div class="tl-entity">Santander | Open Academy </div>
-            </div>
-            <div class="tl-title-text">Workshop Introdução à AI (Code for ALL) + Excel</div>
-            <div class="tl-desc">Introdução a conceitos de Inteligência Artificial e utilização de Excel para análise de dados.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">IA</span><span class="tl-tag">Excel</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="ia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image (3).png" alt="Magma Studio" class="tl-logo">
-              <div class="tl-entity">Magma Studio</div>
-            </div>
-            <div class="tl-title-text">Workshops de Gestão Ágil, Excel e Finanças</div>
-            <div class="tl-desc">Gestão Ágil de Projetos com a NTT Data; Excel 1.0 e 2.0; finanças pessoais; Matemática e Engenharia com a TAP; Engenharia de Sistemas Ferroviários.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Gestão de Projetos</span><span class="tl-tag">Excel</span><span class="tl-tag">Finanças</span><span class="tl-tag">Engenharia</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="engenharia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image-removebg-preview (19).png" alt="XIX ENEEB" class="tl-logo">
-              <div class="tl-entity">XIX ENEEB</div>
-            </div>
-            <div class="tl-title-text">Workshop – Modelagem e impressão 3D</div>
-            <div class="tl-desc">Aplicações de impressão 3D em reabilitação e interfaces computacionais para comunicação e controlo.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Impressão 3D</span><span class="tl-tag">Reabilitação</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="ia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="TECMINHO.png" alt="Tecminho" class="tl-logo">
-              <div class="tl-entity">Tecminho</div>
-            </div>
-            <div class="tl-title-text">Inteligência Artificial aplicada ao Marketing de Conteúdo</div>
-            <div class="tl-desc">Uso de IA para análise e otimização de estratégias de marketing digital.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">IA</span><span class="tl-tag">Marketing</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="ia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image-removebg-preview (20).png" alt="Hospital da Luz" class="tl-logo">
-              <div class="tl-entity">Hospital da Luz</div>
-            </div>
-            <div class="tl-title-text">Inteligência Artificial na área da saúde</div>
-            <div class="tl-desc">Aplicações de IA em diagnóstico, apoio à decisão clínica e gestão de dados de saúde.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">IA</span><span class="tl-tag">Saúde</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2023 -->
-      <div class="tl-year-block" id="year-2023">
-        <div class="tl-year-header">2023</div>
-
-        <div class="tl-item" data-category="engenharia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image (5).png" alt="NOVA FCT" class="tl-logo">
-              <div class="tl-entity">NOVA FCT</div>
-            </div>
-            <div class="tl-title-text">JORTC23 de Engenharia Biomédica</div>
-            <div class="tl-desc">Jornadas técnicas focadas em inovação, investigação e aplicações de engenharia biomédica.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Engenharia Biomédica</span><span class="tl-tag">Investigação</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="online">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image-removebg-preview (14).png" alt="Casa Europa / Le Wagon" class="tl-logo">
-              <div class="tl-entity">Casa Europa, Le Wagon</div>
-            </div>
-            <div class="tl-title-text">Python, UX/UI e Desenvolvimento Web</div>
-            <div class="tl-desc">Análise de Dados com Python; design para dispositivos móveis (UX/UI); criação de sites com HTML & CSS, Bootstrap, PHP, SQL e UX/UI.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Python</span><span class="tl-tag">UX/UI</span><span class="tl-tag">Web Dev</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2022 -->
-      <div class="tl-year-block" id="year-2022">
-        <div class="tl-year-header">2022</div>
-
-        <div class="tl-item" data-category="saude">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image-removebg-preview (12).png" alt="INEM" class="tl-logo">
-              <div class="tl-entity">INEM</div>
-            </div>
-            <div class="tl-title-text">Formações em reanimação e emergência</div>
-            <div class="tl-desc">Reanimar com INEM; Reanimação de Alto Desempenho; formações sobre COVID‑19; abordagem à pessoa autista; Via Verde AVC e Via Verde Sépsis.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Reanimação</span><span class="tl-tag">Emergência</span><span class="tl-tag">INEM</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="desporto">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image (2).png" alt="AESP & ISN" class="tl-logo">
-              <div class="tl-entity">AESP & ISN</div>
-            </div>
-            <div class="tl-title-text">Surf & Rescue</div>
-            <div class="tl-desc">Formação em salvamento em contexto de surf e ambiente marítimo.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Surf</span><span class="tl-tag">Resgate</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="engenharia">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="TecnologiaSetubal_Principal_PolicromiaPositivo_PT-1.png" alt="IPS" class="tl-logo">
-              <div class="tl-entity">IPS</div>
-            </div>
-            <div class="tl-title-text">Seminário «Electromedicina: Gestão e Manutenção de Equipamentos Médicos»</div>
-            <div class="tl-desc">Gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Electromedicina</span><span class="tl-tag">Equipamentos Médicos</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2021 -->
-      <div class="tl-year-block" id="year-2021">
-        <div class="tl-year-header">2021</div>
-
-        <div class="tl-item" data-category="saude">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="image-removebg-preview (11).png" alt="AFSS" class="tl-logo">
-              <div class="tl-entity">AFSS</div>
-            </div>
-            <div class="tl-title-text">Formações em SBV, pediatria e ECG</div>
-            <div class="tl-desc">SBV com e sem DAE; SBV Pediátrico; Primeiros Socorros em Adultos; STOP THE BLEED; Eletrocardiografia Nível I e II.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">SBV</span><span class="tl-tag">Pediatria</span><span class="tl-tag">ECG</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="saude">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="FEMEDICA.png" alt="FEMÉDICA" class="tl-logo">
-              <div class="tl-entity">FEMÉDICA</div>
-            </div>
-            <div class="tl-title-text">Curso Tripulante de Ambulância de Socorro</div>
-            <div class="tl-desc">Atuação em equipas de emergência pré‑hospitalar.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Ambulância</span><span class="tl-tag">Emergência</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item" data-category="desporto">
-          <div class="tl-card">
-            <div class="tl-card-header">
-              <img src="4EMES.png" alt="4EMES" class="tl-logo">
-              <div class="tl-entity">4EMES</div>
-            </div>
-            <div class="tl-title-text">Curso Nadador Salvador</div>
-            <div class="tl-desc">Formação certificada em vigilância balnear e salvamento aquático.</div>
-            <div class="tl-tags">
-              <span class="tl-tag">Nadador Salvador</span><span class="tl-tag">Segurança Aquática</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Botão VOLTAR AO TOPO no fim -->
-    <button class="btn-topo" id="btnTopo">↑ VOLTAR AO TOPO</button>
   </div>
-</section>
 
-<script>
-  // Filtros
-  const filterButtons = document.querySelectorAll('.tl-filter');
-  const items = document.querySelectorAll('.tl-item');
+  <!-- FILTERS -->
+  <div class="filters-section">
+    <button class="filter-btn active" onclick="filterYear('all')">Todos</button>
+    <button class="filter-btn" onclick="filterYear('2025')">2025</button>
+    <button class="filter-btn" onclick="filterYear('2024')">2024</button>
+    <button class="filter-btn" onclick="filterYear('2023')">2023</button>
+    <button class="filter-btn" onclick="filterYear('2022')">2022</button>
+    <button class="filter-btn" onclick="filterYear('2021')">2021</button>
+  </div>
 
-  filterButtons.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const cat = btn.getAttribute('data-filter');
-      filterButtons.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      items.forEach(it=>{
-        const iCat = it.getAttribute('data-category');
-        it.style.display = (cat === 'all' || iCat === cat) ? '' : 'none';
-      });
-    });
-  });
+  <!-- STATS -->
+  <div class="content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-number">8</div>
+        <div class="stat-card-label">🏆 Certificados</div>
+        <div class="stat-card-desc">Profissionais validados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number">320h</div>
+        <div class="stat-card-label">⏱️ Tempo Total</div>
+        <div class="stat-card-desc">Investimento em aprendizagem</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number">5</div>
+        <div class="stat-card-label">🎯 Áreas</div>
+        <div class="stat-card-desc">Técnica, Saúde, Marítima...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number">100%</div>
+        <div class="stat-card-label">✨ Completadas</div>
+        <div class="stat-card-desc">Nenhuma em progresso</div>
+      </div>
+    </div>
 
-  // Navegação por ano
-  const yearLinks = document.querySelectorAll('.year-link');
-  yearLinks.forEach(link=>{
-    link.addEventListener('click',()=>{
-      const year = link.getAttribute('data-year');
-      const target = document.getElementById('year-'+year);
-      if(target){
-        target.scrollIntoView({behavior:'smooth', block:'start'});
+    <!-- GRID SECTIONS -->
+    <div id="gridContainer"></div>
+  </div>
+
+  <script>
+    const formacoes = [
+      {
+        id: 1,
+        year: 2025,
+        title: "Curso Elementar de Natação Pura",
+        org: "Associação de Natação de Lisboa",
+        description: "Formação técnica em ensino de natação, adaptação ao meio aquático e treino em águas abertas.",
+        hours: 40,
+        tags: ["Natação", "Águas Abertas", "Ensino"],
+        category: "técnica",
+        status: "Completado",
+        logo: img("ANL.png")
+      },
+      {
+        id: 2,
+        year: 2025,
+        title: "Formações em Segurança & Primeiros Socorros",
+        org: "Workview",
+        description: "Prevenção e combate a incêndios, evacuação de pessoas, primeiros socorros e segurança ocupacional.",
+        hours: 32,
+        tags: ["Segurança", "Primeiros Socorros", "Saúde Ocupacional"],
+        category: "soft",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 3,
+        year: 2024,
+        title: "Carta de Patrão Local / Curso Vela",
+        org: "Treino de Mar",
+        description: "Noções de navegação e segurança em meio marítimo, complementando experiência em águas abertas.",
+        hours: 24,
+        tags: ["Vela", "Navegação"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 4,
+        year: 2024,
+        title: "Workshop Introdução à AI + Excel",
+        org: "Santander Open Academy",
+        description: "Introdução a conceitos de Inteligência Artificial e utilização de Excel para análise de dados.",
+        hours: 16,
+        tags: ["IA", "Excel"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 5,
+        year: 2024,
+        title: "Workshops de Gestão Ágil, Excel e Finanças",
+        org: "Magma Studio",
+        description: "Gestão Ágil de Projetos com NTT Data; Excel 1.0 e 2.0; finanças pessoais e Engenharia.",
+        hours: 28,
+        tags: ["Gestão de Projetos", "Excel", "Finanças"],
+        category: "soft",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 6,
+        year: 2024,
+        title: "Workshop Modelagem e Impressão 3D",
+        org: "XIX ENEEB",
+        description: "Aplicações de impressão 3D em reabilitação e interfaces computacionais.",
+        hours: 12,
+        tags: ["Impressão 3D", "Reabilitação"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 7,
+        year: 2024,
+        title: "IA aplicada ao Marketing de Conteúdo",
+        org: "Tecminho",
+        description: "Uso de IA para análise e otimização de estratégias de marketing digital.",
+        hours: 8,
+        tags: ["IA", "Marketing"],
+        category: "soft",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 8,
+        year: 2024,
+        title: "Inteligência Artificial na Saúde",
+        org: "Hospital da Luz",
+        description: "Aplicações de IA em diagnóstico, apoio à decisão clínica e gestão de dados de saúde.",
+        hours: 16,
+        tags: ["IA", "Saúde"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 9,
+        year: 2023,
+        title: "Jornadas Técnicas de Engenharia Biomédica",
+        org: "NOVA FCT",
+        description: "Jornadas técnicas focadas em inovação, investigação e aplicações de engenharia biomédica.",
+        hours: 8,
+        tags: ["Engenharia Biomédica", "Investigação"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 10,
+        year: 2023,
+        title: "Python, UX/UI e Desenvolvimento Web",
+        org: "Casa Europa, Le Wagon",
+        description: "Análise de Dados com Python; design para dispositivos móveis; criação de sites com HTML, CSS, SQL.",
+        hours: 60,
+        tags: ["Python", "UX/UI", "Web Dev"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 11,
+        year: 2022,
+        title: "Formações em Reanimação e Emergência",
+        org: "INEM",
+        description: "Reanimar com INEM; Reanimação de Alto Desempenho; Via Verde AVC e Via Verde Sépsis.",
+        hours: 36,
+        tags: ["Reanimação", "Emergência"],
+        category: "soft",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 12,
+        year: 2022,
+        title: "Surf & Rescue",
+        org: "AESP & ISN",
+        description: "Formação em salvamento em contexto de surf e ambiente marítimo.",
+        hours: 20,
+        tags: ["Surf", "Resgate"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 13,
+        year: 2022,
+        title: "Electromedicina: Gestão e Manutenção",
+        org: "IPS",
+        description: "Gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.",
+        hours: 16,
+        tags: ["Electromedicina", "Equipamentos Médicos"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 14,
+        year: 2021,
+        title: "Formações em SBV, Pediatria e ECG",
+        org: "AFSS",
+        description: "SBV com e sem DAE; SBV Pediátrico; Primeiros Socorros; STOP THE BLEED; Eletrocardiografia.",
+        hours: 48,
+        tags: ["SBV", "Pediatria", "ECG"],
+        category: "técnica",
+        status: "Completado",
+        logo: null
+      },
+      {
+        id: 15,
+        year: 2021,
+        title: "Curso Tripulante de Ambulância de Socorro",
+        org: "FEMÉDICA",
+        description: "Atuação em equipas de emergência pré-hospitalar.",
+        hours: 32,
+        tags: ["Ambulância", "Emergência"],
+        category: "técnica",
+        status: "Certificado",
+        logo: null
       }
-      yearLinks.forEach(l=>l.classList.remove('active'));
-      link.classList.add('active');
-    });
-  });
+    ];
 
-  // Voltar ao topo
-  document.getElementById('btnTopo').addEventListener('click',()=>{
-    window.scrollTo({top:0,behavior:'smooth'});
-  });
-</script>
+    let currentFilter = 'all';
 
+    function renderGrid() {
+      const container = document.getElementById('gridContainer');
+      container.innerHTML = '';
+
+      // Agrupar por ano
+      const grouped = {};
+      const filteredItems = formacoes.filter(f => {
+        if (currentFilter === 'all') return true;
+        return f.year === parseInt(currentFilter);
+      });
+
+      filteredItems.forEach(form => {
+        if (!grouped[form.year]) {
+          grouped[form.year] = [];
+        }
+        grouped[form.year].push(form);
+      });
+
+      // Renderizar por ano
+      const years = Object.keys(grouped).sort((a, b) => b - a);
+
+      years.forEach((year, yearIndex) => {
+        const section = document.createElement('div');
+        section.className = 'grid-section';
+
+        const title = document.createElement('div');
+        title.className = 'section-title';
+        title.textContent = `📅 ${year}`;
+        section.appendChild(title);
+
+        const grid = document.createElement('div');
+        grid.className = 'formations-grid';
+
+        grouped[year].forEach((form, index) => {
+          const card = document.createElement('div');
+          card.className = 'formation-card';
+          card.style.animationDelay = `${(yearIndex * 0.1) + (index * 0.05)}s`;
+
+          const logoHTML = form.logo 
+            ? `<img src="${form.logo}" alt="${form.org}">`
+            : `📷`;
+
+          card.innerHTML = `
+            <div class="card-year">${form.year}</div>
+            <div class="card-title">${form.title}</div>
+            <div class="card-org-container">
+              <div class="card-org-logo">${logoHTML}</div>
+              <div class="card-org">${form.org}</div>
+            </div>
+            <div class="card-description">${form.description}</div>
+            <div class="card-meta">
+              <div class="meta-item">⏱️ ${form.hours}h</div>
+              <div class="meta-item">✓ ${form.status}</div>
+            </div>
+            <div class="card-tags">
+              ${form.tags.map(tag => `<span class="tag ${form.category}">${tag}</span>`).join('')}
+            </div>
+          `;
+
+          grid.appendChild(card);
+        });
+
+        section.appendChild(grid);
+        container.appendChild(section);
+      });
+
+      // Update count
+      document.getElementById('totalCount').textContent = filteredItems.length;
+    }
+
+    function filterYear(year) {
+      currentFilter = year;
+      
+      // Update buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      renderGrid();
+    }
+
+    // Init
+    renderGrid();
+  </script>
 </body>
 </html>
