@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Modalidade Aquática</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400&family=Share+Tech+Mono&display=swap');
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #28345A;
+    }
+    body { min-height: 100vh; }
+
+    /* ---------- HUD fixo topo ---------- */
+    .top-hud {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 58px;
+      background: rgba(18,26,36,0.93);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      z-index: 9999;
+      border-bottom: 2.5px solid #42aaff;
+      box-shadow: 0 2px 18px #12244477;
+    }
+    .hud-left { display: flex; align-items: center; gap: 18px; }
+    .hud-time-date {
+      color: #e9f5fa; font-size: 1.07em; letter-spacing: .1px; font-variant-numeric: tabular-nums;
+      font-family: 'Segoe UI Mono', monospace;
+      min-width: 115px; text-align: left; text-shadow: 1px 1px 2px #06060848;
+    }
+    .left-decor-btn {
+      width: 44px; height: 44px; border-radius: 9px; margin-left: 18px;
+      border: 2.5px solid #42aaff;
+      box-shadow: 0 2px 10px #45baff88;
+      background: none;
+      display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .left-decor-btn svg { width: 20px; height: 20px; }
+    .left-decor-btn:hover { background: #428cff22; }
+
+    .hud-center {
+      flex: 1; display: flex; justify-content: flex-end;
+      margin-left: auto; margin-right: 80px;
+    }
+    .profile-area {
+      display: flex; align-items: center; gap: 11px;
+      background: rgba(42,62,94,0.82); border-radius: 9px;
+      padding: 5px 55px 5px 55px;
+      box-shadow: 0 1px 6px #006fff21, 0 2px 8px #121a2412;
+      cursor: pointer; border: 1.5px solid #42aaff60;
+      min-width: 0; max-width: 260px;
+      user-select: none;
+    }
+    .profile-img {
+      width: 38px; height: 38px; border-radius: 7px; object-fit: cover;
+      border: 2.5px solid #42aaff;
+      box-shadow: 0 2px 12px #0a79e058; background: #202a41;
+    }
+    .profile-name {
+      color: #f3f8fc; font-weight: 600; font-size: 1em;
+      max-width: 120px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+      user-select: text;
+    }
+
+    /* ---------- Galeria/Colunas ---------- */
+    .gallery {
+      position: absolute;
+      top: 58px;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 58px);
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+      margin: 0;
+      background: #000;
+      z-index: 9;
+      padding: 16px 10px;          /* espaço em cima/baixo e laterais */
+      box-sizing: border-box;
+      gap: 16px;
+    }
+    .col {
+      position: relative;
+      flex: 1;
+      max-width: 30vw;             /* encolhe um pouco cada foto */
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+      cursor: pointer;
+      transition: filter 0.25s, transform 0.25s;
+      box-sizing: border-box;
+    }
+    .col-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+    .col img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s, transform 0.3s;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+    }
+    .col:hover img,
+    .col:focus img {
+      filter: brightness(0.6);
+      transform: scale(1.03);
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;               /* conteúdo em baixo */
+      background: linear-gradient(
+        to top,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.0) 60%
+      );
+      color: #000000;
+      font-weight: 600;
+      font-size: 1.4em;
+      letter-spacing: 1px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.33s;
+      text-shadow: none;
+      text-align: center;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+    
+    .col:hover .overlay,
+    .col:focus .overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .overlay-bottom {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 18px;
+    }
+    
+    /* se quiseres logo pequeno em TODAS, usas igual */
+    .overlay-logo-small {
+      width: 120px;
+      height: auto;
+      margin-bottom: 6px;
+    }
+
+
+    .col:hover .overlay,
+    .col:focus .overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ---------- Loader HUD ---------- */
+    #screen-fade {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: black;
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 0.8s ease-out;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', 'Share Tech Mono', monospace;
+      user-select: none;
+    }
+    #screen-fade .loader-circle-ret {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #screen-fade .loader-svg {
+      width: 150px;
+      height: 150px;
+      display: block;
+    }
+    #screen-fade .loader-rect {
+      transition: fill 0.12s;
+    }
+    #screen-fade .loader-percent,
+    #screen-fade .loader-complete {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Orbitron', 'Share Tech Mono', monospace;
+      font-weight: 400;
+      user-select: none;
+      pointer-events: none;
+      letter-spacing: 0.01em;
+      line-height: 1;
+    }
+    #screen-fade .loader-percent {
+      top: 43.2%;
+      font-size: 1.5em;
+      color: #17e6ff;
+    }
+    #screen-fade .loader-complete {
+      top: 57.5%;
+      font-size: 0.8em;
+      color: #5effe2;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      width: max-content;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #screen-fade .loader-complete.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-hud">
+    <div class="hud-left">
+      <span class="hud-time-date" id="hudTimeDate"></span>
+      <button class="left-decor-btn" title="Voltar ao menu inicial" type="button">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#42aaff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 11.5L12 4l9 7.5" />
+          <path d="M5 10v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8" />
+          <path d="M9 22V12h6v10" />
+        </svg>
+      </button>
+    </div>
+    <div class="hud-center">
+      <div class="profile-area" title="Meu Perfil" tabindex="0">
+        <img src="Áreas (6).png" alt="Meu Perfil" class="profile-img" />
+        <span class="profile-name">Luís Correia</span>
+      </div>
+    </div>
+    <div class="hud-right"></div>
+  </div>
+
+  <div class="gallery">
+    <!-- Coluna 1 -->
+    <div class="col" tabindex="0" data-link="NatacaoPura.html">
+      <div class="col-inner">
+        <img
+          src="1000034276_c4b8ade6e6aac85d3cc3780c3b35c873-07_07_2024, 20_23_57.jpg"
+          alt="Natação Pura"
+        />
+        <div class="overlay">
+          <div class="overlay-bottom">
+            <!-- Se não quiseres logo aqui, remove esta img -->
+            <img
+              src="icon_np.png"
+              class="overlay-logo-small"
+              alt="Símbolo Natação Pura"
+            />
+            <span>Natação Pura</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Coluna 2 -->
+    <div class="col" tabindex="0" data-link="aguasabertas.html">
+      <div class="col-inner">
+        <img src="FB_IMG_1696068644775 (1).jpg" alt="Águas Abertas" />
+        <div class="overlay">
+          <div class="overlay-bottom">
+            <img
+              src="icon_aa.png"
+              class="overlay-logo-small"
+              alt="Símbolo Águas Abertas"
+            />
+            <span>Águas Abertas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+    
+    <!-- Coluna 3 -->
+    <div class="col" tabindex="0" data-link="salvaqua.html">
+      <div class="col-inner">
+        <img src="Screenshot_20240521_092550_Gallery (1).jpg" alt="Salvamento Aquático" />
+        <div class="overlay">
+          <div class="overlay-bottom">
+            <img
+              src="Imagem_WhatsApp_2025-10-26_às_00.09.13_5fb53800-removebg-preview.png"
+              class="overlay-logo-small"
+              alt="Símbolo Salvamento Aquático"
+            />
+            <span>Salvamento Aquático</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fader/Loader (usado ao entrar e navegar) -->
+  <div id="screen-fade"></div>
+
+  <script>
+    // ---- Fade ao entrar na página ----
+    window.addEventListener("load", () => {
+      const screenFade = document.getElementById("screen-fade");
+      if (!screenFade) return;
+      screenFade.style.pointerEvents = "auto";
+      screenFade.style.opacity = "1";
+      setTimeout(() => {
+        screenFade.style.opacity = "0";
+      }, 100);
+      screenFade.addEventListener(
+        "transitionend",
+        () => {
+          if (screenFade.style.opacity === "0") {
+            screenFade.style.pointerEvents = "none";
+            screenFade.innerHTML = "";
+          }
+        },
+        { once: true }
+      );
+    });
+
+    // ---- Troca do loader no fade and load ----
+    function fadeAndLoad(link) {
+      const screenFade = document.getElementById("screen-fade");
+      if (!screenFade) return;
+
+      screenFade.innerHTML = `
+        <div class="loader-circle-ret" aria-label="A carregar">
+          <svg class="loader-svg" aria-hidden="true" focusable="false"></svg>
+          <div class="loader-percent" id="loaderPercent">0%</div>
+          <div class="loader-complete" id="loaderComplete">COMPLETE</div>
+        </div>
+      `;
+
+      screenFade.style.pointerEvents = "auto";
+      screenFade.style.transition = "opacity 0.8s ease-out";
+      requestAnimationFrame(() => {
+        screenFade.style.opacity = "1";
+      });
+
+      createRectangularLoaderAnimation(() => {
+        window.location.href = link;
+      });
+    }
+
+    // ---- Liga eventos aos cliques e teclas das colunas ----
+    document.querySelectorAll(".col").forEach((col) => {
+      col.addEventListener("click", function (e) {
+        e.preventDefault();
+        const link = this.getAttribute("data-link");
+        if (link) fadeAndLoad(link);
+      });
+      col.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          const link = this.getAttribute("data-link");
+          if (link) fadeAndLoad(link);
+        }
+      });
+    });
+
+    // ---- Atualiza o relógio da HUD ----
+    function updateHudTime() {
+      const el = document.getElementById("hudTimeDate");
+      if (!el) return;
+      const now = new Date();
+      el.textContent =
+        now.toLocaleDateString("pt-PT", { day: "2-digit", month: "2-digit" }) +
+        " " +
+        now.toLocaleTimeString("pt-PT", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+    }
+    setInterval(updateHudTime, 1000);
+    updateHudTime();
+
+    // ---- Botão do menu inicial (index) ----
+    document.querySelector(".left-decor-btn").onclick = function () {
+      fadeAndLoad("index.html");
+    };
+
+    // ---- Função que cria e anima o loader de retângulos circulares ----
+    function createRectangularLoaderAnimation(onComplete) {
+      const svg = document.querySelector(".loader-svg");
+      if (!svg) return;
+      svg.innerHTML = "";
+      const WIDTH = 150,
+        HEIGHT = 150;
+      const cx = WIDTH / 2,
+        cy = HEIGHT / 2;
+      const OUTER_RADIUS = 62;
+      const SEGMENTS = 121;
+      const RECT_W = 8,
+        RECT_H = 16;
+      const ANGLE_STEP = (2 * Math.PI) / SEGMENTS;
+
+      for (let i = 0; i < SEGMENTS; i++) {
+        const angle = i * ANGLE_STEP - Math.PI / 2;
+        const x = cx + Math.cos(angle) * OUTER_RADIUS;
+        const y = cy + Math.sin(angle) * OUTER_RADIUS;
+        const group = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "g"
+        );
+        group.setAttribute(
+          "transform",
+          `translate(${x},${y}) rotate(${(angle * 180) / Math.PI + 90})`
+        );
+        const rect = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "rect"
+        );
+        rect.setAttribute("x", -RECT_W / 2);
+        rect.setAttribute("y", -RECT_H / 2);
+        rect.setAttribute("width", RECT_W);
+        rect.setAttribute("height", RECT_H);
+        rect.setAttribute("rx", 0);
+        rect.setAttribute("fill", "#12324c");
+        rect.setAttribute("opacity", "0.18");
+        rect.classList.add("loader-rect");
+        group.appendChild(rect);
+        svg.appendChild(group);
+      }
+
+      const percentEl = document.getElementById("loaderPercent");
+      const completeEl = document.getElementById("loaderComplete");
+      const rects = svg.querySelectorAll(".loader-rect");
+      let start = null;
+      const targetPercent = 100;
+      const duration = 3000;
+
+      function step(now) {
+        if (!start) start = now;
+        const anim = Math.min(1, (now - start) / duration);
+        const curr = Math.round(anim * targetPercent);
+        percentEl.textContent = curr + "%";
+        const rectsToShow = Math.round((SEGMENTS * curr) / 100);
+        rects.forEach((r, i) => {
+          if (i < rectsToShow) {
+            r.setAttribute("fill", "#17e6ff");
+            r.setAttribute("opacity", "1");
+          } else {
+            r.setAttribute("fill", "#12324c");
+            r.setAttribute("opacity", "0.18");
+          }
+        });
+        if (curr < targetPercent) requestAnimationFrame(step);
+        else {
+          percentEl.textContent = targetPercent + "%";
+          completeEl.classList.add("show");
+          if (onComplete) setTimeout(onComplete, 2000);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+  </script>
+</body>
+</html>

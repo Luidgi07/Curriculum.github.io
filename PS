@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu PS4 Example</title>
+  <style>
+    body {
+      background: linear-gradient(120deg, #16336e 0%, #282c44 100%);
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .ps4-menu {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 40px 10px;
+      background: rgba(30,45,80,0.9);
+      border-radius: 24px;
+      box-shadow: 0 8px 40px #0a132eaa;
+      gap: 32px;
+    }
+    .menu-item {
+      width: 130px;
+      height: 150px;
+      background: #23263c;
+      border-radius: 16px;
+      box-shadow: 0 6px 22px #0007;
+      margin: 0 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.17em;
+      cursor: pointer;
+      transition: 
+        transform 0.25s cubic-bezier(.27,.36,.6,1.3),
+        box-shadow 0.22s,
+        background 0.3s;
+      outline: none;
+      border: none;
+      position: relative;
+    }
+    .menu-item.selected,
+    .menu-item:hover {
+      transform: scale(1.13) translateY(-15px);
+      background: #323f82;
+      box-shadow: 0 0 32px 8px #2996ff55, 0 6px 40px #0006;
+      z-index: 10;
+    }
+    .menu-item .icon {
+      font-size: 2.7em;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    .menu-label {
+      letter-spacing: 1px;
+      font-weight: 500;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="ps4-menu" tabindex="0">
+    <div class="menu-item selected" tabindex="0">
+      <div class="icon">⚙️</div>
+      <div class="menu-label">Definições</div>
+    </div>
+    <div class="menu-item" tabindex="0">
+      <div class="icon">🏆</div>
+      <div class="menu-label">Troféus</div>
+    </div>
+    <div class="menu-item" tabindex="0">
+      <div class="icon">🎮</div>
+      <div class="menu-label">Jogos</div>
+    </div>
+    <div class="menu-item" tabindex="0">
+      <div class="icon">📁</div>
+      <div class="menu-label">Projetos</div>
+    </div>
+    <!-- Adiciona mais cartões conforme quiseres -->
+  </div>
+
+  <script>
+    // Navegação por teclado (setas esquerda/direita)
+    const items = document.querySelectorAll('.menu-item');
+    let selected = 0;
+
+    function selectItem(idx) {
+      items[selected].classList.remove('selected');
+      selected = idx;
+      items[selected].classList.add('selected');
+      items[selected].focus();
+    }
+
+    items.forEach((item, idx) => {
+      item.addEventListener('mouseover', () => selectItem(idx));
+      item.addEventListener('focus', () => selectItem(idx));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        selectItem((selected + 1) % items.length);
+      }
+      if (e.key === 'ArrowLeft') {
+        selectItem((selected - 1 + items.length) % items.length);
+      }
+    });
+  </script>
+</body>
+</html>

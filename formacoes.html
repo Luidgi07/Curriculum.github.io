@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formações & Certificações - Grid View</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e2a3d 0%, #05070b 55%, #000000 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #f5f7fa;
+      overflow-x: hidden;
+    }
+
+    /* HUD */
+    .top-hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 60px;
+      background: rgba(18, 26, 36, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 9999;
+      border-bottom: 2.5px solid #42aaff;
+      box-shadow: 0 2px 18px #12244477;
+    }
+
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: #e9f5fa;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: filter 0.2s;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-btn:hover {
+      filter: brightness(1.22) drop-shadow(0 2px 6px #069cffbb);
+    }
+
+    .hud-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #42aaff;
+      text-shadow: 0 2px 8px #0004;
+    }
+
+    .hud-stats {
+      display: flex;
+      gap: 24px;
+      font-size: 0.9em;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-number {
+      color: #42aaff;
+      font-weight: 700;
+      font-size: 1.2em;
+    }
+
+    /* FILTERS */
+    .filters-section {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      width: 100vw;
+      background: linear-gradient(to bottom, rgba(18, 26, 36, 0.8), transparent);
+      padding: 16px 40px;
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(66, 170, 255, 0.1);
+    }
+
+    .filter-btn {
+      background: rgba(66, 170, 255, 0.1);
+      border: 1.5px solid rgba(66, 170, 255, 0.3);
+      color: #dfe8ff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9em;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .filter-btn:hover {
+      background: rgba(66, 170, 255, 0.2);
+      border-color: #42aaff;
+    }
+
+    .filter-btn.active {
+      background: #42aaff;
+      color: #fff;
+      border-color: #42aaff;
+      box-shadow: 0 0 16px rgba(66, 170, 255, 0.4);
+    }
+
+    /* CONTENT */
+    .content {
+      margin-top: 140px;
+      padding: 40px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* STATS CARDS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 50px;
+    }
+
+    .stat-card {
+      background: rgba(8, 12, 24, 0.6);
+      border: 1.5px solid rgba(66, 170, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: rgba(8, 12, 24, 0.9);
+      border-color: #42aaff;
+      transform: translateY(-2px);
+    }
+
+    .stat-card-number {
+      font-size: 2em;
+      font-weight: 700;
+      color: #42aaff;
+      margin-bottom: 6px;
+    }
+
+    .stat-card-label {
+      font-size: 0.9em;
+      color: #dfe8ff;
+      opacity: 0.9;
+    }
+
+    .stat-card-desc {
+      font-size: 0.75em;
+      color: #dfe8ff;
+      opacity: 0.6;
+      margin-top: 6px;
+    }
+
+    /* GRID LAYOUT */
+    .grid-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #42aaff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(66, 170, 255, 0.3);
+      letter-spacing: 0.05em;
+    }
+
+    .formations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .formation-card {
+      background: rgba(8, 12, 24, 0.55);
+      border: 1.5px solid rgba(66, 170, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .formation-card:hover {
+      background: rgba(8, 12, 24, 0.85);
+      border-color: #42aaff;
+      box-shadow: 0 8px 24px rgba(66, 170, 255, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .card-year {
+      font-size: 0.75em;
+      color: #42aaff;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card-title {
+      font-size: 0.95em;
+      font-weight: 600;
+      color: #f5f7fa;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    /* ORG COM LOGO - CINZA CLARO */
+    .card-org-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px 12px;
+      border-radius: 10px;
+      width: fit-content;
+    }
+
+    .card-org-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      background: #d1d5db;
+      border: 1px solid #9ca3af;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      font-size: 18px;
+    }
+
+    .card-org-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 2px;
+    }
+
+    .card-org {
+      font-size: 0.8em;
+      color: #dfe8ff;
+      opacity: 0.85;
+    }
+
+    .card-description {
+      font-size: 0.8em;
+      color: #dfe8ff;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      opacity: 0.75;
+      flex-grow: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.75em;
+      color: #dfe8ff;
+      opacity: 0.65;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(66, 170, 255, 0.1);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: rgba(66, 170, 255, 0.15);
+      border: 1px solid rgba(66, 170, 255, 0.3);
+      color: #42aaff;
+      padding: 3px 9px;
+      border-radius: 10px;
+      font-size: 0.7em;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .tag.soft {
+      background: rgba(255, 150, 100, 0.1);
+      border-color: rgba(255, 150, 100, 0.3);
+      color: #ff9664;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 768px) {
+      .top-hud {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+        padding: 14px;
+      }
+
+      .hud-stats {
+        width: 100%;
+        justify-content: space-around;
+        font-size: 0.8em;
+        gap: 8px;
+      }
+
+      .filters-section {
+        top: 100px;
+        padding: 12px 16px;
+      }
+
+      .content {
+        margin-top: 170px;
+        padding: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        padding: 16px;
+      }
+
+      .stat-card-number {
+        font-size: 1.6em;
+      }
+
+      .formations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HUD -->
+  <div class="top-hud">
+    <div class="hud-left">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <span class="hud-title">FORMAÇÕES</span>
+    </div>
+    <div class="hud-stats">
+      <div class="stat-item">
+        <span class="stat-number" id="totalCount">16</span>
+        <span>Formações</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="hourCount">541</span>
+        <span>Horas</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="certCount">2</span>
+        <span>Certificados</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-section">
+    <button class="filter-btn active" onclick="filterYear('all')">Todos</button>
+    <button class="filter-btn" onclick="filterYear('2025')">2025</button>
+    <button class="filter-btn" onclick="filterYear('2024')">2024</button>
+    <button class="filter-btn" onclick="filterYear('2023')">2023</button>
+    <button class="filter-btn" onclick="filterYear('2022')">2022</button>
+    <button class="filter-btn" onclick="filterYear('2021')">2021</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-number">4</div>
+        <div class="stat-card-label">🏆 Certificados</div>
+        <div class="stat-card-desc">Profissionais validados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number">541h</div>
+        <div class="stat-card-label">⏱️ Tempo Total</div>
+        <div class="stat-card-desc">Investimento em aprendizagem</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number">8</div>
+        <div class="stat-card-label">🎯 Áreas</div>
+        <div class="stat-card-desc">Técnica, Saúde, Marítima...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number">100%</div>
+        <div class="stat-card-label">✨ Completadas</div>
+        <div class="stat-card-desc">Nenhuma em progresso</div>
+      </div>
+    </div>
+
+    <!-- GRID SECTIONS -->
+    <div id="gridContainer"></div>
+  </div>
+
+  <script>
+    const formacoes = [
+      {
+        id: 1,
+        year: 2025,
+        title: "Curso Elementar de Natação Pura, Águas Abertas e Natação Adaptada",
+        org: "Associação de Natação de Lisboa",
+        description: "Formação técnica em arbitragem de natação pura, águas abertas e natação adaptada",
+        hours: 32,
+        tags: ["Natação", "Águas Abertas", "Ensino"],
+        category: "técnica",
+        status: "Certificado",
+        logo: "ANL.png"
+      },
+      {
+        id: 2,
+        year: 2025,
+        title: "Formações em Segurança & Primeiros Socorros",
+        org: "Workview",
+        description: "Prevenção e combate a incêndios, evacuação de pessoas, primeiros socorros e segurança ocupacional.",
+        hours: 8,
+        tags: ["Segurança", "Primeiros Socorros", "Saúde Ocupacional"],
+        category: "soft",
+        status: "Completado",
+        logo: "image-removebg-preview (17).png"
+      },
+      {
+        id: 3,
+        year: 2024,
+        title: "Carta de Patrão Local / Curso Vela",
+        org: "Treino de Mar",
+        description: "Noções de navegação e segurança em meio marítimo, complementando experiência em águas abertas.",
+        hours: 40,
+        tags: ["Vela", "Navegação"],
+        category: "técnica",
+        status: "Certificado",
+        logo: "image (4).png"
+      },
+      {
+        id: 4,
+        year: 2024,
+        title: "Workshop Introdução à AI + Excel",
+        org: "Santander Open Academy",
+        description: "Introdução a conceitos de Inteligência Artificial e utilização de Excel para análise de dados.",
+        hours: 12,
+        tags: ["IA", "Excel"],
+        category: "técnica",
+        status: "Completado",
+        logo: "image-removebg-preview (15).png"
+      },
+      {
+        id: 5,
+        year: 2024,
+        title: "Workshops de Gestão Ágil, Excel e Finanças",
+        org: "Magma Studio",
+        description: "Gestão Ágil de Projetos com NTT Data; Excel 1.0 e 2.0; finanças pessoais e Engenharia.",
+        hours: 12,
+        tags: ["Gestão de Projetos", "Excel", "Finanças"],
+        category: "soft",
+        status: "Completado",
+        logo: "image (3).png"
+      },
+      {
+        id: 6,
+        year: 2024,
+        title: "Workshop Modelagem e Impressão 3D",
+        org: "XIX ENEEB",
+        description: "Aplicações de impressão 3D em reabilitação e interfaces computacionais.",
+        hours: 4,
+        tags: ["Impressão 3D", "Reabilitação"],
+        category: "técnica",
+        status: "Completado",
+        logo: "image-removebg-preview (19).png"
+      },
+      {
+        id: 7,
+        year: 2024,
+        title: "IA aplicada ao Marketing de Conteúdo",
+        org: "Tecminho",
+        description: "Uso de IA para análise e otimização de estratégias de marketing digital.",
+        hours: 2,
+        tags: ["IA", "Marketing"],
+        category: "soft",
+        status: "Completado",
+        logo: "TECMINHO.png"
+      },
+      {
+        id: 8,
+        year: 2024,
+        title: "Inteligência Artificial na Saúde",
+        org: "Hospital da Luz",
+        description: "Aplicações de IA em diagnóstico, apoio à decisão clínica e gestão de dados de saúde.",
+        hours: 2,
+        tags: ["IA", "Saúde"],
+        category: "técnica",
+        status: "Completado",
+        logo: "image-removebg-preview (20).png"
+      },
+      {
+        id: 9,
+        year: 2023,
+        title: "Jornadas Técnicas de Engenharia Biomédica",
+        org: "NOVA FCT",
+        description: "Jornadas técnicas focadas em inovação, investigação e aplicações de engenharia biomédica.",
+        hours: 2,
+        tags: ["Engenharia Biomédica", "Investigação"],
+        category: "técnica",
+        status: "Completado",
+        logo: "image (5).png"
+      },
+      {
+        id: 10,
+        year: 2023,
+        title: "Python, UX/UI e Desenvolvimento Web",
+        org: "Casa Europa, Le Wagon",
+        description: "Análise de Dados com Python; design para dispositivos móveis; criação de sites com HTML, CSS, SQL.",
+        hours: 4,
+        tags: ["Python", "UX/UI", "Web Dev"],
+        category: "técnica",
+        status: "Completado",
+        logo: "image-removebg-preview (14).png"
+      },
+      {
+        id: 11,
+        year: 2022,
+        title: "Formações em Reanimação e Emergência",
+        org: "INEM",
+        description: "Reanimar com INEM; Reanimação de Alto Desempenho; Via Verde AVC e Via Verde Sépsis.",
+        hours: 50,
+        tags: ["Reanimação", "Emergência"],
+        category: "soft",
+        status: "Completado",
+        logo: "image-removebg-preview (12).png"
+      },
+      {
+        id: 12,
+        year: 2022,
+        title: "Surf & Rescue",
+        org: "AESP & ISN",
+        description: "Formação em salvamento em contexto de surf e ambiente marítimo.",
+        hours: 12,
+        tags: ["Surf", "Resgate"],
+        category: "técnica",
+        status: "Completado",
+        logo: "image (2).png"
+      },
+      {
+        id: 13,
+        year: 2022,
+        title: "Electromedicina: Gestão e Manutenção",
+        org: "IPS",
+        description: "Gestão e manutenção de equipamentos médicos no Hospital Garcia de Orta.",
+        hours: 2,
+        tags: ["Electromedicina", "Equipamentos Médicos"],
+        category: "técnica",
+        status: "Completado",
+        logo: "TecnologiaSetubal_Principal_PolicromiaPositivo_PT-1.png"
+      },
+      {
+        id: 14,
+        year: 2021,
+        title: "Formações em SBV, Pediatria e ECG",
+        org: "AFSS",
+        description: "SBV com e sem DAE; SBV Pediátrico; Primeiros Socorros; STOP THE BLEED; Eletrocardiografia.",
+        hours: 60,
+        tags: ["SBV", "Pediatria", "ECG"],
+        category: "técnica",
+        status: "Completado",
+        logo: "image-removebg-preview (11).png"
+      },
+      {
+        id: 15,
+        year: 2021,
+        title: "Curso Tripulante de Ambulância de Socorro",
+        org: "FEMÉDICA",
+        description: "Atuação em equipas de emergência pré-hospitalar.",
+        hours: 200,
+        tags: ["Ambulância", "Emergência"],
+        category: "técnica",
+        status: "Certificado",
+        logo: "FEMEDICA.png"
+      },
+      {
+        id: 16,
+        year: 2021,
+        title: "Curso Nadador Salvador",
+        org: "4EMES",
+        description: "Atuação em equipas de emergência na praia.",
+        hours: 150,
+        tags: ["Socorrismo", "Emergência"],
+        category: "técnica",
+        status: "Certificado",
+        logo: "4EMES.png"
+      }
+    ];
+
+    let currentFilter = 'all';
+
+    function renderGrid() {
+      const container = document.getElementById('gridContainer');
+      container.innerHTML = '';
+
+      // Agrupar por ano
+      const grouped = {};
+      const filteredItems = formacoes.filter(f => {
+        if (currentFilter === 'all') return true;
+        return f.year === parseInt(currentFilter);
+      });
+
+      filteredItems.forEach(form => {
+        if (!grouped[form.year]) {
+          grouped[form.year] = [];
+        }
+        grouped[form.year].push(form);
+      });
+
+      // Renderizar por ano
+      const years = Object.keys(grouped).sort((a, b) => b - a);
+
+      years.forEach((year, yearIndex) => {
+        const section = document.createElement('div');
+        section.className = 'grid-section';
+
+        const title = document.createElement('div');
+        title.className = 'section-title';
+        title.textContent = `📅 ${year}`;
+        section.appendChild(title);
+
+        const grid = document.createElement('div');
+        grid.className = 'formations-grid';
+
+        grouped[year].forEach((form, index) => {
+          const card = document.createElement('div');
+          card.className = 'formation-card';
+          card.style.animationDelay = `${(yearIndex * 0.1) + (index * 0.05)}s`;
+
+          const logoHTML = form.logo 
+            ? `<img src="${form.logo}" alt="${form.org}" onerror="this.style.display='none'">`
+            : `📷`;
+
+          card.innerHTML = `
+            <div class="card-year">${form.year}</div>
+            <div class="card-title">${form.title}</div>
+            <div class="card-org-container">
+              <div class="card-org-logo">${logoHTML}</div>
+              <div class="card-org">${form.org}</div>
+            </div>
+            <div class="card-description">${form.description}</div>
+            <div class="card-meta">
+              <div class="meta-item">⏱️ ${form.hours}h</div>
+              <div class="meta-item">✓ ${form.status}</div>
+            </div>
+            <div class="card-tags">
+              ${form.tags.map(tag => `<span class="tag ${form.category}">${tag}</span>`).join('')}
+            </div>
+          `;
+
+          grid.appendChild(card);
+        });
+
+        section.appendChild(grid);
+        container.appendChild(section);
+      });
+
+      // Update count
+      document.getElementById('totalCount').textContent = filteredItems.length;
+    }
+
+    function filterYear(year) {
+      currentFilter = year;
+
+      // Update buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      renderGrid();
+    }
+
+    // Init
+    renderGrid();
+  </script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habilidades - Skill Matrix</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e2a3d 0%, #05070b 55%, #000000 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #f5f7fa;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* HUD */
+    .top-hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 60px;
+      background: rgba(18, 26, 36, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 9999;
+      border-bottom: 2.5px solid #42aaff;
+      box-shadow: 0 2px 18px #12244477;
+    }
+
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: #e9f5fa;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: filter 0.2s;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-btn:hover {
+      filter: brightness(1.22) drop-shadow(0 2px 6px #069cffbb);
+    }
+
+    .hud-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #42aaff;
+    }
+
+    /* CONTENT */
+    .content {
+      margin-top: 100px;
+      padding: 40px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-title {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #42aaff;
+      margin-bottom: 40px;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 8px #0004;
+    }
+
+    /* LEGEND */
+    .legend {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95em;
+    }
+
+    .legend-bar {
+      width: 80px;
+      height: 8px;
+      background: linear-gradient(to right, #ff4444, #ffaa44, #44ff44);
+      border-radius: 4px;
+    }
+
+    /* MATRIX */
+    .matrix-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .matrix-column {
+      background: rgba(8, 12, 24, 0.5);
+      border: 1.5px solid rgba(66, 170, 255, 0.2);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .matrix-column:hover {
+      background: rgba(8, 12, 24, 0.8);
+      border-color: #42aaff;
+      transform: translateY(-4px);
+    }
+
+    .column-title {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #42aaff;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-item {
+      margin-bottom: 18px;
+    }
+
+    .skill-name {
+      font-size: 0.95em;
+      font-weight: 600;
+      color: #dfe8ff;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .skill-level {
+      font-size: 0.85em;
+      color: #42aaff;
+      font-weight: 700;
+    }
+
+    .skill-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(66, 170, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #42aaff, #75d5ff);
+      border-radius: 4px;
+      transition: width 0.6s ease;
+      box-shadow: 0 0 8px #42aaffaa;
+    }
+
+    /* RADAR */
+    .radar-section {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 2px solid rgba(66, 170, 255, 0.2);
+    }
+
+    .radar-container {
+      background: rgba(8, 12, 24, 0.6);
+      border: 1.5px solid rgba(66, 170, 255, 0.2);
+      border-radius: 16px;
+      padding: 40px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      flex-wrap: wrap;
+      backdrop-filter: blur(10px);
+    }
+
+    .radar-chart {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      aspect-ratio: 1;
+    }
+
+    .radar-chart svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 20px rgba(66, 170, 255, 0.3));
+    }
+
+    .radar-legend {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .radar-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .radar-legend-item:hover {
+      background: rgba(66, 170, 255, 0.1);
+    }
+
+    .radar-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .radar-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .radar-skill-name {
+      font-weight: 600;
+      color: #42aaff;
+      font-size: 0.95em;
+    }
+
+    .radar-skill-level {
+      font-size: 0.8em;
+      color: #dfe8ff;
+      opacity: 0.7;
+    }
+
+    /* SUMMARY */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 60px;
+    }
+
+    .summary-card {
+      background: rgba(8, 12, 24, 0.6);
+      border: 1.5px solid rgba(66, 170, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .summary-card:hover {
+      background: rgba(8, 12, 24, 0.9);
+      border-color: #42aaff;
+    }
+
+    .summary-number {
+      font-size: 2.2em;
+      font-weight: 700;
+      color: #42aaff;
+      margin-bottom: 8px;
+    }
+
+    .summary-label {
+      font-size: 0.95em;
+      color: #dfe8ff;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 768px) {
+      .content {
+        margin-top: 100px;
+        padding: 20px;
+      }
+
+      .matrix-container {
+        grid-template-columns: 1fr;
+      }
+
+      .radar-container {
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .section-title {
+        font-size: 1.4em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HUD -->
+  <div class="top-hud">
+    <div class="hud-left">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <span class="hud-title">HABILIDADES</span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <!-- MATRIX SECTION -->
+    <h1 class="section-title">📊 Skill Matrix</h1>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-bar"></div>
+        <span>Iniciante (1) → Avançado (5)</span>
+      </div>
+    </div>
+
+    <div class="matrix-container" id="matrixContainer"></div>
+
+    <!-- RADAR SECTION -->
+    <div class="radar-section">
+      <div class="radar-container">
+        <div class="radar-chart">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Circles (background grid) -->
+            <circle cx="200" cy="200" r="30" fill="none" stroke="#42aaff" stroke-width="1" opacity="0.2"/>
+            <circle cx="200" cy="200" r="60" fill="none" stroke="#42aaff" stroke-width="1" opacity="0.2"/>
+            <circle cx="200" cy="200" r="90" fill="none" stroke="#42aaff" stroke-width="1" opacity="0.2"/>
+            <circle cx="200" cy="200" r="120" fill="none" stroke="#42aaff" stroke-width="1" opacity="0.2"/>
+            <circle cx="200" cy="200" r="150" fill="none" stroke="#42aaff" stroke-width="1" opacity="0.2"/>
+
+            <!-- Axes -->
+            <line x1="200" y1="200" x2="200" y2="50" stroke="#42aaff" stroke-width="1" opacity="0.3"/>
+            <line x1="200" y1="200" x2="350" y2="200" stroke="#42aaff" stroke-width="1" opacity="0.3"/>
+            <line x1="200" y1="200" x2="325" y2="325" stroke="#42aaff" stroke-width="1" opacity="0.3"/>
+            <line x1="200" y1="200" x2="200" y2="350" stroke="#42aaff" stroke-width="1" opacity="0.3"/>
+            <line x1="200" y1="200" x2="75" y2="325" stroke="#42aaff" stroke-width="1" opacity="0.3"/>
+            <line x1="200" y1="200" x2="50" y2="200" stroke="#42aaff" stroke-width="1" opacity="0.3"/>
+
+            <!-- Radar polygon - POSIÇÕES CORRETAS -->
+            <polygon points="200,65 317,132 291,252 200,290 96,260 96,140" 
+                     fill="#42aaff" fill-opacity="0.2" stroke="#42aaff" stroke-width="2"/>
+
+            <!-- Axis labels - POSIÇÕES CORRETAS -->
+            <text x="200" y="30" text-anchor="middle" fill="#42aaff" font-size="12" font-weight="600">Python</text>
+            <text x="347" y="115" text-anchor="middle" fill="#42aaff" font-size="12" font-weight="600">Web</text>
+            <text x="347" y="285" text-anchor="middle" fill="#42aaff" font-size="12" font-weight="600">ML</text>
+            <text x="200" y="370" text-anchor="middle" fill="#42aaff" font-size="12" font-weight="600">Medical</text>
+            <text x="53" y="285" text-anchor="middle" fill="#42aaff" font-size="12" font-weight="600">DSP</text>
+            <text x="53" y="115" text-anchor="middle" fill="#42aaff" font-size="12" font-weight="600">Lead</text>
+          </svg>
+        </div>
+
+        <div class="radar-legend">
+          <div class="radar-legend-item">
+            <div class="radar-color" style="background: #42aaff;"></div>
+            <div class="radar-text">
+              <div class="radar-skill-name">Python</div>
+              <div class="radar-skill-level">4.5/5 - Avançado</div>
+            </div>
+          </div>
+
+          <div class="radar-legend-item">
+            <div class="radar-color" style="background: #42aaff;"></div>
+            <div class="radar-text">
+              <div class="radar-skill-name">Leadership</div>
+              <div class="radar-skill-level">4/5 - Avançado</div>
+            </div>
+          </div>
+
+          <div class="radar-legend-item">
+            <div class="radar-color" style="background: #42aaff;"></div>
+            <div class="radar-text">
+              <div class="radar-skill-name">Web Development</div>
+              <div class="radar-skill-level">4.5/5 - Avançado</div>
+            </div>
+          </div>
+
+          <div class="radar-legend-item">
+            <div class="radar-color" style="background: #ffaa44;"></div>
+            <div class="radar-text">
+              <div class="radar-skill-name">Machine Learning</div>
+              <div class="radar-skill-level">3.5/5 - Intermédio</div>
+            </div>
+          </div>
+
+          <div class="radar-legend-item">
+            <div class="radar-color" style="background: #ff8844;"></div>
+            <div class="radar-text">
+              <div class="radar-skill-name">Medical Imaging</div>
+              <div class="radar-skill-level">3/5 - Intermédio</div>
+            </div>
+          </div>
+
+          <div class="radar-legend-item">
+            <div class="radar-color" style="background: #ffaa44;"></div>
+            <div class="radar-text">
+              <div class="radar-skill-name">Signal Processing</div>
+              <div class="radar-skill-level">4/5 - Avançado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-number">12</div>
+        <div class="summary-label">Skills Avançadas</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-number">31</div>
+        <div class="summary-label">Skills Totais</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-number">3</div>
+        <div class="summary-label">Linguagens</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-number">6</div>
+        <div class="summary-label">Áreas Principais</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const skills = {
+      "💻 Técnicas": {
+        "Python": 4.5,
+        "JavaScript": 3,
+        "HTML/CSS": 4.5,
+        "SQL": 3.5
+      },
+      "📊 Signal Processing": {
+        "FFT": 4.5,
+        "Filtering": 4,
+        "Pandas": 3.5,
+        "NumPy": 4
+      },
+      "🤖 AI/ML": {
+        "Machine Learning": 4,
+        "Deep Learning": 3.5,
+        "Image Segmentation": 4,
+        "TensorFlow Basics": 3,
+        "Data Analysis": 4
+      },
+      "🌍 Linguagens": {
+        "Português": 5,
+        "Inglês": 4.5,
+        "Francês": 2
+      },
+      "🚑 Emergência": {
+        "Suporte Básico à Vida": 5,
+        "Primeiros Socorros": 4.5,
+        "RCP": 4.5,
+        "DAE": 4,
+        "Via Verde AVC": 4,
+        "STOP THE BLEED": 4,
+        "Triagem": 4,
+        "Reanimação Pediátrica": 3.5
+      },
+      "👥 Soft Skills": {
+        "Comunicação": 4,
+        "Team Work": 4,
+        "Liderança": 4,
+        "Apresentação": 3.5,
+        "Documentação": 4,
+        "Resolução de Problemas": 5,
+        "Criatividade": 5
+      }
+    };
+
+    function renderMatrix() {
+      const container = document.getElementById('matrixContainer');
+      container.innerHTML = '';
+
+      Object.entries(skills).forEach(([category, items]) => {
+        const column = document.createElement('div');
+        column.className = 'matrix-column';
+        column.innerHTML = `<div class="column-title">${category}</div>`;
+
+        Object.entries(items).forEach(([skill, level]) => {
+          const percentage = (level / 5) * 100;
+          const skillHTML = document.createElement('div');
+          skillHTML.className = 'skill-item';
+          skillHTML.innerHTML = `
+            <div class="skill-name">
+              <span>${skill}</span>
+              <span class="skill-level">${level}/5</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width: ${percentage}%"></div>
+            </div>
+          `;
+          column.appendChild(skillHTML);
+        });
+
+        container.appendChild(column);
+      });
+    }
+
+    renderMatrix();
+  </script>
+</body>
+</html>
