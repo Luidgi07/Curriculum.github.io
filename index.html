@@ -537,6 +537,374 @@ body.gradient-fade::after { opacity: 1; }
   width: 0%;
   transition: width .2s linear;
 }
+
+/* ===== MOBILE FIRST - EXTRA SMALL (< 480px) ===== */
+@media (max-width: 479px) {
+  body {
+    padding-top: 50px;
+  }
+  
+  .top-hud {
+    height: 50px;
+    padding: 0 16px;
+    border-bottom-width: 2px;
+  }
+  
+  .hud-left, .hud-center, .hud-right {
+    gap: 10px;
+  }
+  
+  .profile-area {
+    padding: 4px 12px;
+    border-radius: 6px;
+  }
+  
+  .profile-img {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .profile-name {
+    max-width: 80px;
+    font-size: 0.85em;
+  }
+  
+  .ps4-dashboard {
+    padding: 40px 12px 80px 12px !important;
+  }
+  
+  .carousel-inner {
+    gap: 16px;
+  }
+  
+  .menu-item {
+    width: 120px;
+    height: 180px;
+  }
+  
+  .menu-item.selected {
+    transform: scale(1.15);
+  }
+  
+  .game-details {
+    padding: 20px 12px 40px 12px;
+  }
+  
+  .game-details-inner {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+  
+  .cover-main {
+    height: 140px;
+    border-radius: 12px;
+  }
+  
+  .game-details .info h1 {
+    font-size: 1.4em;
+    letter-spacing: 0.08em;
+    margin: 0 0 6px;
+  }
+  
+  .game-details .info {
+    font-size: 0.85em;
+    line-height: 1.35em;
+  }
+  
+  .game-details .buttons {
+    gap: 8px;
+  }
+  
+  .game-details .buttons button {
+    padding: 5px 14px;
+    font-size: 0.8em;
+  }
+  
+  .side-column {
+    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .side-card {
+    flex: 1;
+    min-width: 140px;
+    padding: 4px 6px;
+  }
+  
+  .side-card img {
+    width: 48px;
+    height: 36px;
+  }
+  
+  .side-card .text {
+    font-size: 0.7em;
+  }
+  
+  .video-slot {
+    max-height: 200px;
+    border-radius: 12px;
+  }
+  
+  .scroll-top-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .scroll-top-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .hud-start {
+    width: 100%;
+    height: 40px;
+    font-size: 0.85em;
+  }
+  
+  .menu-item.selected ~ .hud-row .hud-start {
+    width: 100%;
+  }
+  
+  .hud-btn {
+    padding: 5px 14px;
+    font-size: 0.75em;
+    letter-spacing: 1px;
+  }
+  
+  .hud-title {
+    min-width: auto;
+    flex: 1;
+    max-width: 120px;
+    font-size: 0.85em;
+    padding: 0 12px;
+    height: 40px;
+  }
+  
+  .hud-hint {
+    font-size: 0.7em;
+    padding: 4px 10px;
+    bottom: 14px;
+  }
+}
+
+/* ===== SMALL DEVICES (480px - 640px) ===== */
+@media (min-width: 480px) and (max-width: 640px) {
+  body {
+    padding-top: 52px;
+  }
+  
+  .ps4-dashboard {
+    padding: 50px 20px 90px 20px;
+  }
+  
+  .carousel-inner {
+    gap: 20px;
+  }
+  
+  .menu-item {
+    width: 130px;
+    height: 195px;
+  }
+  
+  .menu-item.selected {
+    transform: scale(1.18);
+  }
+  
+  .game-details {
+    padding: 24px 20px 45px 20px;
+  }
+  
+  .game-details-inner {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+  
+  .cover-main {
+    height: 160px;
+  }
+  
+  .game-details .info h1 {
+    font-size: 1.6em;
+    margin-bottom: 4px;
+  }
+  
+  .game-details .info {
+    font-size: 0.9em;
+  }
+  
+  .side-column {
+    flex-direction: row;
+  }
+  
+  .side-card {
+    flex: 1;
+    min-width: 130px;
+  }
+  
+  .video-slot {
+    max-height: 220px;
+  }
+}
+
+/* ===== TABLET SMALL (641px - 850px) ===== */
+@media (min-width: 641px) and (max-width: 850px) {
+  body {
+    padding-top: 55px;
+  }
+  
+  .ps4-dashboard {
+    padding: 60px 40px 100px 40px;
+  }
+  
+  .carousel-inner {
+    gap: 28px;
+  }
+  
+  .menu-item {
+    width: 145px;
+    height: 215px;
+  }
+  
+  .menu-item.selected {
+    transform: scale(1.2);
+  }
+  
+  .game-details {
+    padding: 30px 40px 50px 40px;
+  }
+  
+  .game-details-inner {
+    grid-template-columns: 280px 1fr !important;
+    gap: 18px;
+  }
+  
+  .cover-main {
+    height: 180px;
+  }
+  
+  .game-details .info h1 {
+    font-size: 1.75em;
+  }
+  
+  .game-details .info {
+    font-size: 0.92em;
+  }
+  
+  .side-column {
+    display: none;
+  }
+  
+  .video-slot {
+    display: none;
+  }
+}
+
+/* ===== TABLET MEDIUM (851px - 1024px) ===== */
+@media (min-width: 851px) and (max-width: 1024px) {
+  .ps4-dashboard {
+    padding: 70px 50px 110px 50px;
+  }
+  
+  .carousel-inner {
+    gap: 30px;
+  }
+  
+  .menu-item {
+    width: 150px;
+    height: 225px;
+  }
+  
+  .game-details {
+    padding: 32px 50px 55px 50px;
+  }
+  
+  .game-details-inner {
+    grid-template-columns: 300px 1fr 180px !important;
+    gap: 20px;
+  }
+  
+  .cover-main {
+    height: 195px;
+  }
+  
+  .game-details .info h1 {
+    font-size: 1.85em;
+  }
+  
+  .video-slot {
+    max-height: 240px;
+  }
+}
+
+/* ===== DESKTOP SMALL (1025px - 1400px) ===== */
+@media (min-width: 1025px) and (max-width: 1400px) {
+  .ps4-dashboard {
+    padding: 80px 70px 120px 70px;
+  }
+  
+  .carousel-inner {
+    gap: 34px;
+  }
+  
+  .menu-item {
+    width: 155px;
+    height: 233px;
+  }
+  
+  .game-details-inner {
+    grid-template-columns: 320px 1.1fr 200px 340px;
+    gap: 22px;
+  }
+  
+  .cover-main {
+    height: 205px;
+  }
+}
+
+/* ===== DESKTOP GRANDE (> 1400px) ===== */
+@media (min-width: 1401px) {
+  .game-details-inner {
+    grid-template-columns: 340px 1.2fr 220px 360px;
+  }
+}
+
+/* ===== LANDSCAPE MODE FIX ===== */
+@media (max-height: 600px) and (orientation: landscape) {
+  body {
+    padding-top: 50px;
+  }
+  
+  .top-hud {
+    height: 48px;
+  }
+  
+  .menu-item {
+    height: 140px;
+  }
+  
+  .dashboard-container.expanded {
+    transform: translateY(-280px);
+  }
+  
+  .game-details {
+    padding: 16px 40px 30px 40px;
+  }
+  
+  .cover-main {
+    height: 140px;
+  }
+  
+  .video-slot {
+    max-height: 160px;
+  }
+}
+
+/* ===== SMOOTH TRANSITIONS ACROSS ALL SIZES ===== */
+* {
+  transition: padding 0.3s ease, margin 0.3s ease, gap 0.3s ease;
+}
+
 </style>
 </head>
 <body>
