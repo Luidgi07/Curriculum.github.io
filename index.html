@@ -547,18 +547,7 @@ body.gradient-fade::after { opacity: 1; }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-  :root {
+:root {
   /* Primitive Color Tokens */
   --color-white: rgba(255, 255, 255, 1);
   --color-black: rgba(0, 0, 0, 1);
@@ -1307,7 +1296,7 @@ select.form-control {
   .top-hud {
     height: 50px;
     padding: 0 var(--space-16);
-    border-bottom: 2px solid var(--color-border);
+    border-bottom-width: var(--space-2);
   }
   
   .hud-left, .hud-center, .hud-right {
@@ -1317,391 +1306,93 @@ select.form-control {
   .profile-area {
     padding: var(--space-4) var(--space-12);
     border-radius: var(--radius-sm);
-    background: var(--color-secondary);
-    transition: background var(--duration-fast) var(--ease-standard);
-  }
-  
-  .profile-area:hover {
-    background: var(--color-secondary-hover);
   }
   
   .profile-img {
-    width: 32px;
-    height: 32px;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-full);
+    width: var(--space-32);
+    height: var(--space-32);
   }
   
   .profile-name {
     max-width: 80px;
     font-size: var(--font-size-sm);
-    color: var(--color-text);
-    font-weight: var(--font-weight-medium);
   }
   
-  .hud-icon {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-  }
-  
-  .icon-trophy, .icon-bell, .icon-cog {
-    width: 24px;
-    height: 24px;
-    color: var(--color-text-secondary);
-    transition: color var(--duration-fast) var(--ease-standard);
-  }
-  
-  .icon-trophy:hover, .icon-bell:hover, .icon-cog:hover {
-    color: var(--color-primary);
-  }
-  
-  .hud-time-date {
-    font-size: var(--font-size-sm);
-    color: var(--color-text);
-  }
-  
-  /* ===== DASHBOARD CAROUSEL ===== */
   .dashboard-container {
-    position: fixed;
-    left: 0;
     top: 50px;
-    width: 100vw;
-    height: auto;
     max-height: 180px;
-    z-index: 10;
-    overflow: visible;
-    background: var(--color-background);
   }
   
   .ps4-dashboard {
-    width: 100vw;
     padding: var(--space-20) var(--space-12) var(--space-10) var(--space-12);
-    overflow: visible;
   }
   
   .carousel-inner {
-    display: flex;
-    align-items: flex-end;
     gap: var(--space-12);
   }
   
   .menu-item {
     width: 100px;
     height: 150px;
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-base);
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: transform var(--duration-normal) var(--ease-standard),
-                box-shadow var(--duration-normal) var(--ease-standard),
-                border-color var(--duration-normal) var(--ease-standard);
-    box-shadow: var(--shadow-sm);
   }
   
   .menu-item.selected {
     transform: scale(1.12);
-    box-shadow: 0 0 30px 3px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.7),
-                0 5px 25px rgba(var(--color-black-rgb, 0, 0, 0), 0.8);
-    border-color: var(--color-primary);
-  }
-  
-  .menu-item-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 0;
-  }
-  
-  .hud-row {
-    display: none;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    align-items: stretch;
-    z-index: 40;
-    transform: translateY(var(--space-12));
-  }
-  
-  .menu-item.selected ~ .hud-row {
-    display: flex;
+    transition: transform var(--duration-normal) var(--ease-standard);
   }
   
   .hud-start {
-    height: 40px;
-    background: rgba(var(--color-slate-900-rgb), 0.98);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-base);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100px;
-    margin-right: var(--space-12);
+    height: 40px;
     font-size: var(--font-size-xs);
-  }
-  
-  .menu-item.selected ~ .hud-row .hud-start {
-    width: calc(100px * 1.12);
   }
   
   .hud-btn {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-    color: var(--color-btn-primary-text);
-    border: none;
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.05em;
-    padding: var(--space-6) var(--space-12);
-    cursor: pointer;
-    height: 32px;
+    padding: 5px var(--space-12);
     font-size: var(--font-size-xs);
-    border-radius: var(--radius-sm);
-    transition: transform var(--duration-fast) var(--ease-standard);
-  }
-  
-  .hud-btn:hover {
-    transform: translateY(-1px);
-  }
-  
-  .hud-btn:active {
-    transform: translateY(0);
   }
   
   .hud-title {
     min-width: 90px;
     height: 40px;
-    display: flex;
-    align-items: center;
-    background: rgba(var(--color-slate-900-rgb), 0.88);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-    padding: 0 var(--space-10);
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text);
-    cursor: pointer;
-    backdrop-filter: blur(14px);
-    transition: background var(--duration-fast) var(--ease-standard);
+    padding: 0 var(--space-10);
   }
   
-  .hud-title:hover {
-    background: rgba(var(--color-slate-900-rgb), 0.95);
-  }
-  
-  /* ===== GAME DETAILS ===== */
   .game-details {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100vw;
-    max-height: calc(100vh - 50px);
     padding: var(--space-16) var(--space-12) var(--space-20) var(--space-12);
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(100%);
-    transition: opacity var(--duration-normal) var(--ease-standard),
-                transform var(--duration-normal) var(--ease-standard);
-    z-index: 12;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: var(--color-background);
-  }
-  
-  .game-details.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
+    max-height: calc(100vh - 50px);
   }
   
   .game-details-inner {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: var(--space-12);
-    max-width: 100%;
   }
   
   .cover-main {
-    width: 100%;
     height: 140px;
-    border-radius: var(--radius-md);
-    border: 2px solid var(--color-primary);
-    object-fit: cover;
-    box-shadow: var(--shadow-md);
-  }
-  
-  .game-details .info {
-    color: var(--color-text);
-    display: flex;
-    flex-direction: column;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
   }
   
   .game-details .info h1 {
     font-size: var(--font-size-xl);
-    letter-spacing: var(--letter-spacing-tight);
-    text-transform: uppercase;
-    margin: 0 0 var(--space-4) 0;
-    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text);
   }
   
-  .game-details .info .tagline {
-    margin: 0 0 var(--space-6) 0;
-    opacity: 0.9;
-    font-weight: var(--font-weight-medium);
+  .game-details .info {
     font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-  }
-  
-  .game-details .info p {
-    margin: 0 0 var(--space-8) 0;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
-    color: var(--color-text);
-  }
-  
-  .game-details .buttons {
-    margin-top: var(--space-8);
-    display: flex;
-    gap: var(--space-6);
-    flex-wrap: wrap;
   }
   
   .game-details .buttons button {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-    border: none;
-    color: var(--color-btn-primary-text);
-    padding: var(--space-6) var(--space-12);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-full);
-    cursor: pointer;
+    padding: 5px var(--space-12);
     font-size: var(--font-size-xs);
-    transition: transform var(--duration-fast) var(--ease-standard);
-  }
-  
-  .game-details .buttons button:hover {
-    transform: translateY(-1px);
-  }
-  
-  .game-details .buttons button:active {
-    transform: translateY(0);
   }
   
   .side-column {
-    width: 100%;
-    display: flex;
     flex-direction: row;
     gap: var(--space-8);
   }
   
-  .side-card {
-    flex: 1;
-    background: var(--color-secondary);
-    border-radius: var(--radius-md);
-    padding: var(--space-6) var(--space-8);
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    border: 1px solid var(--color-border);
-    backdrop-filter: blur(12px);
-    box-shadow: var(--shadow-sm);
-  }
-  
-  .side-card img {
-    width: 45px;
-    height: 32px;
-    object-fit: contain;
-    border-radius: var(--radius-base);
-  }
-  
-  .side-card .text {
-    font-size: var(--font-size-xs);
-    color: var(--color-text);
-    line-height: var(--line-height-tight);
-  }
-  
   .video-slot {
-    width: 100%;
-    border-radius: var(--radius-md);
-    border: 2px solid var(--color-primary);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
     max-height: 180px;
-    margin-top: var(--space-8);
-  }
-  
-  .video-slot video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .scroll-top-btn {
-    position: absolute;
-    left: 50%;
-    top: -40px;
-    transform: translate(-50%, -50%);
-    background: transparent;
-    border: none;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 20;
-    padding: 0;
-    transition: transform var(--duration-fast) var(--ease-standard);
-  }
-  
-  .scroll-top-btn:hover {
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-  
-  .scroll-top-btn svg {
-    width: 22px;
-    height: 22px;
-    stroke: var(--color-primary);
-  }
-  
-  .hub-hint {
-    position: fixed;
-    left: 50%;
-    bottom: 14px;
-    transform: translateX(-50%);
-    padding: var(--space-4) var(--space-10);
-    background: rgba(var(--color-slate-900-rgb), 0.92);
-    border-radius: var(--radius-full);
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
-    font-size: var(--font-size-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 30;
-    transition: opacity var(--duration-normal) var(--ease-standard);
-  }
-  
-  .hub-hint.visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  .hub-hint span.key {
-    padding: var(--space-2) var(--space-6);
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border);
-    font-size: var(--font-size-xs);
   }
 }
 
@@ -1714,7 +1405,6 @@ select.form-control {
   .top-hud {
     height: 52px;
     padding: 0 var(--space-20);
-    border-bottom: 2px solid var(--color-border);
   }
   
   .hud-left, .hud-center, .hud-right {
@@ -1722,55 +1412,26 @@ select.form-control {
   }
   
   .profile-area {
-    padding: var(--space-6) var(--space-16);
-    border-radius: var(--radius-sm);
-    background: var(--color-secondary);
-    transition: background var(--duration-fast) var(--ease-standard);
-  }
-  
-  .profile-area:hover {
-    background: var(--color-secondary-hover);
+    padding: 5px 14px;
   }
   
   .profile-img {
     width: 34px;
     height: 34px;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-full);
   }
   
   .profile-name {
     max-width: 90px;
     font-size: var(--font-size-sm);
-    color: var(--color-text);
-    font-weight: var(--font-weight-medium);
   }
   
-  .hud-icon {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-  }
-  
-  .icon-trophy, .icon-bell, .icon-cog {
-    width: 26px;
-    height: 26px;
-    color: var(--color-text-secondary);
-    transition: color var(--duration-fast) var(--ease-standard);
-  }
-  
-  .icon-trophy:hover, .icon-bell:hover, .icon-cog:hover {
-    color: var(--color-primary);
-  }
-  
-  /* ===== DASHBOARD CAROUSEL ===== */
   .dashboard-container {
     top: 52px;
     max-height: 210px;
-    background: var(--color-background);
   }
   
   .ps4-dashboard {
-    padding: var(--space-32) var(--space-20) var(--space-12) var(--space-20);
+    padding: 30px var(--space-20) var(--space-12) var(--space-20);
   }
   
   .carousel-inner {
@@ -1780,37 +1441,21 @@ select.form-control {
   .menu-item {
     width: 115px;
     height: 172px;
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-base);
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--duration-normal) var(--ease-standard),
-                box-shadow var(--duration-normal) var(--ease-standard),
-                border-color var(--duration-normal) var(--ease-standard);
   }
   
   .menu-item.selected {
     transform: scale(1.14);
-    box-shadow: 0 0 30px 3px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.7),
-                0 5px 25px rgba(0, 0, 0, 0.8);
-    border-color: var(--color-primary);
+    transition: transform var(--duration-normal) var(--ease-standard);
   }
   
   .hud-start {
     width: 115px;
     height: 42px;
     font-size: var(--font-size-sm);
-    background: rgba(var(--color-slate-900-rgb), 0.98);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-base);
-  }
-  
-  .menu-item.selected ~ .hud-row .hud-start {
-    width: calc(115px * 1.14);
   }
   
   .hud-btn {
-    padding: var(--space-6) var(--space-16);
+    padding: var(--space-6) 14px;
     font-size: var(--font-size-xs);
   }
   
@@ -1818,18 +1463,16 @@ select.form-control {
     min-width: 110px;
     height: 42px;
     font-size: var(--font-size-sm);
-    padding: 0 var(--space-12);
   }
   
-  /* ===== GAME DETAILS ===== */
   .game-details {
-    padding: var(--space-20) var(--space-20) 25px var(--space-20);
+    padding: 18px var(--space-20) 25px var(--space-20);
     max-height: calc(100vh - 52px);
   }
   
   .game-details-inner {
-    grid-template-columns: 1fr;
-    gap: var(--space-16);
+    grid-template-columns: 1fr !important;
+    gap: 14px;
   }
   
   .cover-main {
@@ -1837,20 +1480,15 @@ select.form-control {
   }
   
   .game-details .info h1 {
-    font-size: var(--font-size-2xl);
-    margin: 0 0 var(--space-4) 0;
+    font-size: var(--font-size-xl);
   }
   
   .game-details .info {
-    font-size: var(--font-size-md);
-  }
-  
-  .game-details .info p {
-    margin: 0 0 var(--space-8) 0;
+    font-size: var(--font-size-sm);
   }
   
   .game-details .buttons button {
-    padding: var(--space-6) var(--space-16);
+    padding: var(--space-6) 14px;
     font-size: var(--font-size-sm);
   }
   
@@ -1859,18 +1497,8 @@ select.form-control {
     gap: var(--space-10);
   }
   
-  .side-card img {
-    width: 50px;
-    height: 36px;
-  }
-  
-  .side-card .text {
-    font-size: var(--font-size-xs);
-  }
-  
   .video-slot {
     max-height: 210px;
-    margin-top: var(--space-10);
   }
 }
 
@@ -1883,54 +1511,29 @@ select.form-control {
   .top-hud {
     height: 55px;
     padding: 0 28px;
-    border-bottom: 2px solid var(--color-border);
   }
   
   .hud-left, .hud-center, .hud-right {
-    gap: var(--space-16);
+    gap: 14px;
   }
   
   .profile-area {
-    padding: var(--space-6) var(--space-16);
-    background: var(--color-secondary);
-    border-radius: var(--radius-base);
-    transition: background var(--duration-fast) var(--ease-standard);
-  }
-  
-  .profile-area:hover {
-    background: var(--color-secondary-hover);
+    padding: 5px var(--space-16);
   }
   
   .profile-img {
     width: 36px;
     height: 36px;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-full);
   }
   
   .profile-name {
     max-width: 100px;
     font-size: var(--font-size-md);
-    color: var(--color-text);
-    font-weight: var(--font-weight-medium);
   }
   
-  .icon-trophy, .icon-bell, .icon-cog {
-    width: 28px;
-    height: 28px;
-    color: var(--color-text-secondary);
-    transition: color var(--duration-fast) var(--ease-standard);
-  }
-  
-  .icon-trophy:hover, .icon-bell:hover, .icon-cog:hover {
-    color: var(--color-primary);
-  }
-  
-  /* ===== DASHBOARD CAROUSEL ===== */
   .dashboard-container {
     top: 55px;
     max-height: 250px;
-    background: var(--color-background);
   }
   
   .ps4-dashboard {
@@ -1944,51 +1547,33 @@ select.form-control {
   .menu-item {
     width: 130px;
     height: 195px;
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-base);
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--duration-normal) var(--ease-standard),
-                box-shadow var(--duration-normal) var(--ease-standard),
-                border-color var(--duration-normal) var(--ease-standard);
   }
   
   .menu-item.selected {
     transform: scale(1.16);
-    box-shadow: 0 0 30px 3px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.7),
-                0 5px 25px rgba(0, 0, 0, 0.8);
-    border-color: var(--color-primary);
+    transition: transform var(--duration-normal) var(--ease-standard);
   }
   
   .hud-start {
     width: 130px;
     height: 45px;
     font-size: var(--font-size-sm);
-    background: rgba(var(--color-slate-900-rgb), 0.98);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-base);
-  }
-  
-  .menu-item.selected ~ .hud-row .hud-start {
-    width: calc(130px * 1.16);
   }
   
   .hud-title {
     min-width: 130px;
     height: 45px;
     font-size: var(--font-size-md);
-    padding: 0 var(--space-16);
   }
   
-  /* ===== GAME DETAILS ===== */
   .game-details {
     padding: 22px 40px 30px 40px;
     max-height: calc(100vh - 55px);
   }
   
   .game-details-inner {
-    grid-template-columns: 270px 1fr;
-    gap: var(--space-20);
+    grid-template-columns: 270px 1fr !important;
+    gap: 18px;
   }
   
   .cover-main {
@@ -1996,7 +1581,7 @@ select.form-control {
   }
   
   .game-details .info h1 {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
   }
   
   .game-details .info {
@@ -2004,7 +1589,7 @@ select.form-control {
   }
   
   .game-details .buttons button {
-    padding: var(--space-8) var(--space-16);
+    padding: 7px var(--space-16);
     font-size: var(--font-size-sm);
   }
   
@@ -2026,7 +1611,6 @@ select.form-control {
   .top-hud {
     height: 58px;
     padding: 0 var(--space-32);
-    border-bottom: 2px solid var(--color-border);
   }
   
   .hud-left, .hud-center, .hud-right {
@@ -2034,50 +1618,26 @@ select.form-control {
   }
   
   .profile-area {
-    padding: var(--space-6) var(--space-20);
-    border-radius: var(--radius-base);
-    background: var(--color-secondary);
-    transition: background var(--duration-fast) var(--ease-standard);
-  }
-  
-  .profile-area:hover {
-    background: var(--color-secondary-hover);
+    padding: var(--space-6) 18px;
   }
   
   .profile-img {
     width: 38px;
     height: 38px;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-full);
   }
   
   .profile-name {
     max-width: 110px;
     font-size: var(--font-size-base);
-    color: var(--color-text);
-    font-weight: var(--font-weight-medium);
   }
   
-  .icon-trophy, .icon-bell, .icon-cog {
-    width: 28px;
-    height: 28px;
-    color: var(--color-text-secondary);
-    transition: color var(--duration-fast) var(--ease-standard);
-  }
-  
-  .icon-trophy:hover, .icon-bell:hover, .icon-cog:hover {
-    color: var(--color-primary);
-  }
-  
-  /* ===== DASHBOARD CAROUSEL ===== */
   .dashboard-container {
     top: 58px;
     max-height: 280px;
-    background: var(--color-background);
   }
   
   .ps4-dashboard {
-    padding: 50px 50px var(--space-20) 50px;
+    padding: 50px 50px 18px 50px;
   }
   
   .carousel-inner {
@@ -2087,50 +1647,32 @@ select.form-control {
   .menu-item {
     width: 140px;
     height: 210px;
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-base);
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--duration-normal) var(--ease-standard),
-                box-shadow var(--duration-normal) var(--ease-standard),
-                border-color var(--duration-normal) var(--ease-standard);
   }
   
   .menu-item.selected {
     transform: scale(1.18);
-    box-shadow: 0 0 30px 3px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.7),
-                0 5px 25px rgba(0, 0, 0, 0.8);
-    border-color: var(--color-primary);
+    transition: transform var(--duration-normal) var(--ease-standard);
   }
   
   .hud-start {
     width: 140px;
     height: 48px;
     font-size: var(--font-size-md);
-    background: rgba(var(--color-slate-900-rgb), 0.98);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-base);
-  }
-  
-  .menu-item.selected ~ .hud-row .hud-start {
-    width: calc(140px * 1.18);
   }
   
   .hud-title {
     min-width: 150px;
     height: 48px;
     font-size: var(--font-size-md);
-    padding: 0 var(--space-16);
   }
   
-  /* ===== GAME DETAILS ===== */
   .game-details {
     padding: 26px 50px 35px 50px;
     max-height: calc(100vh - 58px);
   }
   
   .game-details-inner {
-    grid-template-columns: 290px 1fr 170px;
+    grid-template-columns: 290px 1fr 170px !important;
     gap: var(--space-20);
   }
   
@@ -2139,7 +1681,7 @@ select.form-control {
   }
   
   .game-details .info h1 {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
   }
   
   .game-details .info {
@@ -2147,17 +1689,13 @@ select.form-control {
   }
   
   .game-details .buttons button {
-    padding: var(--space-8) var(--space-20);
+    padding: var(--space-8) 18px;
     font-size: var(--font-size-md);
   }
   
   .side-card img {
     width: 58px;
     height: 42px;
-  }
-  
-  .side-card .text {
-    font-size: var(--font-size-sm);
   }
   
   .video-slot {
@@ -2174,32 +1712,20 @@ select.form-control {
   .top-hud {
     height: 58px;
     padding: 0 var(--space-32);
-    border-bottom: 2px solid var(--color-border);
   }
   
   .profile-area {
     padding: var(--space-6) var(--space-20);
-    background: var(--color-secondary);
-    border-radius: var(--radius-base);
-    transition: background var(--duration-fast) var(--ease-standard);
-  }
-  
-  .profile-area:hover {
-    background: var(--color-secondary-hover);
   }
   
   .profile-img {
     width: 38px;
     height: 38px;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-full);
   }
   
-  /* ===== DASHBOARD CAROUSEL ===== */
   .dashboard-container {
     top: 58px;
     max-height: 310px;
-    background: var(--color-background);
   }
   
   .ps4-dashboard {
@@ -2213,41 +1739,24 @@ select.form-control {
   .menu-item {
     width: 152px;
     height: 228px;
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-base);
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--duration-normal) var(--ease-standard),
-                box-shadow var(--duration-normal) var(--ease-standard),
-                border-color var(--duration-normal) var(--ease-standard);
   }
   
   .menu-item.selected {
     transform: scale(1.2);
-    box-shadow: 0 0 30px 3px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.7),
-                0 5px 25px rgba(0, 0, 0, 0.8);
-    border-color: var(--color-primary);
+    transition: transform var(--duration-normal) var(--ease-standard);
   }
   
   .hud-start {
     width: 152px;
     height: 48px;
-    background: rgba(var(--color-slate-900-rgb), 0.98);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-base);
   }
   
-  .menu-item.selected ~ .hud-row .hud-start {
-    width: calc(152px * 1.2);
-  }
-  
-  /* ===== GAME DETAILS ===== */
   .game-details {
     padding: 28px 70px 42px 70px;
   }
   
   .game-details-inner {
-    grid-template-columns: 320px 1.15fr 200px 340px;
+    grid-template-columns: 320px 1.15fr 200px 340px !important;
     gap: 22px;
   }
   
@@ -2256,7 +1765,7 @@ select.form-control {
   }
   
   .game-details .info h1 {
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-3xl);
   }
   
   .game-details .info {
@@ -2287,14 +1796,11 @@ select.form-control {
   .top-hud {
     height: 58px;
     padding: 0 var(--space-32);
-    border-bottom: 2px solid var(--color-border);
   }
   
-  /* ===== DASHBOARD CAROUSEL ===== */
   .dashboard-container {
     top: 58px;
     max-height: 330px;
-    background: var(--color-background);
   }
   
   .ps4-dashboard {
@@ -2308,41 +1814,19 @@ select.form-control {
   .menu-item {
     width: 160px;
     height: 240px;
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-base);
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--duration-normal) var(--ease-standard),
-                box-shadow var(--duration-normal) var(--ease-standard),
-                border-color var(--duration-normal) var(--ease-standard);
-  }
-  
-  .menu-item.selected {
-    transform: scale(1.22);
-    box-shadow: 0 0 30px 3px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.7),
-                0 5px 25px rgba(0, 0, 0, 0.8);
-    border-color: var(--color-primary);
   }
   
   .hud-start {
     width: 160px;
     height: 48px;
-    background: rgba(var(--color-slate-900-rgb), 0.98);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-base);
   }
   
-  .menu-item.selected ~ .hud-row .hud-start {
-    width: calc(160px * 1.22);
-  }
-  
-  /* ===== GAME DETAILS ===== */
   .game-details {
     padding: var(--space-32) 80px 50px 80px;
   }
   
   .game-details-inner {
-    grid-template-columns: 340px 1.2fr 220px 360px;
+    grid-template-columns: 340px 1.2fr 220px 360px !important;
     gap: 26px;
   }
   
@@ -2351,7 +1835,7 @@ select.form-control {
   }
   
   .game-details .info h1 {
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-3xl);
   }
   
   .game-details .info {
@@ -2372,7 +1856,6 @@ select.form-control {
   .top-hud {
     height: 48px;
     padding: 0 var(--space-24);
-    border-bottom: 2px solid var(--color-border);
   }
   
   .hud-left, .hud-center, .hud-right {
@@ -2381,15 +1864,11 @@ select.form-control {
   
   .profile-area {
     padding: var(--space-4) var(--space-12);
-    background: var(--color-secondary);
-    border-radius: var(--radius-sm);
   }
   
   .profile-img {
-    width: 32px;
-    height: 32px;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-full);
+    width: var(--space-32);
+    height: var(--space-32);
   }
   
   .profile-name {
@@ -2397,15 +1876,9 @@ select.form-control {
     font-size: var(--font-size-sm);
   }
   
-  .hud-icon {
-    font-size: var(--font-size-base);
-  }
-  
-  /* ===== DASHBOARD CAROUSEL ===== */
   .dashboard-container {
     top: 48px;
     max-height: 120px;
-    background: var(--color-background);
   }
   
   .ps4-dashboard {
@@ -2413,33 +1886,26 @@ select.form-control {
   }
   
   .carousel-inner {
-    gap: var(--space-16);
+    gap: 14px;
   }
   
   .menu-item {
     width: 90px;
     height: 135px;
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-base);
-    box-shadow: var(--shadow-sm);
   }
   
   .menu-item.selected {
     transform: scale(1.1);
-    box-shadow: 0 0 30px 3px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.7),
-                0 5px 25px rgba(0, 0, 0, 0.8);
-    border-color: var(--color-primary);
+    transition: transform var(--duration-normal) var(--ease-standard);
   }
   
-  /* ===== GAME DETAILS ===== */
   .game-details {
-    padding: var(--space-12) 40px var(--space-20) 40px;
+    padding: var(--space-12) 40px 18px 40px;
     max-height: calc(100vh - 48px);
   }
   
   .game-details-inner {
-    grid-template-columns: 200px 1fr 130px;
+    grid-template-columns: 200px 1fr 130px !important;
     gap: var(--space-12);
   }
   
@@ -2448,7 +1914,7 @@ select.form-control {
   }
   
   .game-details .info h1 {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
   }
   
   .game-details .info {
@@ -2459,6 +1925,12 @@ select.form-control {
     max-height: 140px;
   }
 }
+
+
+
+
+
+
 
 
 
