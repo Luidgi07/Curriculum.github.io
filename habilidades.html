@@ -479,6 +479,11 @@
       }
     };
 
+    function getColor(level) {
+      if (level >= 4.5) return '#44ff44';   // Verde (Avançado alto)
+      if (level >= 3.5) return '#ffaa44';   // Laranja (Intermédio)
+      return '#ff4444';                     // Vermelho (Iniciante)
+    }
     function renderMatrix() {
       const container = document.getElementById('matrixContainer');
       container.innerHTML = '';
@@ -498,7 +503,9 @@
               <span class="skill-level">${level}/5</span>
             </div>
             <div class="skill-bar">
-              <div class="skill-fill" style="width: ${percentage}%"></div>
+              <div class="skill-fill" 
+                   style="width: ${percentage}%; background: ${getColor(level)};">
+              </div>
             </div>
           `;
           column.appendChild(skillHTML);
