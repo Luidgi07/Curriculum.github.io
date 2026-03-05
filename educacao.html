@@ -659,31 +659,11 @@
     <!-- Painel lateral Tech Biomed -->
     <aside id="techPanel" aria-label="Projetos Tech Biomed">
       <button id="techPanelClose">Fechar ✕</button>
-      <h3>Projetos Tech Biomed</h3>
+      <h3>Projetos</h3>
 
-      <div class="tech-item" onclick="window.open('projeto_dpm_LTB.pdf','_blank')">
-        <div class="tech-item-title">Exoesqueleto Inferior</div>
-        <small>Projeto LTB | Mecatrónica Biomédica</small>
-      </div>
-
-      <div class="tech-item" onclick="window.open('#','_blank')">
-        <div class="tech-item-title">Processamento ECG/EEG</div>
-        <small>Python (NumPy/SciPy) | Filtro + deteção de picos</small>
-      </div>
-
-      <div class="tech-item" onclick="window.open('Poster_2.pdf','_blank')">
-        <div class="tech-item-title">CRISPR Poster</div>
-        <small>Edição genética | Comunicação científica</small>
-      </div>
-
-      <div class="tech-item" onclick="window.open('https://github.com/TEU_USERNAME','_blank')">
-        <div class="tech-item-title">GitHub Tech Biomed</div>
-        <small>Repositórios de sinais biomédicos e eletrónica</small>
-      </div>
-
-      <div class="tech-item" onclick="window.open('mailto:teu@email?subject=Contacto%20Tech%20Biomed','_blank')">
-        <div class="tech-item-title">Contacto Rápido</div>
-        <small>Enviar email para estágio / colaboração</small>
+      <div class="tech-item" onclick="window.open('','_blank')">
+        <div class="tech-item-title">Projeto Curricular</div>
+        <small>Projeto LTB | ... </small>
       </div>
     </aside>
 
@@ -970,10 +950,14 @@
     let scene, camera, renderer, blocos = [];
 
     const arquivos = [
-      {nome:"Bioquímica",   link:"bioquimica.pdf",   curso:"IPS",  tipo:"Seminário Bioquímica"},
-      {nome:"Sinais Vida",  link:"relatorio_eletrotecnia.pdf", curso:"IPS",  tipo:"Relatório Eletrotecnia"},
-      {nome:"Exoesqueleto", link:"projeto_dpm_LTB.pdf", curso:"IPS",  tipo:"Projeto LTB"},
-      {nome:"CRISPR",       link:"Poster_2.pdf",      curso:"ISEL", tipo:"Poster Genética"}
+      {nome:"Bioquímica",link:"bioquimica.pdf",curso:"IPS",tipo:"Seminário Bioquímica"},
+      {nome:"Sinais Vida",link:"relatorio_eletrotecnia.pdf",curso:"IPS",tipo:"Relatório Eletrotecnia"},
+      {nome:"Ressonância Magnética",link:"equipsaude.pdf",curso:"IPS",tipo:"Relatório Eletrónica"},
+      {nome:"Exoesqueleto",link:"projeto_dpm_LTB.pdf",curso:"IPS",tipo:"Desenvolvimento de Produtos Médicos"},
+      {nome:"Exoesqueleto PPT",link:"DPM.pdf",curso:"IPS",tipo:"Desenvolvimento de Produtos Médicos"},
+      {nome:"Inovação de Dispositivos para a Diabetes",link:"Dispositivos_Médicos.pdf",curso:"IPS",tipo:"Dispositivos Médicos I"},
+      {nome:"CRISPR",link:"poster2.pdf",curso:"IPS",tipo:"Poster Nanotecnologia"},
+      {nome:"Gold Nanoparticles",link:"Poster_1.pdf",curso:"IPS",tipo:"Poster Nanotecnologia"}
     ];
 
     function init3D() {
